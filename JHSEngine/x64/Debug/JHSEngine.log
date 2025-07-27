@@ -1,0 +1,385 @@
+﻿  Engine.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/Core/Engine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/Core/Engine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(14,5): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Core/Engine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(15,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Core/Engine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(16,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Core/Engine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(17,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Core/Engine.cpp')
+  
+  WinMainCommandParameters.Cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/Core/WinMainCommandParameters.Cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/Core/WinMainCommandParameters.Cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(14,5): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Core/WinMainCommandParameters.Cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(15,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Core/WinMainCommandParameters.Cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(16,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Core/WinMainCommandParameters.Cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(17,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Core/WinMainCommandParameters.Cpp')
+  
+  EngineFactory.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/EngineFactory.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/EngineFactory.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(14,5): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/EngineFactory.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(15,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/EngineFactory.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(16,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/EngineFactory.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(17,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/EngineFactory.cpp')
+  
+  JHSEngine.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/JHSEngine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/JHSEngine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(14,5): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/JHSEngine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(15,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/JHSEngine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(16,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/JHSEngine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(17,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/JHSEngine.cpp')
+  
+  WindowsEngine.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/Platform/Windows/WindowsEngine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/Platform/Windows/WindowsEngine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(14,5): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Platform/Windows/WindowsEngine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(15,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Platform/Windows/WindowsEngine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(16,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Platform/Windows/WindowsEngine.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(17,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Platform/Windows/WindowsEngine.cpp')
+  
+  WindowsMessageProcessing.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/Platform/Windows/WindowsMessageProcessing.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Engine/Platform/Windows/WindowsMessageProcessing.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(14,5): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Platform/Windows/WindowsMessageProcessing.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(15,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Platform/Windows/WindowsMessageProcessing.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(16,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Platform/Windows/WindowsMessageProcessing.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(17,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Engine/Platform/Windows/WindowsMessageProcessing.cpp')
+  
+  simple_io_stream.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_io_stream/simple_io_stream.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_io_stream/simple_io_stream.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_io_stream\simple_io_stream.cpp(21,22): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_io_stream\simple_io_stream.cpp(28,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  simple_channel.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_channel/simple_channel.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_channel/simple_channel.cpp')
+  
+  simple_connetion.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_connetion/simple_connetion.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_connetion/simple_connetion.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_channel\simple_net_protocols.h(1,1): warning C4828: The file contains a character starting at offset 0x2a5 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_connetion/simple_connetion.cpp')
+  
+  simple_connetion_tcp.cpp
+  simple_connetion_udp.cpp
+  simple_net_drive.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_drive/simple_net_drive.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_drive/simple_net_drive.cpp')
+  
+  simple_net_drive_tcp.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_drive/simple_net_drive_tcp.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_drive/simple_net_drive_tcp.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_channel\simple_net_protocols.h(1,1): warning C4828: The file contains a character starting at offset 0x2a5 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_drive/simple_net_drive_tcp.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.cpp(254,54): warning C4305: 'argument': truncation from 'int' to 'u_short'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.cpp(254,54): warning C4309: 'argument': truncation of constant value
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.cpp(293,54): warning C4305: 'argument': truncation from 'int' to 'u_short'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.cpp(293,54): warning C4309: 'argument': truncation of constant value
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.cpp(329,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.cpp(340,22): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.cpp(367,5): warning C4311: 'type cast': pointer truncation from 'FSimpleConnetion *' to 'DWORD'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.cpp(367,5): warning C4302: 'type cast': truncation from 'FSimpleConnetion *' to 'DWORD'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.cpp(400,24): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  simple_net_drive_udp.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_drive/simple_net_drive_udp.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_drive/simple_net_drive_udp.cpp')
+  
+  simple_net_type.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_channel/simple_net_type.cpp')
+  
+  simple_object.cpp
+  simple_image_bmp.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_image/Core/simple_image_bmp.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_image/Core/simple_image_bmp.cpp')
+  
+  simple_image.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_cpp_core_minimal\simple_cpp_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x17d that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_image/simple_image.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_image/simple_image.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_image\simple_image.cpp(42,59): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_image\simple_image.cpp(85,43): warning C4267: '=': conversion from 'size_t' to 'BYTE', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_image\simple_image.cpp(86,44): warning C4267: '=': conversion from 'size_t' to 'BYTE', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_image\simple_image.cpp(87,42): warning C4267: '=': conversion from 'size_t' to 'BYTE', possible loss of data
+  math_utils.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(44,22): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(49,23): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(58,33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(59,30): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(60,33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(61,33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(69,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(111,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(170,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(170,13): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(168,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(168,16): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(180,44): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(180,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(179,41): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(179,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(189,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(189,16): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(188,29): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(188,16): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(204,153): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(204,99): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(204,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(203,153): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(203,99): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(203,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(202,153): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(202,99): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\math_utils.cpp(202,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  matrix_2x2.cpp
+  Generating Code...
+D:\JHSEngine\JHSEngine\JHSEngine\Engine\Platform\Windows\WindowsEngine.cpp(119,1): warning C4715: 'FWindowsEngine::InitWindows': not all control paths return a value
+  Compiling...
+  matrix_3x3.cpp
+  matrix_4x4.cpp
+  line.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\primitives\line.cpp(38,13): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  triangle.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\primitives\triangle.cpp(18,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\primitives\triangle.cpp(18,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\primitives\triangle.cpp(25,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\primitives\triangle.cpp(25,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\primitives\triangle.cpp(32,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\primitives\triangle.cpp(32,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  vector_2d.cpp
+  vector_2id.cpp
+  vector_3d.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\vector\vector_3d.cpp(24,4): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\vector\vector_3d.cpp(25,4): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\vector\vector_3d.cpp(26,4): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  vector_3id.cpp
+  vector_4d.cpp
+  vector_4id.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(14,5): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'simple_library/private/simple_math/transformation/vector/vector_4id.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(15,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'simple_library/private/simple_math/transformation/vector/vector_4id.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(16,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'simple_library/private/simple_math/transformation/vector/vector_4id.cpp')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_math\transformation\vector\vector_4id.h(17,6): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'simple_library/private/simple_math/transformation/vector/vector_4id.cpp')
+  
+  vector_color.cpp
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\vector\vector_color.cpp(4,4): warning C4244: 'initializing': conversion from 'float' to 'unsigned char', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\vector\vector_color.cpp(5,4): warning C4244: 'initializing': conversion from 'float' to 'unsigned char', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\vector\vector_color.cpp(6,4): warning C4244: 'initializing': conversion from 'float' to 'unsigned char', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\transformation\vector\vector_color.cpp(7,4): warning C4244: 'initializing': conversion from 'float' to 'unsigned char', possible loss of data
+  Generating Code...
+  simple_c_array_string.c
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_core_minimal/simple_c_core/simple_c_array/simple_c_array_string.c')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_array\simple_c_array_string.c(66,2): warning C4013: 'remove_char_end' undefined; assuming extern returning int
+  string_algorithm.c
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_core_minimal/simple_c_core/simple_c_string_algorithm/string_algorithm.c')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(6,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(20,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(36,17): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(37,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(38,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(61,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(81,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(132,21): warning C4129: '%': unrecognized character escape sequence
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(132,46): warning C4129: '%': unrecognized character escape sequence
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(182,21): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(151,15): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(168,15): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(196,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(211,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(216,8): warning C4090: 'initializing': different 'const' qualifiers
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(224,46): warning C4267: 'function': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(224,63): warning C4267: 'function': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(229,53): warning C4267: 'function': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(243,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(269,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(289,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(303,12): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(329,17): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(330,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(331,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(360,21): warning C4129: '%': unrecognized character escape sequence
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(360,47): warning C4129: '%': unrecognized character escape sequence
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(414,21): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(379,15): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(400,15): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(420,10): warning C4047: 'function': 'wchar_t *' differs in levels of indirection from 'wchar_t *[1024]'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(420,10): warning C4024: 'wmemset': different types for formal and actual parameter 1
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(423,16): warning C4047: 'function': 'wchar_t *const ' differs in levels of indirection from 'wchar_t *[1024]'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(423,16): warning C4024: '_vsnwprintf_s': different types for formal and actual parameter 1
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(427,18): warning C4047: 'function': 'const wchar_t *' differs in levels of indirection from 'wchar_t *[1024]'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(427,18): warning C4024: 'wcscat': different types for formal and actual parameter 2
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(428,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(444,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_core\simple_c_string_algorithm\string_algorithm.c(449,11): warning C4090: 'initializing': different 'const' qualifiers
+  simple_guid.c
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_core_minimal/simple_c_guid/simple_guid.c')
+  
+  simple_file_helper.c
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_core_minimal/simple_c_helper_file/simple_file_helper.c')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(11,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(16,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(21,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(26,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(31,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(36,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(41,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(46,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(51,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(56,3): warning C4002: too many arguments for function-like macro invocation 'assert'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(86,23): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(109,15): warning C4244: '=': conversion from 'intptr_t' to 'long', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(236,23): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(299,23): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(365,32): warning C4047: 'function': 'int' differs in levels of indirection from 'HINSTANCE'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(365,32): warning C4024: 'check_ShellExecute_ret': different types for formal and actual parameter 1
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_helper_file\simple_file_helper.c(451,23): warning C4133: 'function': incompatible types - from 'unsigned short [3]' to 'const char *'
+  simple_c_path.c
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_core_minimal/simple_c_path/simple_c_path.c')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_path\simple_c_path.c(12,2): warning C4013: 'remove_string_start' undefined; assuming extern returning int
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_path\simple_c_path.c(40,2): warning C4013: 'replace_char_inline' undefined; assuming extern returning int
+  simple_c_locale_list.c
+  simple_c_time.c
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_core_minimal/simple_c_time/simple_c_time.c')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_time\simple_c_time.c(74,36): warning C4090: 'function': different 'const' qualifiers
+  simple_c_windows_register.c
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_core_minimal/simple_c_windows/simple_c_windows_register.c')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_windows\simple_c_windows_register.c(16,34): warning C4133: 'function': incompatible types - from 'const char *' to 'LPCWSTR'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_windows\simple_c_windows_register.c(18,37): warning C4133: 'function': incompatible types - from 'const char *' to 'LPCWSTR'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_windows\simple_c_windows_register.c(34,34): warning C4133: 'function': incompatible types - from 'const char *' to 'LPCWSTR'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_windows\simple_c_windows_register.c(41,41): warning C4133: 'function': incompatible types - from 'char [260]' to 'LPWSTR'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_windows\simple_c_windows_register.c(43,40): warning C4133: 'function': incompatible types - from 'char [260]' to 'LPCWSTR'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_windows\simple_c_windows_register.c(84,46): warning C4133: 'function': incompatible types - from 'const char [260]' to 'LPCWSTR'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_windows\simple_c_windows_register.c(89,40): warning C4133: 'function': incompatible types - from 'char *' to 'LPCWSTR'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_windows\simple_c_windows_register.c(95,15): warning C4047: 'function': 'HKEY' differs in levels of indirection from 'HKEY *'
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_windows\simple_c_windows_register.c(95,15): warning C4024: 'RegCloseKey': different types for formal and actual parameter 1
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_core_minimal\simple_c_windows\simple_c_windows_register.c(88,10): warning C4090: 'initializing': different 'const' qualifiers
+  simple_c_windows_setting.c
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_core_minimal/simple_c_windows/simple_c_windows_setting.c')
+  
+  simple_c_log.c
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_c_log/simple_c_log.c')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_c_log\simple_c_log.c(34,3): warning C4013: 'get_local_time_string' undefined; assuming extern returning int
+  simple_math.c
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\public\simple_core_minimal\simple_c_core\simple_core_minimal.h(1,1): warning C4828: The file contains a character starting at offset 0x5a0 that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'simple_library/private/simple_math/simple_math.c')
+  
+D:\JHSEngine\JHSEngine\JHSEngine\simple_library\private\simple_math\simple_math.c(11,51): warning C4244: 'return': conversion from 'double' to 'unsigned int', possible loss of data
+  Generating Code...
+  JHSEngine.vcxproj -> D:\JHSEngine\JHSEngine\x64\Debug\JHSEngine.exe
