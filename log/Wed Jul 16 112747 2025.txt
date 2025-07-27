@@ -1,5 +1,0 @@
-[LOG] [Wed Jul 16 11:27:47 2025] Log Init. 
-[LOG] [Wed Jul 16 11:27:47 2025] InitWindow complete. 
-[LOG] [Wed Jul 16 11:27:47 2025] Engine pre initialization complete. 
-[LOG] [Wed Jul 16 11:27:47 2025] Engine initialization complete. 
-[LOG] [Wed Jul 16 11:27:47 2025] Engine post initialization complete. 

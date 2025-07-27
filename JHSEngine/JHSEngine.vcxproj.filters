@@ -81,6 +81,42 @@
     <ClCompile Include="simple_library\private\simple_image\simple_image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="simple_library\private\simple_math\simple_math.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Engine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Platform\Windows\WindowsEngine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\JHSEngine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EngineFactory.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\WinMainCommandParameters.Cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Platform\Windows\WindowsMessageProcessing.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Debug\EngineDebug.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Config\EngineRenderConfig.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="simple_library\private\simple_cpp_core_minimal\simple_cpp_helper_file\simple_cpp_helper_file.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="simple_library\private\simple_cpp_core_minimal\simple_cpp_string_algorithm\simple_cpp_string_algorithm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="simple_library\private\simple_math\soft_rasterization\soft_rasterization.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="simple_library\private\simple_math\transformation\matrix\matrix_2x2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -94,6 +130,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="simple_library\private\simple_math\transformation\primitives\triangle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="simple_library\private\simple_math\transformation\quaternion\quat.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="simple_library\private\simple_math\transformation\rotator\rotator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="simple_library\private\simple_math\transformation\vector\vector_2d.cpp">
@@ -120,25 +162,16 @@
     <ClCompile Include="simple_library\private\simple_math\math_utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="simple_library\private\simple_math\simple_math.c">
+    <ClCompile Include="simple_library\third_party_library\tinyxml\tinystr.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Core\Engine.cpp">
+    <ClCompile Include="simple_library\third_party_library\tinyxml\tinyxml.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Platform\Windows\WindowsEngine.cpp">
+    <ClCompile Include="simple_library\third_party_library\tinyxml\tinyxmlerror.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\JHSEngine.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\EngineFactory.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Core\WinMainCommandParameters.Cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Platform\Windows\WindowsMessageProcessing.cpp">
+    <ClCompile Include="simple_library\third_party_library\tinyxml\tinyxmlparser.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -245,6 +278,48 @@
     <ClInclude Include="simple_library\public\simple_image\simple_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Core\Engine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Platform\Windows\WindowsEngine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineMinimal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineFactory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\WinMainCommandParameters.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Debug\Log\SimpleLog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Platform\Windows\WindowsMessageProcessing.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Debug\EngineDebug.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Config\EngineRenderConfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Rendering\DirectX12\d3dx12.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="simple_library\public\simple_math\simple_math.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="simple_library\public\simple_cpp_core_minimal\simple_cpp_helper_file\simple_cpp_helper_file.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="simple_library\public\simple_cpp_core_minimal\simple_cpp_string_algorithm\simple_cpp_string_algorithm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="simple_library\public\simple_math\soft_rasterization\soft_rasterization.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="simple_library\public\simple_math\transformation\matrix\matrix_2x2.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -258,6 +333,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="simple_library\public\simple_math\transformation\primitives\triangle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="simple_library\public\simple_math\transformation\quaternion\quat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="simple_library\public\simple_math\transformation\rotator\rotator.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="simple_library\public\simple_math\transformation\vector\vector_2d.h">
@@ -290,31 +371,16 @@
     <ClInclude Include="simple_library\public\simple_math\simple_core_math.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="simple_library\public\simple_math\simple_math.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="simple_library\public\simple_library.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Core\Engine.h">
+    <ClInclude Include="simple_library\public\simple_library_macro.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Platform\Windows\WindowsEngine.h">
+    <ClInclude Include="simple_library\third_party_library\tinyxml\tinystr.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EngineMinimal.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\EngineFactory.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Core\WinMainCommandParameters.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Debug\Log\SimpleLog.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Platform\Windows\WindowsMessageProcessing.h">
+    <ClInclude Include="simple_library\third_party_library\tinyxml\tinyxml.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
