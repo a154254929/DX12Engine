@@ -10,6 +10,7 @@ FWindowsEngine::FWindowsEngine()
     , bMSAA4XEnabled(false)
     , backBufferFormat(DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM)
     , depthStencilBufferFormat(DXGI_FORMAT::DXGI_FORMAT_D24_UNORM_S8_UINT)
+    , currentSwapBuffIndex(0)
 {
     for (int i = 0; i < FEngineRenderConfig::GetRenderConfig()->SwapChainCount; ++i)
     {
@@ -128,6 +129,22 @@ int FWindowsEngine::PostInit()
     ID3D12CommandList* commandList[] = { graphicsCommandList.Get()};
     commandQueue->ExecuteCommandLists(_countof(commandList), commandList);
 
+    //覆盖原先Window画布
+    //描述视口尺寸
+    viewprotInfo.TopLeftX = 0;
+    viewprotInfo.TopLeftY = 0;
+    viewprotInfo.Width = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
+    viewprotInfo.Height = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
+    viewprotInfo.MinDepth = 0.f;
+    viewprotInfo.MaxDepth = 1.f;
+
+    //矩形
+    viewprotRect.left = 0;
+    viewprotRect.top = 0;
+    viewprotRect.right = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
+    viewprotRect.bottom = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
+
+    WaitGPUCommandQueueComplete();
 
     Engine_Log("Engine post initialization complete.");
     return 0;
@@ -135,6 +152,53 @@ int FWindowsEngine::PostInit()
 
 void FWindowsEngine::Tick()
 {
+    ANALYSIS_HRESULT(commandAllocator->Reset());
+
+    ANALYSIS_HRESULT(graphicsCommandList->Reset(commandAllocator.Get(), NULL));
+
+    CD3DX12_RESOURCE_BARRIER ResourceBarrierPresent = CD3DX12_RESOURCE_BARRIER::Transition(GetCurrentSwapBuff(),
+        D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+    graphicsCommandList->ResourceBarrier(1, &ResourceBarrierPresent);
+
+    //
+    //
+    graphicsCommandList->RSSetViewports(1, &viewprotInfo);
+    graphicsCommandList->RSSetScissorRects(1, &viewprotRect);
+
+    //Çå³ý»­²¼
+    graphicsCommandList->ClearRenderTargetView(GetCurrentSwapBufferView(),
+        DirectX::Colors::Red,
+        0, nullptr);
+
+    //Çå³ýÉî¶ÈÄ£°å»º³åÇø
+    graphicsCommandList->ClearDepthStencilView(GetCurrentDepthStencilView(),
+        D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
+        1.f, 0, 0, NULL);
+
+    //
+    D3D12_CPU_DESCRIPTOR_HANDLE SwapBufferView = GetCurrentSwapBufferView();
+    D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView = GetCurrentDepthStencilView();
+    graphicsCommandList->OMSetRenderTargets(1, &SwapBufferView,
+        true, &DepthStencilView);
+
+    CD3DX12_RESOURCE_BARRIER ResourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(GetCurrentSwapBuff(),
+        D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+    graphicsCommandList->ResourceBarrier(1, &ResourceBarrierPresentRenderTarget);
+
+    //Â¼ÈëÍê³É
+    ANALYSIS_HRESULT(graphicsCommandList->Close());
+
+    //Ìá½»ÃüÁî
+    ID3D12CommandList* CommandList[] = { graphicsCommandList.Get() };
+    commandQueue->ExecuteCommandLists(_countof(CommandList), CommandList);
+
+    //½»»»Á½¸öbuff»º³åÇø
+    ANALYSIS_HRESULT(swapChain->Present(0, 0));
+    currentSwapBuffIndex = !(bool)currentSwapBuffIndex;
+
+    //CPUµÈGPU
+    WaitGPUCommandQueueComplete();
 }
 
 int FWindowsEngine::PreExit()
@@ -155,6 +219,51 @@ int FWindowsEngine::PostExit()
     Engine_Log("Engine post exit complete.");
     return 0;
 }
+
+ID3D12Resource* FWindowsEngine::GetCurrentSwapBuff() const
+{
+    return swapChainBuffer[currentSwapBuffIndex].Get();
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE FWindowsEngine::GetCurrentSwapBufferView() const
+{
+    return CD3DX12_CPU_DESCRIPTOR_HANDLE(
+        rtvHeap->GetCPUDescriptorHandleForHeapStart(),
+        currentSwapBuffIndex,
+        rtvDescriptorSize
+    );
+}
+
+D3D12_CPU_DESCRIPTOR_HANDLE FWindowsEngine::GetCurrentDepthStencilView() const
+{
+    return dsvHeap->GetCPUDescriptorHandleForHeapStart();
+}
+
+void FWindowsEngine::WaitGPUCommandQueueComplete()
+{
+    currentFenceIndex++;
+
+    //
+    ANALYSIS_HRESULT(commandQueue->Signal(fence.Get(), currentFenceIndex));
+
+    if (fence->GetCompletedValue() < currentFenceIndex)
+    {
+        //
+        //SECURITY_ATTRIBUTES
+        //CREATE_EVENT_INITIAL_SET  0x00000002
+        //CREATE_EVENT_MANUAL_RESET 0x00000001
+        //ResetEvents
+        HANDLE eventEX = CreateEventEx(NULL, NULL, 0, EVENT_ALL_ACCESS);
+
+        //GPU
+        ANALYSIS_HRESULT(fence->SetEventOnCompletion(currentFenceIndex, eventEX));
+
+        //
+        WaitForSingleObject(eventEX, INFINITE);
+        CloseHandle(eventEX);
+    }
+}
+
 bool FWindowsEngine::InitWindows(FWinMainCommandParameters InParameters)
 {
     //注册窗口
