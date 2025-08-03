@@ -1,36 +1,44 @@
-﻿#pragma once
+#pragma once
 
 #ifdef _WIN32
 #include "../../Core/Engine.h"
 
 class FWindowsEngine :public FEngine
 {
+	friend class IRenderingInterface;
 public:
-    FWindowsEngine();
-    ~FWindowsEngine();
+	FWindowsEngine();
+	~FWindowsEngine();
 
-    virtual int PreInit(FWinMainCommandParameters);
-    virtual int Init(FWinMainCommandParameters);
-    virtual int PostInit();
+	virtual int PreInit(FWinMainCommandParameters inParameters);
 
-    virtual void Tick();
+	virtual int Init(FWinMainCommandParameters inParameters);
+	virtual int PostInit();
 
-    virtual int PreExit();
-    virtual int Exit();
-    virtual int PostExit();
+	virtual void Tick(float deltaTime);
+
+	virtual int PreExit();
+	virtual int Exit();
+	virtual int PostExit();
 
 public:
-    ID3D12Resource* GetCurrentSwapBuff() const;
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentSwapBufferView() const;
-    D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentDepthStencilView() const;
+	ID3D12Resource* GetCurrentSwapBuff() const;
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentSwapBufferView() const;
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentDepthStencilView() const;
+public:
+    DXGI_FORMAT GetBackBufferFormat() const {return backBufferFormat;}
+    DXGI_FORMAT GetDepthStencilBufferFormat() const {return depthStencilBufferFormat;}
+    UINT GetDXGISampleCount() const;
+    UINT GetDXGISampleQuality() const;
 
 protected:
-    void WaitGPUCommandQueueComplete();
+	void WaitGPUCommandQueueComplete();
 
 private:
     bool InitWindows(FWinMainCommandParameters InParameters);
 
     bool InitDirect3D();
+    void PostInitDirect3D();
 protected:
     UINT64 currentFenceIndex;
     int currentSwapBuffIndex;
@@ -52,8 +60,9 @@ protected:
     vector<ComPtr<ID3D12Resource>> swapChainBuffer;
     ComPtr<ID3D12Resource> depthStencilBuffer;
 
-    D3D12_VIEWPORT viewprotInfo;
-    D3D12_RECT viewprotRect;
+    //和屏幕的视口有关
+    D3D12_VIEWPORT viewportInfo;
+    D3D12_RECT viewportRect;
 protected:
     HWND mainWindowsHandle;         //主窗口句柄
     UINT m4xQualityLevels;

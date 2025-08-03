@@ -1,12 +1,23 @@
-﻿#include "WindowsEngine.h"
+#include "WindowsEngine.h"
 #include "../../Debug/EngineDebug.h"
 #include "../../Config/EngineRenderConfig.h"
+#include "../../Rendering/Core/Rendering.h"
+#include "../../Mesh/BoxMesh.h"
 
-#ifdef _WIN32
+#if defined(_WIN32)
 #include "WindowsMessageProcessing.h"
 
+//class FVector
+//{
+//	unsigned char r;//255 ->[0,1]
+//	unsigned char g;//255
+//	unsigned char b;//255
+//	unsigned char a;//255
+//};
+
 FWindowsEngine::FWindowsEngine()
-    : m4xQualityLevels(0)
+    : currentFenceIndex(0)
+    , m4xQualityLevels(0)
     , bMSAA4XEnabled(false)
     , backBufferFormat(DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM)
     , depthStencilBufferFormat(DXGI_FORMAT::DXGI_FORMAT_D24_UNORM_S8_UINT)
@@ -16,6 +27,11 @@ FWindowsEngine::FWindowsEngine()
     {
         swapChainBuffer.push_back(ComPtr<ID3D12Resource>());
     }
+}
+
+FWindowsEngine::~FWindowsEngine()
+{
+
 }
 
 int FWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
@@ -34,17 +50,12 @@ int FWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
 
 int FWindowsEngine::Init(FWinMainCommandParameters inParameters)
 {
+    InitWindows(inParameters);
 
+    InitDirect3D();
 
-    if (InitWindows(inParameters))
-    {
+    PostInitDirect3D();
 
-    }
-
-    if (InitDirect3D())
-    {
-
-    }
     Engine_Log("Engine initialization complete.");
     return 0;
 }
@@ -52,152 +63,98 @@ int FWindowsEngine::Init(FWinMainCommandParameters inParameters)
 int FWindowsEngine::PostInit()
 {
     ANALYSIS_HRESULT(graphicsCommandList->Reset(commandAllocator.Get(), NULL));
-    for (int i = 0; i < FEngineRenderConfig::GetRenderConfig()->SwapChainCount; ++i)
     {
-        swapChainBuffer[i].Reset();
-    }
-    depthStencilBuffer.Reset();
+        //构建Mesh
+        FBoxMesh* boxMesh = FBoxMesh::CreateMesh();
+	}
 
-    swapChain->ResizeBuffers(
-        FEngineRenderConfig::GetRenderConfig()->SwapChainCount,
-        FEngineRenderConfig::GetRenderConfig()->ScreenWidth,
-        FEngineRenderConfig::GetRenderConfig()->ScreenHeight,
-        backBufferFormat,
-        DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
-    );
+	ANALYSIS_HRESULT(graphicsCommandList->Close());
 
-    //拿到描述Size
-    rtvDescriptorSize = d3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-    CD3DX12_CPU_DESCRIPTOR_HANDLE heapHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
-    for (int i = 0; i < FEngineRenderConfig::GetRenderConfig()->SwapChainCount; ++i)
-    {
-        swapChain->GetBuffer(i, IID_PPV_ARGS(&swapChainBuffer[i]));
-        d3dDevice->CreateRenderTargetView(
-            swapChainBuffer[i].Get(),
-            nullptr,
-            heapHandle
-        );
-        heapHandle.Offset(1, rtvDescriptorSize);
-    }
-
-    D3D12_RESOURCE_DESC resourceDesv;
-    resourceDesv.Width = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
-    resourceDesv.Height = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
-    resourceDesv.Alignment = 0;
-    resourceDesv.MipLevels = 1;
-    resourceDesv.DepthOrArraySize = 1;
-    resourceDesv.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-    resourceDesv.SampleDesc.Count = bMSAA4XEnabled ? 4 : 1;
-    resourceDesv.SampleDesc.Quality = bMSAA4XEnabled ? (m4xQualityLevels - 1) : 0;
-    resourceDesv.Format = DXGI_FORMAT_R24G8_TYPELESS;
-    resourceDesv.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-    resourceDesv.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-    D3D12_CLEAR_VALUE clearValue;
-    clearValue.DepthStencil.Depth = 1.f;
-    clearValue.DepthStencil.Stencil = 0;
-    clearValue.Format = depthStencilBufferFormat;
-
-    CD3DX12_HEAP_PROPERTIES heapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-    d3dDevice->CreateCommittedResource(
-        &heapProperties,
-        D3D12_HEAP_FLAG_NONE,
-        &resourceDesv,
-        D3D12_RESOURCE_STATE_COMMON,
-        &clearValue,
-        IID_PPV_ARGS(depthStencilBuffer.GetAddressOf())
-    );
-
-    D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-    dsvDesc.Format = depthStencilBufferFormat;
-    dsvDesc.Texture2D.MipSlice = 0;
-    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-    dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
-    d3dDevice->CreateDepthStencilView(
-        depthStencilBuffer.Get(),
-        &dsvDesc,
-        dsvHeap->GetCPUDescriptorHandleForHeapStart()
-    );
-
-    CD3DX12_RESOURCE_BARRIER ResourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(
-        depthStencilBuffer.Get(),
-        D3D12_RESOURCE_STATE_COMMON,
-        D3D12_RESOURCE_STATE_DEPTH_WRITE
-    );
-    graphicsCommandList->ResourceBarrier(1, &ResourceBarrier);
-    graphicsCommandList->Close();
-
-    ID3D12CommandList* commandList[] = { graphicsCommandList.Get()};
+    ID3D12CommandList* commandList[] = { graphicsCommandList.Get() };
     commandQueue->ExecuteCommandLists(_countof(commandList), commandList);
 
-    //覆盖原先Window画布
-    //描述视口尺寸
-    viewprotInfo.TopLeftX = 0;
-    viewprotInfo.TopLeftY = 0;
-    viewprotInfo.Width = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
-    viewprotInfo.Height = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
-    viewprotInfo.MinDepth = 0.f;
-    viewprotInfo.MaxDepth = 1.f;
-
-    //矩形
-    viewprotRect.left = 0;
-    viewprotRect.top = 0;
-    viewprotRect.right = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
-    viewprotRect.bottom = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
-
-    WaitGPUCommandQueueComplete();
-
-    Engine_Log("Engine post initialization complete.");
-    return 0;
+	WaitGPUCommandQueueComplete();
+	Engine_Log("Engine post initialization complete.");
+	return 0;
 }
 
-void FWindowsEngine::Tick()
+void FWindowsEngine::Tick(float deltaTime)
 {
+    //重置录制相关的内存,为下一帧做准备
     ANALYSIS_HRESULT(commandAllocator->Reset());
 
-    ANALYSIS_HRESULT(graphicsCommandList->Reset(commandAllocator.Get(), NULL));
+    for (auto& temp : IRenderingInterface::renderingInterfaces)
+    {
+        temp->PreDraw(deltaTime);
+    }
 
-    CD3DX12_RESOURCE_BARRIER ResourceBarrierPresent = CD3DX12_RESOURCE_BARRIER::Transition(GetCurrentSwapBuff(),
-        D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+    //指向那个资源 转换状态
+    CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = CD3DX12_RESOURCE_BARRIER::Transition(
+        GetCurrentSwapBuff(),
+        D3D12_RESOURCE_STATE_PRESENT,
+        D3D12_RESOURCE_STATE_RENDER_TARGET
+    );
 
-    graphicsCommandList->ResourceBarrier(1, &ResourceBarrierPresent);
+	graphicsCommandList->ResourceBarrier(1, &resourceBarrierPresent);
 
-    //
-    //
-    graphicsCommandList->RSSetViewports(1, &viewprotInfo);
-    graphicsCommandList->RSSetScissorRects(1, &viewprotRect);
+    //需要每帧执行,绑定矩形框
+    graphicsCommandList->RSSetViewports(1, &viewportInfo);
+    graphicsCommandList->RSSetScissorRects(1, &viewportRect);
+    //清除画布
+    graphicsCommandList->ClearRenderTargetView(
+        GetCurrentSwapBufferView(),
+        DirectX::Colors::CadetBlue,
+        0,
+        nullptr
+    );
 
-    //Çå³ý»­²¼
-    graphicsCommandList->ClearRenderTargetView(GetCurrentSwapBufferView(),
-        DirectX::Colors::Red,
-        0, nullptr);
-
-    //Çå³ýÉî¶ÈÄ£°å»º³åÇø
-    graphicsCommandList->ClearDepthStencilView(GetCurrentDepthStencilView(),
+    //清除深度模板缓存
+    graphicsCommandList->ClearDepthStencilView(
+        GetCurrentDepthStencilView(),
         D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
-        1.f, 0, 0, NULL);
+        1.f,
+        0,
+        0,
+        NULL
+    );
 
-    //
-    D3D12_CPU_DESCRIPTOR_HANDLE SwapBufferView = GetCurrentSwapBufferView();
-    D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView = GetCurrentDepthStencilView();
-    graphicsCommandList->OMSetRenderTargets(1, &SwapBufferView,
-        true, &DepthStencilView);
+    //输出的合并阶段
+    D3D12_CPU_DESCRIPTOR_HANDLE swapBufferView = GetCurrentSwapBufferView();
+    D3D12_CPU_DESCRIPTOR_HANDLE depthStencilView = GetCurrentDepthStencilView();
+    graphicsCommandList->OMSetRenderTargets(
+        1,
+        &swapBufferView,
+        true,
+        &depthStencilView
+    );
 
-    CD3DX12_RESOURCE_BARRIER ResourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(GetCurrentSwapBuff(),
-        D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-    graphicsCommandList->ResourceBarrier(1, &ResourceBarrierPresentRenderTarget);
+    //渲染其他内容
+    for (auto& temp : IRenderingInterface::renderingInterfaces)
+    {
+        temp->Draw(deltaTime);
+        temp->PostDraw(deltaTime);
+    }
 
-    //Â¼ÈëÍê³É
+    //指向那个资源 转换其状态
+    CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
+        GetCurrentSwapBuff(),
+        D3D12_RESOURCE_STATE_RENDER_TARGET,
+        D3D12_RESOURCE_STATE_PRESENT
+    );
+    graphicsCommandList->ResourceBarrier(1, &resourceBarrierPresentRenderTarget);
+
+    //录入完成
     ANALYSIS_HRESULT(graphicsCommandList->Close());
 
-    //Ìá½»ÃüÁî
-    ID3D12CommandList* CommandList[] = { graphicsCommandList.Get() };
-    commandQueue->ExecuteCommandLists(_countof(CommandList), CommandList);
+    //提交命令
+    ID3D12CommandList* commandList[] = { graphicsCommandList.Get() };
+    commandQueue->ExecuteCommandLists(_countof(commandList), commandList);
 
-    //½»»»Á½¸öbuff»º³åÇø
+    //交换两个buff缓冲区
     ANALYSIS_HRESULT(swapChain->Present(0, 0));
-    currentSwapBuffIndex = !(bool)currentSwapBuffIndex;
+    currentSwapBuffIndex ^= 1;
 
-    //CPUµÈGPU
+    //CPU等待GPU
     WaitGPUCommandQueueComplete();
 }
 
@@ -239,26 +196,36 @@ D3D12_CPU_DESCRIPTOR_HANDLE FWindowsEngine::GetCurrentDepthStencilView() const
     return dsvHeap->GetCPUDescriptorHandleForHeapStart();
 }
 
+UINT FWindowsEngine::GetDXGISampleCount() const
+{
+    return bMSAA4XEnabled ? 4 : 1;
+}
+
+UINT FWindowsEngine::GetDXGISampleQuality() const
+{
+    return bMSAA4XEnabled ? (m4xQualityLevels - 1) : 0;
+}
+
 void FWindowsEngine::WaitGPUCommandQueueComplete()
 {
     currentFenceIndex++;
 
-    //
+    //像GPU设置新的隔离点 等待GPU处理完信号
     ANALYSIS_HRESULT(commandQueue->Signal(fence.Get(), currentFenceIndex));
 
     if (fence->GetCompletedValue() < currentFenceIndex)
     {
-        //
+        //创建或打开一个事件内核对象,并返回该对象的句柄
         //SECURITY_ATTRIBUTES
         //CREATE_EVENT_INITIAL_SET  0x00000002
         //CREATE_EVENT_MANUAL_RESET 0x00000001
         //ResetEvents
         HANDLE eventEX = CreateEventEx(NULL, NULL, 0, EVENT_ALL_ACCESS);
 
-        //GPU
+        //GPU完成后会通知句柄
         ANALYSIS_HRESULT(fence->SetEventOnCompletion(currentFenceIndex, eventEX));
 
-        //
+        //等待GPU,阻塞主线程
         WaitForSingleObject(eventEX, INFINITE);
         CloseHandle(eventEX);
     }
@@ -329,7 +296,7 @@ bool FWindowsEngine::InitWindows(FWinMainCommandParameters InParameters)
 
 bool FWindowsEngine::InitDirect3D()
 {
-
+	//Debug
     ComPtr<ID3D12Debug> d3d12Debug;
     if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&d3d12Debug))))
     {
@@ -346,8 +313,7 @@ bool FWindowsEngine::InitDirect3D()
     //  E_HANDLE            无效句柄
     //  E_ABORT             操作终止
     ANALYSIS_HRESULT(CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory)));
-    IID_PPV_ARGS(&d3dDevice);
-    HRESULT d3dDeviceResult = D3D12CreateDevice(NULL, D3D_FEATURE_LEVEL_10_0, IID_PPV_ARGS(&d3dDevice));
+    HRESULT d3dDeviceResult = D3D12CreateDevice(NULL, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&d3dDevice));
     if (FAILED(d3dDeviceResult))
     {
         //warp
@@ -369,26 +335,34 @@ bool FWindowsEngine::InitDirect3D()
     */
     ANALYSIS_HRESULT(d3dDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)));
 
+////////////////////////////////////////////////////////////////////////////////////////
+	//INT Priority 
+	//D3D12_COMMAND_QUEUE_PRIORITY
+	//D3D12_COMMAND_QUEUE_PRIORITY_NORMAL
+	//D3D12_COMMAND_QUEUE_PRIORITY_HIGH
+	//NodeMask Ö¸Ê¾¸ÃÃüÁî¶ÓÁÐÓ¦ÔÚÄÄ¸öGPU½ÚµãÉÏÖ´ÐÐ
+
     //初始化命令对象
     D3D12_COMMAND_QUEUE_DESC queueDesc = {};
     queueDesc.Type = D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT;
     queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAGS::D3D12_COMMAND_QUEUE_FLAG_NONE;
     ANALYSIS_HRESULT(d3dDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&commandQueue)));
 
+    ID3D12CommandAllocator Allocator();
     ANALYSIS_HRESULT(d3dDevice->CreateCommandAllocator(
         D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT,
-        IID_PPV_ARGS(commandAllocator.GetAddressOf()))
-    );
+        IID_PPV_ARGS(commandAllocator.GetAddressOf())
+    ));
 
     ANALYSIS_HRESULT(d3dDevice->CreateCommandList(
         0,//默认一个GPU
         D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT,
         commandAllocator.Get(),//将CommandList关联到分配器
-        NULL,
-        IID_PPV_ARGS(graphicsCommandList.GetAddressOf()))
-    );
+        NULL,//ID3D12PipelineState
+        IID_PPV_ARGS(graphicsCommandList.GetAddressOf())
+    ));
 
-    graphicsCommandList->Close();
+    ANALYSIS_HRESULT(graphicsCommandList->Close());
     //多重采样
     ////////////////////////////////////////////////////////////////////////////////
     D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS qualityLevels;
@@ -404,9 +378,9 @@ bool FWindowsEngine::InitDirect3D()
     ));
 
     m4xQualityLevels = qualityLevels.NumQualityLevels;
-
+    
     //交换链
-    ////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
     swapChain.Reset();
     DXGI_SWAP_CHAIN_DESC swapChainDesc;
     swapChainDesc.BufferDesc.Width = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
@@ -414,20 +388,29 @@ bool FWindowsEngine::InitDirect3D()
     swapChainDesc.BufferDesc.RefreshRate.Numerator = FEngineRenderConfig::GetRenderConfig()->RefreshRate;
     swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
     swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
     swapChainDesc.BufferDesc.Format = backBufferFormat;
-
-    swapChainDesc.BufferCount = FEngineRenderConfig::GetRenderConfig()->SwapChainCount;
-
+    
+	swapChainDesc.BufferCount = FEngineRenderConfig::GetRenderConfig()->SwapChainCount;
+	//DXGI_USAGE_BACK_BUFFER //
+	//DXGI_USAGE_READ_ONLY 
+	//DXGI_USAGE_SHADER_INPUT
+	//DXGI_USAGE_SHARED
+	//DXGI_USAGE_UNORDERED_ACCESS
     swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//使用表面或者资源作为输出渲染目标
     swapChainDesc.OutputWindow = mainWindowsHandle;//指定Window句柄
     swapChainDesc.Windowed = true;//以窗口运行
     swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_FLIP_DISCARD;
     swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG::DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-    swapChainDesc.SampleDesc.Count = bMSAA4XEnabled ? 4 : 1;
-    swapChainDesc.SampleDesc.Quality = bMSAA4XEnabled ? (m4xQualityLevels - 1) : 0;
+    swapChainDesc.SampleDesc.Count = GetDXGISampleCount();
+    swapChainDesc.SampleDesc.Quality = GetDXGISampleQuality();
 
-    ANALYSIS_HRESULT(dxgiFactory->CreateSwapChain(commandQueue.Get(), &swapChainDesc, swapChain.GetAddressOf()));
+    ANALYSIS_HRESULT(dxgiFactory->CreateSwapChain(
+        commandQueue.Get(),
+        &swapChainDesc,
+        swapChain.GetAddressOf()
+    ));
 
     //资源描述对象
     ////////////////////////////////////////////////////////////////////////////////
@@ -452,5 +435,108 @@ bool FWindowsEngine::InitDirect3D()
     ANALYSIS_HRESULT(d3dDevice->CreateDescriptorHeap(&dsvDescriptorHeapDesc, IID_PPV_ARGS(dsvHeap.GetAddressOf())));
 
     return false;
+}
+
+void FWindowsEngine::PostInitDirect3D()
+{
+    //同步
+    WaitGPUCommandQueueComplete();
+
+    ANALYSIS_HRESULT(graphicsCommandList->Reset(commandAllocator.Get(), NULL));
+    for (int i = 0; i < FEngineRenderConfig::GetRenderConfig()->SwapChainCount; ++i)
+    {
+        swapChainBuffer[i].Reset();
+    }
+    depthStencilBuffer.Reset();
+
+    swapChain->ResizeBuffers(
+        FEngineRenderConfig::GetRenderConfig()->SwapChainCount,
+        FEngineRenderConfig::GetRenderConfig()->ScreenWidth,
+        FEngineRenderConfig::GetRenderConfig()->ScreenHeight,
+        backBufferFormat,
+        DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
+    );
+
+    //拿到描述Size
+    rtvDescriptorSize = d3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+    CD3DX12_CPU_DESCRIPTOR_HANDLE heapHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
+    for (int i = 0; i < FEngineRenderConfig::GetRenderConfig()->SwapChainCount; ++i)
+    {
+        swapChain->GetBuffer(i, IID_PPV_ARGS(&swapChainBuffer[i]));
+        d3dDevice->CreateRenderTargetView(
+            swapChainBuffer[i].Get(),
+            nullptr,
+            heapHandle
+        );
+        heapHandle.Offset(1, rtvDescriptorSize);
+    }
+
+    D3D12_RESOURCE_DESC resourceDesv;
+    resourceDesv.Width = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
+    resourceDesv.Height = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
+    resourceDesv.Alignment = 0;
+    resourceDesv.MipLevels = 1;
+    resourceDesv.DepthOrArraySize = 1;
+    resourceDesv.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+    resourceDesv.SampleDesc.Count = GetDXGISampleCount();
+    resourceDesv.SampleDesc.Quality = GetDXGISampleQuality();
+    resourceDesv.Format = DXGI_FORMAT_R24G8_TYPELESS;
+    resourceDesv.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+    resourceDesv.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+
+    D3D12_CLEAR_VALUE clearValue;
+    clearValue.DepthStencil.Depth = 1.f;
+    clearValue.DepthStencil.Stencil = 0;
+    clearValue.Format = depthStencilBufferFormat;
+
+    CD3DX12_HEAP_PROPERTIES heapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+    d3dDevice->CreateCommittedResource(
+        &heapProperties,
+        D3D12_HEAP_FLAG_NONE,
+        &resourceDesv,
+        D3D12_RESOURCE_STATE_COMMON,
+        &clearValue,
+        IID_PPV_ARGS(depthStencilBuffer.GetAddressOf())
+    );
+
+    D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+    dsvDesc.Format = depthStencilBufferFormat;
+    dsvDesc.Texture2D.MipSlice = 0;
+    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+    dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+    d3dDevice->CreateDepthStencilView(
+        depthStencilBuffer.Get(),
+        &dsvDesc,
+        dsvHeap->GetCPUDescriptorHandleForHeapStart()
+    );
+
+    CD3DX12_RESOURCE_BARRIER resourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(
+        depthStencilBuffer.Get(),
+        D3D12_RESOURCE_STATE_COMMON,
+        D3D12_RESOURCE_STATE_DEPTH_WRITE
+    );
+    graphicsCommandList->ResourceBarrier(1, &resourceBarrier);
+    graphicsCommandList->Close();
+
+    ID3D12CommandList* commandList[] = { graphicsCommandList.Get() };
+    commandQueue->ExecuteCommandLists(_countof(commandList), commandList);
+
+    //覆盖原先Window画布
+    //描述视口尺寸
+    viewportInfo.TopLeftX = 0;
+    viewportInfo.TopLeftY = 0;
+    viewportInfo.Width = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
+    viewportInfo.Height = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
+    viewportInfo.MinDepth = 0.f;
+    viewportInfo.MaxDepth = 1.f;
+
+    //矩形
+    viewportRect.left = 0;
+    viewportRect.top = 0;
+    viewportRect.right = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
+    viewportRect.bottom = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
+
+    WaitGPUCommandQueueComplete();
+    return;
 }
 #endif

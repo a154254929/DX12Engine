@@ -42,7 +42,9 @@ int Init(FEngine *inEngine, HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cm
 
 void Tick(FEngine* inEngine)
 {
-	inEngine->Tick();
+	float deltaTime = 0.03f;
+	inEngine->Tick(deltaTime);
+	Sleep(deltaTime * 1000);
 }
 
 int Exit(FEngine *inEngine)
@@ -71,6 +73,8 @@ int Exit(FEngine *inEngine)
 	return returnValue;
 }
 
+FEngine* engine = NULL;
+
 // hInstance 自己的实例
 // prevInstance 上次实例
 // cmdLine 传递命令
@@ -88,22 +92,40 @@ int Exit(FEngine *inEngine)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
 	int returnValue = 0;
-	if (FEngine* engine = FEngineFactory::CreateEngine())
+	engine = FEngineFactory::CreateEngine();
+	if (engine)
 	{
 		//初始化
 		returnValue = Init(engine, hInstance, prevInstance, cmdLine, showCmd);
 
+		MSG engineMsg = { 0 };
+
 		//渲染出图
-		while (true)
+		while (engineMsg.message != WM_QUIT)
 		{
-			Tick(engine);
+			//PM_NOREMOVE			消息不从队列里除掉
+			//PM_REMOVE				消息从队列里除掉
+			//PM_MOTIFY				此标志使系统不是发等待程序空闲的线程
+			//
+			//PM_QS_INPUT			处理鼠标和键盘消息
+			//PM_QS_PAINT			处理画图消息
+			//PM_QS_POSTMESSAGE		处理所有被寄送的消息,包括计时器和热键
+			//PM_QS_SENDMESSAGE		处理所有发送消息
+			if (PeekMessage(&engineMsg, 0, 0, 0, PM_REMOVE))
+			{
+				TranslateMessage(&engineMsg);
+				DispatchMessage(&engineMsg);
+			}
+			else
+			{
+				Tick(engine);
+			}
 		}
 
 		//退出
 		returnValue = Exit(engine);
 
 		returnValue = 0;
-		return returnValue;
 	}
 	else
 	{
