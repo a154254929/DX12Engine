@@ -56,7 +56,7 @@ ComPtr<ID3D12Resource> IRenderingInterface::ConstructDefaultBuffer(ComPtr<ID3D12
 		IID_PPV_ARGS(buffer.GetAddressOf())
 	));
 
-	CD3DX12_HEAP_PROPERTIES updateBufferProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+	CD3DX12_HEAP_PROPERTIES updateBufferProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	ANALYSIS_HRESULT(GetD3dDevice()->CreateCommittedResource(
 		&updateBufferProperties,
 		D3D12_HEAP_FLAG_NONE,
@@ -84,8 +84,8 @@ ComPtr<ID3D12Resource> IRenderingInterface::ConstructDefaultBuffer(ComPtr<ID3D12
 		GetGraphicsCommandList().Get(),
 		buffer.Get(),
 		outTmpBuffer.Get(),
-		0,
-		0,
+		0,//0 -> D3D12_REQ_SUBRESOURCES
+		0,//0 -> D3D12_REQ_SUBRESOURCES
 		1,
 		&subresourceData
 	);
@@ -169,15 +169,15 @@ void FRenderingResourcesUpdate::Init(ID3D12Device* inDevice, UINT inElementSize,
 	elementSize = inElementSize;
 	CD3DX12_HEAP_PROPERTIES heapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(inElementSize * inElementCount);
-	inDevice->CreateCommittedResource(
+	ANALYSIS_HRESULT(inDevice->CreateCommittedResource(
 		&heapProperties,
 		D3D12_HEAP_FLAG_NONE,
 		&resourceDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&uploadBuffer)
-	);
-	ANALYSIS_HRESULT(uploadBuffer->Map(0, nullptr, reinterpret_cast<void**>(&data)));
+	));
+	ANALYSIS_HRESULT(uploadBuffer->Map(0,nullptr,reinterpret_cast<void**>(&data)));
 }
 
 void FRenderingResourcesUpdate::Update(int index, const void* inData)

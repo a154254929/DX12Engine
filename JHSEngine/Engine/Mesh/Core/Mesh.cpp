@@ -215,22 +215,22 @@ void FMesh::Draw(float deltaTime)
 
 void FMesh::PostDraw(float deltaTime)
 {
-	XMUINT3 meshPos = XMUINT3(5.0f, 5.0f, 5.0f);
+	XMINT3 cameraPos = XMINT3(5.0f, 5.0f, 5.0f);
 
-	XMVECTOR pos = XMVectorSet(meshPos.x, meshPos.y, meshPos.z, 1.0f);
+	XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
 	XMVECTOR viewTarget = XMVectorZero();
 	XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
 
 	XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
 	XMStoreFloat4x4(&viewMatrix, viewLookAt);
 
-	XMMATRIX ATRIXWorld = XMLoadFloat4x4(&worldMatrix);
-	XMMATRIX ATRIXProject = XMLoadFloat4x4(&projectMatrix);
-	XMMATRIX WVP = ATRIXWorld * viewLookAt * ATRIXProject;
+	XMMATRIX artixWorld = XMLoadFloat4x4(&worldMatrix);
+	XMMATRIX artixProject = XMLoadFloat4x4(&projectMatrix);
+	XMMATRIX wvp = artixWorld * viewLookAt * artixProject;
 
-	FObjectTransformation ObjectTransformation;
-	XMStoreFloat4x4(&ObjectTransformation.world, XMMatrixTranspose(WVP));
-	objectConstants->Update(0, &ObjectTransformation);
+	FObjectTransformation objectTransformation;
+	XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(wvp));
+	objectConstants->Update(0, &objectTransformation);
 }
 
 FMesh* FMesh::CreateMesh(const FMeshRenderingData* inRenderingData)
