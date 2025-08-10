@@ -7,13 +7,11 @@ vector<IRenderingInterface*> IRenderingInterface::renderingInterfaces;
 
 IRenderingInterface::IRenderingInterface()
 {
-	create_guid(&guid);
 	renderingInterfaces.push_back(this);
 }
 
 IRenderingInterface::~IRenderingInterface()
 {
-
 	for (auto iter = renderingInterfaces.begin(); iter != renderingInterfaces.end(); ++iter)
 	{
 		if (*iter == this)

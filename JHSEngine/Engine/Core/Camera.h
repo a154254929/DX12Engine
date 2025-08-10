@@ -1,6 +1,6 @@
 #pragma once
 #include "Viewport.h"
-#include "Object/CoreMinimalObject.h"
+#include "CoreObject/CoreMinimalObject.h"
 
 struct FInputKey;
 class CTransformationComponent;

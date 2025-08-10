@@ -1,10 +1,12 @@
-#pragma once
+﻿#pragma once
 #if defined(_WIN32)
 #include "../../Platform/Windows/WindowsEngine.h"
 #else
 #include "../../Core/Engine.h"
 #endif
-class IRenderingInterface
+
+//提供渲染内容的接口
+class IRenderingInterface : public IGuidInterface
 {
 	friend class CWindowsEngine;
 public:
@@ -16,13 +18,6 @@ public:
 	virtual void PreDraw(float deltaTime);
 	virtual void Draw(float deltaTime);
 	virtual void PostDraw(float deltaTime);
-
-	bool operator==(const IRenderingInterface& inOther)
-	{
-		return guid_equal(&guid, &inOther.guid);
-	}
-
-	simple_c_guid GetGuid() { return guid; }
 
 protected:
 	ComPtr<ID3D12Resource> ConstructDefaultBuffer(ComPtr<ID3D12Resource>& outTmpBuffer, const void* inData, UINT64 inDataSize);
@@ -37,8 +32,6 @@ protected:
 #endif
 private:
 	static vector<IRenderingInterface*> renderingInterfaces;
-
-	simple_c_guid guid;
 };
 
 class FRenderingResourcesUpdate : public enable_shared_from_this<FRenderingResourcesUpdate>

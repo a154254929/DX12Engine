@@ -6,6 +6,7 @@
 
 #if defined(_WIN32)
 #include "WindowsMessageProcessing.h"
+#include "../../Core/World.h"
 
 //class FVector
 //{
@@ -27,11 +28,17 @@ CWindowsEngine::CWindowsEngine()
     {
         swapChainBuffer.push_back(ComPtr<ID3D12Resource>());
     }
+    bTick = false;
 }
 
 CWindowsEngine::~CWindowsEngine()
 {
 
+}
+
+CEngine::CEngine()
+{
+    bTick = false;
 }
 
 int CWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
@@ -56,6 +63,8 @@ int CWindowsEngine::Init(FWinMainCommandParameters inParameters)
 
     PostInitDirect3D();
 
+    CWorld* world = CreateObject<CWorld>(new CWorld());
+
     Engine_Log("Engine initialization complete.");
     return 0;
 }
@@ -66,6 +75,11 @@ int CWindowsEngine::PostInit()
     {
         //构建Mesh
         CBoxMesh* boxMesh = CBoxMesh::CreateMesh();
+
+        for (auto& obj : gObjects)
+        {
+            obj->BeginInit();
+        }
 	}
 
 	ANALYSIS_HRESULT(graphicsCommandList->Close());
@@ -80,6 +94,11 @@ int CWindowsEngine::PostInit()
 
 void CWindowsEngine::Tick(float deltaTime)
 {
+    for (auto& obj : gObjects)
+    {
+        if(obj->IsTick())
+            obj->Tick(deltaTime);
+    }
     //重置录制相关的内存,为下一帧做准备
     ANALYSIS_HRESULT(commandAllocator->Reset());
 

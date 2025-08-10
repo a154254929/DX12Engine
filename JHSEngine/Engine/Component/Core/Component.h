@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Core/Object/CoreMinimalObject.h"
+#include "../../Core/CoreObject/CoreMinimalObject.h"
 
 class CComponent : public CCoreMinimalObject
 {

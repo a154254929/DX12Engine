@@ -1,6 +1,5 @@
 #pragma once
 #include "Core/Component.h"
-#include "../EngineMinimal.h"
 #include "Input/InputType.h"
 
 DEFINITION_SIMPLE_SINGLE_DELEGATE(FCaptureKeyboardInforDelegate, void, const FInputKey &);

@@ -20,7 +20,6 @@ public:
 	virtual int PreExit();
 	virtual int Exit();
 	virtual int PostExit();
-
 public:
 	ID3D12Resource* GetCurrentSwapBuff() const;
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentSwapBufferView() const;
