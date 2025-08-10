@@ -102,9 +102,9 @@ ComPtr<ID3D12Resource> IRenderingInterface::ConstructDefaultBuffer(ComPtr<ID3D12
 ComPtr<ID3D12Device> IRenderingInterface::GetD3dDevice()
 {
 #ifdef _WIN32
-	if (FWindowsEngine* inEngine = GetEngine())
+	if (CWindowsEngine* inEngine = GetEngine())
 #else
-	if (FEngine* inEngine = GetEngine())
+	if (CEngine* inEngine = GetEngine())
 #endif
 	{
 		return inEngine->d3dDevice;
@@ -115,9 +115,9 @@ ComPtr<ID3D12Device> IRenderingInterface::GetD3dDevice()
 ComPtr<ID3D12GraphicsCommandList> IRenderingInterface::GetGraphicsCommandList()
 {
 #ifdef _WIN32
-	if (FWindowsEngine* inEngine = GetEngine())
+	if (CWindowsEngine* inEngine = GetEngine())
 #else
-	if (FEngine* inEngine = GetEngine())
+	if (CEngine* inEngine = GetEngine())
 #endif
 	{
 		return inEngine->graphicsCommandList;
@@ -128,9 +128,9 @@ ComPtr<ID3D12GraphicsCommandList> IRenderingInterface::GetGraphicsCommandList()
 ComPtr<ID3D12CommandAllocator> IRenderingInterface::GetCommandAllocator()
 {
 #ifdef _WIN32
-	if (FWindowsEngine* inEngine = GetEngine())
+	if (CWindowsEngine* inEngine = GetEngine())
 #else
-	if (FEngine* inEngine = GetEngine())
+	if (CEngine* inEngine = GetEngine())
 #endif
 	{
 		return inEngine->commandAllocator;
@@ -139,12 +139,12 @@ ComPtr<ID3D12CommandAllocator> IRenderingInterface::GetCommandAllocator()
 }
 
 #ifdef _WIN32
-FWindowsEngine* IRenderingInterface::GetEngine()
+CWindowsEngine* IRenderingInterface::GetEngine()
 {
-	return dynamic_cast<FWindowsEngine*>(engine);
+	return dynamic_cast<CWindowsEngine*>(engine);
 }
 #else
-FEngine* IRenderingInterface::GetEngine()
+CEngine* IRenderingInterface::GetEngine()
 {
 	return engine;
 }

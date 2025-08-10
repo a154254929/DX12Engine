@@ -6,7 +6,7 @@
 #endif
 class IRenderingInterface
 {
-	friend class FWindowsEngine;
+	friend class CWindowsEngine;
 public:
 	IRenderingInterface();
 	virtual ~IRenderingInterface();
@@ -31,9 +31,9 @@ protected:
 	ComPtr<ID3D12GraphicsCommandList> GetGraphicsCommandList();
 	ComPtr<ID3D12CommandAllocator> GetCommandAllocator();
 #ifdef _WIN32
-	FWindowsEngine* GetEngine();
+	CWindowsEngine* GetEngine();
 #else
-	FEngine* GetEngine();
+	CEngine* GetEngine();
 #endif
 private:
 	static vector<IRenderingInterface*> renderingInterfaces;

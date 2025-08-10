@@ -1,7 +1,7 @@
 #include "Mesh.h"
 #include "../../Config/EngineRenderConfig.h"
 
-FMesh::FMesh()
+CMesh::CMesh()
 	: vertexStrideInBytes(0)
 	, vertexSizeInBytes(0)
 	, indexSizeInBytes(0)
@@ -15,7 +15,7 @@ FMesh::FMesh()
 }
 
 const float PI = 3.1415926535f;
-void FMesh::Init()
+void CMesh::Init()
 {
 	float aspectRatio = (float)FEngineRenderConfig::GetRenderConfig()->ScreenWidth / (float)FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
 	XMMATRIX project = XMMatrixPerspectiveFovLH(
@@ -28,7 +28,7 @@ void FMesh::Init()
 	XMStoreFloat4x4(&projectMatrix, project);
 }
 
-void FMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
+void CMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
 	//构建栈
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc;
@@ -175,12 +175,12 @@ void FMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
     ANALYSIS_HRESULT(GetD3dDevice()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&pipelineStatePSO)))
 }
 
-void FMesh::PreDraw(float deltaTime)
+void CMesh::PreDraw(float deltaTime)
 {
     GetGraphicsCommandList()->Reset(GetCommandAllocator().Get(), pipelineStatePSO.Get());
 }
 
-void FMesh::Draw(float deltaTime)
+void CMesh::Draw(float deltaTime)
 {
     ID3D12DescriptorHeap* descriptorHeap[] = { cbvHeap.Get() };
     GetGraphicsCommandList()->SetDescriptorHeaps(_countof(descriptorHeap), descriptorHeap);
@@ -213,7 +213,7 @@ void FMesh::Draw(float deltaTime)
 	);
 }
 
-void FMesh::PostDraw(float deltaTime)
+void CMesh::PostDraw(float deltaTime)
 {
 	XMINT3 cameraPos = XMINT3(5.0f, 5.0f, 5.0f);
 
@@ -233,14 +233,14 @@ void FMesh::PostDraw(float deltaTime)
 	objectConstants->Update(0, &objectTransformation);
 }
 
-FMesh* FMesh::CreateMesh(const FMeshRenderingData* inRenderingData)
+CMesh* CMesh::CreateMesh(const FMeshRenderingData* inRenderingData)
 {
-	FMesh* mesh = new FMesh();
+	CMesh* mesh = new CMesh();
 	mesh->BuildMesh(inRenderingData);
 	return mesh;
 }
 
-D3D12_VERTEX_BUFFER_VIEW FMesh::GetVertexBufferView()
+D3D12_VERTEX_BUFFER_VIEW CMesh::GetVertexBufferView()
 {
 	D3D12_VERTEX_BUFFER_VIEW vbv;
 	vbv.BufferLocation = gpuVertexBufferPtr->GetGPUVirtualAddress();
@@ -249,7 +249,7 @@ D3D12_VERTEX_BUFFER_VIEW FMesh::GetVertexBufferView()
 	return vbv;
 }
 
-D3D12_INDEX_BUFFER_VIEW FMesh::GetIndexBufferView()
+D3D12_INDEX_BUFFER_VIEW CMesh::GetIndexBufferView()
 {
 	D3D12_INDEX_BUFFER_VIEW ibv;
 	ibv.BufferLocation = gpuIndexBufferPtr->GetGPUVirtualAddress();

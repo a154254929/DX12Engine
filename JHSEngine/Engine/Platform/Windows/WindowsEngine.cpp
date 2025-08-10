@@ -15,7 +15,7 @@
 //	unsigned char a;//255
 //};
 
-FWindowsEngine::FWindowsEngine()
+CWindowsEngine::CWindowsEngine()
     : currentFenceIndex(0)
     , m4xQualityLevels(0)
     , bMSAA4XEnabled(false)
@@ -29,12 +29,12 @@ FWindowsEngine::FWindowsEngine()
     }
 }
 
-FWindowsEngine::~FWindowsEngine()
+CWindowsEngine::~CWindowsEngine()
 {
 
 }
 
-int FWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
+int CWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
 {
     //日志系统初始化
     const char logPath[] = "../log";
@@ -48,7 +48,7 @@ int FWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
     return 0;
 }
 
-int FWindowsEngine::Init(FWinMainCommandParameters inParameters)
+int CWindowsEngine::Init(FWinMainCommandParameters inParameters)
 {
     InitWindows(inParameters);
 
@@ -60,12 +60,12 @@ int FWindowsEngine::Init(FWinMainCommandParameters inParameters)
     return 0;
 }
 
-int FWindowsEngine::PostInit()
+int CWindowsEngine::PostInit()
 {
     ANALYSIS_HRESULT(graphicsCommandList->Reset(commandAllocator.Get(), NULL));
     {
         //构建Mesh
-        FBoxMesh* boxMesh = FBoxMesh::CreateMesh();
+        CBoxMesh* boxMesh = CBoxMesh::CreateMesh();
 	}
 
 	ANALYSIS_HRESULT(graphicsCommandList->Close());
@@ -78,7 +78,7 @@ int FWindowsEngine::PostInit()
 	return 0;
 }
 
-void FWindowsEngine::Tick(float deltaTime)
+void CWindowsEngine::Tick(float deltaTime)
 {
     //重置录制相关的内存,为下一帧做准备
     ANALYSIS_HRESULT(commandAllocator->Reset());
@@ -158,31 +158,31 @@ void FWindowsEngine::Tick(float deltaTime)
     WaitGPUCommandQueueComplete();
 }
 
-int FWindowsEngine::PreExit()
+int CWindowsEngine::PreExit()
 {
     Engine_Log("Engine pre exit complete.");
     return 0;
 }
 
-int FWindowsEngine::Exit()
+int CWindowsEngine::Exit()
 {
     Engine_Log("Engine exit complete.");
     return 0;
 }
 
-int FWindowsEngine::PostExit()
+int CWindowsEngine::PostExit()
 {
     FEngineRenderConfig::Destroy();
     Engine_Log("Engine post exit complete.");
     return 0;
 }
 
-ID3D12Resource* FWindowsEngine::GetCurrentSwapBuff() const
+ID3D12Resource* CWindowsEngine::GetCurrentSwapBuff() const
 {
     return swapChainBuffer[currentSwapBuffIndex].Get();
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE FWindowsEngine::GetCurrentSwapBufferView() const
+D3D12_CPU_DESCRIPTOR_HANDLE CWindowsEngine::GetCurrentSwapBufferView() const
 {
     return CD3DX12_CPU_DESCRIPTOR_HANDLE(
         rtvHeap->GetCPUDescriptorHandleForHeapStart(),
@@ -191,22 +191,22 @@ D3D12_CPU_DESCRIPTOR_HANDLE FWindowsEngine::GetCurrentSwapBufferView() const
     );
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE FWindowsEngine::GetCurrentDepthStencilView() const
+D3D12_CPU_DESCRIPTOR_HANDLE CWindowsEngine::GetCurrentDepthStencilView() const
 {
     return dsvHeap->GetCPUDescriptorHandleForHeapStart();
 }
 
-UINT FWindowsEngine::GetDXGISampleCount() const
+UINT CWindowsEngine::GetDXGISampleCount() const
 {
     return bMSAA4XEnabled ? 4 : 1;
 }
 
-UINT FWindowsEngine::GetDXGISampleQuality() const
+UINT CWindowsEngine::GetDXGISampleQuality() const
 {
     return bMSAA4XEnabled ? (m4xQualityLevels - 1) : 0;
 }
 
-void FWindowsEngine::WaitGPUCommandQueueComplete()
+void CWindowsEngine::WaitGPUCommandQueueComplete()
 {
     currentFenceIndex++;
 
@@ -231,7 +231,7 @@ void FWindowsEngine::WaitGPUCommandQueueComplete()
     }
 }
 
-bool FWindowsEngine::InitWindows(FWinMainCommandParameters InParameters)
+bool CWindowsEngine::InitWindows(FWinMainCommandParameters InParameters)
 {
     //注册窗口
     WNDCLASSEX windowsClass;
@@ -294,7 +294,7 @@ bool FWindowsEngine::InitWindows(FWinMainCommandParameters InParameters)
     Engine_Log("InitWindow complete.");
 }
 
-bool FWindowsEngine::InitDirect3D()
+bool CWindowsEngine::InitDirect3D()
 {
 	//Debug
     ComPtr<ID3D12Debug> d3d12Debug;
@@ -437,7 +437,7 @@ bool FWindowsEngine::InitDirect3D()
     return false;
 }
 
-void FWindowsEngine::PostInitDirect3D()
+void CWindowsEngine::PostInitDirect3D()
 {
     //同步
     WaitGPUCommandQueueComplete();

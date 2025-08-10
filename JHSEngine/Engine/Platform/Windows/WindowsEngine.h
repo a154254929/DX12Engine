@@ -3,12 +3,12 @@
 #ifdef _WIN32
 #include "../../Core/Engine.h"
 
-class FWindowsEngine :public FEngine
+class CWindowsEngine : public CEngine
 {
 	friend class IRenderingInterface;
 public:
-	FWindowsEngine();
-	~FWindowsEngine();
+	CWindowsEngine();
+	~CWindowsEngine();
 
 	virtual int PreInit(FWinMainCommandParameters inParameters);
 

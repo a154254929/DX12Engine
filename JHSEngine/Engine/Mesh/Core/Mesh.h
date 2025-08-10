@@ -12,10 +12,10 @@ struct FObjectTransformation
 	static XMFLOAT4X4 IdentityMatrix4x4();
 };
 
-class FMesh : public IRenderingInterface
+class CMesh : public CCoreMinimalObject, public IRenderingInterface
 {
 public:
-	FMesh();
+	CMesh();
 	virtual void Init();
 
 	virtual void BuildMesh(const FMeshRenderingData* inRenderingData);
@@ -24,7 +24,7 @@ public:
 	virtual void Draw(float deltaTime);
 	virtual void PostDraw(float deltaTime);
 
-	static FMesh* CreateMesh(const FMeshRenderingData* inRenderingData);
+	static CMesh* CreateMesh(const FMeshRenderingData* inRenderingData);
 
 	D3D12_VERTEX_BUFFER_VIEW GetVertexBufferView();
 	D3D12_INDEX_BUFFER_VIEW GetIndexBufferView();

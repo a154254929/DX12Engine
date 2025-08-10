@@ -24,4 +24,4 @@ using namespace std;
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 
-extern class FEngine* engine;
+extern class CEngine* engine;
