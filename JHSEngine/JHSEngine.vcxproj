@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\Component\Core\Component.cpp" />
     <ClCompile Include="Engine\Component\InputComponent.cpp" />
+    <ClCompile Include="Engine\Component\Input\InputType.cpp" />
     <ClCompile Include="Engine\Component\TransformationComponent.cpp" />
     <ClCompile Include="Engine\Config\EngineRenderConfig.cpp" />
     <ClCompile Include="Engine\Core\Camera.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="Engine\Mesh\Core\MeshType.cpp" />
     <ClCompile Include="Engine\Platform\Windows\WindowsEngine.cpp" />
     <ClCompile Include="Engine\Platform\Windows\WindowsMessageProcessing.cpp" />
+    <ClCompile Include="Engine\Platform\Windows\WindowsPlatform.h.cpp" />
     <ClCompile Include="Engine\Rendering\Core\Rendering.cpp" />
     <ClCompile Include="Engine\Shader\Core\Shader.cpp" />
     <ClCompile Include="simple_library\private\simple_channel\simple_io_stream\simple_io_stream.cpp" />
@@ -199,6 +201,7 @@
     <ClInclude Include="Engine\CodeReflection\CodeReflectionMacroTag.h" />
     <ClInclude Include="Engine\Component\Core\Component.h" />
     <ClInclude Include="Engine\Component\InputComponent.h" />
+    <ClInclude Include="Engine\Component\Input\InputType.h" />
     <ClInclude Include="Engine\Component\TransformationComponent.h" />
     <ClInclude Include="Engine\Config\EngineRenderConfig.h" />
     <ClInclude Include="Engine\Core\Camera.h" />
@@ -216,6 +219,7 @@
     <ClInclude Include="Engine\Mesh\Core\MeshType.h" />
     <ClInclude Include="Engine\Platform\Windows\WindowsEngine.h" />
     <ClInclude Include="Engine\Platform\Windows\WindowsMessageProcessing.h" />
+    <ClInclude Include="Engine\Platform\Windows\WindowsPlatform.h" />
     <ClInclude Include="Engine\Rendering\Core\Rendering.h" />
     <ClInclude Include="Engine\Rendering\DirectX12\d3dx12.h" />
     <ClInclude Include="Engine\Shader\Core\Shader.h" />

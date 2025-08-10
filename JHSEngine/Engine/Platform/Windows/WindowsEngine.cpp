@@ -292,6 +292,7 @@ bool CWindowsEngine::InitWindows(FWinMainCommandParameters InParameters)
     UpdateWindow(mainWindowsHandle);
 
     Engine_Log("InitWindow complete.");
+    return true;
 }
 
 bool CWindowsEngine::InitDirect3D()

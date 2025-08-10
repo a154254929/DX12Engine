@@ -210,6 +210,12 @@
     <ClCompile Include="Engine\Component\InputComponent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Platform\Windows\WindowsPlatform.h.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Component\Input\InputType.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="simple_library\private\simple_channel\simple_net_connetion\simple_connetion_tcp.h">
@@ -456,6 +462,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Engine\CodeReflection\CodeReflectionMacroTag.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Platform\Windows\WindowsPlatform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Component\Input\InputType.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
