@@ -11,5 +11,5 @@ public:
 
 	virtual void Draw(float deltaTime);
 
-	static CCylinderMesh* CreateMesh(float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
+	static CCylinderMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inTopRadius, float inBottomRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
 };

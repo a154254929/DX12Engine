@@ -11,5 +11,5 @@ public:
 
 	virtual void Draw(float deltaTime);
 
-	static CSphereMesh* CreateMesh(float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
+	static CSphereMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
 };

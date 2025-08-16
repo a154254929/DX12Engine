@@ -16,10 +16,8 @@ void CPlaneMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 	Super::BuildMesh(inRenderingData);
 }
 
-CPlaneMesh* CPlaneMesh::CreateMesh(float inHeight, float inWidth, uint32_t inHeightSubdivide, uint32_t inWidthSubdivide)
+CPlaneMesh* CPlaneMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, uint32_t inHeightSubdivide, uint32_t inWidthSubdivide)
 {
-	FMeshRenderingData meshRenderingData;
-
 	auto subdivideValue = [&](float inValue, float inSubdivideValue)->float
 	{
 			if (inValue <= 0)

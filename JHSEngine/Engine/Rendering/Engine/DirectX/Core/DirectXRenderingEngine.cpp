@@ -1,17 +1,20 @@
-#include "WindowsEngine.h"
-#include "../../Debug/EngineDebug.h"
-#include "../../Config/EngineRenderConfig.h"
-#include "../../Rendering/Core/Rendering.h"
-#include "../../Mesh/BoxMesh.h"
-#include "../../Mesh/SphereMesh.h"
-#include "../../Mesh/CylinderMesh.h"
-#include "../../Mesh/ConeMesh.h"
-#include "../../Mesh/PlaneMesh.h"
-#include "../../Mesh/CustomMesh.h"
+﻿#include "DirectXRenderingEngine.h"
+
+#include "../../../../Debug/EngineDebug.h"
+#include "../../../../Config/EngineRenderConfig.h"
+#include "../../../../Rendering/Core/Rendering.h"
+#include "../../../../Mesh/BoxMesh.h"
+#include "../../../../Mesh/SphereMesh.h"
+#include "../../../../Mesh/CylinderMesh.h"
+#include "../../../../Mesh/ConeMesh.h"
+#include "../../../../Mesh/PlaneMesh.h"
+#include "../../../../Mesh/CustomMesh.h"
+#include "../../../../Core/CoreObject/CoreMinimalObject.h"
+#include "../../../../Mesh/Core/MeshManager.h"
 
 #if defined(_WIN32)
-#include "WindowsMessageProcessing.h"
-#include "../../Core/World.h"
+#include "../../../../Core/WinMainCommandParameters.h"
+
 
 //class FVector
 //{
@@ -21,7 +24,7 @@
 //	unsigned char a;//255
 //};
 
-CWindowsEngine::CWindowsEngine()
+CDirectXRenderingEngine::CDirectXRenderingEngine()
     : currentFenceIndex(0)
     , m4xQualityLevels(0)
     , bMSAA4XEnabled(false)
@@ -34,90 +37,64 @@ CWindowsEngine::CWindowsEngine()
         swapChainBuffer.push_back(ComPtr<ID3D12Resource>());
     }
     bTick = false;
+
+    meshManager = new CMeshManager();
 }
 
-CWindowsEngine::~CWindowsEngine()
+CDirectXRenderingEngine::~CDirectXRenderingEngine()
 {
-
+    delete meshManager;
 }
 
-CEngine::CEngine()
+int CDirectXRenderingEngine::PreInit(FWinMainCommandParameters inParameters)
 {
-    bTick = false;
-}
-
-int CWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
-{
-    //日志系统初始化
-    const char logPath[] = "../log";
-    init_log_system(logPath);
-    Engine_Log("Log Init.");
-     
-    //处理命令
-
-
-    Engine_Log("Engine pre initialization complete.");
+    Engine_Log("DirectXRenderingEngine pre initialization complete.");
     return 0;
 }
 
-int CWindowsEngine::Init(FWinMainCommandParameters inParameters)
+int CDirectXRenderingEngine::Init(FWinMainCommandParameters inParameters)
 {
-    InitWindows(inParameters);
-
     InitDirect3D();
 
     PostInitDirect3D();
 
-    CWorld* world = CreateObject<CWorld>(new CWorld());
+    meshManager->Init();
 
-    Engine_Log("Engine initialization complete.");
+    Engine_Log("DirectXRenderingEngine initialization complete.");
     return 0;
 }
 
-int CWindowsEngine::PostInit()
+int CDirectXRenderingEngine::PostInit()
 {
     ANALYSIS_HRESULT(graphicsCommandList->Reset(commandAllocator.Get(), NULL));
     {
         //构建Mesh
-        //CBoxMesh* boxMesh = CBoxMesh::CreateMesh(3, 2, 4);
-        //CSphereMesh* sphereMesh = CSphereMesh::CreateMesh(3, 20, 20);
-        //CCylinderMesh* cylinderMesh = CCylinderMesh::CreateMesh(1, 5, 20, 5);
-        //CConeMesh* coneMesh = CConeMesh::CreateMesh(1, 5, 20, 5);
-        //CPlaneMesh* planeMesh = CPlaneMesh::CreateMesh(10, 10, 10, 10);
+        //CMesh* boxMesh = meshManager->CreateBoxMesh(3, 2, 4);
+        //CMesh* sphereMesh = meshManager->CreateSphereMesh(3, 20, 20);
+        //CMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 20, 5);
+        //CMesh* coneMesh = meshManager->CreateConeMesh(1, 5, 20, 5);
+        //CMesh* planeMesh = meshManager->CreatePlaneMesh(10, 10, 10, 10);
         //string objPath = "../JHSEngine/Rock.obj";
         string objPath = "../JHSEngine/ball.obj";
-        CCustomMesh* customMesh = CCustomMesh::CreateMesh(objPath);
+        CMesh* customMesh = meshManager->CreateMesh(objPath);
+    }
 
-        for (auto& obj : gObjects)
-        {
-            obj->BeginInit();
-        }
-	}
-
-	ANALYSIS_HRESULT(graphicsCommandList->Close());
+    ANALYSIS_HRESULT(graphicsCommandList->Close());
 
     ID3D12CommandList* commandList[] = { graphicsCommandList.Get() };
     commandQueue->ExecuteCommandLists(_countof(commandList), commandList);
 
-	WaitGPUCommandQueueComplete();
-	Engine_Log("Engine post initialization complete.");
-	return 0;
+    WaitGPUCommandQueueComplete();
+    Engine_Log("Engine post initialization complete.");
+    return 0;
 }
 
-void CWindowsEngine::Tick(float deltaTime)
+void CDirectXRenderingEngine::Tick(float deltaTime)
 {
-    for (auto& obj : gObjects)
-    {
-        if(obj->IsTick())
-            obj->Tick(deltaTime);
-    }
     //重置录制相关的内存,为下一帧做准备
     ANALYSIS_HRESULT(commandAllocator->Reset());
 
-    for (auto& temp : IRenderingInterface::renderingInterfaces)
-    {
-        temp->PreDraw(deltaTime);
-    }
+    meshManager->PreDraw(deltaTime);
 
     //指向那个资源 转换状态
     CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = CD3DX12_RESOURCE_BARRIER::Transition(
@@ -126,7 +103,7 @@ void CWindowsEngine::Tick(float deltaTime)
         D3D12_RESOURCE_STATE_RENDER_TARGET
     );
 
-	graphicsCommandList->ResourceBarrier(1, &resourceBarrierPresent);
+    graphicsCommandList->ResourceBarrier(1, &resourceBarrierPresent);
 
     //需要每帧执行,绑定矩形框
     graphicsCommandList->RSSetViewports(1, &viewportInfo);
@@ -160,11 +137,8 @@ void CWindowsEngine::Tick(float deltaTime)
     );
 
     //渲染其他内容
-    for (auto& temp : IRenderingInterface::renderingInterfaces)
-    {
-        temp->Draw(deltaTime);
-        temp->PostDraw(deltaTime);
-    }
+    meshManager->Draw(deltaTime);
+    meshManager->PostDraw(deltaTime);
 
     //指向那个资源 转换其状态
     CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
@@ -189,31 +163,31 @@ void CWindowsEngine::Tick(float deltaTime)
     WaitGPUCommandQueueComplete();
 }
 
-int CWindowsEngine::PreExit()
+int CDirectXRenderingEngine::PreExit()
 {
     Engine_Log("Engine pre exit complete.");
     return 0;
 }
 
-int CWindowsEngine::Exit()
+int CDirectXRenderingEngine::Exit()
 {
     Engine_Log("Engine exit complete.");
     return 0;
 }
 
-int CWindowsEngine::PostExit()
+int CDirectXRenderingEngine::PostExit()
 {
     FEngineRenderConfig::Destroy();
     Engine_Log("Engine post exit complete.");
     return 0;
 }
 
-ID3D12Resource* CWindowsEngine::GetCurrentSwapBuff() const
+ID3D12Resource* CDirectXRenderingEngine::GetCurrentSwapBuff() const
 {
     return swapChainBuffer[currentSwapBuffIndex].Get();
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE CWindowsEngine::GetCurrentSwapBufferView() const
+D3D12_CPU_DESCRIPTOR_HANDLE CDirectXRenderingEngine::GetCurrentSwapBufferView() const
 {
     return CD3DX12_CPU_DESCRIPTOR_HANDLE(
         rtvHeap->GetCPUDescriptorHandleForHeapStart(),
@@ -222,22 +196,22 @@ D3D12_CPU_DESCRIPTOR_HANDLE CWindowsEngine::GetCurrentSwapBufferView() const
     );
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE CWindowsEngine::GetCurrentDepthStencilView() const
+D3D12_CPU_DESCRIPTOR_HANDLE CDirectXRenderingEngine::GetCurrentDepthStencilView() const
 {
     return dsvHeap->GetCPUDescriptorHandleForHeapStart();
 }
 
-UINT CWindowsEngine::GetDXGISampleCount() const
+UINT CDirectXRenderingEngine::GetDXGISampleCount() const
 {
     return bMSAA4XEnabled ? 4 : 1;
 }
 
-UINT CWindowsEngine::GetDXGISampleQuality() const
+UINT CDirectXRenderingEngine::GetDXGISampleQuality() const
 {
     return bMSAA4XEnabled ? (m4xQualityLevels - 1) : 0;
 }
 
-void CWindowsEngine::WaitGPUCommandQueueComplete()
+void CDirectXRenderingEngine::WaitGPUCommandQueueComplete()
 {
     currentFenceIndex++;
 
@@ -262,73 +236,9 @@ void CWindowsEngine::WaitGPUCommandQueueComplete()
     }
 }
 
-bool CWindowsEngine::InitWindows(FWinMainCommandParameters InParameters)
+bool CDirectXRenderingEngine::InitDirect3D()
 {
-    //注册窗口
-    WNDCLASSEX windowsClass;
-    windowsClass.cbSize = sizeof(WNDCLASSEX);//该对象实际占用多大内存
-    windowsClass.cbClsExtra = 0;//是否需要额外空间
-    windowsClass.cbWndExtra = 0;//是否需要额外内存
-    windowsClass.hbrBackground = nullptr;//如果没有设置就是GDI擦除
-    windowsClass.hCursor = LoadCursor(NULL, IDC_ARROW);//设置一个箭头光标
-    windowsClass.hIcon = nullptr;//应用程序方舟磁盘上显示的图标
-    windowsClass.hIconSm = nullptr;//应用程序左上角图标
-    windowsClass.hInstance = InParameters.HInstance;//窗口实例
-    windowsClass.lpszClassName = L"JHSEngine";//窗口名字
-    windowsClass.lpszMenuName = nullptr;//
-    windowsClass.style = CS_VREDRAW | CS_HREDRAW;//怎么绘制窗口 水平或垂直
-    windowsClass.lpfnWndProc = EngineWindowProc;//消息处理函数
-
-    //注册在窗口
-    ATOM registerAtom = RegisterClassEx(&windowsClass);
-
-    if (!registerAtom)
-    {
-        Engine_Log_Error("Register Fail.");
-        MessageBox(NULL, L"Register windows class fail", L"Error", MB_OK);
-    }
-
-    RECT rect = { 0, 0, FEngineRenderConfig::GetRenderConfig()->ScreenWidth, FEngineRenderConfig::GetRenderConfig()->ScreenHeight };
-
-    //lpRect 视口
-    //dwStyle 视口风格
-    //bMenu 没有菜单
-    AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, NULL);
-
-    int windowWidth = rect.right - rect.left;
-    int windowHeight = rect.bottom - rect.top;
-
-    mainWindowsHandle = CreateWindowEx(
-        NULL,                       //窗口额外风格
-        L"JHSEngine",               //窗口名称
-        L"JHS Engine",              //窗口标题栏名称
-        WS_OVERLAPPEDWINDOW,        //窗口风格
-        100, 100,                   //窗口坐标
-        windowWidth, windowHeight,  //´°¿Ú¿í¸ß
-        NULL,                       //¸±´°¿Ú¾ä±ú
-        nullptr,                    //²Ëµ¥¾ä±ú
-        InParameters.HInstance,     //´°¿ÚÊµÀý
-        NULL                        //¶îÍâ²ÎÊý
-    );
-
-    if (!mainWindowsHandle)
-    {
-        Engine_Log_Error("InitWindow fail.");
-        MessageBox(0, L"CreateWindow Failed", 0, 0);
-        return false;
-    }
-
-    //ÏÔÊ¾´°¿Ú
-    ShowWindow(mainWindowsHandle, SW_SHOW);
-    UpdateWindow(mainWindowsHandle);
-
-    Engine_Log("InitWindow complete.");
-    return true;
-}
-
-bool CWindowsEngine::InitDirect3D()
-{
-	//Debug
+    //Debug
     ComPtr<ID3D12Debug> d3d12Debug;
     if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&d3d12Debug))))
     {
@@ -367,14 +277,14 @@ bool CWindowsEngine::InitDirect3D()
     */
     ANALYSIS_HRESULT(d3dDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)));
 
-////////////////////////////////////////////////////////////////////////////////////////
-	//INT Priority 
-	//D3D12_COMMAND_QUEUE_PRIORITY
-	//D3D12_COMMAND_QUEUE_PRIORITY_NORMAL
-	//D3D12_COMMAND_QUEUE_PRIORITY_HIGH
-	//NodeMask Ö¸Ê¾¸ÃÃüÁî¶ÓÁÐÓ¦ÔÚÄÄ¸öGPU½ÚµãÉÏÖ´ÐÐ
+    ////////////////////////////////////////////////////////////////////////////////////////
+        //INT Priority 
+        //D3D12_COMMAND_QUEUE_PRIORITY
+        //D3D12_COMMAND_QUEUE_PRIORITY_NORMAL
+        //D3D12_COMMAND_QUEUE_PRIORITY_HIGH
+        //NodeMask Ö¸Ê¾¸ÃÃüÁî¶ÓÁÐÓ¦ÔÚÄÄ¸öGPU½ÚµãÉÏÖ´ÐÐ
 
-    //初始化命令对象
+        //初始化命令对象
     D3D12_COMMAND_QUEUE_DESC queueDesc = {};
     queueDesc.Type = D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT;
     queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAGS::D3D12_COMMAND_QUEUE_FLAG_NONE;
@@ -410,7 +320,7 @@ bool CWindowsEngine::InitDirect3D()
     ));
 
     m4xQualityLevels = qualityLevels.NumQualityLevels;
-    
+
     //交换链
 ////////////////////////////////////////////////////////////////////
     swapChain.Reset();
@@ -420,15 +330,15 @@ bool CWindowsEngine::InitDirect3D()
     swapChainDesc.BufferDesc.RefreshRate.Numerator = FEngineRenderConfig::GetRenderConfig()->RefreshRate;
     swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
     swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+    swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
     swapChainDesc.BufferDesc.Format = backBufferFormat;
-    
-	swapChainDesc.BufferCount = FEngineRenderConfig::GetRenderConfig()->SwapChainCount;
-	//DXGI_USAGE_BACK_BUFFER //
-	//DXGI_USAGE_READ_ONLY 
-	//DXGI_USAGE_SHADER_INPUT
-	//DXGI_USAGE_SHARED
-	//DXGI_USAGE_UNORDERED_ACCESS
+
+    swapChainDesc.BufferCount = FEngineRenderConfig::GetRenderConfig()->SwapChainCount;
+    //DXGI_USAGE_BACK_BUFFER //
+    //DXGI_USAGE_READ_ONLY 
+    //DXGI_USAGE_SHADER_INPUT
+    //DXGI_USAGE_SHARED
+    //DXGI_USAGE_UNORDERED_ACCESS
     swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//使用表面或者资源作为输出渲染目标
     swapChainDesc.OutputWindow = mainWindowsHandle;//指定Window句柄
     swapChainDesc.Windowed = true;//以窗口运行
@@ -469,7 +379,7 @@ bool CWindowsEngine::InitDirect3D()
     return false;
 }
 
-void CWindowsEngine::PostInitDirect3D()
+void CDirectXRenderingEngine::PostInitDirect3D()
 {
     //同步
     WaitGPUCommandQueueComplete();

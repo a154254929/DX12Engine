@@ -11,7 +11,7 @@ public:
 
 	virtual void Draw(float deltaTime);
 
-	static CCustomMesh* CreateMesh(string &inPath);
+	static CCustomMesh* CreateMesh(FMeshRenderingData& meshRenderingData, string &inPath);
 
 	static bool LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshData);
 };

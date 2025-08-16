@@ -16,10 +16,8 @@ void CBoxMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 	Super::BuildMesh(inRenderingData);
 }
 
-CBoxMesh* CBoxMesh::CreateMesh(float inHeight, float inWidth, float inDepth)
+CBoxMesh* CBoxMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, float inDepth)
 {
-	FMeshRenderingData meshRenderingData;
-
 	float halfHeight = inHeight * .5f;
 	float halfWidth = inWidth * .5f;
 	float halfDepth = inDepth * .5f;

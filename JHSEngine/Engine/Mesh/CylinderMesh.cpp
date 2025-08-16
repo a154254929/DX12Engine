@@ -16,15 +16,15 @@ void CCylinderMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 	Super::BuildMesh(inRenderingData);
 }
 
-CCylinderMesh* CCylinderMesh::CreateMesh(float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
+CCylinderMesh* CCylinderMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inTopRadius, float inBottomRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
 {
-	FMeshRenderingData meshRenderingData;
-
 	inAxialSubdivision = max(inAxialSubdivision, 3);
 	inHeightSubdivision = max(inHeightSubdivision, 1);
 
 	float thetaValue = XM_2PI / inAxialSubdivision;
-	float heightClip = inHeight * 1.f / (inHeightSubdivision - 1);
+	float clip = 1.f / (inHeightSubdivision - 1);
+	float heightClip = inHeight * clip;
+	float radiusClip = (inBottomRadius - inTopRadius) * clip;
 
 	float topHeight = inHeight * .5f;
 	float bottomHeight = -topHeight;
@@ -39,7 +39,7 @@ CCylinderMesh* CCylinderMesh::CreateMesh(float inRadius, float inHeight, uint32_
 	{
 		float theta = i * thetaValue;
 		meshRenderingData.vertexData.push_back(FVertex(
-			XMFLOAT3(inRadius * cosf(theta), topHeight, inRadius * sinf(theta)),
+			XMFLOAT3(inTopRadius * cosf(theta), topHeight, inTopRadius * sinf(theta)),
 			XMFLOAT4(0, i * 1.f / (inAxialSubdivision - 1), 1.f, 1.f)
 		));
 		meshRenderingData.vertexData[i + 1].normal = topNormal;
@@ -57,11 +57,12 @@ CCylinderMesh* CCylinderMesh::CreateMesh(float inRadius, float inHeight, uint32_
 	{
 		uint32_t roundStart = topBodyIndexStart + i * inAxialSubdivision;
 		float height = topHeight - heightClip * i;
+		float radius = inTopRadius + radiusClip * i;
 		for (uint32_t j = 0; j < inAxialSubdivision; ++j)
 		{
 			float theta = j * thetaValue;
 			meshRenderingData.vertexData.push_back(FVertex(
-				XMFLOAT3(inRadius * cosf(theta), height, inRadius * sinf(theta)),
+				XMFLOAT3(radius * cosf(theta), height, radius * sinf(theta)),
 				XMFLOAT4(.25f, j * 1.f / (inAxialSubdivision - 1), 1.f, 1.f)
 			));
 			meshRenderingData.vertexData[roundStart + j].normal = XMFLOAT3(cosf(theta), 0, sinf(theta));
@@ -89,7 +90,7 @@ CCylinderMesh* CCylinderMesh::CreateMesh(float inRadius, float inHeight, uint32_
 	{
 		float theta = i * thetaValue;
 		meshRenderingData.vertexData.push_back(FVertex(
-			XMFLOAT3(inRadius * cosf(theta), bottomHeight, inRadius * sinf(theta)),
+			XMFLOAT3(inBottomRadius * cosf(theta), bottomHeight, inBottomRadius * sinf(theta)),
 			XMFLOAT4(1.f, i * 1.f / (inAxialSubdivision - 1), 1.f, 1.f)
 		));
 		meshRenderingData.vertexData[bottomIndexStart + i].normal = bottomNormal;

@@ -16,9 +16,8 @@ void CCustomMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 	Super::BuildMesh(inRenderingData);
 }
 
-CCustomMesh* CCustomMesh::CreateMesh(string& inPath)
+CCustomMesh* CCustomMesh::CreateMesh(FMeshRenderingData& meshRenderingData, string& inPath)
 {
-	FMeshRenderingData meshRenderingData;
 	{
 		//拿到文件大小
 		unsigned int fileSize = get_file_size_by_filename(inPath.c_str());
@@ -47,7 +46,7 @@ CCustomMesh* CCustomMesh::CreateMesh(string& inPath)
 	return customMesh;
 }
 
-bool CCustomMesh::LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshData)
+bool CCustomMesh::LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshRenderingData)
 {
 	if (buffSize > 0)
 	{
@@ -76,14 +75,14 @@ bool CCustomMesh::LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingD
 					else
 					{
 						//先添加一个点
-						meshData->vertexData.push_back(FVertex(
+						meshRenderingData->vertexData.push_back(FVertex(
 							XMFLOAT3(),
 							XMFLOAT4(Colors::White)
 						));
 
 						//拿到添加后的位置
-						int topIndex = meshData->vertexData.size() - 1;
-						XMFLOAT3& float3InPos = meshData->vertexData[topIndex].position;
+						int topIndex = meshRenderingData->vertexData.size() - 1;
+						XMFLOAT3& float3InPos = meshRenderingData->vertexData[topIndex].position;
 
 						lineStream >> float3InPos.x;
 						lineStream >> float3InPos.y;
@@ -109,7 +108,7 @@ bool CCustomMesh::LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingD
 
 						//找到位置索引
 						char* vPosIndex = string_mid(saveLineString, tmpBuff, 0, stringPosA);
-						meshData->indexData.push_back(atoi(vPosIndex) - 1);
+						meshRenderingData->indexData.push_back(atoi(vPosIndex) - 1);
 
 						//找到纹理索引
 						int stringPosB = find_string(saveLineString, "/", stringPosA + 1);

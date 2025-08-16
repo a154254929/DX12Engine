@@ -1,6 +1,7 @@
 #include "Rendering.h"
 #ifdef _WIN32
 #include "../../Platform/Windows/WindowsEngine.h"
+#include "../../Rendering/Engine/DirectX/Core/DirectXRenderingEngine.h"
 #endif
 
 vector<IRenderingInterface*> IRenderingInterface::renderingInterfaces;
@@ -105,7 +106,7 @@ ComPtr<ID3D12Device> IRenderingInterface::GetD3dDevice()
 	if (CEngine* inEngine = GetEngine())
 #endif
 	{
-		return inEngine->d3dDevice;
+		return inEngine->GetRenderingEngine()->d3dDevice;
 	}
 	return NULL;
 }
@@ -118,7 +119,7 @@ ComPtr<ID3D12GraphicsCommandList> IRenderingInterface::GetGraphicsCommandList()
 	if (CEngine* inEngine = GetEngine())
 #endif
 	{
-		return inEngine->graphicsCommandList;
+		return inEngine->GetRenderingEngine()->graphicsCommandList;
 	}
 	return NULL;
 }
@@ -131,7 +132,7 @@ ComPtr<ID3D12CommandAllocator> IRenderingInterface::GetCommandAllocator()
 	if (CEngine* inEngine = GetEngine())
 #endif
 	{
-		return inEngine->commandAllocator;
+		return inEngine->GetRenderingEngine()->commandAllocator;
 	}
 	return NULL;
 }

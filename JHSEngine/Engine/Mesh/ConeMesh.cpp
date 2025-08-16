@@ -16,10 +16,8 @@ void CConeMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 	Super::BuildMesh(inRenderingData);
 }
 
-CConeMesh* CConeMesh::CreateMesh(float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
+CConeMesh* CConeMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
 {
-	FMeshRenderingData meshRenderingData;
-
 	inAxialSubdivision = max(inAxialSubdivision, 3);
 	inHeightSubdivision = max(inHeightSubdivision, 1);
 

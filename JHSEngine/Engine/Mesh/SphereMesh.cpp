@@ -16,10 +16,8 @@ void CSphereMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 	Super::BuildMesh(inRenderingData);
 }
 
-CSphereMesh* CSphereMesh::CreateMesh(float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
+CSphereMesh* CSphereMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
 {
-	FMeshRenderingData meshRenderingData;
-
 	inAxialSubdivision = max(inAxialSubdivision, 3);
 	inHeightSubdivision = max(inHeightSubdivision, 3);
 
