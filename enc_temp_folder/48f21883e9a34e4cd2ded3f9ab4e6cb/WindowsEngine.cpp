@@ -84,8 +84,8 @@ int CWindowsEngine::PostInit()
         //CCylinderMesh* cylinderMesh = CCylinderMesh::CreateMesh(1, 5, 20, 5);
         //CConeMesh* coneMesh = CConeMesh::CreateMesh(1, 5, 20, 5);
         //CPlaneMesh* planeMesh = CPlaneMesh::CreateMesh(10, 10, 10, 10);
-        string objPath = "../JHSEngine/Rock.obj";
-        //string objPath = "../JHSEngine/ball.obj";
+        //string objPath = "../JHSEngine/Rock.obj";
+        string objPath = "../JHSEngine/ball.obj";
         CCustomMesh* customMesh = CCustomMesh::CreateMesh(objPath);
 
         for (auto& obj : gObjects)

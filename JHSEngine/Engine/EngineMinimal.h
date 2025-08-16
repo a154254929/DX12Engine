@@ -4,6 +4,7 @@
 #include "Debug/Log/SimpleLog.h"
 
 #include<vector>
+#include<sstream>
 
 #pragma commit(lib, "d3dcompiler.lib")
 #pragma commit(lib, "D3D12.lib")
