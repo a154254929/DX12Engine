@@ -1,0 +1,14 @@
+# Blender 4.5.1 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl cliff_face_H
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Map #4
+map_refl D:/BaiduNetDisk/maps/cliff_face_H_spec.jpg
+map_Bump -bm 1.000000 C:/Map #13

@@ -8,6 +8,7 @@ struct FVertex
 
 	XMFLOAT3 position;
 	XMFLOAT4 color;
+	XMFLOAT3 normal;
 };
 
 struct FMeshRenderingData

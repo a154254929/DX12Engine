@@ -16,19 +16,23 @@ void CBoxMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 	Super::BuildMesh(inRenderingData);
 }
 
-CBoxMesh* CBoxMesh::CreateMesh()
+CBoxMesh* CBoxMesh::CreateMesh(float inHeight, float inWidth, float inDepth)
 {
 	FMeshRenderingData meshRenderingData;
 
+	float halfHeight = inHeight * .5f;
+	float halfWidth = inWidth * .5f;
+	float halfDepth = inDepth * .5f;
+
 	//构建顶点
-	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT4(Colors::White)));
-	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(0.f, 1.f, 0.f), XMFLOAT4(Colors::AliceBlue)));
-	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(1.f, 1.f, 0.f), XMFLOAT4(Colors::Aqua)));
-	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(1.f, 0.f, 0.f), XMFLOAT4(Colors::Aquamarine)));
-	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(0.f, 0.f, 1.f), XMFLOAT4(Colors::Bisque)));
-	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(0.f, 1.f, 1.f), XMFLOAT4(Colors::Blue)));
-	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(1.f, 1.f, 1.f), XMFLOAT4(Colors::Chocolate)));
-	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(1.f, 0.f, 1.f), XMFLOAT4(Colors::Red)));
+	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(-halfWidth, -halfHeight, -halfDepth), XMFLOAT4(Colors::White)));
+	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(-halfWidth, halfHeight, -halfDepth), XMFLOAT4(Colors::AliceBlue)));
+	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(halfWidth, halfHeight, -halfDepth), XMFLOAT4(Colors::Aqua)));
+	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(halfWidth, -halfHeight, -halfDepth), XMFLOAT4(Colors::Aquamarine)));
+	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(-halfWidth, -halfHeight, halfDepth), XMFLOAT4(Colors::Bisque)));
+	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(-halfWidth, halfHeight, halfDepth), XMFLOAT4(Colors::Blue)));
+	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(halfWidth, halfHeight, halfDepth), XMFLOAT4(Colors::Chocolate)));
+	meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(halfWidth, -halfHeight, halfDepth), XMFLOAT4(Colors::Red)));
 
 	//构建索引
 	//前
