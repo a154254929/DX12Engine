@@ -11,6 +11,9 @@ CCamera::CCamera()
 void CCamera::BeginInit()
 {
 	inputComponent->captureKeyboardInforDelegate.Bind(this, &CCamera::ExecuteKeboard);
+	inputComponent->OnMouseButtonDownDelegate.Bind(this, &CCamera::OnMouseButtonDown);
+	inputComponent->OnMouseButtonUpDelegate.Bind(this, &CCamera::OnMouseButtonUp);
+	inputComponent->OnMouseMoveDelegate.Bind(this, &CCamera::OnMouseMove);
 }
 
 void CCamera::Tick(float deltaTime)
@@ -19,4 +22,20 @@ void CCamera::Tick(float deltaTime)
 
 void CCamera::ExecuteKeboard(const FInputKey& inputKey)
 {
+}
+
+void CCamera::OnMouseButtonDown(int x, int y)
+{
+	lsatMousePosition.x = x;
+	lsatMousePosition.y = y;
+}
+
+void CCamera::OnMouseButtonUp(int x, int y)
+{
+
+}
+
+void CCamera::OnMouseMove(int x, int y)
+{
+
 }

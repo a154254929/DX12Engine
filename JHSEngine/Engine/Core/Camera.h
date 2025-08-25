@@ -20,9 +20,17 @@ public:
 	virtual void Tick(float deltaTime);
 
 	virtual void ExecuteKeboard(const FInputKey& inputKey);
+
+public:
+	virtual void OnMouseButtonDown(int x, int y);
+	virtual void OnMouseButtonUp(int x, int y);
+	virtual void OnMouseMove(int x, int y);
 public:
 
 	FORCEINLINE CTransformationComponent* GetTransformationComponent() { return transformationComponent; }
 
 	FORCEINLINE CInputComponent* GetInputComponent() { return inputComponent; }
+
+protected:
+	POINT lsatMousePosition;
 };
