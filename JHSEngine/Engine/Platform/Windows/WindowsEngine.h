@@ -7,7 +7,7 @@
 class CDirectXRenderingEngine;
 class CWindowsEngine : public CEngine
 {
-	friend class IRenderingInterface;
+	friend class IDirectXDeviceInterface;
 public:
 	CWindowsEngine();
 	~CWindowsEngine();

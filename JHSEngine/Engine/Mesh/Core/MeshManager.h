@@ -3,10 +3,14 @@
 #include "../../Shader/Core/Shader.h"
 #include "MeshType.h"
 #include "Mesh.h"
+#include "../../Interface/DirectXDeviceInterface.h"
 
 class FRenderingResourcesUpdate;
 
-class CMeshManager :public CCoreMinimalObject, public IRenderingInterface
+class CMeshManager
+	:public CCoreMinimalObject
+	, public IRenderingInterface
+	, public IDirectXDeviceInterface
 {
 public:
 	CMeshManager();

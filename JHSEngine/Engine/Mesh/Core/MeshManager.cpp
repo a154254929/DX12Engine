@@ -9,6 +9,7 @@
 #include "ObjectTransformation.h"
 #include "../../Rendering/Core/RenderingResourcesUpdate.h"
 #include "../../Rendering/Engine/DirectX/Core/DirectXRenderingEngine.h"
+#include "../../Rendering/Core/Buffer/ConstructBuffer.h"
 
 CMeshManager::CMeshManager()
     : vertexSizeInBytes(0)
@@ -133,12 +134,13 @@ void CMeshManager::BuildMesh(const FMeshRenderingData* inRenderingData)
         indexSizeInBytes
     );
 
-    gpuVertexBufferPtr = ConstructDefaultBuffer(
+    ConstructBuffer::FConstructBuffer constructBuffer;
+    gpuVertexBufferPtr = constructBuffer.ConstructDefaultBuffer(
         vertexBufferTmpPtr,
         inRenderingData->vertexData.data(),
         vertexSizeInBytes
     );
-    gpuIndexBufferPtr = ConstructDefaultBuffer(
+    gpuIndexBufferPtr = constructBuffer.ConstructDefaultBuffer(
         indexBufferTmpPtr,
         inRenderingData->indexData.data(),
         indexSizeInBytes

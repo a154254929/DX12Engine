@@ -261,6 +261,15 @@
     <ClCompile Include="Engine\Component\Input\Input.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Interface\DirectXDeviceInterface.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Interface\OpenGLDeviceInterface.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Rendering\Core\Buffer\ConstructBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="simple_library\private\simple_channel\simple_net_connetion\simple_connetion_tcp.h">
@@ -558,6 +567,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Component\Input\Input.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Interface\DirectXDeviceInterface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Interface\OpenGLDeviceInterface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Rendering\Core\Buffer\ConstructBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -19,17 +19,6 @@ public:
 	virtual void Draw(float deltaTime);
 	virtual void PostDraw(float deltaTime);
 
-protected:
-	ComPtr<ID3D12Resource> ConstructDefaultBuffer(ComPtr<ID3D12Resource>& outTmpBuffer, const void* inData, UINT64 inDataSize);
-protected:
-	ComPtr<ID3D12Device> GetD3dDevice();
-	ComPtr<ID3D12GraphicsCommandList> GetGraphicsCommandList();
-	ComPtr<ID3D12CommandAllocator> GetCommandAllocator();
-#ifdef _WIN32
-	CWindowsEngine* GetEngine();
-#else
-	CEngine* GetEngine();
-#endif
 private:
 	static vector<IRenderingInterface*> renderingInterfaces;
 };
