@@ -5,6 +5,7 @@
 #include "../../Rendering/Engine/Core/RenderingEngine.h"
 
 class CDirectXRenderingEngine;
+class CWorld;
 class CWindowsEngine : public CEngine
 {
 	friend class IDirectXDeviceInterface;
@@ -32,5 +33,6 @@ protected:
 
 protected:
     CDirectXRenderingEngine* renderingEngine;
+	CWorld* world;
 };
 #endif

@@ -18,23 +18,32 @@ CMeshManager::CMeshManager()
     , indexFormat(DXGI_FORMAT_R16_UINT)
     , indexSize(0)
     , worldMatrix(FObjectTransformation::IdentityMatrix4x4())
-    , viewMatrix(FObjectTransformation::IdentityMatrix4x4())
-    , projectMatrix(FObjectTransformation::IdentityMatrix4x4())
 {
 
 }
 
 void CMeshManager::Init()
 {
-    float aspectRatio = (float)FEngineRenderConfig::GetRenderConfig()->ScreenWidth / (float)FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
-    XMMATRIX project = XMMatrixPerspectiveFovLH(
-        0.25f * XM_PI, //以弧度为单位的自上而下的视场角
-        aspectRatio,//宽高比
-        1.0f,//近裁剪面
-        1000.f//原剪裁面
-    );
+}
 
-    XMStoreFloat4x4(&projectMatrix, project);
+void CMeshManager::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
+{
+    XMINT3 cameraPos = XMINT3(5.0f, 5.0f, 5.0f);
+
+    XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+    XMVECTOR viewTarget = XMVectorZero();
+    XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
+
+    XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
+    XMStoreFloat4x4(const_cast<XMFLOAT4X4*>(&viewportInfo.viewMatrix), viewLookAt);
+
+    XMMATRIX artixWorld = XMLoadFloat4x4(&worldMatrix);
+    XMMATRIX artixProject = XMLoadFloat4x4(&viewportInfo.projectMatrix);
+    XMMATRIX wvp = artixWorld * viewLookAt * artixProject;
+
+    FObjectTransformation objectTransformation;
+    XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(wvp));
+    objectConstants->Update(0, &objectTransformation);
 }
 
 void CMeshManager::BuildMesh(const FMeshRenderingData* inRenderingData)
@@ -226,22 +235,6 @@ void CMeshManager::Draw(float DeltaTime)
 
 void CMeshManager::PostDraw(float DeltaTime)
 {
-    XMINT3 cameraPos = XMINT3(5.0f, 5.0f, 5.0f);
-
-    XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
-    XMVECTOR viewTarget = XMVectorZero();
-    XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
-
-    XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
-    XMStoreFloat4x4(&viewMatrix, viewLookAt);
-
-    XMMATRIX artixWorld = XMLoadFloat4x4(&worldMatrix);
-    XMMATRIX artixProject = XMLoadFloat4x4(&projectMatrix);
-    XMMATRIX wvp = artixWorld * viewLookAt * artixProject;
-
-    FObjectTransformation objectTransformation;
-    XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(wvp));
-    objectConstants->Update(0, &objectTransformation);
 }
 
 D3D12_VERTEX_BUFFER_VIEW CMeshManager::GetVertexBufferView()

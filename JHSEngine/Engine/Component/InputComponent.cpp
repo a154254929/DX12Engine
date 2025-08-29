@@ -13,6 +13,26 @@ void CInputComponent::Tick(float deltaTime)
 	if (captureKeyboardInforDelegate.IsBound())
 	{
 		FInputKey inputKey;
+		if (GetAsyncKeyState('W') & 0x8000)
+		{
+			inputKey.keyName = "W";
+		}
+		else if (GetAsyncKeyState('S') & 0x8000)
+		{
+			inputKey.keyName = "S";
+		}
+		else if (GetAsyncKeyState('A') & 0x8000)
+		{
+			inputKey.keyName = "A";
+		}
+		else if (GetAsyncKeyState('D') & 0x8000)
+		{
+			inputKey.keyName = "D";
+		}
+		else
+		{
+			return;
+		}
 		captureKeyboardInforDelegate.Execute(inputKey);
 	}
 }

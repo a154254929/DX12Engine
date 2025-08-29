@@ -4,6 +4,7 @@
 #include "MeshType.h"
 #include "Mesh.h"
 #include "../../Interface/DirectXDeviceInterface.h"
+#include "../../Core/ViewportInfo.h"
 
 class FRenderingResourcesUpdate;
 
@@ -18,6 +19,7 @@ public:
 	virtual void Init();
 
 	virtual void BuildMesh(const FMeshRenderingData* inRenderingData);
+	virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 
 	virtual void PreDraw(float deltaTime);
 	virtual void Draw(float deltaTime);
@@ -70,6 +72,4 @@ protected:
 	UINT indexSize;
 
 	XMFLOAT4X4 worldMatrix;
-	XMFLOAT4X4 viewMatrix;
-	XMFLOAT4X4 projectMatrix;
 };

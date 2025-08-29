@@ -140,6 +140,7 @@
     <ClCompile Include="Engine\Core\CoreObject\GuidInterface.cpp" />
     <ClCompile Include="Engine\Core\Engine.cpp" />
     <ClCompile Include="Engine\Core\Viewport.cpp" />
+    <ClCompile Include="Engine\Core\ViewportInfo.cpp" />
     <ClCompile Include="Engine\Core\WinMainCommandParameters.cpp" />
     <ClCompile Include="Engine\Core\World.cpp" />
     <ClCompile Include="Engine\Debug\EngineDebug.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="Engine\Core\CoreObject\GuidInterface.h" />
     <ClInclude Include="Engine\Core\Engine.h" />
     <ClInclude Include="Engine\Core\Viewport.h" />
+    <ClInclude Include="Engine\Core\ViewportInfo.h" />
     <ClInclude Include="Engine\Core\WinMainCommandParameters.h" />
     <ClInclude Include="Engine\Core\World.h" />
     <ClInclude Include="Engine\Debug\EngineDebug.h" />

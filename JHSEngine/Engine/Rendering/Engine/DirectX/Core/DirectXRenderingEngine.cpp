@@ -89,6 +89,11 @@ int CDirectXRenderingEngine::PostInit()
     return 0;
 }
 
+void CDirectXRenderingEngine::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
+{
+    meshManager->UpdateCalculations(deltaTime, viewportInfo);
+}
+
 void CDirectXRenderingEngine::Tick(float deltaTime)
 {
     //重置录制相关的内存,为下一帧做准备

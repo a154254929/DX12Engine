@@ -3,6 +3,7 @@
 #include "../../Debug/EngineDebug.h"
 #include "../../Config/EngineRenderConfig.h"
 #include "../../Core/World.h"
+#include "../../Core/Camera.h"
 #include "../../Rendering/Engine/DirectX/DirectX12RenderingEngine.h"
 
 #if defined(_WIN32)
@@ -51,7 +52,7 @@ int CWindowsEngine::Init(FWinMainCommandParameters inParameters)
 
     renderingEngine->Init(inParameters);
 
-    CWorld* world = CreateObject<CWorld>(new CWorld());
+    world = CreateObject<CWorld>(new CWorld());
 
     Engine_Log("Engine initialization complete.");
     return 0;
@@ -74,6 +75,17 @@ void CWindowsEngine::Tick(float deltaTime)
     {
         if(obj->IsTick())
             obj->Tick(deltaTime);
+    }
+
+    if (world)
+    {
+        if (CCamera* camera = world->GetCamera())
+        {
+            FViewportInfo viewportInfo;
+            viewportInfo.viewMatrix = camera->viewMatrix;
+            viewportInfo.projectMatrix = camera->projectMatrix;
+            renderingEngine->UpdateCalculations(deltaTime, viewportInfo);
+        }
     }
 
     renderingEngine->Tick(deltaTime);
