@@ -4,7 +4,7 @@
 #include "MeshType.h"
 #include "Mesh.h"
 #include "../../Interface/DirectXDeviceInterface.h"
-#include "../../Core/ViewportInfo.h"
+#include "../../Core/Viewport/ViewportInfo.h"
 
 class FRenderingResourcesUpdate;
 

@@ -17,7 +17,7 @@ CMeshManager::CMeshManager()
     , indexSizeInBytes(0)
     , indexFormat(DXGI_FORMAT_R16_UINT)
     , indexSize(0)
-    , worldMatrix(FObjectTransformation::IdentityMatrix4x4())
+    , worldMatrix(EngineMath::IdentityMatrix4x4())
 {
 
 }
@@ -28,14 +28,15 @@ void CMeshManager::Init()
 
 void CMeshManager::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
 {
-   XMINT3 cameraPos = XMINT3(5.0f, 5.0f, 5.0f);
+   //XMINT3 cameraPos = XMINT3(viewportInfo.viewMatrix.m[3][0], viewportInfo.viewMatrix.m[3][1], viewportInfo.viewMatrix.m[3][2]);
+   //XMINT3 cameraPos = XMINT3(5.0f, 5.0f, 5.0f);
 
-    /*XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
-    XMVECTOR viewTarget = XMVectorZero();
-    XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
+    //XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+    //XMVECTOR viewTarget = XMVectorZero();
+    //XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
 
-    XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
-    XMStoreFloat4x4(const_cast<XMFLOAT4X4*>(&viewportInfo.viewMatrix), viewLookAt);*/
+    //XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
+    //XMStoreFloat4x4(const_cast<XMFLOAT4X4*>(&viewportInfo.viewMatrix), viewLookAt);
     XMMATRIX viewLookAt = XMLoadFloat4x4(&viewportInfo.viewMatrix);
 
     XMMATRIX artixWorld = XMLoadFloat4x4(&worldMatrix);

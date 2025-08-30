@@ -1,2 +1,7 @@
 #pragma once
-#include <DirectXMath.h>
+#include "../EngineMinimal.h"
+
+namespace EngineMath
+{
+	XMFLOAT4X4 IdentityMatrix4x4();
+}

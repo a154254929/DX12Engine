@@ -2,8 +2,8 @@
 
 CTransformationComponent::CTransformationComponent()
 	: position(0.f, 0.f, 0.f)
-	, forwardVector(0.f, 1.f, 0.f)
-	, upVector(0.f, 0.f, 1.f)
+	, forwardVector(0.f, 0.f, 1.f)
+	, upVector(0.f, 1.f, 0.f)
 	, rightVector(1.f, 0.f, 0.f)
 {
 }

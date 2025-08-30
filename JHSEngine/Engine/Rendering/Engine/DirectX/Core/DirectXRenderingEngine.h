@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "../../Core/RenderingEngine.h"
-#include "../../../../Core/ViewportInfo.h"
+#include "../../../../Core/Viewport/ViewportInfo.h"
 
 class CMeshManager;
 class CDirectXRenderingEngine : public CRenderingEngine

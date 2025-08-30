@@ -192,9 +192,6 @@
     <ClCompile Include="Engine\Shader\Core\Shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Core\Viewport.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Core\Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -270,7 +267,13 @@
     <ClCompile Include="Engine\Rendering\Core\Buffer\ConstructBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Core\ViewportInfo.cpp">
+    <ClCompile Include="Engine\Core\Viewport\Viewport.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Viewport\ViewportInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Viewport\ViewportTransformation.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -500,9 +503,6 @@
     <ClInclude Include="Engine\Shader\Core\Shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Core\Viewport.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Core\Camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -581,7 +581,13 @@
     <ClInclude Include="Engine\Rendering\Core\Buffer\ConstructBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Core\ViewportInfo.h">
+    <ClInclude Include="Engine\Core\Viewport\Viewport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Viewport\ViewportInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Viewport\ViewportTransformation.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
