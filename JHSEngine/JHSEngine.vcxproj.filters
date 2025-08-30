@@ -590,5 +590,8 @@
     <ClInclude Include="Engine\Core\Viewport\ViewportTransformation.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Core\CameraType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

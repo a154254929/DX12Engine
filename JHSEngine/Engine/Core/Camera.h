@@ -6,7 +6,7 @@
 struct FInputKey;
 class CTransformationComponent;
 class CInputComponent;
-
+enum ECameraType;
 class CCamera
 	: public CCoreMinimalObject
 	, public FViewport
@@ -51,4 +51,11 @@ protected:
 
 	//鼠标灵敏度
 	float mounseSensitivity;
+
+	ECameraType cameraType;
+
+	//球面坐标
+	float radius;
+	float theta;
+	float phi;
 };
