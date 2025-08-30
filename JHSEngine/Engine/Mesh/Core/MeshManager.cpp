@@ -70,8 +70,12 @@ void CMeshManager::BuildMesh(const FMeshRenderingData* inRenderingData)
     heapDesc.NodeMask = 0;
     GetD3dDevice()->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&cbvHeap));
 
-    //构建对象常量缓冲区
+    //构建常量缓冲区
     {
+        UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+        CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(cbvHeap->GetCPUDescriptorHandleForHeapStart());
+
+        //构建对象常量缓冲区
         objectConstants = make_shared<FRenderingResourcesUpdate>();
         objectConstants->Init(GetD3dDevice().Get(), sizeof(FObjectTransformation), 1);
         D3D12_GPU_VIRTUAL_ADDRESS objAddr = objectConstants.get()->GetBuffer()->GetGPUVirtualAddress();
@@ -80,27 +84,22 @@ void CMeshManager::BuildMesh(const FMeshRenderingData* inRenderingData)
         objCBVDesc.BufferLocation = objAddr;
         objCBVDesc.SizeInBytes = objectConstants->GetConstantBufferByteSize();
 
+        desHandle.Offset(0, descriptorOffset);
         GetD3dDevice()->CreateConstantBufferView(
             &objCBVDesc,
-            cbvHeap->GetCPUDescriptorHandleForHeapStart()
+            desHandle
         );
-    }
 
-    //构建视口常量缓冲区
-    {
+        //构建视口常量缓冲区
         viewportConstants = make_shared<FRenderingResourcesUpdate>();
         viewportConstants->Init(GetD3dDevice().Get(), sizeof(FViewportTransformation), 1);
         D3D12_GPU_VIRTUAL_ADDRESS viewportAddr = viewportConstants.get()->GetBuffer()->GetGPUVirtualAddress();
-
-        int heapOffset = 1;
-        UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-        CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(cbvHeap->GetCPUDescriptorHandleForHeapStart());
-        desHandle.Offset(heapOffset, descriptorOffset);
 
         D3D12_CONSTANT_BUFFER_VIEW_DESC viewportCBVDesc;
         viewportCBVDesc.BufferLocation = viewportAddr;
         viewportCBVDesc.SizeInBytes = viewportConstants->GetConstantBufferByteSize();
 
+        desHandle.Offset(1, descriptorOffset);
         GetD3dDevice()->CreateConstantBufferView(
             &viewportCBVDesc,
             desHandle
@@ -267,12 +266,12 @@ void CMeshManager::Draw(float DeltaTime)
     //定义要绘制哪种图元 点 线 面
     GetGraphicsCommandList()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, cbvHeap->GetGPUDescriptorHandleForHeapStart());
-
-    int heapOffset = 1;
     UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
     CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvHeap->GetGPUDescriptorHandleForHeapStart());
-    desHandle.Offset(heapOffset, descriptorOffset);
+
+    desHandle.Offset(0, descriptorOffset);
+    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, desHandle);
+    desHandle.Offset(1, descriptorOffset);
     GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(1, desHandle);
 
     //真正绘制
