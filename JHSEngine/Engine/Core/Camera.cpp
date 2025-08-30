@@ -23,6 +23,7 @@ void CCamera::BeginInit()
 	inputComponent->OnMouseButtonDownDelegate.Bind(this, &CCamera::OnMouseButtonDown);
 	inputComponent->OnMouseButtonUpDelegate.Bind(this, &CCamera::OnMouseButtonUp);
 	inputComponent->OnMouseMoveDelegate.Bind(this, &CCamera::OnMouseMove);
+	inputComponent->OnMouseWheelDelegate.Bind(this, &CCamera::OnMouseWheel);
 }
 
 void CCamera::Tick(float deltaTime)
@@ -153,28 +154,27 @@ void CCamera::OnMouseMove(int x, int y)
 	lsatMousePosition.y = y;
 }
 
+void CCamera::OnMouseWheel(int x, int y, float inDelta)
+{
+	if (cameraType == ECameraType::OvservationObject)
+	{
+		radius += inDelta * -0.001f;
+		radius = math_libray::Clamp(radius, 7.f, 40.0f);
+	}
+}
+
 void CCamera::MoveForward(float inValue)
 {
-	switch (cameraType)
+	if (cameraType == ECameraType::CameraRoaming)
 	{
-		case ECameraType::CameraRoaming:
-		{
-			XMFLOAT3 f3Position = transformationComponent->GetPosition();
-			XMFLOAT3 f3Forward = transformationComponent->GetForwardVector();
-			XMVECTOR amountMovement = XMVectorReplicate(inValue * 5.f);
-			XMVECTOR forward = XMLoadFloat3(&f3Forward);
-			XMVECTOR position = XMLoadFloat3(&f3Position);
-			position += amountMovement * forward;
-			XMStoreFloat3(&f3Position, position);
-			transformationComponent->SetPosition(f3Position);
-			break;
-		}
-		case ECameraType::OvservationObject:
-		{
-			radius += inValue * -1.f;
-			radius = math_libray::Clamp(radius, 0.01f, 15.0f);
-			break;
-		}
+		XMFLOAT3 f3Position = transformationComponent->GetPosition();
+		XMFLOAT3 f3Forward = transformationComponent->GetForwardVector();
+		XMVECTOR amountMovement = XMVectorReplicate(inValue * 5.f);
+		XMVECTOR forward = XMLoadFloat3(&f3Forward);
+		XMVECTOR position = XMLoadFloat3(&f3Position);
+		position += amountMovement * forward;
+		XMStoreFloat3(&f3Position, position);
+		transformationComponent->SetPosition(f3Position);
 	}
 }
 

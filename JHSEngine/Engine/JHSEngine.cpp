@@ -44,7 +44,7 @@ void Tick(CEngine* inEngine)
 {
 	float deltaTime = 0.03f;
 	inEngine->Tick(deltaTime);
-	Sleep(deltaTime * 1000);
+	//Sleep(deltaTime * 1000);
 }
 
 int Exit(CEngine *inEngine)

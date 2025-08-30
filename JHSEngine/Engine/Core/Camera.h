@@ -31,6 +31,7 @@ public:
 	virtual void OnMouseButtonDown(int x, int y);
 	virtual void OnMouseButtonUp(int x, int y);
 	virtual void OnMouseMove(int x, int y);
+	virtual void OnMouseWheel(int x, int y, float inDelta);
 
 	virtual void MoveForward(float inValue);
 	virtual void MoveRight(float inValue);
