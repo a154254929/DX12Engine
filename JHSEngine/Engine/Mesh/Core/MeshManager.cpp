@@ -10,6 +10,7 @@
 #include "../../Rendering/Core/RenderingResourcesUpdate.h"
 #include "../../Rendering/Engine/DirectX/Core/DirectXRenderingEngine.h"
 #include "../../Rendering/Core/Buffer/ConstructBuffer.h"
+#include "../../Core/Viewport/ViewportTransformation.h"
 
 CMeshManager::CMeshManager()
     : vertexSizeInBytes(0)
@@ -37,55 +38,98 @@ void CMeshManager::UpdateCalculations(float deltaTime, const FViewportInfo viewp
 
     //XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
     //XMStoreFloat4x4(const_cast<XMFLOAT4X4*>(&viewportInfo.viewMatrix), viewLookAt);
-    XMMATRIX viewLookAt = XMLoadFloat4x4(&viewportInfo.viewMatrix);
+    //XMMATRIX viewLookAt = XMLoadFloat4x4(&viewportInfo.viewMatrix);
 
-    XMMATRIX artixWorld = XMLoadFloat4x4(&worldMatrix);
-    XMMATRIX artixProject = XMLoadFloat4x4(&viewportInfo.projectMatrix);
-    XMMATRIX wvp = artixWorld * viewLookAt * artixProject;
+    //XMMATRIX artixWorld = XMLoadFloat4x4(&worldMatrix);
+    //XMMATRIX artixProject = XMLoadFloat4x4(&viewportInfo.projectMatrix);
+    //XMMATRIX wvp = artixWorld * viewLookAt * artixProject;
+
+    XMMATRIX wrold = XMLoadFloat4x4(&worldMatrix);
 
     FObjectTransformation objectTransformation;
-    XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(wvp));
+    XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(wrold));
     objectConstants->Update(0, &objectTransformation);
+
+    //更新视口
+    XMMATRIX projectMatrix = XMLoadFloat4x4(&viewportInfo.projectMatrix);
+    XMMATRIX viewMatrix = XMLoadFloat4x4(&viewportInfo.viewMatrix);
+    XMMATRIX viewProjMatrix = XMMatrixMultiply(viewMatrix, projectMatrix);
+
+    FViewportTransformation viewportTransformation;
+    XMStoreFloat4x4(&viewportTransformation.viewProjectionMatrix, XMMatrixTranspose(viewProjMatrix));
+    viewportConstants->Update(0, &viewportTransformation);
 }
 
 void CMeshManager::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
     //构建栈
     D3D12_DESCRIPTOR_HEAP_DESC heapDesc;
-    heapDesc.NumDescriptors = 1;
+    heapDesc.NumDescriptors = 2;
     heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
     heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
     heapDesc.NodeMask = 0;
     GetD3dDevice()->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&cbvHeap));
 
-    //常量缓冲区的构建
-    objectConstants = make_shared<FRenderingResourcesUpdate>();
-    objectConstants->Init(GetD3dDevice().Get(), sizeof(FObjectTransformation), 1);
-    D3D12_GPU_VIRTUAL_ADDRESS obAddr = objectConstants.get()->GetBuffer()->GetGPUVirtualAddress();
+    //构建对象常量缓冲区
+    {
+        objectConstants = make_shared<FRenderingResourcesUpdate>();
+        objectConstants->Init(GetD3dDevice().Get(), sizeof(FObjectTransformation), 1);
+        D3D12_GPU_VIRTUAL_ADDRESS objAddr = objectConstants.get()->GetBuffer()->GetGPUVirtualAddress();
 
-    D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
-    cbvDesc.BufferLocation = obAddr;
-    cbvDesc.SizeInBytes = objectConstants->GetConstantBufferByteSize();
+        D3D12_CONSTANT_BUFFER_VIEW_DESC objCBVDesc;
+        objCBVDesc.BufferLocation = objAddr;
+        objCBVDesc.SizeInBytes = objectConstants->GetConstantBufferByteSize();
 
-    GetD3dDevice()->CreateConstantBufferView(
-        &cbvDesc,
-        cbvHeap->GetCPUDescriptorHandleForHeapStart()
-    );
+        GetD3dDevice()->CreateConstantBufferView(
+            &objCBVDesc,
+            cbvHeap->GetCPUDescriptorHandleForHeapStart()
+        );
+    }
+
+    //构建视口常量缓冲区
+    {
+        viewportConstants = make_shared<FRenderingResourcesUpdate>();
+        viewportConstants->Init(GetD3dDevice().Get(), sizeof(FViewportTransformation), 1);
+        D3D12_GPU_VIRTUAL_ADDRESS viewportAddr = viewportConstants.get()->GetBuffer()->GetGPUVirtualAddress();
+
+        int heapOffset = 1;
+        UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+        CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(cbvHeap->GetCPUDescriptorHandleForHeapStart());
+        desHandle.Offset(heapOffset, descriptorOffset);
+
+        D3D12_CONSTANT_BUFFER_VIEW_DESC viewportCBVDesc;
+        viewportCBVDesc.BufferLocation = viewportAddr;
+        viewportCBVDesc.SizeInBytes = viewportConstants->GetConstantBufferByteSize();
+
+        GetD3dDevice()->CreateConstantBufferView(
+            &viewportCBVDesc,
+            desHandle
+        );
+    }
 
     //构建根签名
-    CD3DX12_ROOT_PARAMETER rootParam[1];
+    CD3DX12_ROOT_PARAMETER rootParam[2];
 
-    //cbv描述表
-    CD3DX12_DESCRIPTOR_RANGE descriptorRangeCBV;
-    descriptorRangeCBV.Init(
+    //Object cbv描述表
+    CD3DX12_DESCRIPTOR_RANGE descriptorRangeObjCBV;
+    descriptorRangeObjCBV.Init(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
         1,
         0
     );
-    rootParam[0].InitAsDescriptorTable(1, &descriptorRangeCBV);
+
+    //ViewPort cbv描述表
+    CD3DX12_DESCRIPTOR_RANGE descriptorRangeViewportCBV;
+    descriptorRangeViewportCBV.Init(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        1
+    );
+    rootParam[0].InitAsDescriptorTable(1, &descriptorRangeObjCBV);
+    rootParam[1].InitAsDescriptorTable(1, &descriptorRangeViewportCBV);
 
     CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc(
-        1,
+        2,
         rootParam,
         0,
         nullptr,
@@ -224,6 +268,12 @@ void CMeshManager::Draw(float DeltaTime)
     GetGraphicsCommandList()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, cbvHeap->GetGPUDescriptorHandleForHeapStart());
+
+    int heapOffset = 1;
+    UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+    CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvHeap->GetGPUDescriptorHandleForHeapStart());
+    desHandle.Offset(heapOffset, descriptorOffset);
+    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(1, desHandle);
 
     //真正绘制
     GetGraphicsCommandList()->DrawIndexedInstanced(

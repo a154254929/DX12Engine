@@ -1,6 +1,11 @@
-cbuffer ConstBuffer : register(b0)//b0->b14
+cbuffer ConstBuffer : register(b0) //b0->b14
 {
-    float4x4 World;
+    float4x4 WorldMatrix;
+}
+
+cbuffer ViewportConstBuffer : register(b1)
+{
+    float4x4 ViewProjectionMatrix;
 }
 
 struct Varying
@@ -18,7 +23,8 @@ struct Attribute
 Attribute VertexShaderUnlit(Varying input)
 {
     Attribute output;
-    output.position = mul(float4(input.position, 1), World);
+    float4 worldPosition = mul(float4(input.position, 1), WorldMatrix);
+    output.position = mul(worldPosition, ViewProjectionMatrix);
     output.color = input.color;
     return output;
 }

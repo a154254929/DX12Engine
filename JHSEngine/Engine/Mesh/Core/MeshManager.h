@@ -56,6 +56,7 @@ protected:
 	ComPtr<ID3D12RootSignature> rootSignature;
 	ComPtr<ID3D12DescriptorHeap> cbvHeap;
 	shared_ptr<FRenderingResourcesUpdate> objectConstants;
+	shared_ptr<FRenderingResourcesUpdate> viewportConstants;
 
 	ComPtr<ID3D12PipelineState> pipelineStatePSO;
 
