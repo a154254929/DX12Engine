@@ -21,6 +21,8 @@ public:
 
 	virtual void ExecuteKeboard(const FInputKey& inputKey);
 
+	virtual void BuildViewMatrix(float deltaTime);
+
 public:
 	virtual void OnMouseButtonDown(int x, int y);
 	virtual void OnMouseButtonUp(int x, int y);
