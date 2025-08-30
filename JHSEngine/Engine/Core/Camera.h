@@ -1,12 +1,16 @@
-#pragma once
+﻿#pragma once
 #include "Viewport/Viewport.h"
 #include "CoreObject/CoreMinimalObject.h"
+#include "../Interface/DirectXDeviceInterface.h"
 
 struct FInputKey;
 class CTransformationComponent;
 class CInputComponent;
 
-class CCamera : public CCoreMinimalObject, public FViewport
+class CCamera
+	: public CCoreMinimalObject
+	, public FViewport
+	, public IDirectXDeviceInterface
 {
 	CVARIABLE()
 	CTransformationComponent* transformationComponent;
@@ -30,6 +34,10 @@ public:
 
 	virtual void MoveForward(float inValue);
 	virtual void MoveRight(float inValue);
+	virtual void MoveUp(float inValue);
+protected:
+	void RotateAroundYAxis(float inRotateDegrees);
+	void RotateAroundXAxis(float inRotateDegrees);
 public:
 
 	FORCEINLINE CTransformationComponent* GetTransformationComponent() { return transformationComponent; }
@@ -38,4 +46,9 @@ public:
 
 protected:
 	POINT lsatMousePosition;
+
+	bool bLeftMosueDown{ false };
+
+	//鼠标灵敏度
+	float mounseSensitivity;
 };

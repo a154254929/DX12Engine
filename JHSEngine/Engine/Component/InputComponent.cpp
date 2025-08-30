@@ -29,6 +29,14 @@ void CInputComponent::Tick(float deltaTime)
 		{
 			inputKey.keyName = "D";
 		}
+		else if (GetAsyncKeyState('E') & 0x8000)
+		{
+			inputKey.keyName = "E";
+		}
+		else if (GetAsyncKeyState('Q') & 0x8000)
+		{
+			inputKey.keyName = "Q";
+		}
 		else
 		{
 			return;
