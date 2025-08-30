@@ -83,7 +83,7 @@ void CCamera::MoveForward(float inValue)
 {
 	XMFLOAT3 f3Position = transformationComponent->GetPosition();
 	XMFLOAT3 f3Forward = transformationComponent->GetForwardVector();
-	XMVECTOR amountMovement = XMVectorReplicate(inValue * 10.f);
+	XMVECTOR amountMovement = XMVectorReplicate(inValue * 5.f);
 	XMVECTOR forward = XMLoadFloat3(&f3Forward);
 	XMVECTOR position = XMLoadFloat3(&f3Position);
 	position += amountMovement * forward;
@@ -95,7 +95,7 @@ void CCamera::MoveRight(float inValue)
 {
 	XMFLOAT3 f3Position = transformationComponent->GetPosition();
 	XMFLOAT3 f3Right = transformationComponent->GetRightVector();
-	XMVECTOR amountMovement = XMVectorReplicate(inValue * 10.f);
+	XMVECTOR amountMovement = XMVectorReplicate(inValue * 5.f);
 	XMVECTOR right = XMLoadFloat3(&f3Right);
 	XMVECTOR position = XMLoadFloat3(&f3Position);
 	position += amountMovement * right;

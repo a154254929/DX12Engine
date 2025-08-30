@@ -35,8 +35,8 @@ void CTransformationComponent::CorrectionVector()
 	XMVECTOR forward = XMLoadFloat3(&forwardVector);
 
 	forward = XMVector3Normalize(forward);
-	up = XMVector3Normalize(XMVector3Cross(right, forward));
-	right = XMVector3Normalize(XMVector3Cross(forward, up));
+	up = XMVector3Normalize(XMVector3Cross(forward, right));
+	right = XMVector3Normalize(XMVector3Cross(up, forward));
 
 	XMStoreFloat3(&rightVector, right);
 	XMStoreFloat3(&upVector, up);
@@ -58,7 +58,7 @@ void CTransformationComponent::GetCorrectionPosition(fvector_3d& inPosV3)
 
 	XMVECTOR newPosition = XMLoadFloat3(&position);
 
-	inPosV3.x = XMVectorGetX(XMVector3Dot(newPosition, right));
-	inPosV3.y = XMVectorGetX(XMVector3Dot(newPosition, up));
-	inPosV3.z = XMVectorGetX(XMVector3Dot(newPosition, forward));
+	inPosV3.x = -XMVectorGetX(XMVector3Dot(newPosition, right));
+	inPosV3.y = -XMVectorGetX(XMVector3Dot(newPosition, up));
+	inPosV3.z = -XMVectorGetX(XMVector3Dot(newPosition, forward));
 }
