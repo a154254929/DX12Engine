@@ -74,9 +74,13 @@ int CDirectXRenderingEngine::PostInit()
         //CMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 20, 5);
         //CMesh* coneMesh = meshManager->CreateConeMesh(1, 5, 20, 5);
         //CMesh* planeMesh = meshManager->CreatePlaneMesh(10, 10, 10, 10);
+        /*
         //string objPath = "../JHSEngine/Rock.obj";
         string objPath = "../JHSEngine/ball.obj";
         CMesh* customMesh = meshManager->CreateMesh(objPath);
+        */
+        //CMesh* aesmaMesh = meshManager->CreateAesmaMesh(3, 1, 10, 10, 3);
+        CMesh* donutMesh = meshManager->CreateDonutMesh(3, .5f, 10, 10);
     }
 
     ANALYSIS_HRESULT(graphicsCommandList->Close());

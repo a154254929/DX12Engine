@@ -19,7 +19,7 @@ void CCylinderMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 CCylinderMesh* CCylinderMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inTopRadius, float inBottomRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
 {
 	inAxialSubdivision = max(inAxialSubdivision, 3);
-	inHeightSubdivision = max(inHeightSubdivision, 1);
+	inHeightSubdivision = max(inHeightSubdivision, 2);
 
 	float thetaValue = XM_2PI / inAxialSubdivision;
 	float clip = 1.f / (inHeightSubdivision - 1);

@@ -6,6 +6,8 @@
 #include "../CylinderMesh.h"
 #include "../SphereMesh.h"
 #include "../PlaneMesh.h"
+#include "../AesmaMesh.h"
+#include "../DonutMesh.h"
 #include "ObjectTransformation.h"
 #include "../../Rendering/Core/RenderingResourcesUpdate.h"
 #include "../../Rendering/Engine/DirectX/Core/DirectXRenderingEngine.h"
@@ -334,6 +336,16 @@ CMesh* CMeshManager::CreateCylinderMesh(float inTopRadius, float inBottomRadius,
 CMesh* CMeshManager::CreatePlaneMesh(float inHeight, float inWidth, uint32_t inHeightSubdivide, uint32_t inWidthSubdivide)
 {
     return CreateMesh<CPlaneMesh>(inHeight, inWidth, inHeightSubdivide, inWidthSubdivide);
+}
+
+CMesh* CMeshManager::CreateAesmaMesh(float inOuterRadius, float inInnerRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
+{
+    return CreateMesh<CAesmaMesh>(inOuterRadius, inInnerRadius, inHeight, inAxialSubdivision, inHeightSubdivision);
+}
+
+CMesh* CMeshManager::CreateDonutMesh(float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision)
+{
+    return CreateMesh<CDonutMesh>(inDonutRadius, inThicknessRadius, inDonutAxialSubdivision, inThicknessAxialSubdivision);
 }
 
 template<class T, typename ...ParamTypes>
