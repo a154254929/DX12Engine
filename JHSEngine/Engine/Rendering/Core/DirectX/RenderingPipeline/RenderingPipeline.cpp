@@ -37,8 +37,11 @@ void FRenderingPipeline::BuildPipeline()
 	//构建常量描述堆
 	geometryMap.BuildDescriptorHeap();
 
-	//构建常量缓冲区
-	geometryMap.BuildConstantBuffer();
+	//构建对象常量缓冲区
+	geometryMap.BuildObjectConstantBuffer();
+
+	//构建视口常量缓冲区
+	geometryMap.BuildViewPortConstantBuffer();
 
 	//构建管线
 	directXPipelineState.Build();

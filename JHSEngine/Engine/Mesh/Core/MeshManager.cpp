@@ -63,27 +63,6 @@ void CMeshManager::UpdateCalculations(float deltaTime, const FViewportInfo viewp
 void CMeshManager::BuildMesh()
 {
     renderingPipeline.BuildPipeline();
-    return;
-
-    //构建常量缓冲区
-    {
-        UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-        //构建视口常量缓冲区
-        viewportConstants = make_shared<FRenderingResourcesUpdate>();
-        viewportConstants->Init(GetD3dDevice().Get(), sizeof(FViewportTransformation), 1);
-        D3D12_GPU_VIRTUAL_ADDRESS viewportAddr = viewportConstants.get()->GetBuffer()->GetGPUVirtualAddress();
-
-        D3D12_CONSTANT_BUFFER_VIEW_DESC viewportCBVDesc;
-        viewportCBVDesc.BufferLocation = viewportAddr;
-        viewportCBVDesc.SizeInBytes = viewportConstants->GetConstantBufferByteSize();
-
-        desHandle.Offset(1, descriptorOffset);
-        GetD3dDevice()->CreateConstantBufferView(
-            &viewportCBVDesc,
-            desHandle
-        );
-    }
 }
 
 void CMeshManager::PreDraw(float DeltaTime)

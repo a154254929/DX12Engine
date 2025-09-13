@@ -6,7 +6,7 @@ struct FDirectXDescriptorHeap : public IDirectXDeviceInterface_Struct
 
 	void Build(UINT inNumDescriptor);
 
-	ID3D12DescriptorHeap* GetCBVHeap() { return cbvHeap.Get();}
+	ID3D12DescriptorHeap* GetHeap() { return cbvHeap.Get();}
 protected:
 	ComPtr<ID3D12DescriptorHeap> cbvHeap;
 };

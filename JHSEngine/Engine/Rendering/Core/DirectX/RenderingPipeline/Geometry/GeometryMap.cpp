@@ -1,6 +1,7 @@
 ﻿#include "GeometryMap.h"
 #include "../../../Buffer/ConstructBuffer.h"
 #include "../../../../../Mesh/Core/ObjectTransformation.h"
+#include "../../../../../Core/Viewport/Viewport.h"
 
 FGeometryMap::FGeometryMap()
 {
@@ -28,19 +29,29 @@ void FGeometryMap::BuildDescriptorHeap()
 	descriptorHeap.Build(GetDrawObjectNumber() + 1);
 }
 
-void FGeometryMap::BuildConstantBuffer()
+void FGeometryMap::BuildObjectConstantBuffer()
 {
 	//创建常量缓冲区
 	objectConstantBufferView.CreateConstant(sizeof(FObjectTransformation), 1);
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(descriptorHeap.GetCBVHeap()->GetCPUDescriptorHandleForHeapStart());
+	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetCPUDescriptorHandleForHeapStart());
 	//构建常量缓冲区
-	objectConstantBufferView.BuildConstantBuffer(desHandle, GetDrawObjectNumber() + 1);
+	objectConstantBufferView.BuildConstantBuffer(desHandle, GetDrawObjectNumber());
 }
 
 UINT FGeometryMap::GetDrawObjectNumber()
 {
 	return geometrys[0].GetDrawObjectNumber();
+}
+
+void FGeometryMap::BuildViewPortConstantBuffer()
+{
+	//创建常量缓冲区
+	viewportConstantBufferView.CreateConstant(sizeof(FViewport), 1);
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetCPUDescriptorHandleForHeapStart());
+	//构建常量缓冲区
+	viewportConstantBufferView.BuildConstantBuffer(desHandle, 1, GetDrawObjectNumber());
 }
 
 bool FGeometry::bRenderingDataExistence(CMesh* inKey)

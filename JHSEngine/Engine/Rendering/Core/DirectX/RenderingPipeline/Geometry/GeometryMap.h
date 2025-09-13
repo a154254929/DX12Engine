@@ -43,13 +43,20 @@ public:
 	void BuildDescriptorHeap();
 
 	//常量缓冲区
-	void BuildConstantBuffer();
+	void BuildObjectConstantBuffer();
 
 	/*后面会有变化*/
 	UINT GetDrawObjectNumber();
+
+	//构建视口常量缓冲区
+	void BuildViewPortConstantBuffer();
+
+public:
+	ID3D12DescriptorHeap* GetHeap() { return descriptorHeap.GetHeap(); }
 protected:
 	map<int, FGeometry> geometrys;
 	FDirectXDescriptorHeap descriptorHeap;
 
 	FConstantBufferView objectConstantBufferView;
+	FConstantBufferView viewportConstantBufferView;
 };
