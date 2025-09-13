@@ -1,5 +1,6 @@
 ﻿#include "GeometryMap.h"
 #include "../../../Buffer/ConstructBuffer.h"
+#include "../../../../../Mesh/Core/ObjectTransformation.h"
 
 FGeometryMap::FGeometryMap()
 {
@@ -25,6 +26,16 @@ void FGeometryMap::BuildDescriptorHeap()
 {
 	//+1是因为有摄像机
 	descriptorHeap.Build(GetDrawObjectNumber() + 1);
+}
+
+void FGeometryMap::BuildConstantBuffer()
+{
+	//创建常量缓冲区
+	objectConstantBufferView.CreateConstant(sizeof(FObjectTransformation), 1);
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(descriptorHeap.GetCBVHeap()->GetCPUDescriptorHandleForHeapStart());
+	//构建常量缓冲区
+	objectConstantBufferView.BuildConstantBuffer(desHandle, GetDrawObjectNumber() + 1);
 }
 
 UINT FGeometryMap::GetDrawObjectNumber()

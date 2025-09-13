@@ -38,7 +38,7 @@ void FRenderingPipeline::BuildPipeline()
 	geometryMap.BuildDescriptorHeap();
 
 	//构建常量缓冲区
-
+	geometryMap.BuildConstantBuffer();
 
 	//构建管线
 	directXPipelineState.Build();

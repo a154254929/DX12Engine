@@ -3,6 +3,7 @@
 #include "../../../../../Mesh/Core/MeshType.h"
 #include "RenderingData.h"
 #include "../DescriptorHeap/DirectXDescriptorHeap.h"
+#include "../ConstantBuffer/ConstantBufferView.h"
 
 
 class FGeometry : public IDirectXDeviceInterface_Struct
@@ -38,12 +39,17 @@ public:
 	void BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData);
 
 	void Build();
-
+	//描述堆
 	void BuildDescriptorHeap();
+
+	//常量缓冲区
+	void BuildConstantBuffer();
 
 	/*后面会有变化*/
 	UINT GetDrawObjectNumber();
 protected:
 	map<int, FGeometry> geometrys;
 	FDirectXDescriptorHeap descriptorHeap;
+
+	FConstantBufferView objectConstantBufferView;
 };

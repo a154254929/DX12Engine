@@ -68,22 +68,6 @@ void CMeshManager::BuildMesh()
     //构建常量缓冲区
     {
         UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-        CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(cbvHeap->GetCPUDescriptorHandleForHeapStart());
-
-        //构建对象常量缓冲区
-        objectConstants = make_shared<FRenderingResourcesUpdate>();
-        objectConstants->Init(GetD3dDevice().Get(), sizeof(FObjectTransformation), 1);
-        D3D12_GPU_VIRTUAL_ADDRESS objAddr = objectConstants.get()->GetBuffer()->GetGPUVirtualAddress();
-
-        D3D12_CONSTANT_BUFFER_VIEW_DESC objCBVDesc;
-        objCBVDesc.BufferLocation = objAddr;
-        objCBVDesc.SizeInBytes = objectConstants->GetConstantBufferByteSize();
-
-        desHandle.Offset(0, descriptorOffset);
-        GetD3dDevice()->CreateConstantBufferView(
-            &objCBVDesc,
-            desHandle
-        );
 
         //构建视口常量缓冲区
         viewportConstants = make_shared<FRenderingResourcesUpdate>();
