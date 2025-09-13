@@ -2,10 +2,50 @@
 #include "../../../Buffer/ConstructBuffer.h"
 #include "../../../../../Mesh/Core/ObjectTransformation.h"
 #include "../../../../../Core/Viewport/Viewport.h"
+#include "../../../../../Core/Viewport/ViewportTransformation.h"
 
 FGeometryMap::FGeometryMap()
 {
 	geometrys.insert(pair<int, FGeometry>(0, FGeometry()));
+}
+
+void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
+{
+	//XMINT3 cameraPos = XMINT3(viewportInfo.viewMatrix.m[3][0], viewportInfo.viewMatrix.m[3][1], viewportInfo.viewMatrix.m[3][2]);
+	//XMINT3 cameraPos = XMINT3(5.0f, 5.0f, 5.0f);
+
+	 //XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+	 //XMVECTOR viewTarget = XMVectorZero();
+	 //XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
+
+	 //XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
+	 //XMStoreFloat4x4(const_cast<XMFLOAT4X4*>(&viewportInfo.viewMatrix), viewLookAt);
+	 //XMMATRIX viewLookAt = XMLoadFloat4x4(&viewportInfo.viewMatrix);
+
+	 //XMMATRIX artixProject = XMLoadFloat4x4(&viewportInfo.projectMatrix);
+	 //XMMATRIX wvp = artixWorld * viewLookAt * artixProject;
+
+	//XMMATRIX wrold = XMLoadFloat4x4(&worldMatrix);
+	for (int i = 0; i < geometrys.size(); ++i)
+	{
+		for (size_t j = 0; j < geometrys[i].describeMeshRenderingData.size(); ++j)
+		{
+			FRenderingData& inRenderingData = geometrys[i].describeMeshRenderingData[i];
+			XMMATRIX artixWorld = XMLoadFloat4x4(&inRenderingData.worldMatrix);
+			FObjectTransformation objectTransformation;
+			XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(artixWorld));
+			objectConstantBufferView.Update(j, &objectTransformation);
+		}
+	}
+
+	//更新视口
+	XMMATRIX projectMatrix = XMLoadFloat4x4(&viewportInfo.projectMatrix);
+	XMMATRIX viewMatrix = XMLoadFloat4x4(&viewportInfo.viewMatrix);
+	XMMATRIX viewProjMatrix = XMMatrixMultiply(viewMatrix, projectMatrix);
+
+	FViewportTransformation viewportTransformation;
+	XMStoreFloat4x4(&viewportTransformation.viewProjectionMatrix, XMMatrixTranspose(viewProjMatrix));
+	viewportConstantBufferView.Update(0, &viewportTransformation);
 }
 
 void FGeometryMap::BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData)

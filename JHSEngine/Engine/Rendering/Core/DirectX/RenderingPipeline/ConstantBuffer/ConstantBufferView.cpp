@@ -24,3 +24,8 @@ void FConstantBufferView::BuildConstantBuffer(CD3DX12_CPU_DESCRIPTOR_HANDLE inHa
         );
     }
 }
+
+void FConstantBufferView::Update(int index, const void* inData)
+{
+    constants->Update(index, inData);
+}

@@ -4,6 +4,7 @@
 #include "../../../../Shader/Core/Shader.h"
 #include "PipelineState/DirectXPipelineState.h"
 #include "RootSignature/DirectXRootSignature.h"
+#include "../../../../Core/Viewport/ViewportInfo.h"
 
 class CMesh;
 class FRenderingPipeline: public IDirectXDeviceInterface
@@ -12,6 +13,8 @@ public:
 	FRenderingPipeline();
 
 	void BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData);
+
+	virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 
 	void BuildPipeline();
 protected:

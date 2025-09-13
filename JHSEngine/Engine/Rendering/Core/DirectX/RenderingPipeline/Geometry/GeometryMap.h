@@ -4,10 +4,12 @@
 #include "RenderingData.h"
 #include "../DescriptorHeap/DirectXDescriptorHeap.h"
 #include "../ConstantBuffer/ConstantBufferView.h"
+#include "../../../../../Core/Viewport/ViewportInfo.h"
 
 
 class FGeometry : public IDirectXDeviceInterface_Struct
 {
+	friend FGeometryMap;
 public:
 	bool bRenderingDataExistence(CMesh* inKey);
 	void BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData);
@@ -17,6 +19,8 @@ public:
 
 	/*后面会有变化*/
 	UINT GetDrawObjectNumber() const { return describeMeshRenderingData.size(); }
+
+	virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 protected:
 	ComPtr<ID3DBlob> cpuVertexBufferPtr;
 	ComPtr<ID3DBlob> cpuIndexBufferPtr;
@@ -35,6 +39,8 @@ class FGeometryMap : public IDirectXDeviceInterface
 {
 public:
 	FGeometryMap();
+
+	virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 
 	void BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData);
 

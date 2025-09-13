@@ -9,6 +9,10 @@ void FRenderingPipeline::BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMe
 	geometryMap.BuildMesh(inMesh, inMeshData);
 }
 
+void FRenderingPipeline::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
+{
+}
+
 
 void FRenderingPipeline::BuildPipeline()
 {

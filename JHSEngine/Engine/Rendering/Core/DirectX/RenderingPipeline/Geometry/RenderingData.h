@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "../../../../../Interface/DirectXDeviceInterface.h"
-//#include "../../../RenderingResourcesUpdate.h"
+#include "../../../RenderingResourcesUpdate.h"
 
 class CMesh;
 struct FRenderingData : public IDirectXDeviceInterface_Struct
