@@ -21,6 +21,17 @@ void FGeometryMap::Build()
 	}
 }
 
+void FGeometryMap::BuildDescriptorHeap()
+{
+	//+1是因为有摄像机
+	descriptorHeap.Build(GetDrawObjectNumber() + 1);
+}
+
+UINT FGeometryMap::GetDrawObjectNumber()
+{
+	return geometrys[0].GetDrawObjectNumber();
+}
+
 bool FGeometry::bRenderingDataExistence(CMesh* inKey)
 {
 	for (auto& tmp : describeMeshRenderingData)

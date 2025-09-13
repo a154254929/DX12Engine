@@ -34,6 +34,11 @@ void FRenderingPipeline::BuildPipeline()
 	//构建模型
 	geometryMap.Build();
 
+	//构建常量描述堆
+	geometryMap.BuildDescriptorHeap();
+
+	//构建常量缓冲区
+
 
 	//构建管线
 	directXPipelineState.Build();

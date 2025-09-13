@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "../../../../../Interface/DirectXDeviceInterface.h"
-//#include "../../RenderingResourceUpdate.h"
+#include "../../../RenderingResourcesUpdate.h"
 
 class CMesh;
 struct FRenderingData : public IDirectXDeviceInterface_Struct
@@ -25,5 +25,5 @@ public:
 
 	XMFLOAT4X4 worldMatrix;
 	CMesh* mesh;
-	//shared_ptr<FRenderingResourcesUpdate> objectContants;
+	shared_ptr<FRenderingResourcesUpdate> objectConstants;
 };
