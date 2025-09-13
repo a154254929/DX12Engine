@@ -12,9 +12,12 @@ void FRenderingPipeline::BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMe
 
 void FRenderingPipeline::BuildPipeline()
 {
+	//初始化GPS描述
 	directXPipelineState.ResetGPSDesc();
 
-	directXPipelineState.BindRootSignature();
+	//构建根签名
+	rootSignature.BuildRootSignature();
+	directXPipelineState.BindRootSignature(rootSignature.GetRootSignature());
 
 
 	//构建管线

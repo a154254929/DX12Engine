@@ -3,6 +3,7 @@
 #include "Geometry/GeometryMap.h"
 #include "../../../../Shader/Core/Shader.h"
 #include "PipelineState/DirectXPipelineState.h"
+#include "RootSignature/DirectXRootSignature.h"
 
 class CMesh;
 class FRenderingPipeline: public IDirectXDeviceInterface
@@ -22,4 +23,5 @@ protected:
 	vector<D3D12_INPUT_ELEMENT_DESC> inputElementDesc;
 
 	FDirectXPipelineState directXPipelineState;
+	FDirectXRootSignature rootSignature;
 };

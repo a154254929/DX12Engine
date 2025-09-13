@@ -50,12 +50,8 @@ protected:
 protected:
 
 	FRenderingPipeline renderingPipeline;
-
-	ComPtr<ID3D12RootSignature> rootSignature;
 	ComPtr<ID3D12DescriptorHeap> cbvHeap;
 	shared_ptr<FRenderingResourcesUpdate> objectConstants;
 	shared_ptr<FRenderingResourcesUpdate> viewportConstants;
-
-	vector<D3D12_INPUT_ELEMENT_DESC> inputElementDesc;
 protected:
 };
