@@ -10,7 +10,6 @@
 #include "../DonutMesh.h"
 #include "ObjectTransformation.h"
 #include "../../Rendering/Core/RenderingResourcesUpdate.h"
-#include "../../Rendering/Core/Buffer/ConstructBuffer.h"
 #include "../../Core/Viewport/ViewportTransformation.h"
 
 CMeshManager::CMeshManager()
@@ -109,41 +108,6 @@ void CMeshManager::BuildMesh()
             desHandle
         );
     }
-
-    ////////////////////////////
-    //构建模型
-    vertexStrideInBytes = sizeof(FVertex);
-    indexSize = inRenderingData->indexData.size();
-
-    //获取模型数据大小
-    vertexSizeInBytes = inRenderingData->vertexData.size() * vertexStrideInBytes;
-    indexSizeInBytes = indexSize * sizeof(uint16_t);
-
-    ANALYSIS_HRESULT(D3DCreateBlob(vertexSizeInBytes, &cpuVertexBufferPtr));
-    memcpy(
-        cpuVertexBufferPtr->GetBufferPointer(),
-        inRenderingData->vertexData.data(),
-        vertexSizeInBytes
-    );
-
-    ANALYSIS_HRESULT(D3DCreateBlob(indexSizeInBytes, &cpuIndexBufferPtr));
-    memcpy(
-        cpuIndexBufferPtr->GetBufferPointer(),
-        inRenderingData->indexData.data(),
-        indexSizeInBytes
-    );
-
-    ConstructBuffer::FConstructBuffer constructBuffer;
-    gpuVertexBufferPtr = constructBuffer.ConstructDefaultBuffer(
-        vertexBufferTmpPtr,
-        inRenderingData->vertexData.data(),
-        vertexSizeInBytes
-    );
-    gpuIndexBufferPtr = constructBuffer.ConstructDefaultBuffer(
-        indexBufferTmpPtr,
-        inRenderingData->indexData.data(),
-        indexSizeInBytes
-    );
 }
 
 void CMeshManager::PreDraw(float DeltaTime)

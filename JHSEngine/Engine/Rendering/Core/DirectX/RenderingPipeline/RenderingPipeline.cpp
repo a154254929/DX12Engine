@@ -31,6 +31,9 @@ void FRenderingPipeline::BuildPipeline()
 	};
 	directXPipelineState.BindInputLayout(inputElementDesc.data(), inputElementDesc.size());
 
+	//构建模型
+	geometryMap.Build();
+
 
 	//构建管线
 	directXPipelineState.Build();
