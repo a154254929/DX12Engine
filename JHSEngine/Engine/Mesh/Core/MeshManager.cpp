@@ -351,16 +351,16 @@ CMesh* CMeshManager::CreateDonutMesh(float inDonutRadius, float inThicknessRadiu
 template<class T, typename ...ParamTypes>
 T* CMeshManager::CreateMesh(ParamTypes && ...params)
 {
-    T* MyMesh = new T();
+    T* myMesh = new T();
 
     FMeshRenderingData meshRenderingData;
-    MyMesh->CreateMesh(meshRenderingData, forward<ParamTypes>(params)...);
+    myMesh->CreateMesh(meshRenderingData, forward<ParamTypes>(params)...);
 
-    MyMesh->BeginInit();
+    myMesh->BeginInit();
 
-    BuildMesh(&meshRenderingData);
+    renderingPipeline->BuildMesh(myMesh, &meshRenderingData);
 
-    MyMesh->Init();
+    myMesh->Init();
 
-    return MyMesh;
+    return myMesh;
 }

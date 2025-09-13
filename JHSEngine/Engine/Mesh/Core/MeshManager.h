@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include "../../Interface/DirectXDeviceInterface.h"
 #include "../../Core/Viewport/ViewportInfo.h"
+#include "../../Rendering/Core/DirectX/RenderingPipeline/RenderingPipeline.h"
 
 class FRenderingResourcesUpdate;
 
@@ -48,14 +49,8 @@ protected:
 	template<class T, typename ...ParamTypes>
 	T* CreateMesh(ParamTypes &&...Params);
 protected:
-	ComPtr<ID3DBlob> cpuVertexBufferPtr;
-	ComPtr<ID3DBlob> cpuIndexBufferPtr;
 
-	ComPtr<ID3D12Resource> gpuVertexBufferPtr;
-	ComPtr<ID3D12Resource> gpuIndexBufferPtr;
-
-	ComPtr<ID3D12Resource> vertexBufferTmpPtr;
-	ComPtr<ID3D12Resource> indexBufferTmpPtr;
+	FRenderingPipeline renderingPipeline;
 
 	ComPtr<ID3D12RootSignature> rootSignature;
 	ComPtr<ID3D12DescriptorHeap> cbvHeap;
@@ -69,12 +64,4 @@ protected:
 
 	vector<D3D12_INPUT_ELEMENT_DESC> inputElementDesc;
 protected:
-	UINT vertexSizeInBytes;
-	UINT vertexStrideInBytes;
-
-	UINT indexSizeInBytes;
-	DXGI_FORMAT indexFormat;
-	UINT indexSize;
-
-	XMFLOAT4X4 worldMatrix;
 };
