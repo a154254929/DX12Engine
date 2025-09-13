@@ -10,7 +10,6 @@
 #include "../DonutMesh.h"
 #include "ObjectTransformation.h"
 #include "../../Rendering/Core/RenderingResourcesUpdate.h"
-#include "../../Rendering/Engine/DirectX/Core/DirectXRenderingEngine.h"
 #include "../../Rendering/Core/Buffer/ConstructBuffer.h"
 #include "../../Core/Viewport/ViewportTransformation.h"
 
@@ -62,8 +61,11 @@ void CMeshManager::UpdateCalculations(float deltaTime, const FViewportInfo viewp
     viewportConstants->Update(0, &viewportTransformation);
 }
 
-void CMeshManager::BuildMesh(const FMeshRenderingData* inRenderingData)
+void CMeshManager::BuildMesh()
 {
+    renderingPipeline.BuildPipeline();
+    return;
+
     //构建栈
     D3D12_DESCRIPTOR_HEAP_DESC heapDesc;
     heapDesc.NumDescriptors = 2;
@@ -201,45 +203,6 @@ void CMeshManager::BuildMesh(const FMeshRenderingData* inRenderingData)
         inRenderingData->indexData.data(),
         indexSizeInBytes
     );
-
-    //PSO 流水线绑定
-    D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsDesc;
-    memset(&gpsDesc, 0, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
-
-    //绑定输入布局
-    gpsDesc.InputLayout.pInputElementDescs = inputElementDesc.data();
-    gpsDesc.InputLayout.NumElements = (UINT)inputElementDesc.size();
-
-    //绑定根签名
-    gpsDesc.pRootSignature = rootSignature.Get();
-
-    //绑定顶点着色器
-    gpsDesc.VS.pShaderBytecode = reinterpret_cast<BYTE*>(vertexShader.GetBufferPointer());
-    gpsDesc.VS.BytecodeLength = vertexShader.GetBufferSize();
-
-    //绑定像素着色器
-    gpsDesc.PS.pShaderBytecode = pixelShader.GetBufferPointer();
-    gpsDesc.PS.BytecodeLength = pixelShader.GetBufferSize();
-
-    //配置光栅化状态
-    gpsDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-    gpsDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;//线框方式渲染
-
-    gpsDesc.SampleMask = UINT_MAX;
-
-    gpsDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-    gpsDesc.NumRenderTargets = 1;
-
-    gpsDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-    gpsDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-
-    gpsDesc.SampleDesc.Count = GetEngine()->GetRenderingEngine()->GetDXGISampleCount();
-    gpsDesc.SampleDesc.Quality = GetEngine()->GetRenderingEngine()->GetDXGISampleQuality();
-
-    gpsDesc.RTVFormats[0] = GetEngine()->GetRenderingEngine()->GetBackBufferFormat();
-    gpsDesc.DSVFormat = GetEngine()->GetRenderingEngine()->GetDepthStencilBufferFormat();
-
-    ANALYSIS_HRESULT(GetD3dDevice()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&pipelineStatePSO)))
 }
 
 void CMeshManager::PreDraw(float DeltaTime)
@@ -358,7 +321,7 @@ T* CMeshManager::CreateMesh(ParamTypes && ...params)
 
     myMesh->BeginInit();
 
-    renderingPipeline->BuildMesh(myMesh, &meshRenderingData);
+    renderingPipeline->BuildMesh(myMesh, meshRenderingData);
 
     myMesh->Init();
 

@@ -1,5 +1,5 @@
 #include "RenderingData.h"
-#include "../../../../Mesh/Core/MeshType.h"
+#include "../../../../../Mesh/Core/MeshType.h"
 
 FRenderingData::FRenderingData()
 	:indexSize(0)

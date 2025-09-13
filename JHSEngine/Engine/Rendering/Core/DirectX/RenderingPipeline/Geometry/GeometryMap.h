@@ -28,7 +28,7 @@ class FGeometryMap : public IDirectXDeviceInterface
 public:
 	FGeometryMap();
 
-	void BuildMesh(CMesh* inMesh, const FMeshRenderingData* inRenderingData);
+	void BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData);
 protected:
 	map<int, FGeometry> geometrys;
 };

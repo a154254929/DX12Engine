@@ -5,10 +5,10 @@ FGeometryMap::FGeometryMap()
 	geometrys.insert(pair<int, FGeometry>(0, FGeometry()));
 }
 
-void FGeometryMap::BuildMesh(CMesh* inMesh, const FMeshRenderingData* inRenderingData)
+void FGeometryMap::BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData)
 {
 	FGeometry& geometry = geometrys[0];
-	geometry.BuildMesh(inMesh, inRenderingData);
+	geometry.BuildMesh(inMesh, inMeshData);
 }
 
 bool FGeometry::bRenderingDataExistence(CMesh* inKey)

@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "../../../../Interface/DirectXDeviceInterface.h"
+#include "../../../../../Interface/DirectXDeviceInterface.h"
 //#include "../../RenderingResourceUpdate.h"
 
 class CMesh;

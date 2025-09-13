@@ -69,7 +69,7 @@ int CDirectXRenderingEngine::PostInit()
     ANALYSIS_HRESULT(graphicsCommandList->Reset(commandAllocator.Get(), NULL));
     {
         //构建Mesh
-        //CMesh* boxMesh = meshManager->CreateBoxMesh(3, 2, 4);
+        CMesh* boxMesh = meshManager->CreateBoxMesh(3, 2, 4);
         //CMesh* sphereMesh = meshManager->CreateSphereMesh(3, 20, 20);
         //CMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 20, 5);
         //CMesh* coneMesh = meshManager->CreateConeMesh(1, 5, 20, 5);

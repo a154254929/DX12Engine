@@ -1,6 +1,5 @@
 #pragma once
 #include "../../Core/CoreObject/CoreMinimalObject.h"
-#include "../../Shader/Core/Shader.h"
 #include "MeshType.h"
 #include "Mesh.h"
 #include "../../Interface/DirectXDeviceInterface.h"
@@ -19,7 +18,7 @@ public:
 
 	virtual void Init();
 
-	virtual void BuildMesh(const FMeshRenderingData* inRenderingData);
+	virtual void BuildMesh();
 	virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 
 	virtual void PreDraw(float deltaTime);
@@ -56,11 +55,6 @@ protected:
 	ComPtr<ID3D12DescriptorHeap> cbvHeap;
 	shared_ptr<FRenderingResourcesUpdate> objectConstants;
 	shared_ptr<FRenderingResourcesUpdate> viewportConstants;
-
-	ComPtr<ID3D12PipelineState> pipelineStatePSO;
-
-	FShader vertexShader;
-	FShader pixelShader;
 
 	vector<D3D12_INPUT_ELEMENT_DESC> inputElementDesc;
 protected:
