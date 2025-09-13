@@ -19,6 +19,18 @@ void FRenderingPipeline::BuildPipeline()
 	rootSignature.BuildRootSignature();
 	directXPipelineState.BindRootSignature(rootSignature.GetRootSignature());
 
+	//构建shader
+	vertexShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "VertexShaderUnlit", "vs_5_0");
+	pixelShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "PixelShaderUnlit", "ps_5_0");
+	directXPipelineState.BindShader(vertexShader, pixelShader);
+
+	//输入布局
+	inputElementDesc = {
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
+	};
+	directXPipelineState.BindInputLayout(inputElementDesc.data(), inputElementDesc.size());
+
 
 	//构建管线
 	directXPipelineState.Build();
