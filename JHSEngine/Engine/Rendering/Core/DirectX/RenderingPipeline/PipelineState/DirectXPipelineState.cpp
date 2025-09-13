@@ -1,7 +1,21 @@
 ﻿#include "DirectXPipelineState.h"
 #include "../../../../Engine/DirectX/Core/DirectXRenderingEngine.h"
+#include "../../../../../Platform/Windows/WindowsEngine.h"
 
 FDirectXPipelineState::FDirectXPipelineState()
+{
+}
+
+void FDirectXPipelineState::PreDraw(float deltaTime)
+{
+    GetGraphicsCommandList()->Reset(GetCommandAllocator().Get(), pipelineStatePSO.Get());
+}
+
+void FDirectXPipelineState::Draw(float deltaTime)
+{
+}
+
+void FDirectXPipelineState::PostDraw(float deltaTime)
 {
 }
 

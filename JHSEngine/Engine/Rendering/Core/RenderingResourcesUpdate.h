@@ -1,4 +1,9 @@
 #pragma once
+#if defined(_WIN32)
+#include "../../Platform/Windows/WindowsEngine.h"
+#else
+#include "../../Core/Engine.h"
+#endif
 class FRenderingResourcesUpdate : public enable_shared_from_this<FRenderingResourcesUpdate>
 {
 public:

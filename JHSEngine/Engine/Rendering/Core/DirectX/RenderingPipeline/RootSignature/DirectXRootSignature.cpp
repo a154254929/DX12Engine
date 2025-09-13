@@ -4,6 +4,19 @@ FDirectXRootSignature::FDirectXRootSignature()
 {
 }
 
+void FDirectXRootSignature::PreDraw(float deltaTime)
+{
+    GetGraphicsCommandList()->SetGraphicsRootSignature(GetRootSignature());
+}
+
+void FDirectXRootSignature::Draw(float deltaTime)
+{
+}
+
+void FDirectXRootSignature::PostDraw(float deltaTime)
+{
+}
+
 void FDirectXRootSignature::BuildRootSignature()
 {
 

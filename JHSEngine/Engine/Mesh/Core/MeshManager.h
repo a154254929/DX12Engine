@@ -24,9 +24,6 @@ public:
 	virtual void PreDraw(float deltaTime);
 	virtual void Draw(float deltaTime);
 	virtual void PostDraw(float deltaTime);
-
-	D3D12_VERTEX_BUFFER_VIEW GetVertexBufferView();
-	D3D12_INDEX_BUFFER_VIEW GetIndexBufferView();
 public:
 	CMesh* CreateBoxMesh(float inHeight, float inWidth, float inDepth);
 

@@ -30,70 +30,19 @@ void CMeshManager::BuildMesh()
     renderingPipeline.BuildPipeline();
 }
 
-void CMeshManager::PreDraw(float DeltaTime)
+void CMeshManager::PreDraw(float deltaTime)
 {
-    GetGraphicsCommandList()->Reset(GetCommandAllocator().Get(), pipelineStatePSO.Get());
+    renderingPipeline.PreDraw(deltaTime);
 }
 
-void CMeshManager::Draw(float DeltaTime)
+void CMeshManager::Draw(float deltaTime)
 {
-    ID3D12DescriptorHeap* descriptorHeap[] = { cbvHeap.Get() };
-    GetGraphicsCommandList()->SetDescriptorHeaps(_countof(descriptorHeap), descriptorHeap);
-
-    GetGraphicsCommandList()->SetGraphicsRootSignature(rootSignature.Get());
-
-    D3D12_VERTEX_BUFFER_VIEW vbv = GetVertexBufferView();
-    //绑定渲染流水线是的输入槽,可以在输入装配阶段转入顶点数据
-    GetGraphicsCommandList()->IASetVertexBuffers(
-        0,//起始输入槽0-15
-        1,
-        &vbv
-    );
-
-    D3D12_INDEX_BUFFER_VIEW ibv = GetIndexBufferView();
-    GetGraphicsCommandList()->IASetIndexBuffer(&ibv);
-
-    //定义要绘制哪种图元 点 线 面
-    GetGraphicsCommandList()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-    CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvHeap->GetGPUDescriptorHandleForHeapStart());
-
-    desHandle.Offset(0, descriptorOffset);
-    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, desHandle);
-    desHandle.Offset(1, descriptorOffset);
-    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(1, desHandle);
-
-    //真正绘制
-    GetGraphicsCommandList()->DrawIndexedInstanced(
-        indexSize,//顶点索引数量
-        1,//绘制数量
-        0,//顶点缓冲区第一个被绘制的索引
-        0,//GPU从所以缓冲区读取的第一个索引位置
-        0//在从顶点缓冲区中读取每个实例数据之前天道到每个索引的值
-    );
+    renderingPipeline.Draw(deltaTime);
 }
 
-void CMeshManager::PostDraw(float DeltaTime)
+void CMeshManager::PostDraw(float deltaTime)
 {
-}
-
-D3D12_VERTEX_BUFFER_VIEW CMeshManager::GetVertexBufferView()
-{
-    D3D12_VERTEX_BUFFER_VIEW vbv;
-    vbv.BufferLocation = gpuVertexBufferPtr->GetGPUVirtualAddress();
-    vbv.SizeInBytes = vertexSizeInBytes;
-    vbv.StrideInBytes = vertexStrideInBytes;
-    return vbv;
-}
-
-D3D12_INDEX_BUFFER_VIEW CMeshManager::GetIndexBufferView()
-{
-    D3D12_INDEX_BUFFER_VIEW ibv;
-    ibv.BufferLocation = gpuIndexBufferPtr->GetGPUVirtualAddress();
-    ibv.SizeInBytes = indexSizeInBytes;
-    ibv.Format = indexFormat;
-    return ibv;
+    renderingPipeline.PostDraw(deltaTime);
 }
 
 CMesh* CMeshManager::CreateSphereMesh(float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
@@ -146,7 +95,7 @@ T* CMeshManager::CreateMesh(ParamTypes && ...params)
 
     myMesh->BeginInit();
 
-    renderingPipeline->BuildMesh(myMesh, meshRenderingData);
+    renderingPipeline.BuildMesh(myMesh, meshRenderingData);
 
     myMesh->Init();
 

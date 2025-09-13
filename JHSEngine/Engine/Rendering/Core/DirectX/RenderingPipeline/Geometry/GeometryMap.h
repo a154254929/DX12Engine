@@ -9,7 +9,7 @@
 
 class FGeometry : public IDirectXDeviceInterface_Struct
 {
-	friend FGeometryMap;
+	friend struct FGeometryMap;
 public:
 	bool bRenderingDataExistence(CMesh* inKey);
 	void BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData);
@@ -20,7 +20,8 @@ public:
 	/*后面会有变化*/
 	UINT GetDrawObjectNumber() const { return describeMeshRenderingData.size(); }
 
-	virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
+	D3D12_VERTEX_BUFFER_VIEW GetVertexBufferView();
+	D3D12_INDEX_BUFFER_VIEW GetIndexBufferView();
 protected:
 	ComPtr<ID3DBlob> cpuVertexBufferPtr;
 	ComPtr<ID3DBlob> cpuIndexBufferPtr;
@@ -40,6 +41,10 @@ class FGeometryMap : public IDirectXDeviceInterface
 public:
 	FGeometryMap();
 
+	void PreDraw(float deltaTime);
+	void Draw(float deltaTime);
+	void PostDraw(float deltaTime);
+
 	virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 
 	void BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData);
@@ -57,6 +62,10 @@ public:
 	//构建视口常量缓冲区
 	void BuildViewPortConstantBuffer();
 
+public:
+	void DrawViewport(float deltaTime);
+
+	void DrawMesh(float deltaTime);
 public:
 	ID3D12DescriptorHeap* GetHeap() { return descriptorHeap.GetHeap(); }
 protected:

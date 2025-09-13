@@ -11,6 +11,7 @@ void FRenderingPipeline::BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMe
 
 void FRenderingPipeline::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
 {
+	geometryMap.UpdateCalculations(deltaTime, viewportInfo);
 }
 
 
@@ -49,4 +50,25 @@ void FRenderingPipeline::BuildPipeline()
 
 	//构建管线
 	directXPipelineState.Build();
+}
+
+void FRenderingPipeline::PreDraw(float deltaTime)
+{
+	directXPipelineState.PreDraw(deltaTime);
+	rootSignature.PreDraw(deltaTime);
+	geometryMap.PreDraw(deltaTime);
+}
+
+void FRenderingPipeline::Draw(float deltaTime)
+{
+	directXPipelineState.Draw(deltaTime);
+	rootSignature.Draw(deltaTime);
+	geometryMap.Draw(deltaTime);
+}
+
+void FRenderingPipeline::PostDraw(float deltaTime)
+{
+	directXPipelineState.PostDraw(deltaTime);
+	rootSignature.PostDraw(deltaTime);
+	geometryMap.PostDraw(deltaTime);
 }
