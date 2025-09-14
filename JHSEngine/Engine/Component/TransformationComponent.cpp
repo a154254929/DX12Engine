@@ -13,6 +13,23 @@ void CTransformationComponent::SetPosition(const XMFLOAT3& inPosition)
 	position = inPosition;
 }
 
+void CTransformationComponent::SetRotation(const fvector_3d& inRotation)
+{
+	float rollRadians = XMConvertToRadians(inRotation.z);
+	float pitchRadians = XMConvertToRadians(inRotation.x);
+	float yawRadians = XMConvertToRadians(inRotation.y);
+
+	XMMATRIX rotationPitchYawRoll = XMMatrixRotationRollPitchYaw(pitchRadians, yawRadians, rollRadians);
+
+	XMVECTOR right = XMLoadFloat3(&rightVector);
+	XMVECTOR up = XMLoadFloat3(&upVector);
+	XMVECTOR forward = XMLoadFloat3(&forwardVector);
+
+	XMStoreFloat3(&rightVector, XMVector3TransformNormal(XMLoadFloat3(&rightVector), rotationPitchYawRoll));
+	XMStoreFloat3(&upVector, XMVector3TransformNormal(XMLoadFloat3(&upVector), rotationPitchYawRoll));
+	XMStoreFloat3(&forwardVector, XMVector3TransformNormal(XMLoadFloat3(&forwardVector), rotationPitchYawRoll));
+}
+
 void CTransformationComponent::SetForwardVector(const XMFLOAT3& inForwardVector)
 {
 	forwardVector = inForwardVector;

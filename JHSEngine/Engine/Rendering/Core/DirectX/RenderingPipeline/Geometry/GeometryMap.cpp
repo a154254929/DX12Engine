@@ -53,15 +53,16 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
 			{
 				XMFLOAT3& position = inRenderingData.mesh->GetPosition();
 
-				/*inRenderingData.WorldMatrix = {
-					RightVector.x * Scale.x,	UPVector.x,				ForwardVector.x ,			0.f,
-					RightVector.y,				UPVector.y * Scale.x,	ForwardVector.y,			0.f,
-					RightVector.z,				UPVector.z ,			ForwardVector.z * Scale.x,	0.f,
-					Position.x,					Position.y,				Position.z,					1.f };*/
+				XMFLOAT3 rightVector = inRenderingData.mesh->GetRightVector();
+				XMFLOAT3 upVector = inRenderingData.mesh->GetUpVector();
+				XMFLOAT3 forwardVector = inRenderingData.mesh->GetForwardVector();
 
-				inRenderingData.worldMatrix(3, 0) = position.x;
-				inRenderingData.worldMatrix(3, 1) = position.y;
-				inRenderingData.worldMatrix(3, 2) = position.z;
+				inRenderingData.worldMatrix = {
+					rightVector.x,				upVector.x,				forwardVector.x ,			0.f,
+					rightVector.y,				upVector.y,				forwardVector.y,			0.f,
+					rightVector.z,				upVector.z ,			forwardVector.z,			0.f,
+					position.x,					position.y,				position.z,					1.f
+				};
 			}
 			XMMATRIX artixWorld = XMLoadFloat4x4(&inRenderingData.worldMatrix);
 			FObjectTransformation objectTransformation;

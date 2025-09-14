@@ -74,7 +74,10 @@ int CDirectXRenderingEngine::PostInit()
         {
             sphereMesh->SetPosition(XMFLOAT3(1, 2, 4));
         }
-        GMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 10, 20, 3);
+        if (GMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 10, 20, 3))
+        {
+            cylinderMesh->SetRotation(fvector_3d(-90, 0, 0));
+        }
         GMesh* coneMesh = meshManager->CreateConeMesh(1, 5, 20, 5);
         //CMesh* planeMesh = meshManager->CreatePlaneMesh(10, 10, 10, 10);
         /*
