@@ -80,7 +80,7 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
 	viewportConstantBufferView.Update(0, &viewportTransformation);
 }
 
-void FGeometryMap::BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData)
+void FGeometryMap::BuildMesh(GMesh* inMesh, const FMeshRenderingData& inMeshData)
 {
 	FGeometry& geometry = geometrys[0];
 	geometry.BuildMesh(inMesh, inMeshData);
@@ -172,7 +172,7 @@ void FGeometryMap::DrawMesh(float deltaTime)
 	}
 }
 
-bool FGeometry::bRenderingDataExistence(CMesh* inKey)
+bool FGeometry::bRenderingDataExistence(GMesh* inKey)
 {
 	for (auto& tmp : describeMeshRenderingData)
 	{
@@ -182,7 +182,7 @@ bool FGeometry::bRenderingDataExistence(CMesh* inKey)
 	return false;
 }
 
-void FGeometry::BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData)
+void FGeometry::BuildMesh(GMesh* inMesh, const FMeshRenderingData& inMeshData)
 {
 	if (!bRenderingDataExistence(inMesh))
 	{

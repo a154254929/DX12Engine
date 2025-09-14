@@ -1,22 +1,22 @@
 #include "ConeMesh.h"
 #include "Core/MeshType.h"
 
-void CConeMesh::Init()
+void GConeMesh::Init()
 {
 	Super::Init();
 }
 
-void CConeMesh::Draw(float deltaTime)
+void GConeMesh::Draw(float deltaTime)
 {
 	Super::Draw(deltaTime);
 }
 
-void CConeMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
+void GConeMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
 	Super::BuildMesh(inRenderingData);
 }
 
-CConeMesh* CConeMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
+GConeMesh* GConeMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
 {
 	inAxialSubdivision = max(inAxialSubdivision, 3);
 	inHeightSubdivision = max(inHeightSubdivision, 1);
@@ -109,7 +109,7 @@ CConeMesh* CConeMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float in
 		meshRenderingData.indexData.push_back(bottomIndexStart + j);
 		meshRenderingData.indexData.push_back(bottomIndexStart + (j + 1) % inAxialSubdivision);
 	}
-	CConeMesh* coneMesh = new CConeMesh;
+	GConeMesh* coneMesh = new GConeMesh;
 	coneMesh->BuildMesh(&meshRenderingData);
 
 	coneMesh->Init();

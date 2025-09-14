@@ -1,9 +1,9 @@
 #pragma once
 #include "Core/Mesh.h"
 
-class CDonutMesh : public CMesh
+class GDonutMesh : public GMesh
 {
-	typedef CMesh Super;
+	typedef GMesh Super;
 public:
 	virtual void Init();
 
@@ -11,5 +11,5 @@ public:
 
 	virtual void Draw(float deltaTime);
 
-	static CDonutMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision);
+	static GDonutMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision);
 };

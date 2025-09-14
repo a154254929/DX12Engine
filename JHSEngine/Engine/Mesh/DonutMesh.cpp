@@ -1,22 +1,22 @@
 #include "DonutMesh.h"
 #include "Core/MeshType.h"
 
-void CDonutMesh::Init()
+void GDonutMesh::Init()
 {
 	Super::Init();
 }
 
-void CDonutMesh::Draw(float deltaTime)
+void GDonutMesh::Draw(float deltaTime)
 {
 	Super::Draw(deltaTime);
 }
 
-void CDonutMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
+void GDonutMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
 	Super::BuildMesh(inRenderingData);
 }
 
-CDonutMesh* CDonutMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision)
+GDonutMesh* GDonutMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision)
 {
 	inDonutAxialSubdivision = max(inDonutAxialSubdivision, 3);
 	inThicknessAxialSubdivision = max(inThicknessAxialSubdivision, 3);
@@ -55,7 +55,7 @@ CDonutMesh* CDonutMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float 
 		}
 	}
 
-	CDonutMesh* donutMesh = new CDonutMesh;
+	GDonutMesh* donutMesh = new GDonutMesh;
 	donutMesh->BuildMesh(&meshRenderingData);
 
 	donutMesh->Init();

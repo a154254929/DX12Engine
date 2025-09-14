@@ -25,21 +25,21 @@ public:
 	virtual void Draw(float deltaTime);
 	virtual void PostDraw(float deltaTime);
 public:
-	CMesh* CreateBoxMesh(float inHeight, float inWidth, float inDepth);
+	GMesh* CreateBoxMesh(float inHeight, float inWidth, float inDepth);
 
-	CMesh* CreateConeMesh(float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
+	GMesh* CreateConeMesh(float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
 
-	CMesh* CreateCylinderMesh(float InTopRadius, float InBottomRadius, float InHeight, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision);
+	GMesh* CreateCylinderMesh(float InTopRadius, float InBottomRadius, float InHeight, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision);
 
-	CMesh* CreatePlaneMesh(float InHeight, float InWidth, uint32_t InHeightSubdivide, uint32_t InWidthSubdivide);
+	GMesh* CreatePlaneMesh(float InHeight, float InWidth, uint32_t InHeightSubdivide, uint32_t InWidthSubdivide);
 
-	CMesh* CreateAesmaMesh(float inOuterRadius, float inInnerRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
+	GMesh* CreateAesmaMesh(float inOuterRadius, float inInnerRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
 
-	CMesh* CreateDonutMesh(float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision);
+	GMesh* CreateDonutMesh(float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision);
 
-	CMesh* CreateSphereMesh(float InRadius, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision);
+	GMesh* CreateSphereMesh(float InRadius, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision);
 
-	CMesh* CreateMesh(string& InPath);
+	GMesh* CreateMesh(string& InPath);
 
 protected:
 	template<class T, typename ...ParamTypes>

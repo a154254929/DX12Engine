@@ -1,22 +1,22 @@
 #include "BoxMesh.h"
 #include "Core/MeshType.h"
 
-void CBoxMesh::Init()
+void GBoxMesh::Init()
 {
 	Super::Init();
 }
 
-void CBoxMesh::Draw(float deltaTime)
+void GBoxMesh::Draw(float deltaTime)
 {
 	Super::Draw(deltaTime);
 }
 
-void CBoxMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
+void GBoxMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
 	Super::BuildMesh(inRenderingData);
 }
 
-CBoxMesh* CBoxMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, float inDepth)
+GBoxMesh* GBoxMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, float inDepth)
 {
 	float halfHeight = inHeight * .5f;
 	float halfWidth = inWidth * .5f;
@@ -52,7 +52,7 @@ CBoxMesh* CBoxMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inHe
 	meshRenderingData.indexData.push_back(4);meshRenderingData.indexData.push_back(0);meshRenderingData.indexData.push_back(3);
 	meshRenderingData.indexData.push_back(4);meshRenderingData.indexData.push_back(3);meshRenderingData.indexData.push_back(7);
 
-	CBoxMesh* boxMesh = new CBoxMesh;
+	GBoxMesh* boxMesh = new GBoxMesh;
 	boxMesh->BuildMesh(&meshRenderingData);
 
 	boxMesh->Init();

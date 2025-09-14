@@ -1,9 +1,9 @@
 #pragma once
 #include "Core/Mesh.h"
 
-class CPlaneMesh : public CMesh
+class GPlaneMesh : public GMesh
 {
-	typedef CMesh Super;
+	typedef GMesh Super;
 public:
 	virtual void Init();
 
@@ -11,5 +11,5 @@ public:
 
 	virtual void Draw(float deltaTime);
 
-	static CPlaneMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, uint32_t inHeightSubdivide, uint32_t inWidthSubdivide);
+	static GPlaneMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, uint32_t inHeightSubdivide, uint32_t inWidthSubdivide);
 };

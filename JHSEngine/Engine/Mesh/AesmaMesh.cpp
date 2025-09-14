@@ -1,22 +1,22 @@
 #include "AesmaMesh.h"
 #include "Core/MeshType.h"
 
-void CAesmaMesh::Init()
+void GAesmaMesh::Init()
 {
 	Super::Init();
 }
 
-void CAesmaMesh::Draw(float deltaTime)
+void GAesmaMesh::Draw(float deltaTime)
 {
 	Super::Draw(deltaTime);
 }
 
-void CAesmaMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
+void GAesmaMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
 	Super::BuildMesh(inRenderingData);
 }
 
-CAesmaMesh* CAesmaMesh::CreateMesh(
+GAesmaMesh* GAesmaMesh::CreateMesh(
 	FMeshRenderingData& meshRenderingData,
 	float inOuterRadius,
 	float inInnerRadius,
@@ -160,7 +160,7 @@ CAesmaMesh* CAesmaMesh::CreateMesh(
 		meshRenderingData.indexData.push_back(bottomIndexStart + (i + 1) % inAxialSubdivision + inAxialSubdivision);
 	}
 
-	CAesmaMesh* aesmaMesh = new CAesmaMesh;
+	GAesmaMesh* aesmaMesh = new GAesmaMesh;
 	aesmaMesh->BuildMesh(&meshRenderingData);
 
 	aesmaMesh->Init();

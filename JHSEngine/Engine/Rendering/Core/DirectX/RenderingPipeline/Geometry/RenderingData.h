@@ -2,7 +2,7 @@
 #include "../../../../../Interface/DirectXDeviceInterface.h"
 #include "../../../RenderingResourcesUpdate.h"
 
-class CMesh;
+class GMesh;
 struct FRenderingData : public IDirectXDeviceInterface_Struct
 {
 public:
@@ -24,6 +24,6 @@ public:
 	DXGI_FORMAT indexFormat;
 
 	XMFLOAT4X4 worldMatrix;
-	CMesh* mesh;
+	GMesh* mesh;
 	shared_ptr<FRenderingResourcesUpdate> objectConstants;
 };

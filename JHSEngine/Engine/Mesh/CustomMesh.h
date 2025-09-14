@@ -1,9 +1,9 @@
 #pragma once
 #include "Core/Mesh.h"
 
-class CCustomMesh : public CMesh
+class GCustomMesh : public GMesh
 {
-	typedef CMesh Super;
+	typedef GMesh Super;
 public:
 	virtual void Init();
 
@@ -11,7 +11,7 @@ public:
 
 	virtual void Draw(float deltaTime);
 
-	static CCustomMesh* CreateMesh(FMeshRenderingData& meshRenderingData, string &inPath);
+	static GCustomMesh* CreateMesh(FMeshRenderingData& meshRenderingData, string &inPath);
 
 	static bool LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshData);
 };

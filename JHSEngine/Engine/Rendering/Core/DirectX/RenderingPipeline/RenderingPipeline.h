@@ -6,13 +6,13 @@
 #include "RootSignature/DirectXRootSignature.h"
 #include "../../../../Core/Viewport/ViewportInfo.h"
 
-class CMesh;
+class GMesh;
 class FRenderingPipeline: public IDirectXDeviceInterface
 {
 public:
 	FRenderingPipeline();
 
-	void BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData);
+	void BuildMesh(GMesh* inMesh, const FMeshRenderingData& inMeshData);
 
 	virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 

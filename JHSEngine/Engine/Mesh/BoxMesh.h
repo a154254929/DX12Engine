@@ -1,9 +1,9 @@
 #pragma once
 #include "Core/Mesh.h"
 
-class CBoxMesh : public CMesh
+class GBoxMesh : public GMesh
 {
-	typedef CMesh Super;
+	typedef GMesh Super;
 public:
 	virtual void Init();
 
@@ -11,5 +11,5 @@ public:
 
 	virtual void Draw(float deltaTime);
 
-	static CBoxMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, float inDepth);
+	static GBoxMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, float inDepth);
 };

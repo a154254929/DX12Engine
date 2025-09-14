@@ -1,22 +1,22 @@
 ﻿#include "CustomMesh.h"
 #include "Core/MeshType.h"
 
-void CCustomMesh::Init()
+void GCustomMesh::Init()
 {
 	Super::Init();
 }
 
-void CCustomMesh::Draw(float deltaTime)
+void GCustomMesh::Draw(float deltaTime)
 {
 	Super::Draw(deltaTime);
 }
 
-void CCustomMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
+void GCustomMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
 	Super::BuildMesh(inRenderingData);
 }
 
-CCustomMesh* CCustomMesh::CreateMesh(FMeshRenderingData& meshRenderingData, string& inPath)
+GCustomMesh* GCustomMesh::CreateMesh(FMeshRenderingData& meshRenderingData, string& inPath)
 {
 	{
 		//拿到文件大小
@@ -38,7 +38,7 @@ CCustomMesh* CCustomMesh::CreateMesh(FMeshRenderingData& meshRenderingData, stri
 	}
 
 
-	CCustomMesh* customMesh = new CCustomMesh;
+	GCustomMesh* customMesh = new GCustomMesh;
 	customMesh->BuildMesh(&meshRenderingData);
 
 	customMesh->Init();
@@ -46,7 +46,7 @@ CCustomMesh* CCustomMesh::CreateMesh(FMeshRenderingData& meshRenderingData, stri
 	return customMesh;
 }
 
-bool CCustomMesh::LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshRenderingData)
+bool GCustomMesh::LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshRenderingData)
 {
 	if (buffSize > 0)
 	{

@@ -3,5 +3,5 @@
 
 CWorld::CWorld()
 {
-	camera = CreateObject<CCamera>(new CCamera());
+	camera = CreateObject<GCamera>(new GCamera());
 }

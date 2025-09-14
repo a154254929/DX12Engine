@@ -1,22 +1,22 @@
 #include "CylinderMesh.h"
 #include "Core/MeshType.h"
 
-void CCylinderMesh::Init()
+void GCylinderMesh::Init()
 {
 	Super::Init();
 }
 
-void CCylinderMesh::Draw(float deltaTime)
+void GCylinderMesh::Draw(float deltaTime)
 {
 	Super::Draw(deltaTime);
 }
 
-void CCylinderMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
+void GCylinderMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
 	Super::BuildMesh(inRenderingData);
 }
 
-CCylinderMesh* CCylinderMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inTopRadius, float inBottomRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
+GCylinderMesh* GCylinderMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inTopRadius, float inBottomRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
 {
 	inAxialSubdivision = max(inAxialSubdivision, 3);
 	inHeightSubdivision = max(inHeightSubdivision, 2);
@@ -107,7 +107,7 @@ CCylinderMesh* CCylinderMesh::CreateMesh(FMeshRenderingData& meshRenderingData, 
 		meshRenderingData.indexData.push_back(bottomIndexStart + j);
 		meshRenderingData.indexData.push_back(bottomIndexStart + (j + 1) % inAxialSubdivision);
 	}
-	CCylinderMesh* cylinderMesh = new CCylinderMesh;
+	GCylinderMesh* cylinderMesh = new GCylinderMesh;
 	cylinderMesh->BuildMesh(&meshRenderingData);
 
 	cylinderMesh->Init();

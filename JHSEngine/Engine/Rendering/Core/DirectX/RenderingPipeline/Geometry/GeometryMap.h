@@ -11,8 +11,8 @@ class FGeometry : public IDirectXDeviceInterface_Struct
 {
 	friend struct FGeometryMap;
 public:
-	bool bRenderingDataExistence(CMesh* inKey);
-	void BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData);
+	bool bRenderingDataExistence(GMesh* inKey);
+	void BuildMesh(GMesh* inMesh, const FMeshRenderingData& inMeshData);
 
 	//构建模型
 	void Build();
@@ -47,7 +47,7 @@ public:
 
 	virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 
-	void BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData);
+	void BuildMesh(GMesh* inMesh, const FMeshRenderingData& inMeshData);
 
 	void Build();
 	//描述堆

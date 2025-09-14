@@ -79,7 +79,7 @@ void CWindowsEngine::Tick(float deltaTime)
 
     if (world)
     {
-        if (CCamera* camera = world->GetCamera())
+        if (GCamera* camera = world->GetCamera())
         {
             FViewportInfo viewportInfo;
             viewportInfo.viewMatrix = camera->viewMatrix;

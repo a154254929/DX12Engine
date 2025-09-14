@@ -1,22 +1,22 @@
 #include "PlaneMesh.h"
 #include "Core/MeshType.h"
 
-void CPlaneMesh::Init()
+void GPlaneMesh::Init()
 {
 	Super::Init();
 }
 
-void CPlaneMesh::Draw(float deltaTime)
+void GPlaneMesh::Draw(float deltaTime)
 {
 	Super::Draw(deltaTime);
 }
 
-void CPlaneMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
+void GPlaneMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
 	Super::BuildMesh(inRenderingData);
 }
 
-CPlaneMesh* CPlaneMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, uint32_t inHeightSubdivide, uint32_t inWidthSubdivide)
+GPlaneMesh* GPlaneMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, uint32_t inHeightSubdivide, uint32_t inWidthSubdivide)
 {
 	auto subdivideValue = [&](float inValue, float inSubdivideValue)->float
 	{
@@ -51,7 +51,7 @@ CPlaneMesh* CPlaneMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float 
 		}
 	}
 
-	CPlaneMesh* planeMesh = new CPlaneMesh;
+	GPlaneMesh* planeMesh = new GPlaneMesh;
 	planeMesh->BuildMesh(&meshRenderingData);
 
 	planeMesh->Init();

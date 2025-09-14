@@ -1,22 +1,22 @@
 #include "SphereMesh.h"
 #include "Core/MeshType.h"
 
-void CSphereMesh::Init()
+void GSphereMesh::Init()
 {
 	Super::Init();
 }
 
-void CSphereMesh::Draw(float deltaTime)
+void GSphereMesh::Draw(float deltaTime)
 {
 	Super::Draw(deltaTime);
 }
 
-void CSphereMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
+void GSphereMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
 	Super::BuildMesh(inRenderingData);
 }
 
-CSphereMesh* CSphereMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
+GSphereMesh* GSphereMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
 {
 	inAxialSubdivision = max(inAxialSubdivision, 3);
 	inHeightSubdivision = max(inHeightSubdivision, 3);
@@ -84,7 +84,7 @@ CSphereMesh* CSphereMesh::CreateMesh(FMeshRenderingData& meshRenderingData, floa
 		meshRenderingData.indexData.push_back(finalRoundStart + i);
 		meshRenderingData.indexData.push_back(finalRoundStart + ((i + 1) % inAxialSubdivision));
 	}
-	CSphereMesh* sphereMesh = new CSphereMesh;
+	GSphereMesh* sphereMesh = new GSphereMesh;
 	sphereMesh->BuildMesh(&meshRenderingData);
 
 	sphereMesh->Init();
