@@ -2,6 +2,7 @@
 #include "../../../Buffer/ConstructBuffer.h"
 #include "../../../../../Mesh/Core/ObjectTransformation.h"
 #include "../../../../../Core/Viewport/ViewportTransformation.h"
+#include "../../../../../Mesh/Core/Mesh.h"
 
 FGeometryMap::FGeometryMap()
 {
@@ -49,6 +50,19 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
 		for (size_t j = 0; j < geometrys[i].describeMeshRenderingData.size(); ++j)
 		{
 			FRenderingData& inRenderingData = geometrys[i].describeMeshRenderingData[j];
+			{
+				XMFLOAT3& position = inRenderingData.mesh->GetPosition();
+
+				/*inRenderingData.WorldMatrix = {
+					RightVector.x * Scale.x,	UPVector.x,				ForwardVector.x ,			0.f,
+					RightVector.y,				UPVector.y * Scale.x,	ForwardVector.y,			0.f,
+					RightVector.z,				UPVector.z ,			ForwardVector.z * Scale.x,	0.f,
+					Position.x,					Position.y,				Position.z,					1.f };*/
+
+				inRenderingData.worldMatrix(3, 0) = position.x;
+				inRenderingData.worldMatrix(3, 1) = position.y;
+				inRenderingData.worldMatrix(3, 2) = position.z;
+			}
 			XMMATRIX artixWorld = XMLoadFloat4x4(&inRenderingData.worldMatrix);
 			FObjectTransformation objectTransformation;
 			XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(artixWorld));
