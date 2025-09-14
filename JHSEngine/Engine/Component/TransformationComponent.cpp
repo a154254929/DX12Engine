@@ -2,6 +2,8 @@
 
 CTransformationComponent::CTransformationComponent()
 	: position(0.f, 0.f, 0.f)
+	, rotation(0.f, 0.f, 0.f)
+	, scale(1.f, 1.f, 1.f)
 	, forwardVector(0.f, 0.f, 1.f)
 	, upVector(0.f, 1.f, 0.f)
 	, rightVector(1.f, 0.f, 0.f)
@@ -28,6 +30,13 @@ void CTransformationComponent::SetRotation(const fvector_3d& inRotation)
 	XMStoreFloat3(&rightVector, XMVector3TransformNormal(XMLoadFloat3(&rightVector), rotationPitchYawRoll));
 	XMStoreFloat3(&upVector, XMVector3TransformNormal(XMLoadFloat3(&upVector), rotationPitchYawRoll));
 	XMStoreFloat3(&forwardVector, XMVector3TransformNormal(XMLoadFloat3(&forwardVector), rotationPitchYawRoll));
+}
+
+void CTransformationComponent::SetScale(const fvector_3d& inScale)
+{
+	scale.x = inScale.x;
+	scale.y = inScale.y;
+	scale.z = inScale.z;
 }
 
 void CTransformationComponent::SetForwardVector(const XMFLOAT3& inForwardVector)

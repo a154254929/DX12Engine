@@ -72,13 +72,18 @@ int CDirectXRenderingEngine::PostInit()
         //CMesh* boxMesh = meshManager->CreateBoxMesh(3, 2, 4);
         if (GMesh* sphereMesh = meshManager->CreateSphereMesh(3, 20, 20))
         {
-            sphereMesh->SetPosition(XMFLOAT3(1, 2, 4));
+            sphereMesh->SetPosition(XMFLOAT3(10, 0, 0));
         }
+
         if (GMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 10, 20, 3))
         {
             cylinderMesh->SetRotation(fvector_3d(-90, 0, 0));
         }
-        GMesh* coneMesh = meshManager->CreateConeMesh(1, 5, 20, 5);
+
+        if (GMesh* coneMesh = meshManager->CreateConeMesh(1, 5, 20, 5))
+        {
+            coneMesh->SetScale(fvector_3d(0.1f, 1.f, 1.f));
+        }
         //CMesh* planeMesh = meshManager->CreatePlaneMesh(10, 10, 10, 10);
         /*
         string objPath = "../JHSEngine/Rock.obj";

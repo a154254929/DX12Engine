@@ -141,9 +141,9 @@ void GCamera::OnMouseMove(int x, int y)
 			}
 			case ECameraType::OvservationObject:
 			{
-				theta -= xRadians;
+				theta += xRadians;
 				theta = math_libray::Clamp(theta, -XM_PIDIV2 + 0.01f, XM_PIDIV2 - 0.01f);
-				phi += yRadians;
+				phi -= yRadians;
 				break;
 			}
 			default:

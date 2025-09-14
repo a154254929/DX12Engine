@@ -17,8 +17,12 @@ public:
 public:
 	void SetPosition(const XMFLOAT3& inPosition);
 	void SetRotation(const fvector_3d& inRotation);
+	void SetScale(const fvector_3d& inScale);
 
 	XMFLOAT3& GetPosition();
+	fvector_3d GetRotation() const;
+	fvector_3d GetScale() const;
+
 	XMFLOAT3& GetForwardVector();
 	XMFLOAT3& GetRightVector();
 	XMFLOAT3& GetUpVector();

@@ -52,15 +52,16 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
 			FRenderingData& inRenderingData = geometrys[i].describeMeshRenderingData[j];
 			{
 				XMFLOAT3& position = inRenderingData.mesh->GetPosition();
+				fvector_3d scale = inRenderingData.mesh->GetScale();
 
 				XMFLOAT3 rightVector = inRenderingData.mesh->GetRightVector();
 				XMFLOAT3 upVector = inRenderingData.mesh->GetUpVector();
 				XMFLOAT3 forwardVector = inRenderingData.mesh->GetForwardVector();
 
 				inRenderingData.worldMatrix = {
-					rightVector.x,				upVector.x,				forwardVector.x ,			0.f,
-					rightVector.y,				upVector.y,				forwardVector.y,			0.f,
-					rightVector.z,				upVector.z ,			forwardVector.z,			0.f,
+					rightVector.x * scale.x,	upVector.x,				forwardVector.x ,			0.f,
+					rightVector.y,				upVector.y * scale.y,	forwardVector.y,			0.f,
+					rightVector.z,				upVector.z ,			forwardVector.z * scale.z,	0.f,
 					position.x,					position.y,				position.z,					1.f
 				};
 			}
