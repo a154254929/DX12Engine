@@ -8,5 +8,8 @@ FRenderingData::FRenderingData()
 	, vertexOffsetPosition(0)
 	, indexTypeSize(sizeof(uint16_t))
 	, vertexTypeSize(sizeof(FVertex))
+	, indexFormat(DXGI_FORMAT_R16_UINT)
+	, worldMatrix(EngineMath::IdentityMatrix4x4())
+	, mesh(NULL)
 {
 }

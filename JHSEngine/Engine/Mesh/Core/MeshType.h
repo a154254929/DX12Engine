@@ -17,6 +17,6 @@ struct FMeshRenderingData
 	vector<uint16_t> indexData;
 
 public:
-	UINT GetVertexSizeInBytes() { return indexData.size() * sizeof(uint16_t); }
-	UINT GetIndexSizeInBytes() { return vertexData.size() * sizeof(FVertex); }
+	UINT GetVertexSizeInBytes() { return vertexData.size() * sizeof(FVertex); }
+	UINT GetIndexSizeInBytes() { return indexData.size() * sizeof(uint16_t); }
 };

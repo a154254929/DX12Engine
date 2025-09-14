@@ -56,18 +56,18 @@ public:
 	//常量缓冲区
 	void BuildObjectConstantBuffer();
 
+	//构建视口常量缓冲区
+	void BuildViewportConstantBuffer();
+
 	/*后面会有变化*/
 	UINT GetDrawObjectNumber();
-
-	//构建视口常量缓冲区
-	void BuildViewPortConstantBuffer();
 
 public:
 	void DrawViewport(float deltaTime);
 
 	void DrawMesh(float deltaTime);
 public:
-	ID3D12DescriptorHeap* GetHeap() { return descriptorHeap.GetHeap(); }
+	ID3D12DescriptorHeap* GetHeap() const { return descriptorHeap.GetHeap(); }
 protected:
 	map<int, FGeometry> geometrys;
 	FDirectXDescriptorHeap descriptorHeap;

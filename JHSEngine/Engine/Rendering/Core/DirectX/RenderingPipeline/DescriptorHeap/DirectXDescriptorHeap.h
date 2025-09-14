@@ -10,7 +10,7 @@ struct FDirectXDescriptorHeap : public IDirectXDeviceInterface_Struct
 	void Draw(float deltaTime);
 	void PostDraw(float deltaTime);
 
-	ID3D12DescriptorHeap* GetHeap() { return cbvHeap.Get();}
+	ID3D12DescriptorHeap* GetHeap()const { return cbvHeap.Get(); }
 protected:
 	ComPtr<ID3D12DescriptorHeap> cbvHeap;
 };

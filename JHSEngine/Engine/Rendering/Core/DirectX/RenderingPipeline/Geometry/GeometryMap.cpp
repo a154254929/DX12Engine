@@ -1,7 +1,6 @@
 ﻿#include "GeometryMap.h"
 #include "../../../Buffer/ConstructBuffer.h"
 #include "../../../../../Mesh/Core/ObjectTransformation.h"
-#include "../../../../../Core/Viewport/Viewport.h"
 #include "../../../../../Core/Viewport/ViewportTransformation.h"
 
 FGeometryMap::FGeometryMap()
@@ -91,26 +90,26 @@ void FGeometryMap::BuildDescriptorHeap()
 void FGeometryMap::BuildObjectConstantBuffer()
 {
 	//创建常量缓冲区
-	objectConstantBufferView.CreateConstant(sizeof(FObjectTransformation), 1);
+	objectConstantBufferView.CreateConstant(sizeof(FObjectTransformation), GetDrawObjectNumber());
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetCPUDescriptorHandleForHeapStart());
+	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(GetHeap()->GetCPUDescriptorHandleForHeapStart());
 	//构建常量缓冲区
 	objectConstantBufferView.BuildConstantBuffer(desHandle, GetDrawObjectNumber());
+}
+
+void FGeometryMap::BuildViewportConstantBuffer()
+{
+	//创建常量缓冲区
+	viewportConstantBufferView.CreateConstant(sizeof(FViewportTransformation), 1);
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(GetHeap()->GetCPUDescriptorHandleForHeapStart());
+	//构建常量缓冲区
+	viewportConstantBufferView.BuildConstantBuffer(desHandle, 1, GetDrawObjectNumber());
 }
 
 UINT FGeometryMap::GetDrawObjectNumber()
 {
 	return geometrys[0].GetDrawObjectNumber();
-}
-
-void FGeometryMap::BuildViewPortConstantBuffer()
-{
-	//创建常量缓冲区
-	viewportConstantBufferView.CreateConstant(sizeof(FViewport), 1);
-
-	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetCPUDescriptorHandleForHeapStart());
-	//构建常量缓冲区
-	viewportConstantBufferView.BuildConstantBuffer(desHandle, 1, GetDrawObjectNumber());
 }
 
 void FGeometryMap::DrawViewport(float deltaTime)
@@ -127,12 +126,11 @@ void FGeometryMap::DrawMesh(float deltaTime)
 	UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	for (auto& tmp : geometrys)
 	{
-
 		D3D12_VERTEX_BUFFER_VIEW vbv = tmp.second.GetVertexBufferView();
 		D3D12_INDEX_BUFFER_VIEW ibv = tmp.second.GetIndexBufferView();
-		CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetGPUDescriptorHandleForHeapStart());
 		for (int j = 0; j < tmp.second.describeMeshRenderingData.size(); ++j)
 		{
+			CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetGPUDescriptorHandleForHeapStart());
 			FRenderingData& inRenderingData = tmp.second.describeMeshRenderingData[j];
 			GetGraphicsCommandList()->IASetIndexBuffer(&ibv);
 			//绑定渲染流水线是的输入槽,可以在输入装配阶段转入顶点数据
@@ -146,6 +144,7 @@ void FGeometryMap::DrawMesh(float deltaTime)
 			GetGraphicsCommandList()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 			desHandle.Offset(j, descriptorOffset);
+			GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, desHandle);
 
 			//真正绘制
 			GetGraphicsCommandList()->DrawIndexedInstanced(
@@ -156,7 +155,6 @@ void FGeometryMap::DrawMesh(float deltaTime)
 				0//在从顶点缓冲区中读取每个实例数据之前天道到每个索引的值
 			);
 		}
-
 	}
 }
 
@@ -179,23 +177,23 @@ void FGeometry::BuildMesh(CMesh* inMesh, const FMeshRenderingData& inMeshData)
 
 		//基础信息记录
 		inRenderingData.mesh = inMesh;
-		inRenderingData.indexSize += inMeshData.indexData.size();
-		inRenderingData.vertexSize += inMeshData.vertexData.size();
+		inRenderingData.indexSize = inMeshData.indexData.size();
+		inRenderingData.vertexSize = inMeshData.vertexData.size();
 
 		inRenderingData.indexOffsetPosition = meshRenderingData.indexData.size();
 		inRenderingData.vertexOffsetPosition = meshRenderingData.vertexData.size();
 
 		//索引的合并
 		meshRenderingData.indexData.insert(
-			meshRenderingData.indexData.end()
-			, inMeshData.indexData.begin()
-			, inMeshData.indexData.end()
+			meshRenderingData.indexData.end(),
+			inMeshData.indexData.begin(),
+			inMeshData.indexData.end()
 		);
 		//顶点的合并
 		meshRenderingData.vertexData.insert(
-			meshRenderingData.vertexData.end()
-			, inMeshData.vertexData.begin()
-			, inMeshData.vertexData.end()
+			meshRenderingData.vertexData.end(),
+			inMeshData.vertexData.begin(),
+			inMeshData.vertexData.end()
 		);
 	}
 }

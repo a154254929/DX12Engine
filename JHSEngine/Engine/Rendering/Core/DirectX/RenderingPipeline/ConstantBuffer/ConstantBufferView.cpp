@@ -1,4 +1,4 @@
-#include "ConstantBufferView.h"
+﻿#include "ConstantBufferView.h"
 
 void FConstantBufferView::CreateConstant(UINT objectSize, UINT objectCount)
 {
@@ -13,6 +13,7 @@ void FConstantBufferView::BuildConstantBuffer(CD3DX12_CPU_DESCRIPTOR_HANDLE inHa
 
     for (int i = 0; i < inConstantBufferNum; ++i)
     {
+        //每一帧都是起始地址
         CD3DX12_CPU_DESCRIPTOR_HANDLE handle = inHandle;
         D3D12_CONSTANT_BUFFER_VIEW_DESC objCBVDesc;
         objCBVDesc.BufferLocation = objAddr + i * constants->GetConstantBufferByteSize();

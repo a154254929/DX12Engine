@@ -46,7 +46,7 @@ void FRenderingPipeline::BuildPipeline()
 	geometryMap.BuildObjectConstantBuffer();
 
 	//构建视口常量缓冲区
-	geometryMap.BuildViewPortConstantBuffer();
+	geometryMap.BuildViewportConstantBuffer();
 
 	//构建管线
 	directXPipelineState.Build();
@@ -55,20 +55,17 @@ void FRenderingPipeline::BuildPipeline()
 void FRenderingPipeline::PreDraw(float deltaTime)
 {
 	directXPipelineState.PreDraw(deltaTime);
-	rootSignature.PreDraw(deltaTime);
-	geometryMap.PreDraw(deltaTime);
 }
 
 void FRenderingPipeline::Draw(float deltaTime)
 {
-	directXPipelineState.Draw(deltaTime);
-	rootSignature.Draw(deltaTime);
+	rootSignature.PreDraw(deltaTime);
+	geometryMap.PreDraw(deltaTime);
+
 	geometryMap.Draw(deltaTime);
 }
 
 void FRenderingPipeline::PostDraw(float deltaTime)
 {
-	directXPipelineState.PostDraw(deltaTime);
-	rootSignature.PostDraw(deltaTime);
 	geometryMap.PostDraw(deltaTime);
 }

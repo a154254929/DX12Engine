@@ -23,6 +23,7 @@ void CMeshManager::Init()
 
 void CMeshManager::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
 {
+    renderingPipeline.UpdateCalculations(deltaTime, viewportInfo);
 }
 
 void CMeshManager::BuildMesh()
