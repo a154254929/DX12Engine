@@ -38,11 +38,21 @@ void FDirectXRootSignature::BuildRootSignature()
         1,
         1
     );
+
+    //Material cbv描述表
+    CD3DX12_DESCRIPTOR_RANGE descriptorRangeViewportCBV;
+    descriptorRangeViewportCBV.Init(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        2
+    );
+
     rootParam[0].InitAsDescriptorTable(1, &descriptorRangeObjCBV);
     rootParam[1].InitAsDescriptorTable(1, &descriptorRangeViewportCBV);
+    rootParam[2].InitAsDescriptorTable(1, &descriptorRangeViewportCBV);
 
     CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc(
-        2,
+        3,
         rootParam,
         0,
         nullptr,

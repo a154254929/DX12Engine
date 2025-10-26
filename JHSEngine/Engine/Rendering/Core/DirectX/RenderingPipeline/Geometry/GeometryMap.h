@@ -54,13 +54,22 @@ public:
 	void BuildDescriptorHeap();
 
 	//常量缓冲区
-	void BuildObjectConstantBuffer();
+	void BuildMeshConstantBuffer();
+
+	//构建材质常量缓冲区
+	void BuildMaterialConstantBuffer();
 
 	//构建视口常量缓冲区
 	void BuildViewportConstantBuffer();
 
+	//构建光源常量缓冲区
+	void BuildLightConstantBuffer();
+
 	/*后面会有变化*/
-	UINT GetDrawObjectNumber();
+	UINT GetDrawMeshObjectNumber();
+
+	/*后面会有变化*/
+	UINT GetDrawMaterialObjectNumber();
 
 public:
 	void DrawViewport(float deltaTime);
@@ -72,6 +81,7 @@ protected:
 	map<int, FGeometry> geometrys;
 	FDirectXDescriptorHeap descriptorHeap;
 
-	FConstantBufferView objectConstantBufferView;
+	FConstantBufferView meshConstantBufferView;
+	FConstantBufferView materialConstantBufferView;
 	FConstantBufferView viewportConstantBufferView;
 };

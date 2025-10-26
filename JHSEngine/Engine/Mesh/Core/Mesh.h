@@ -4,8 +4,13 @@
 #include "../../Shader/Core/Shader.h"
 #include "../../Actor/Core/ActorObject.h"
 
+class CMaterial;
 class GMesh : public GActorObject, public IRenderingInterface
 {
+
+	CVARIABLE()
+		vector<CMaterial*> materials;
+
 public:
 	GMesh();
 	virtual void Init();
@@ -15,5 +20,8 @@ public:
 	virtual void PreDraw(float deltaTime);
 	virtual void Draw(float deltaTime);
 	virtual void PostDraw(float deltaTime);
+
+public:
+	UINT GetMaterialNum() const;
 
 };
