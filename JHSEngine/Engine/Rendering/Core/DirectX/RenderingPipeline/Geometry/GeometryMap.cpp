@@ -4,6 +4,7 @@
 #include "../../../../../Core/Viewport/ViewportTransformation.h"
 #include "../../../../../Mesh/Core/Mesh.h"
 #include "../../../../../Mesh/Core/Material/MaterialConstantBuffer.h"
+#include "../../../../../Component/Light/Core/LightConstantBuffer.h"
 
 FGeometryMap::FGeometryMap()
 {
@@ -78,6 +79,10 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
 			materialConstantBufferView.Update(j, &materialConstantBuffer);
 		}
 	}
+	//更新灯光
+	FLightConstantBuffer lightConstantBuffer;
+
+	lightConstantBufferView.Update(0, &lightConstantBuffer);
 
 	//更新视口
 	XMMATRIX projectMatrix = XMLoadFloat4x4(&viewportInfo.projectMatrix);
@@ -107,7 +112,7 @@ void FGeometryMap::Build()
 void FGeometryMap::BuildDescriptorHeap()
 {
 	//+1是因为有摄像机
-	descriptorHeap.Build(GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber() + 1);
+	descriptorHeap.Build(GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber() + GetDrawLightObjectNumber() + 1);
 }
 
 void FGeometryMap::BuildMeshConstantBuffer()
@@ -134,6 +139,16 @@ void FGeometryMap::BuildMaterialConstantBuffer()
 	);
 }
 
+void FGeometryMap::BuildLightConstantBuffer()
+{
+	//创建常量缓冲区
+	lightConstantBufferView.CreateConstant(sizeof(FViewportTransformation), GetDrawLightObjectNumber());
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(GetHeap()->GetCPUDescriptorHandleForHeapStart());
+	//构建常量缓冲区
+	lightConstantBufferView.BuildConstantBuffer(desHandle, GetDrawLightObjectNumber(), GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber());
+}
+
 void FGeometryMap::BuildViewportConstantBuffer()
 {
 	//创建常量缓冲区
@@ -141,7 +156,7 @@ void FGeometryMap::BuildViewportConstantBuffer()
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(GetHeap()->GetCPUDescriptorHandleForHeapStart());
 	//构建常量缓冲区
-	viewportConstantBufferView.BuildConstantBuffer(desHandle, 1, GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber());
+	viewportConstantBufferView.BuildConstantBuffer(desHandle, 1, GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber() + GetDrawLightObjectNumber());
 }
 
 UINT FGeometryMap::GetDrawMeshObjectNumber()
@@ -162,13 +177,27 @@ UINT FGeometryMap::GetDrawMaterialObjectNumber()
 	return count;
 }
 
+UINT FGeometryMap::GetDrawLightObjectNumber()
+{
+	return 1;
+}
+
 void FGeometryMap::DrawViewport(float deltaTime)
 {
 	UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
-	desHandle.Offset(GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber(), descriptorOffset);
+	desHandle.Offset(GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber() + GetDrawLightObjectNumber(), descriptorOffset);
 	GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(1, desHandle);
+}
+
+void FGeometryMap::DrawLight(float deltaTime)
+{
+	UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(GetHeap()->GetGPUDescriptorHandleForHeapStart());
+
+	desHandle.Offset(GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber(), descriptorOffset);
+	GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(3, desHandle);
 }
 
 void FGeometryMap::DrawMesh(float deltaTime)

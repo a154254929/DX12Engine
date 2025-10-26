@@ -312,6 +312,15 @@
     <ClCompile Include="Engine\Mesh\Core\Material\MaterialConstantBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Component\Light\Core\LightComponent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Component\Light\Core\LightConstantBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Component\Light\ParallelLightComponent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="simple_library\private\simple_channel\simple_net_connetion\simple_connetion_tcp.h">
@@ -666,6 +675,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Mesh\Core\Material\MaterialConstantBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Component\Light\Core\LightComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Component\Light\Core\LightConstantBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Component\Light\ParallelLightComponent.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

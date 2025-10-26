@@ -71,8 +71,13 @@ public:
 	/*后面会有变化*/
 	UINT GetDrawMaterialObjectNumber();
 
+	/*后面会有变化*/
+	UINT GetDrawLightObjectNumber();
+
 public:
 	void DrawViewport(float deltaTime);
+
+	void DrawLight(float deltaTime);
 
 	void DrawMesh(float deltaTime);
 public:
@@ -84,4 +89,5 @@ protected:
 	FConstantBufferView meshConstantBufferView;
 	FConstantBufferView materialConstantBufferView;
 	FConstantBufferView viewportConstantBufferView;
+	FConstantBufferView lightConstantBufferView;
 };

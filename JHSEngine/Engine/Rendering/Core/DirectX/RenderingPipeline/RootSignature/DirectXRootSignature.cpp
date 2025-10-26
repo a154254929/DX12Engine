@@ -21,7 +21,7 @@ void FDirectXRootSignature::BuildRootSignature()
 {
 
     //构建根签名
-    CD3DX12_ROOT_PARAMETER rootParam[2];
+    CD3DX12_ROOT_PARAMETER rootParam[4];
 
     //Object cbv描述表
     CD3DX12_DESCRIPTOR_RANGE descriptorRangeObjCBV;
@@ -40,19 +40,28 @@ void FDirectXRootSignature::BuildRootSignature()
     );
 
     //Material cbv描述表
-    CD3DX12_DESCRIPTOR_RANGE descriptorRangeViewportCBV;
-    descriptorRangeViewportCBV.Init(
+    CD3DX12_DESCRIPTOR_RANGE descriptorRangeMaterialCBV;
+    descriptorRangeMaterialCBV.Init(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
         1,
         2
     );
 
+    //Light cbv描述表
+    CD3DX12_DESCRIPTOR_RANGE descriptorRangeLightCBV;
+    descriptorRangeLightCBV.Init(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        3
+    );
+
     rootParam[0].InitAsDescriptorTable(1, &descriptorRangeObjCBV);
     rootParam[1].InitAsDescriptorTable(1, &descriptorRangeViewportCBV);
-    rootParam[2].InitAsDescriptorTable(1, &descriptorRangeViewportCBV);
+    rootParam[2].InitAsDescriptorTable(1, &descriptorRangeMaterialCBV);
+    rootParam[3].InitAsDescriptorTable(1, &descriptorRangeLightCBV);
 
     CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc(
-        3,
+        4,
         rootParam,
         0,
         nullptr,

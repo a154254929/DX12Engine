@@ -52,6 +52,9 @@ void FRenderingPipeline::BuildPipeline()
 	//构建视口常量缓冲区
 	geometryMap.BuildViewportConstantBuffer();
 
+	//构建光源常量缓冲区
+	geometryMap.BuildLightConstantBuffer();
+
 	//构建管线
 	directXPipelineState.Build();
 }
