@@ -44,8 +44,8 @@ GSphereMesh* GSphereMesh::CreateMesh(FMeshRenderingData& meshRenderingData, floa
 				XMFLOAT3(layerRadius * cosf(theta), y, layerRadius * sinf(theta)),
 				XMFLOAT4(i * 1.f / (inHeightSubdivision - 1), j * 1.f / (inAxialSubdivision - 1), 1.f, 1.f)
 			));
-			XMVECTOR vertexPos = XMLoadFloat3(&meshRenderingData.vertexData[roundStart].position);
-			XMStoreFloat3(&meshRenderingData.vertexData[roundStart].normal, XMVector3Normalize(vertexPos));
+			XMVECTOR vertexPos = XMLoadFloat3(&meshRenderingData.vertexData[roundStart + j].position);
+			XMStoreFloat3(&meshRenderingData.vertexData[roundStart + j].normal, XMVector3Normalize(vertexPos));
 		}
 		if (i == 1)
 		{

@@ -33,7 +33,7 @@ void FRenderingPipeline::BuildPipeline()
 	inputElementDesc = {
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"NORMAL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
 	};
 	directXPipelineState.BindInputLayout(inputElementDesc.data(), inputElementDesc.size());
 
@@ -49,11 +49,11 @@ void FRenderingPipeline::BuildPipeline()
 	//构建材质常量缓冲区
 	geometryMap.BuildMaterialConstantBuffer();
 
-	//构建视口常量缓冲区
-	geometryMap.BuildViewportConstantBuffer();
-
 	//构建光源常量缓冲区
 	geometryMap.BuildLightConstantBuffer();
+
+	//构建视口常量缓冲区
+	geometryMap.BuildViewportConstantBuffer();
 
 	//构建管线
 	directXPipelineState.Build();

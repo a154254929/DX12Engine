@@ -5,5 +5,6 @@ struct FLightConstantBuffer
 {
 	FLightConstantBuffer();
 
-	XMFLOAT4 world;
+	XMFLOAT3 lightIntensity;
+	XMFLOAT3 lightDirection;
 };

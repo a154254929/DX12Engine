@@ -21,6 +21,9 @@ void FGeometryMap::Draw(float deltaTime)
 	//渲染视口
 	DrawViewport(deltaTime);
 
+	//渲染光源
+	DrawLight(deltaTime);
+
 	//渲染模型
 	DrawMesh(deltaTime);
 }
@@ -142,7 +145,7 @@ void FGeometryMap::BuildMaterialConstantBuffer()
 void FGeometryMap::BuildLightConstantBuffer()
 {
 	//创建常量缓冲区
-	lightConstantBufferView.CreateConstant(sizeof(FViewportTransformation), GetDrawLightObjectNumber());
+	lightConstantBufferView.CreateConstant(sizeof(FLightConstantBuffer), GetDrawLightObjectNumber());
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(GetHeap()->GetCPUDescriptorHandleForHeapStart());
 	//构建常量缓冲区

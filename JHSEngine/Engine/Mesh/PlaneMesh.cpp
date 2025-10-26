@@ -37,7 +37,11 @@ GPlaneMesh* GPlaneMesh::CreateMesh(FMeshRenderingData& meshRenderingData, float 
 	{
 		for (uint32_t j = 0; j <= inWidthSubdivide; ++j)
 		{
-			meshRenderingData.vertexData.push_back(FVertex(XMFLOAT3(-halfWidth + heightSubdivide * i, 0, -halfWidth + widthSubdivide * j), XMFLOAT4(i * 1.0f / inHeightSubdivide, j * 1.0f / inWidthSubdivide, 1.f, 1.f)));
+			meshRenderingData.vertexData.push_back(FVertex(
+				XMFLOAT3(-halfWidth + heightSubdivide * i, 0, -halfWidth + widthSubdivide * j),
+				XMFLOAT4(i * 1.0f / inHeightSubdivide, j * 1.0f / inWidthSubdivide, 1.f, 1.f),
+				XMFLOAT3(.0f, 1.0f, .0f)
+			));
 			if (i != 0 && j != inWidthSubdivide)
 			{
 				meshRenderingData.indexData.push_back(i * (inWidthSubdivide + 1) + j);

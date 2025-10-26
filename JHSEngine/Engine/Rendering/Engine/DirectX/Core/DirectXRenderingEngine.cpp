@@ -70,6 +70,11 @@ int CDirectXRenderingEngine::PostInit()
     {
         //构建Mesh
         //CMesh* boxMesh = meshManager->CreateBoxMesh(3, 2, 4);
+        if (GMesh* planeMesh = meshManager->CreatePlaneMesh(10, 10, 10, 10))
+        {
+            planeMesh->SetPosition(XMFLOAT3(.0f, -2.0f, .0f));
+            planeMesh->SetScale(fvector_3d(6.0f, 6.0f, 6.0f));
+        }
         if (GMesh* sphereMesh = meshManager->CreateSphereMesh(3, 20, 20))
         {
             sphereMesh->SetPosition(XMFLOAT3(0, 2, 0));
@@ -84,11 +89,6 @@ int CDirectXRenderingEngine::PostInit()
         {
             coneMesh->SetScale(fvector_3d(0.1f, 1.f, 1.f));
         }*/
-        if (GMesh* planeMesh = meshManager->CreatePlaneMesh(10, 10, 10, 10))
-        {
-            planeMesh->SetPosition(XMFLOAT3(.0f, -2.0f, .0f));
-            planeMesh->SetScale(fvector_3d(6.0f, 6.0f, 6.0f));
-        }
         /*
         string objPath = "../JHSEngine/Rock.obj";
         string objPath = "../JHSEngine/ball.obj";
