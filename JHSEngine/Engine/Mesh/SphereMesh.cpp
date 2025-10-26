@@ -74,7 +74,7 @@ GSphereMesh* GSphereMesh::CreateMesh(FMeshRenderingData& meshRenderingData, floa
 	meshRenderingData.vertexData.push_back(FVertex(
 		XMFLOAT3(0.f, -inRadius, 0.f), XMFLOAT4(Colors::White)
 	));
-	uint32_t finalIndex = (inHeightSubdivision - 2) * inAxialSubdivision;
+	uint32_t finalIndex = (inHeightSubdivision - 2) * inAxialSubdivision + 1;
 	XMVECTOR buttonVertexPos = XMLoadFloat3(&meshRenderingData.vertexData[finalIndex].position);
 	XMStoreFloat3(&meshRenderingData.vertexData[finalIndex].normal, XMVector3Normalize(buttonVertexPos));
 	uint32_t finalRoundStart = (inHeightSubdivision - 3) * inAxialSubdivision + 1;

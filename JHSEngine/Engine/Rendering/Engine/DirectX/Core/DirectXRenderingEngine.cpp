@@ -72,10 +72,10 @@ int CDirectXRenderingEngine::PostInit()
         //CMesh* boxMesh = meshManager->CreateBoxMesh(3, 2, 4);
         if (GMesh* sphereMesh = meshManager->CreateSphereMesh(3, 20, 20))
         {
-            sphereMesh->SetPosition(XMFLOAT3(10, 0, 0));
+            sphereMesh->SetPosition(XMFLOAT3(0, 2, 0));
         }
 
-        if (GMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 10, 20, 3))
+        /*if (GMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 10, 20, 3))
         {
             cylinderMesh->SetRotation(fvector_3d(-90, 0, 0));
         }
@@ -83,15 +83,19 @@ int CDirectXRenderingEngine::PostInit()
         if (GMesh* coneMesh = meshManager->CreateConeMesh(1, 5, 20, 5))
         {
             coneMesh->SetScale(fvector_3d(0.1f, 1.f, 1.f));
+        }*/
+        if (GMesh* planeMesh = meshManager->CreatePlaneMesh(10, 10, 10, 10))
+        {
+            planeMesh->SetPosition(XMFLOAT3(.0f, -2.0f, .0f));
+            planeMesh->SetScale(fvector_3d(6.0f, 6.0f, 6.0f));
         }
-        //CMesh* planeMesh = meshManager->CreatePlaneMesh(10, 10, 10, 10);
         /*
         string objPath = "../JHSEngine/Rock.obj";
-        */
         string objPath = "../JHSEngine/ball.obj";
         GMesh* customMesh = meshManager->CreateMesh(objPath);
-        //CMesh* aesmaMesh = meshManager->CreateAesmaMesh(3, 1, 10, 20, 3);
-        //CMesh* donutMesh = meshManager->CreateDonutMesh(3, .5f, 10, 10);
+        */
+        //GMesh* aesmaMesh = meshManager->CreateAesmaMesh(3, 1, 10, 20, 3);
+        //GMesh* donutMesh = meshManager->CreateDonutMesh(3, .5f, 10, 10);
     }
     meshManager->BuildMesh();
 

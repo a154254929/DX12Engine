@@ -4,15 +4,21 @@
 
 FDirectXPipelineState::FDirectXPipelineState()
 {
+    //线框
+    PSO.insert(pair<int, ComPtr<ID3D12PipelineState>>(4, ComPtr<ID3D12PipelineState>()));
+    //Shader
+    PSO.insert(pair<int, ComPtr<ID3D12PipelineState>>(5, ComPtr<ID3D12PipelineState>()));
 }
 
 void FDirectXPipelineState::PreDraw(float deltaTime)
 {
-    GetGraphicsCommandList()->Reset(GetCommandAllocator().Get(), pipelineStatePSO.Get());
+    GetGraphicsCommandList()->Reset(GetCommandAllocator().Get(), PSO[pipelineState].Get());
 }
 
 void FDirectXPipelineState::Draw(float deltaTime)
 {
+    //捕获键盘按键
+    CaptureKeyboardKeys();
 }
 
 void FDirectXPipelineState::PostDraw(float deltaTime)
@@ -66,8 +72,26 @@ void FDirectXPipelineState::Build()
     gpsDesc.SampleDesc.Count = GetEngine()->GetRenderingEngine()->GetDXGISampleCount();
     gpsDesc.SampleDesc.Quality = GetEngine()->GetRenderingEngine()->GetDXGISampleQuality();
 
+    //RTV和DSV格式
     gpsDesc.RTVFormats[0] = GetEngine()->GetRenderingEngine()->GetBackBufferFormat();
     gpsDesc.DSVFormat = GetEngine()->GetRenderingEngine()->GetDepthStencilBufferFormat();
+    
+    //线框模式注册
+    ANALYSIS_HRESULT(GetD3dDevice()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&PSO[EPipelineState::WireFrame])))
 
-    ANALYSIS_HRESULT(GetD3dDevice()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&pipelineStatePSO)))
+    //实体模式注册
+    gpsDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;//实体方式渲染
+    ANALYSIS_HRESULT(GetD3dDevice()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&PSO[EPipelineState::GrayModel])))
+}
+
+void FDirectXPipelineState::CaptureKeyboardKeys()
+{
+    if (GetAsyncKeyState('4') & 0x8000)
+    {
+        pipelineState = EPipelineState::GrayModel;
+    }
+    else if (GetAsyncKeyState('5') & 0x8000)
+    {
+        pipelineState = EPipelineState::WireFrame;
+    }
 }

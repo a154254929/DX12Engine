@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "../../../../../Interface/DirectXDeviceInterface.h"
 #include "../../../../../Shader/Core/Shader.h"
+#include "../RenderingPipelineType.h"
 
 struct FDirectXPipelineState : public IDirectXDeviceInterface_Struct
 {
@@ -24,8 +25,15 @@ public:
 
 	void Build();
 
-	ID3D12PipelineState* GetPSO() { return pipelineStatePSO.Get(); }
+	ID3D12PipelineState* GetPSO() { return PSO[pipelineState].Get(); }
+
 private:
-	ComPtr<ID3D12PipelineState> pipelineStatePSO;
+	//按键捕获
+	void CaptureKeyboardKeys();
+
+private:
+	unordered_map<int, ComPtr<ID3D12PipelineState>> PSO;
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsDesc;
+
+	EPipelineState pipelineState = EPipelineState::GrayModel;
 };

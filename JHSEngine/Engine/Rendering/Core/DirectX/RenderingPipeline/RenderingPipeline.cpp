@@ -63,9 +63,11 @@ void FRenderingPipeline::Draw(float deltaTime)
 	geometryMap.PreDraw(deltaTime);
 
 	geometryMap.Draw(deltaTime);
+	directXPipelineState.Draw(deltaTime);
 }
 
 void FRenderingPipeline::PostDraw(float deltaTime)
 {
 	geometryMap.PostDraw(deltaTime);
+	directXPipelineState.PostDraw(deltaTime);
 }
