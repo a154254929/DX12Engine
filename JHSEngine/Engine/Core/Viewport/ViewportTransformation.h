@@ -6,5 +6,6 @@ struct FViewportTransformation
 {
 	FViewportTransformation();
 
+	XMFLOAT4 viewportWorldPosirion;
 	XMFLOAT4X4 viewProjectionMatrix;
 };

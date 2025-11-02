@@ -5,6 +5,7 @@
 #include "../../../../../Mesh/Core/Mesh.h"
 #include "../../../../../Mesh/Core/Material/MaterialConstantBuffer.h"
 #include "../../../../../Component/Light/Core/LightConstantBuffer.h"
+#include "../../../../../Mesh/Core/Material/Material.h"
 
 FGeometryMap::FGeometryMap()
 {
@@ -78,7 +79,18 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
 
 			//变换材质
 			FMaterialConstantBuffer materialConstantBuffer;
+			{
+				if (CMaterial* material = (*(inRenderingData.mesh->GetMaterials()))[0])
+				{
+					fvector_4d baseColor = material->GetBaseColor();
+					materialConstantBuffer.baseColor = XMFLOAT4(baseColor.x, baseColor.y, baseColor.z, baseColor.w);
 
+					materialConstantBuffer.roughness = material->GetRoughness();
+
+					materialConstantBuffer.materialType = material->GetMaterialType();
+				}
+
+			}
 			materialConstantBufferView.Update(j, &materialConstantBuffer);
 		}
 	}
@@ -94,6 +106,8 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
 
 	FViewportTransformation viewportTransformation;
 	XMStoreFloat4x4(&viewportTransformation.viewProjectionMatrix, XMMatrixTranspose(viewProjMatrix));
+	//拿到视口位置
+	viewportTransformation.viewportWorldPosirion = viewportInfo.viewWorldPosition;
 	viewportConstantBufferView.Update(0, &viewportTransformation);
 }
 

@@ -306,9 +306,6 @@
     <ClCompile Include="Engine\Actor\Core\ActorObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Mesh\Core\Material\Material .cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Mesh\Core\Material\MaterialConstantBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -319,6 +316,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Component\Light\ParallelLightComponent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Mesh\Core\Material\Material.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Mesh\Core\Material\MaterialType.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -684,6 +687,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Component\Light\ParallelLightComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Mesh\Core\Material\MaterialType.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

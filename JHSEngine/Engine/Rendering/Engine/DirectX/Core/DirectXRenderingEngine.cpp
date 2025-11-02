@@ -11,6 +11,7 @@
 #include "../../../../Mesh/CustomMesh.h"
 #include "../../../../Core/CoreObject/CoreMinimalObject.h"
 #include "../../../../Mesh/Core/MeshManager.h"
+#include "../../../../Mesh/Core/Material/Material.h"
 
 #if defined(_WIN32)
 #include "../../../../Core/WinMainCommandParameters.h"
@@ -74,10 +75,45 @@ int CDirectXRenderingEngine::PostInit()
         {
             planeMesh->SetPosition(XMFLOAT3(.0f, -2.0f, .0f));
             planeMesh->SetScale(fvector_3d(6.0f, 6.0f, 6.0f));
+            if (CMaterial* material = (*planeMesh->GetMaterials())[0])
+            {
+                material->SetBaseColor(fvector_4d(.5f, .8f, .5f, 1.f));
+                material->SetMaterialType(EMaterialType::Lambertain);
+            }
         }
-        if (GMesh* sphereMesh = meshManager->CreateSphereMesh(3, 20, 20))
+        if (GMesh* sphereMeshLambertain = meshManager->CreateSphereMesh(1, 20, 20))
         {
-            sphereMesh->SetPosition(XMFLOAT3(0, 2, 0));
+            sphereMeshLambertain->SetPosition(XMFLOAT3(-1, 1, 0));
+            {
+                if (CMaterial* material = (*sphereMeshLambertain->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
+                    material->SetMaterialType(EMaterialType::Lambertain);
+                }
+            }
+        }
+        if (GMesh* sphereMeshHalfLambertain = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshHalfLambertain->SetPosition(XMFLOAT3(1, 1, 0));
+            {
+                if (CMaterial* material = (*sphereMeshHalfLambertain->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
+                    material->SetMaterialType(EMaterialType::HalfLambertain);
+                }
+            }
+        }
+        if (GMesh* sphereMeshHalfPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshHalfPhong->SetPosition(XMFLOAT3(3, 1, 0));
+            {
+                if (CMaterial* material = (*sphereMeshHalfPhong->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
+                    material->SetRoughness(.99f);
+                    material->SetMaterialType(EMaterialType::Phong);
+                }
+            }
         }
 
         /*if (GMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 10, 20, 3))

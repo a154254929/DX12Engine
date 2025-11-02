@@ -24,4 +24,6 @@ public:
 public:
 	UINT GetMaterialNum() const;
 
+	vector<CMaterial*>* GetMaterials() { return &materials; };
+
 };

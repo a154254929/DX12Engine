@@ -1,3 +1,6 @@
+#include "Light.hlsl"
+#include "Material.hlsl"
+
 cbuffer ObjectConstBuffer : register(b0) //b0->b14
 {
     float4x4 WorldMatrix;
@@ -5,11 +8,19 @@ cbuffer ObjectConstBuffer : register(b0) //b0->b14
 
 cbuffer ViewportConstBuffer : register(b1)
 {
+    float4 ViewportWorldPosirion;
     float4x4 ViewProjectionMatrix;
 }
 
 cbuffer MaterialConstBuffer : register(b2)
 {
+    uint MaterialType;
+    uint XX1;
+    uint XX2;
+    uint XX3;
+    
+    float4 BaseColor;
+    float Roughness;
     float4x4 Transformation;
 }
 
@@ -30,6 +41,7 @@ struct Varying
 struct Attribute
 {
     float4 position : SV_POSITION;
+    float4 worldPosition : TEXCOORD1;
     float4 color : COLOR;
     float3 normal : NORMAL;
 };
@@ -37,17 +49,51 @@ struct Attribute
 Attribute VertexShaderUnlit(Varying input)
 {
     Attribute output;
-    float4 worldPosition = mul(float4(input.position, 1), WorldMatrix);
-    output.position = mul(worldPosition, ViewProjectionMatrix);
+    output.worldPosition = mul(float4(input.position, 1), WorldMatrix);
+    output.position = mul(output.worldPosition, ViewProjectionMatrix);
     output.normal = normalize(mul(input.normal, (float3x3) WorldMatrix));
+    //output.normal = normalize(mul(input.normal, (float3x3) WorldMatrix)) * .5 + .5;
+    //output.normal = input.normal;
     output.color = input.color;
     return output;
 }
 
 float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 {
-    float lambert = saturate(dot(normalize(-LightDirection), normalize(input.normal)));
-    return input.color * lambert;
+    float4 ambientLight = { .15f, .15f, .25f, 1.0f };
+    
+    FMaterial material;
+    material.BaseColor = BaseColor;
+    float3 normal = normalize(input.normal);
+    
+    float diffusie = 1.f;
+    float lambert = saturate(dot(normalize(-LightDirection), normal));
+    float4 specularColor = 0;
+    if (MaterialType == 0)  //lambertain
+    {
+        diffusie = lambert;
+    }
+    else if (MaterialType == 1) //half-lambertain
+    {
+        float halfLambert = lambert * .5f + .5f;
+        diffusie = halfLambert;
+    }
+    else if (MaterialType == 2) //phong
+    {
+        diffusie = lambert;
+        
+        float smothness = saturate(1.f - Roughness);
+        float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
+        float3 reflectLight = normalize(reflect(LightDirection, normal));
+        float m = 256 * smothness;
+        specularColor.rgb = pow(saturate(dot(view, reflectLight)), m);
+        specularColor.a = 1;
+
+    }
+    
+    return material.BaseColor * diffusie + material.BaseColor * ambientLight + material.BaseColor * specularColor;
+    //return material.BaseColor;
+    
     //return float4(input.normal, 1);
     //return float4(lambert.xxx, 1);
 }

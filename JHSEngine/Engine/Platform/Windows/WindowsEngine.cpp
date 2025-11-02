@@ -84,6 +84,8 @@ void CWindowsEngine::Tick(float deltaTime)
             FViewportInfo viewportInfo;
             viewportInfo.viewMatrix = camera->viewMatrix;
             viewportInfo.projectMatrix = camera->projectMatrix;
+            XMFLOAT3 viewWorldPosition = camera->GetPosition();
+            viewportInfo.viewWorldPosition = XMFLOAT4(viewWorldPosition.x, viewWorldPosition.y, viewWorldPosition.z, 1.f);
             renderingEngine->UpdateCalculations(deltaTime, viewportInfo);
         }
     }

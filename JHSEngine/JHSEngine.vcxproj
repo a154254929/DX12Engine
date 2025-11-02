@@ -157,8 +157,9 @@
     <ClCompile Include="Engine\Mesh\AesmaMesh.cpp" />
     <ClCompile Include="Engine\Mesh\BoxMesh.cpp" />
     <ClCompile Include="Engine\Mesh\ConeMesh.cpp" />
-    <ClCompile Include="Engine\Mesh\Core\Material\Material .cpp" />
+    <ClCompile Include="Engine\Mesh\Core\Material\Material.cpp" />
     <ClCompile Include="Engine\Mesh\Core\Material\MaterialConstantBuffer.cpp" />
+    <ClCompile Include="Engine\Mesh\Core\Material\MaterialType.cpp" />
     <ClCompile Include="Engine\Mesh\Core\Mesh.cpp" />
     <ClCompile Include="Engine\Mesh\Core\MeshManager.cpp" />
     <ClCompile Include="Engine\Mesh\Core\MeshType.cpp" />
@@ -266,6 +267,7 @@
     <ClInclude Include="Engine\Mesh\ConeMesh.h" />
     <ClInclude Include="Engine\Mesh\Core\Material\Material.h" />
     <ClInclude Include="Engine\Mesh\Core\Material\MaterialConstantBuffer.h" />
+    <ClInclude Include="Engine\Mesh\Core\Material\MaterialType.h" />
     <ClInclude Include="Engine\Mesh\Core\Mesh.h" />
     <ClInclude Include="Engine\Mesh\Core\MeshManager.h" />
     <ClInclude Include="Engine\Mesh\Core\MeshType.h" />
