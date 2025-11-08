@@ -82,11 +82,23 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     {
         diffusie = lambert;
         
-        float smothness = saturate(1.f - Roughness);
+        float smoothness = 1.f - saturate(Roughness);
         float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
         float3 reflectLight = normalize(reflect(LightDirection, normal));
-        float m = 256 * smothness;
+        float m = 100 * smoothness;
         specularColor.rgb = pow(saturate(dot(view, reflectLight)), m);
+        specularColor.a = 1;
+
+    }
+    else if (MaterialType == 3) //phong
+    {
+        diffusie = lambert;
+        
+        float smoothness = 1.f - saturate(Roughness);
+        float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
+        float3 halfView = normalize(view - LightDirection);
+        float m = 100 * smoothness;
+        specularColor.rgb = pow(saturate(dot(normal, halfView)), m);
         specularColor.a = 1;
 
     }

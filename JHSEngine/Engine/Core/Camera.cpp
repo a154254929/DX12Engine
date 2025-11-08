@@ -35,27 +35,27 @@ void GCamera::ExecuteKeboard(const FInputKey& inputKey)
 {
 	if (inputKey.keyName == "W")
 	{
-		MoveForward(1.f);
+		MoveForward(speed);
 	}
 	else if (inputKey.keyName == "S")
 	{
-		MoveForward(-1.f);
+		MoveForward(-speed);
 	}
 	if (inputKey.keyName == "D")
 	{
-		MoveRight(1.f);
+		MoveRight(speed);
 	}
 	else if (inputKey.keyName == "A")
 	{
-		MoveRight(-1.f);
+		MoveRight(-speed);
 	}
 	if (inputKey.keyName == "E")
 	{
-		MoveUp(1.f);
+		MoveUp(speed);
 	}
 	else if (inputKey.keyName == "Q")
 	{
-		MoveUp(-1.f);
+		MoveUp(-speed);
 	}
 	if (inputKey.keyName == "T")
 	{

@@ -55,4 +55,6 @@ protected:
 	float radius;
 	float theta;
 	float phi;
+
+	float speed = .5f;
 };
