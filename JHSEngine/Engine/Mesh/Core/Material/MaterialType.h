@@ -13,6 +13,7 @@ enum EMaterialType
 	Banded2,
 	Back,
 	AnisotropyKajiyaKay,
+	OrenNayar,
 	Fresnel = 100,
 	Max
 };

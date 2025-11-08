@@ -238,6 +238,21 @@ int CDirectXRenderingEngine::PostInit()
             }
         }
 
+        ////////////////////////////////////////////////////////
+
+        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshBlinPhong->SetPosition(XMFLOAT3(-4.f, 8.5f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.2f, .7f, .2f, 1.f));
+                    material->SetRoughness(.7f);
+                    material->SetMaterialType(EMaterialType::OrenNayar);
+                }
+            }
+        }
+
         /*if (GMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 10, 20, 3))
         {
             cylinderMesh->SetRotation(fvector_3d(-90, 0, 0));
