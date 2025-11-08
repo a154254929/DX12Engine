@@ -67,11 +67,11 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     float3 normal = normalize(input.normal);
     
     float diffusie = 1.f;
-    float lambert = saturate(dot(normalize(-LightDirection), normal));
+    float lambert = dot(normalize(-LightDirection), normal);
     float4 specularColor = 0;
     if (MaterialType == 0)  //lambertain
     {
-        diffusie = lambert;
+        diffusie = saturate(lambert);
     }
     else if (MaterialType == 1) //half-lambertain
     {
@@ -80,7 +80,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     }
     else if (MaterialType == 2) //phong
     {
-        diffusie = lambert;
+        diffusie = saturate(lambert);
         
         float smoothness = 1.f - saturate(Roughness);
         float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
@@ -90,9 +90,9 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         specularColor.a = 1;
 
     }
-    else if (MaterialType == 3) //phong
+    else if (MaterialType == 3) //blinn-phong
     {
-        diffusie = lambert;
+        diffusie = saturate(lambert);
         
         float smoothness = 1.f - saturate(Roughness);
         float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
@@ -101,6 +101,24 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         specularColor.rgb = pow(saturate(dot(normal, halfView)), m);
         specularColor.a = 1;
 
+    }
+    else if (MaterialType == 4) //WrapLight
+    {
+        //float wrapValue = 1.f; //lambertain
+        float wrapValue = 2.f;
+        diffusie = saturate((lambert + wrapValue) / (1 + wrapValue));
+    }
+    else if (MaterialType == 5) //Minnaert
+    {
+        float smoothness = 1.f - saturate(Roughness);
+        float r = 20 * smoothness;
+        float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
+        diffusie = saturate(lambert) * pow(dot(normal, view) * saturate(lambert), r);
+    }
+    else if (MaterialType == 100) //Fresnel
+    {
+        float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
+        diffusie = pow(saturate(1 - dot(normal, view)), 1.5f);
     }
     
     return material.BaseColor * diffusie + material.BaseColor * ambientLight + material.BaseColor * specularColor;

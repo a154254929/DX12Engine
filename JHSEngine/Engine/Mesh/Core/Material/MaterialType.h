@@ -6,6 +6,8 @@ enum EMaterialType
 	HalfLambertain,
 	Phong,
 	BlinnPhong,
+	Wrap,
+	Minnaaer,
 	Fresnel = 100,
 	Max
 };

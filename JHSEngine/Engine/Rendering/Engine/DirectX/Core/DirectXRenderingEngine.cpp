@@ -81,6 +81,7 @@ int CDirectXRenderingEngine::PostInit()
                 material->SetMaterialType(EMaterialType::Lambertain);
             }
         }
+
         if (GMesh* sphereMeshLambertain = meshManager->CreateSphereMesh(1, 20, 20))
         {
             sphereMeshLambertain->SetPosition(XMFLOAT3(-2.5, 1, 0));
@@ -92,6 +93,7 @@ int CDirectXRenderingEngine::PostInit()
                 }
             }
         }
+
         if (GMesh* sphereMeshHalfLambertain = meshManager->CreateSphereMesh(1, 20, 20))
         {
             sphereMeshHalfLambertain->SetPosition(XMFLOAT3(0, 1, 0));
@@ -103,6 +105,31 @@ int CDirectXRenderingEngine::PostInit()
                 }
             }
         }
+
+        if (GMesh* sphereMeshHalfLambertain = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshHalfLambertain->SetPosition(XMFLOAT3(0, 3.5, 0));
+            {
+                if (CMaterial* material = (*sphereMeshHalfLambertain->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
+                    material->SetMaterialType(EMaterialType::Wrap);
+                }
+            }
+        }
+
+        if (GMesh* sphereMeshLambertain = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshLambertain->SetPosition(XMFLOAT3(-2.5, 3.5f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshLambertain->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
+                    material->SetMaterialType(EMaterialType::Fresnel);
+                }
+            }
+        }
+
         if (GMesh* sphereMeshPhong = meshManager->CreateSphereMesh(1, 20, 20))
         {
             sphereMeshPhong->SetPosition(XMFLOAT3(2.5, 1, 0));
@@ -115,6 +142,7 @@ int CDirectXRenderingEngine::PostInit()
                 }
             }
         }
+
         if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
         {
             sphereMeshBlinPhong->SetPosition(XMFLOAT3(2.5, 3.5, 0));
@@ -124,6 +152,19 @@ int CDirectXRenderingEngine::PostInit()
                     material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
                     material->SetRoughness(.8f);
                     material->SetMaterialType(EMaterialType::BlinnPhong);
+                }
+            }
+        }
+
+        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshBlinPhong->SetPosition(XMFLOAT3(-2.5, 6, 0));
+            {
+                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
+                    material->SetRoughness(.95f);
+                    material->SetMaterialType(EMaterialType::Minnaaer);
                 }
             }
         }

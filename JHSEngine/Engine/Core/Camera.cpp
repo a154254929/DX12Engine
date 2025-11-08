@@ -158,7 +158,7 @@ void GCamera::OnMouseWheel(int x, int y, float inDelta)
 {
 	if (cameraType == ECameraType::OvservationObject)
 	{
-		radius += inDelta * -0.001f;
+		radius += inDelta * -0.01f;
 		radius = math_libray::Clamp(radius, 7.f, 40.0f);
 	}
 }
