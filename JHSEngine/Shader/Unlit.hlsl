@@ -8,7 +8,7 @@ cbuffer ObjectConstBuffer : register(b0) //b0->b14
 
 cbuffer ViewportConstBuffer : register(b1)
 {
-    float4 ViewportWorldPosirion;
+    float4 ViewportWorldPosition;
     float4x4 ViewProjectionMatrix;
 }
 
@@ -64,10 +64,11 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     
     FMaterial material;
     material.BaseColor = BaseColor;
-    float3 normal = normalize(input.normal);
+    float3 normal = normalize(input.normal.xyz);
+    float3 lightDir = normalize(-LightDirection);
     
     float diffusie = 1.f;
-    float lambert = dot(normalize(-LightDirection), normal);
+    float lambert = dot(lightDir, normal);
     float4 specularColor = 0;
     if (MaterialType == 0)  //lambertain
     {
@@ -82,23 +83,22 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     {
         diffusie = saturate(lambert);
         
+        float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
+        float3 reflectLight = normalize(reflect(-lightDir, normal));
         float smoothness = 1.f - saturate(Roughness);
-        float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
-        float3 reflectLight = normalize(reflect(LightDirection, normal));
         float m = 100 * smoothness;
         specularColor.rgb = pow(saturate(dot(view, reflectLight)), m);
         specularColor.a = 1;
-
     }
     else if (MaterialType == 3) //blinn-phong
     {
         diffusie = saturate(lambert);
         
+        float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
+        float3 halfView = normalize(view + lightDir);
         float smoothness = 1.f - saturate(Roughness);
-        float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
-        float3 halfView = normalize(view - LightDirection);
         float m = 100 * smoothness;
-        specularColor.rgb = pow(saturate(dot(normal, halfView)), m);
+        specularColor.rgb += lambert > 0 ? pow(saturate(dot(normal, halfView)), m) : 0;
         specularColor.a = 1;
 
     }
@@ -112,13 +112,36 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     {
         float smoothness = 1.f - saturate(Roughness);
         float r = 20 * smoothness;
-        float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
+        float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
         diffusie = saturate(lambert) * pow(dot(normal, view) * saturate(lambert), r);
+    }
+    else if (MaterialType == 6) //Minnaert
+    {
+        float diffuseLayer = 4.0f;
+        diffusie = lambert * .5f + .5f;
+        diffusie = floor(diffusie * diffuseLayer) / diffuseLayer;
+        
+        float specularLayer = 2;
+        float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
+        float3 f0 = .1f;
+        specularColor.rgb += FresnelSchlickMethod(f0, normal, view, 3).rgb;
+        
+        float smoothness = 1.f - saturate(Roughness);
+        float m = 100 * smoothness;
+        float3 halfView = normalize(view + lightDir);
+        specularColor.rgb += lambert > 0 ? pow(saturate(dot(normal, halfView)), m) :0;
+        //float3 reflectLight = normalize(reflect(-lightDir, normal));
+        //specularColor.rgb += pow(saturate(dot(view, reflectLight)), m);
+        
+        specularColor.rgb = floor(saturate(specularColor.rgb) * specularLayer) / specularLayer;
+        
+        specularColor.a = 1;
     }
     else if (MaterialType == 100) //Fresnel
     {
-        float3 view = normalize((ViewportWorldPosirion - input.worldPosition).xyz);
-        diffusie = pow(saturate(1 - dot(normal, view)), 1.5f);
+        float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
+        float3 f0 = .1f;
+        specularColor.rgb = FresnelSchlickMethod(f0, normal, view, 3).rgb;
     }
     
     return material.BaseColor * diffusie + material.BaseColor * ambientLight + material.BaseColor * specularColor;

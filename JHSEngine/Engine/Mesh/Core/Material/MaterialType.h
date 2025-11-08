@@ -8,6 +8,7 @@ enum EMaterialType
 	BlinnPhong,
 	Wrap,
 	Minnaaer,
+	Banded,
 	Fresnel = 100,
 	Max
 };
