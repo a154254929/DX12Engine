@@ -1,4 +1,4 @@
-#include "SphereMesh.h"
+﻿#include "SphereMesh.h"
 #include "Core/MeshType.h"
 
 void GSphereMesh::Init()
@@ -44,8 +44,16 @@ GSphereMesh* GSphereMesh::CreateMesh(FMeshRenderingData& meshRenderingData, floa
 				XMFLOAT3(layerRadius * cosf(theta), y, layerRadius * sinf(theta)),
 				XMFLOAT4(i * 1.f / (inHeightSubdivision - 1), j * 1.f / (inAxialSubdivision - 1), 1.f, 1.f)
 			));
-			XMVECTOR vertexPos = XMLoadFloat3(&meshRenderingData.vertexData[roundStart + j].position);
-			XMStoreFloat3(&meshRenderingData.vertexData[roundStart + j].normal, XMVector3Normalize(vertexPos));
+			FVertex& curVert = meshRenderingData.vertexData[roundStart + j];
+			XMVECTOR vertexPos = XMLoadFloat3(&curVert.position);
+			XMStoreFloat3(&curVert.normal, XMVector3Normalize(vertexPos));
+
+			//U方向切线
+			curVert.utangent.x = -layerRadius * sinf(theta);
+			curVert.utangent.y = 0;
+			curVert.utangent.z = layerRadius * cosf(theta);
+			XMVECTOR utangent = XMLoadFloat3(&curVert.utangent);
+			XMStoreFloat3(&curVert.utangent, XMVector3Normalize(utangent));
 		}
 		if (i == 1)
 		{

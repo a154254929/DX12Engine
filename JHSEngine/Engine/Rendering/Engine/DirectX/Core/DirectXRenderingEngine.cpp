@@ -186,6 +186,58 @@ int CDirectXRenderingEngine::PostInit()
 
         ////////////////////////////////////////////////////////////////
 
+        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshBlinPhong->SetPosition(XMFLOAT3(4.f, 6.f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
+                    material->SetRoughness(.95f);
+                    material->SetMaterialType(EMaterialType::Banded1);
+                }
+            }
+        }
+
+        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshBlinPhong->SetPosition(XMFLOAT3(1.5f, 6.f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
+                    material->SetRoughness(.95f);
+                    material->SetMaterialType(EMaterialType::AnisotropyKajiyaKay);
+                }
+            }
+        }
+
+        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshBlinPhong->SetPosition(XMFLOAT3(-1.5f, 6.f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
+                    material->SetRoughness(.95f);
+                    material->SetMaterialType(EMaterialType::Banded2);
+                }
+            }
+        }
+
+        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshBlinPhong->SetPosition(XMFLOAT3(-4.f, 6.f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.2f, .7f, .2f, 1.f));
+                    material->SetRoughness(.95f);
+                    material->SetMaterialType(EMaterialType::Back);
+                }
+            }
+        }
+
         /*if (GMesh* cylinderMesh = meshManager->CreateCylinderMesh(1, 5, 10, 20, 3))
         {
             cylinderMesh->SetRotation(fvector_3d(-90, 0, 0));

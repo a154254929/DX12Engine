@@ -9,6 +9,10 @@ enum EMaterialType
 	Wrap,
 	Minnaaer,
 	Banded,
+	Banded1,
+	Banded2,
+	Back,
+	AnisotropyKajiyaKay,
 	Fresnel = 100,
 	Max
 };
