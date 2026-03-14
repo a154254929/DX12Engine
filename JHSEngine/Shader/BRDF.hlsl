@@ -1,4 +1,4 @@
-float3 GetDiffuseLambert(float DiffuseColor)
+float3 GetDiffuseLambert(float3 DiffuseColor)
 {
     float PI = acos(-1);
     return DiffuseColor * (1.0f / PI);

@@ -215,8 +215,8 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         float3 N = normal;
         float PI = acos(-1.0f);
         
-        float Roughness = .7f;
-        float Metallic = .6f;
+        float Roughness = .2f;
+        float Metallic = .2f;
 
         float4 D = GetDistributionGGX(N, H, Roughness);
         
@@ -229,9 +229,18 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         float4 Kd = 1.0f - F;
         Kd *= 1.0f - Metallic;
         
-        float3 Diffusse = Kd * GetDiffuseLambert(material.BaseColor);
+        float3 Diffuse = Kd.rgb * GetDiffuseLambert(material.BaseColor.rgb);
         
-        return float4(Diffusse.rgb, 1.0f);
+        float NoV = saturate(dot(N, V));
+        float NoL = nol;
+        
+        float4 Value = (D * G * F) / (4 * NoV * NoL);
+        float4 Specalur = float4 (Value.rgb, 1.0f);
+        
+        float3 Radiance = LightIntensity;
+        float3 finalColor = (Diffuse + Specalur.rgb) * NoL * Radiance;
+        
+        return float4(finalColor.rgb, 1.0f);
     }
     else if (MaterialType == 100) //Fresnel
     {
