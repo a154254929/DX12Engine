@@ -276,7 +276,7 @@ int CDirectXRenderingEngine::PostInit()
             {
                 if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
                 {
-                    material->SetBaseColor(fvector_4d(.2f, .7f, .2f, 1.f));
+                    material->SetBaseColor(fvector_4d(.9f, .9f, .9f, 1.f));
                     material->SetRoughness(.7f);
                     material->SetMaterialType(EMaterialType::PBR);
                 }

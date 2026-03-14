@@ -1,3 +1,9 @@
+float3 GetDiffuseLambert(float DiffuseColor)
+{
+    float PI = acos(-1);
+    return DiffuseColor * (1.0f / PI);
+}
+
 float4 GetDistributionGGX(float3 N, float3 H, float Roughness)
 {
     float PI = acos(-1);

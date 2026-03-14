@@ -216,17 +216,22 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         float PI = acos(-1.0f);
         
         float Roughness = .7f;
-        float Metallic = .2f;
+        float Metallic = .6f;
 
         float4 D = GetDistributionGGX(N, H, Roughness);
         
-        float3 F0 = 0.2;
+        float3 F0 = 0.04;
         F0 = lerp(F0, material.BaseColor.rgb, Metallic);
         float4 F = float4(FresnelSchlickMethod(F0, N, V, 5), 1.0f);
         
         float G = GSmith(N, V, L, Roughness);
         
-        return G;
+        float4 Kd = 1.0f - F;
+        Kd *= 1.0f - Metallic;
+        
+        float3 Diffusse = Kd * GetDiffuseLambert(material.BaseColor);
+        
+        return float4(Diffusse.rgb, 1.0f);
     }
     else if (MaterialType == 100) //Fresnel
     {
