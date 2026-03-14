@@ -1,5 +1,6 @@
 #include "Light.hlsl"
 #include "Material.hlsl"
+#include "BRDF.hlsl"
 
 cbuffer ObjectConstBuffer : register(b0) //b0->b14
 {
@@ -205,6 +206,20 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 
         diffuse = saturate(nol) * (a + b * saturate(phiri) * sin(alpha) * tan(beta));
 
+    }
+    else if (MaterialType == 20) //PBR
+    {
+        float3 L = lightDir;
+        float3 V = view;
+        float3 H = normalize(V + L);
+        float3 N = normal;
+        float PI = acos(-1.0f);
+        
+        float Roughness = .7f;
+        float Metallic = .3f;
+
+        float D = GetDistributionGGX(N, H, Roughness);
+        return D;
     }
     else if (MaterialType == 100) //Fresnel
     {

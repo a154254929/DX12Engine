@@ -14,6 +14,7 @@ enum EMaterialType
 	Back,
 	AnisotropyKajiyaKay,
 	OrenNayar,
+	PBR = 20,
 	Fresnel = 100,
 	Max
 };

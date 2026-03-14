@@ -269,6 +269,19 @@ int CDirectXRenderingEngine::PostInit()
         */
         //GMesh* aesmaMesh = meshManager->CreateAesmaMesh(3, 1, 10, 20, 3);
         //GMesh* donutMesh = meshManager->CreateDonutMesh(3, .5f, 10, 10);
+
+        if (GMesh* sphereMeshPBR = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshPBR->SetPosition(XMFLOAT3(-1.f, 8.5f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.2f, .7f, .2f, 1.f));
+                    material->SetRoughness(.7f);
+                    material->SetMaterialType(EMaterialType::PBR);
+                }
+            }
+        }
     }
     meshManager->BuildMesh();
 
