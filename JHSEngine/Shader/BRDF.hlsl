@@ -1,4 +1,4 @@
-float GetDistributionGGX(float3 N, float3 H, float Roughness)
+float4 GetDistributionGGX(float3 N, float3 H, float Roughness)
 {
     float PI = acos(-1);
     float a2 = pow(Roughness, 4);
