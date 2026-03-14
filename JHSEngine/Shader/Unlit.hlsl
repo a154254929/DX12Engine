@@ -216,7 +216,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         float PI = acos(-1.0f);
         
         float Roughness = .7f;
-        float Metallic = .07f;
+        float Metallic = .2f;
 
         float4 D = GetDistributionGGX(N, H, Roughness);
         
@@ -224,7 +224,9 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         F0 = lerp(F0, material.BaseColor.rgb, Metallic);
         float4 F = float4(FresnelSchlickMethod(F0, N, V, 5), 1.0f);
         
-        return F;
+        float G = GSmith(N, V, L, Roughness);
+        
+        return G;
     }
     else if (MaterialType == 100) //Fresnel
     {
