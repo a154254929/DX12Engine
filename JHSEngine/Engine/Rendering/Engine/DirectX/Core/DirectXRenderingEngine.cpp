@@ -19,10 +19,10 @@
 
 //class FVector
 //{
-//	unsigned char r;//255 ->[0,1]
-//	unsigned char g;//255
-//	unsigned char b;//255
-//	unsigned char a;//255
+//    unsigned char r;//255 ->[0,1]
+//    unsigned char g;//255
+//    unsigned char b;//255
+//    unsigned char a;//255
 //};
 
 CDirectXRenderingEngine::CDirectXRenderingEngine()
@@ -279,6 +279,30 @@ int CDirectXRenderingEngine::PostInit()
                     material->SetBaseColor(fvector_4d(.9f, .9f, .9f, 1.f));
                     material->SetRoughness(.7f);
                     material->SetMaterialType(EMaterialType::PBR);
+                }
+            }
+        }
+
+        //线框显示
+        if (GMesh* sphereMeshPBR = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshPBR->SetPosition(XMFLOAT3(1.f, 8.5f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
+                {
+                    material->SetMaterialDisplayStatusType(EMaterialDisplayStatusType::WireframeDisplay);
+                }
+            }
+        }
+
+        //点状显示
+        if (GMesh* sphereMeshPBR = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshPBR->SetPosition(XMFLOAT3(4.f, 8.5f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
+                {
+                    material->SetMaterialDisplayStatusType(EMaterialDisplayStatusType::PointDisplay);
                 }
             }
         }

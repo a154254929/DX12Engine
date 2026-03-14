@@ -4,12 +4,12 @@
 #include "../../Shader/Core/Shader.h"
 #include "../../Actor/Core/ActorObject.h"
 
+class CMeshComponent;
 class CMaterial;
 class GMesh : public GActorObject, public IRenderingInterface
 {
-
 	CVARIABLE()
-		vector<CMaterial*> materials;
+	CMeshComponent* meshComponent;
 
 public:
 	GMesh();
@@ -23,7 +23,7 @@ public:
 
 public:
 	UINT GetMaterialNum() const;
-
-	vector<CMaterial*>* GetMaterials() { return &materials; };
+	
+	vector<CMaterial*>* GetMaterials();
 
 };

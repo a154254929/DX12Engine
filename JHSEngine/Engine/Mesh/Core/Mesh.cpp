@@ -1,19 +1,28 @@
 ﻿#include "Mesh.h"
+
+#include "../../Component/Mesh/ShellMeshComponent.h"
 #include "../../Config/EngineRenderConfig.h"
-#include "Material/Material.h"
 
 GMesh::GMesh()
 	:GActorObject()
 {
-	materials.push_back(CreateObject<CMaterial>(new CMaterial()));
+	meshComponent = CreateObject<CShellMeshComponent>(new CShellMeshComponent());
 }
 
 void GMesh::Init()
 {
+	if (meshComponent)
+	{
+		meshComponent->Init();
+	}
 }
 
 void GMesh::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
+	if (meshComponent)
+	{
+		meshComponent->BuildMesh(inRenderingData);
+	}
 }
 
 void GMesh::PreDraw(float deltaTime)
@@ -28,7 +37,12 @@ void GMesh::PostDraw(float deltaTime)
 {
 }
 
-UINT GMesh::GetMaterialNum() const
+UINT GMesh::GetMaterialNum()const
 {
-	return materials.size();
+	return meshComponent->GetMaterialNum();
+}
+
+vector<CMaterial*>* GMesh::GetMaterials()
+{
+	return meshComponent->GetMaterials();
 }
