@@ -3,5 +3,5 @@
 
 namespace EngineMath
 {
-	XMFLOAT4X4 IdentityMatrix4x4();
+    XMFLOAT4X4 IdentityMatrix4x4();
 }

@@ -5,10 +5,10 @@
 
 namespace SimpleImage
 {
-	struct SIMPLE_LIBRARY_API FBmpImageInfo
-	{
-		BITMAPFILEHEADER BmpHearder;		//头信息
-		BITMAPINFOHEADER BmpInFoHeader;		//头信息2
-		RGBQUAD          BmpColors[256];	//颜色表
-	};
+    struct SIMPLE_LIBRARY_API FBmpImageInfo
+    {
+        BITMAPFILEHEADER BmpHearder;        //头锟斤拷息
+        BITMAPINFOHEADER BmpInFoHeader;        //头锟斤拷息2
+        RGBQUAD          BmpColors[256];    //锟斤拷色锟斤拷
+    };
 }

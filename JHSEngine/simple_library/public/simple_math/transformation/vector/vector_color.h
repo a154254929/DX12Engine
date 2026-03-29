@@ -5,15 +5,15 @@
 
 struct SIMPLE_LIBRARY_API fvector_color
 {
-	float r;
-	float g;
-	float b;
-	float a;
+    float r;
+    float g;
+    float b;
+    float a;
 
 public:
-	fvector_color();
+    fvector_color();
 
-	fvector_color(float in_value);
+    fvector_color(float in_value);
 
-	fvector_color(float in_r, float in_g, float in_b = 0, float in_a = 255);
+    fvector_color(float in_r, float in_g, float in_b = 0, float in_a = 255);
 };

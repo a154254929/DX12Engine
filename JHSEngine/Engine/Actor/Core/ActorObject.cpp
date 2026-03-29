@@ -3,50 +3,50 @@
 
 GActorObject::GActorObject()
 {
-	transformationComponent = CreateObject<CTransformationComponent>(new CTransformationComponent());
+    transformationComponent = CreateObject<CTransformationComponent>(new CTransformationComponent());
 }
 
 void GActorObject::SetPosition(const XMFLOAT3& inPosition)
 {
-	transformationComponent->SetPosition(inPosition);
+    transformationComponent->SetPosition(inPosition);
 }
 
 void GActorObject::SetRotation(const fvector_3d& inRotation)
 {
-	transformationComponent->SetRotation(inRotation);
+    transformationComponent->SetRotation(inRotation);
 }
 
 void GActorObject::SetScale(const fvector_3d& inScale)
 {
-	transformationComponent->SetScale(inScale);
+    transformationComponent->SetScale(inScale);
 }
 
 XMFLOAT3& GActorObject::GetPosition()
 {
-	return transformationComponent->GetPosition();
+    return transformationComponent->GetPosition();
 }
 
 fvector_3d GActorObject::GetRotation() const
 {
-	return transformationComponent->GetRotation();
+    return transformationComponent->GetRotation();
 }
 
 fvector_3d GActorObject::GetScale() const
 {
-	return transformationComponent->GetScale();
+    return transformationComponent->GetScale();
 }
 
 XMFLOAT3& GActorObject::GetForwardVector()
 {
-	return transformationComponent->GetForwardVector();
+    return transformationComponent->GetForwardVector();
 }
 
 XMFLOAT3& GActorObject::GetRightVector()
 {
-	return transformationComponent->GetRightVector();
+    return transformationComponent->GetRightVector();
 }
 
 XMFLOAT3& GActorObject::GetUpVector()
 {
-	return transformationComponent->GetUpVector();
+    return transformationComponent->GetUpVector();
 }

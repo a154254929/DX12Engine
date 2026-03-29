@@ -6,10 +6,10 @@
 
 unsigned int get_uint32_random(unsigned int in_max)
 {
-	if (in_max > 0)
-	{
-		return (unsigned int)(rand() / (double)RAND_MAX * (in_max - 0) + 0);
-	}
+    if (in_max > 0)
+    {
+        return (unsigned int)(rand() / (double)RAND_MAX * (in_max - 0) + 0);
+    }
 
-	return 0;
+    return 0;
 }

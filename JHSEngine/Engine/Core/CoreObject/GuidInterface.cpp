@@ -2,5 +2,5 @@
 
 IGuidInterface::IGuidInterface()
 {
-	create_guid(&guid);
+    create_guid(&guid);
 }

@@ -5,12 +5,12 @@
 class FWinMainCommandParameters
 {
 public:
-	FWinMainCommandParameters(HINSTANCE inHInstance, HINSTANCE inPrevInstance, PSTR inCmdLine, int inShowCmd);
+    FWinMainCommandParameters(HINSTANCE inHInstance, HINSTANCE inPrevInstance, PSTR inCmdLine, int inShowCmd);
 
-	HINSTANCE HInstance;
-	HINSTANCE PrevInstance;
-	PSTR CmdLine;
-	int ShowCmd;
+    HINSTANCE HInstance;
+    HINSTANCE PrevInstance;
+    PSTR CmdLine;
+    int ShowCmd;
 };
 #elif 0
 #endif

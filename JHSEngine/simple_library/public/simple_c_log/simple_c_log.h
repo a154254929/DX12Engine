@@ -6,10 +6,10 @@
 _CRT_BEGIN_C_HEADER
 enum e_error
 {
-	SIMPLE_C_SUCCESS = 0,
-	SIMPLE_C_LOG,
-	SIMPLE_C_WARNING,
-	SIMPLE_C_ERROR,
+    SIMPLE_C_SUCCESS = 0,
+    SIMPLE_C_LOG,
+    SIMPLE_C_WARNING,
+    SIMPLE_C_ERROR,
 };
 
 const char *get_log_filename();
@@ -24,8 +24,8 @@ int get_log_str(enum e_error error, char* buff,const char *content_buff);
 
 #define log_system(type,format,...) \
 { \
-	char tmp_log_format[] = format; \
-	log_wirte(type, tmp_log_format, __VA_ARGS__); \
+    char tmp_log_format[] = format; \
+    log_wirte(type, tmp_log_format, __VA_ARGS__); \
 }
 
 #define log_success(format,...) log_system(SIMPLE_C_SUCCESS,format,__VA_ARGS__)

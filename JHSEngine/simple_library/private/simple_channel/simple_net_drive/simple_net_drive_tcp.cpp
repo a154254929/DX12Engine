@@ -8,415 +8,415 @@
 HANDLE FSimpleTCPNetDrive::CompletionPortHandle = nullptr;
 
 FSimpleTCPNetDrive::FSimpleTCPNetDrive(ESimpleDriveType InDriveType)
-	:DriveType(InDriveType)
+    :DriveType(InDriveType)
 {
-	MainConnetion = new FSimpleTCPConnetion();
+    MainConnetion = new FSimpleTCPConnetion();
 
-	if (InDriveType == ESimpleDriveType::DRIVETYPE_LISTEN)
-	{
-		MainConnetion->SetConnetionState(ESimpleConnetionState::JOIN);
-		MainConnetion->SetConnetionType(ESimpleConnetionType::CONNETION_MAIN_LISTEN);
-	}
+    if (InDriveType == ESimpleDriveType::DRIVETYPE_LISTEN)
+    {
+        MainConnetion->SetConnetionState(ESimpleConnetionState::JOIN);
+        MainConnetion->SetConnetionType(ESimpleConnetionType::CONNETION_MAIN_LISTEN);
+    }
 }
 
 void HandShake(FSimpleConnetion* InLink)
 {
-	if (!InLink)
-	{
-		return;
-	}
+    if (!InLink)
+    {
+        return;
+    }
 
-	FSimpleBunchHead Head = *(FSimpleBunchHead*)InLink->GetIOData().Buffer;
-	if (Head.ParamNum == 0)
-	{
-		memset(InLink->GetIOData().Buffer, 0, 1024);
-		InLink->GetIOData().Len = 0;
-	}
+    FSimpleBunchHead Head = *(FSimpleBunchHead*)InLink->GetIOData().Buffer;
+    if (Head.ParamNum == 0)
+    {
+        memset(InLink->GetIOData().Buffer, 0, 1024);
+        InLink->GetIOData().Len = 0;
+    }
 
-	if (FSimpleChannel* Channel = InLink->GetMainChannel())
-	{
-		if (InLink->GetDriveType() == ESimpleDriveType::DRIVETYPE_LISTEN)
-		{
-			switch (Head.Protocols)
-			{
-				case SP_Hello:
-				{
-					std::string VersionRemote;
-					SIMPLE_PROTOCOLS_RECEIVE(SP_Hello, VersionRemote);
+    if (FSimpleChannel* Channel = InLink->GetMainChannel())
+    {
+        if (InLink->GetDriveType() == ESimpleDriveType::DRIVETYPE_LISTEN)
+        {
+            switch (Head.Protocols)
+            {
+                case SP_Hello:
+                {
+                    std::string VersionRemote;
+                    SIMPLE_PROTOCOLS_RECEIVE(SP_Hello, VersionRemote);
 
-					if (VersionRemote == "1.0.1")
-					{
-						SIMPLE_PROTOCOLS_SEND(SP_Challenge);
+                    if (VersionRemote == "1.0.1")
+                    {
+                        SIMPLE_PROTOCOLS_SEND(SP_Challenge);
 
-						log_log("Server:[Challenge] %s", InLink->GetAddrString().c_str());
-					}
+                        log_log("Server:[Challenge] %s", InLink->GetAddrString().c_str());
+                    }
 
-					break;
-				}
-				case SP_Login:
-				{
-					std::vector<int> Channels;
-					SIMPLE_PROTOCOLS_RECEIVE(SP_Login, Channels)
-					if (Channels.size() == 10)
-					{
-						InLink->SetConnetionState(ESimpleConnetionState::LOGIN);
+                    break;
+                }
+                case SP_Login:
+                {
+                    std::vector<int> Channels;
+                    SIMPLE_PROTOCOLS_RECEIVE(SP_Login, Channels)
+                    if (Channels.size() == 10)
+                    {
+                        InLink->SetConnetionState(ESimpleConnetionState::LOGIN);
 
-						auto ChannelLists = InLink->GetChannels();
-						
-						int i = 0;
-						for (auto &Tmp :*ChannelLists)
-						{
-							Tmp.SetGuid(Channels[i]);
-							i++;
-						}
+                        auto ChannelLists = InLink->GetChannels();
+                        
+                        int i = 0;
+                        for (auto &Tmp :*ChannelLists)
+                        {
+                            Tmp.SetGuid(Channels[i]);
+                            i++;
+                        }
 
-						SIMPLE_PROTOCOLS_SEND(SP_Welcom);
+                        SIMPLE_PROTOCOLS_SEND(SP_Welcom);
 
-						log_log("Server:[Welcom] %s", InLink->GetAddrString().c_str());
-					}
+                        log_log("Server:[Welcom] %s", InLink->GetAddrString().c_str());
+                    }
 
-					break;
-				}
-				case SP_Join:
-				{
-					InLink->SetConnetionState(ESimpleConnetionState::JOIN);
-					InLink->ResetHeartBeat();
+                    break;
+                }
+                case SP_Join:
+                {
+                    InLink->SetConnetionState(ESimpleConnetionState::JOIN);
+                    InLink->ResetHeartBeat();
 
-					log_success("Server:[Join] %s", InLink->GetAddrString().c_str());
+                    log_success("Server:[Join] %s", InLink->GetAddrString().c_str());
 
-					break;
-				}
-			}
-		}
-		else//¿Í»§¶Ë
-		{
-			switch (Head.Protocols)
-			{
-				case SP_Challenge:
-				{
-					std::vector<int> Channels;
-					InLink->GetChannelActiveID(Channels);
-					SIMPLE_PROTOCOLS_SEND(SP_Login, Channels);
-					InLink->SetConnetionState(ESimpleConnetionState::LOGIN);
+                    break;
+                }
+            }
+        }
+        else//ï¿½Í»ï¿½ï¿½ï¿½
+        {
+            switch (Head.Protocols)
+            {
+                case SP_Challenge:
+                {
+                    std::vector<int> Channels;
+                    InLink->GetChannelActiveID(Channels);
+                    SIMPLE_PROTOCOLS_SEND(SP_Login, Channels);
+                    InLink->SetConnetionState(ESimpleConnetionState::LOGIN);
 
-					log_log("Client:[Login] :%s", InLink->GetAddrString().c_str());
-				}
-				case SP_Welcom:
-				{
-					InLink->SetConnetionState(ESimpleConnetionState::JOIN);
+                    log_log("Client:[Login] :%s", InLink->GetAddrString().c_str());
+                }
+                case SP_Welcom:
+                {
+                    InLink->SetConnetionState(ESimpleConnetionState::JOIN);
 
-					SIMPLE_PROTOCOLS_SEND(SP_Join);
+                    SIMPLE_PROTOCOLS_SEND(SP_Join);
 
-					//ÉèÖÃÐÄÌø
-					InLink->StartSendHeartBeat();
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                    InLink->StartSendHeartBeat();
 
-					log_log("Client:[Join] :%s", InLink->GetAddrString().c_str());
-				}
-			}
-		}	
-	}
+                    log_log("Client:[Join] :%s", InLink->GetAddrString().c_str());
+                }
+            }
+        }    
+    }
 }
 
 unsigned int __stdcall Run(void* Content)
 {
-	for (;;)
-	{
- 		DWORD IOSize = -1;
-		LPOVERLAPPED lpOverlapped = NULL;
-		FSimpleConnetion* InLink = NULL;
+    for (;;)
+    {
+         DWORD IOSize = -1;
+        LPOVERLAPPED lpOverlapped = NULL;
+        FSimpleConnetion* InLink = NULL;
 
-		//win32 ºÍ win64
-		bool Ret = GetQueuedCompletionStatus(FSimpleTCPNetDrive::CompletionPortHandle, &IOSize, (PULONG_PTR)&InLink, &lpOverlapped, INFINITE);
-		if (InLink == NULL && lpOverlapped == NULL)
-		{
-			break;
-		}
+        //win32 ï¿½ï¿½ win64
+        bool Ret = GetQueuedCompletionStatus(FSimpleTCPNetDrive::CompletionPortHandle, &IOSize, (PULONG_PTR)&InLink, &lpOverlapped, INFINITE);
+        if (InLink == NULL && lpOverlapped == NULL)
+        {
+            break;
+        }
 
-		if (Ret)
-		{
-			if (IOSize == 0)
-			{
-				//ListRemove(Client);
-				continue;
-			}
+        if (Ret)
+        {
+            if (IOSize == 0)
+            {
+                //ListRemove(Client);
+                continue;
+            }
 
-			FSimpleIOData* pData = CONTAINING_RECORD(lpOverlapped,FSimpleIOData, Overlapped);
-			switch (pData->Type)
-			{
-				case 0://½ÓÊÜ ¿Í»§¶Ë·¢ËÍµÄÏûÏ¢
-				{
-					InLink->GetIOData().Len = IOSize;
-					InLink->GetIOData().Buffer[IOSize] = '\0';
-					if (InLink->GetConnetionState() == ESimpleConnetionState::JOIN)
-					{
-						//ÒµÎñÂß¼­
-						InLink->Analysis();
-					}
-					else
-					{
-						//
-						HandShake(InLink);
-					}
+            FSimpleIOData* pData = CONTAINING_RECORD(lpOverlapped,FSimpleIOData, Overlapped);
+            switch (pData->Type)
+            {
+                case 0://ï¿½ï¿½ï¿½ï¿½ ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½Íµï¿½ï¿½ï¿½Ï¢
+                {
+                    InLink->GetIOData().Len = IOSize;
+                    InLink->GetIOData().Buffer[IOSize] = '\0';
+                    if (InLink->GetConnetionState() == ESimpleConnetionState::JOIN)
+                    {
+                        //Òµï¿½ï¿½ï¿½ß¼ï¿½
+                        InLink->Analysis();
+                    }
+                    else
+                    {
+                        //
+                        HandShake(InLink);
+                    }
 
-					break;
-				}
-				case 1://·¢ËÍ
-				{	
-					//printf(InLink->GetIOData().Buffer);
-					//InLink->GetIOData().Len = 0;
-					//if (!InLink->Recv())
-					//{
-					//	InLink->Send();
-					//	//ListRemove(Client);
-					//}
+                    break;
+                }
+                case 1://ï¿½ï¿½ï¿½ï¿½
+                {    
+                    //printf(InLink->GetIOData().Buffer);
+                    //InLink->GetIOData().Len = 0;
+                    //if (!InLink->Recv())
+                    //{
+                    //    InLink->Send();
+                    //    //ListRemove(Client);
+                    //}
 
-					//break;
-				}
-			}
-		}
-		else
-		{
-			DWORD Msg = GetLastError();
-			if (Msg == WAIT_TIMEOUT)
-			{
-				continue;
-			}
-			else if (lpOverlapped != NULL)
-			{
-				//ListRemove(Client);
-			}
-			else
-			{
-				break;
-			}
-		}
-	}
+                    //break;
+                }
+            }
+        }
+        else
+        {
+            DWORD Msg = GetLastError();
+            if (Msg == WAIT_TIMEOUT)
+            {
+                continue;
+            }
+            else if (lpOverlapped != NULL)
+            {
+                //ListRemove(Client);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 bool FSimpleTCPNetDrive::Init()
 {
-	if (DriveType == ESimpleDriveType::DRIVETYPE_LISTEN)
-	{
-		//Íê³É¶Ë¿Ú
-		if ((CompletionPortHandle = CreateIoCompletionPort(
-			INVALID_HANDLE_VALUE,//´ò¿ªµÄÎÄ¼þ¾ä±ú
-			NULL,//
-			0,
-			0)) == NULL)
-		{
-			//GetLastError();
-			log_error("´´½¨Íê³É¶Ë¿ÚÊ§°Ü ~~ \n");
-			return false;
-		}
+    if (DriveType == ESimpleDriveType::DRIVETYPE_LISTEN)
+    {
+        //ï¿½ï¿½É¶Ë¿ï¿½
+        if ((CompletionPortHandle = CreateIoCompletionPort(
+            INVALID_HANDLE_VALUE,//ï¿½ò¿ªµï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½
+            NULL,//
+            0,
+            0)) == NULL)
+        {
+            //GetLastError();
+            log_error("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¶Ë¿ï¿½Ê§ï¿½ï¿½ ~~ \n");
+            return false;
+        }
 
-		//´´½¨Ïß³ÌÊýÄ¿
-		for (int i = 0; i < 2 * 2; i++)
-		{
-			hThreadHandle[i] = (HANDLE)_beginthreadex(
-				NULL,// °²È«ÊôÐÔ£¬ ÎªNULLÊ±±íÊ¾Ä¬ÈÏ°²È«ÐÔ
-				0,// Ïß³ÌµÄ¶ÑÕ»´óÐ¡£¬ Ò»°ãÄ¬ÈÏÎª0
-				Run, // ËùÒªÆô¶¯µÄÏß³Ìº¯Êý
-				CompletionPortHandle, // Ïß³Ìº¯ÊýµÄ²ÎÊý£¬ ÊÇÒ»¸övoid*ÀàÐÍ£¬ ´«µÝ¶à¸ö²ÎÊýÊ±ÓÃ½á¹¹Ìå
-				0,// ÐÂÏß³ÌµÄ³õÊ¼×´Ì¬£¬0±íÊ¾Á¢¼´Ö´ÐÐ£¬CREATE_SUSPENDED±íÊ¾´´½¨Ö®ºó¹ÒÆð
-				NULL);   // ÓÃÀ´½ÓÊÕÏß³ÌID
-		}
-	}
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½ï¿½ï¿½Ä¿
+        for (int i = 0; i < 2 * 2; i++)
+        {
+            hThreadHandle[i] = (HANDLE)_beginthreadex(
+                NULL,// ï¿½ï¿½È«ï¿½ï¿½ï¿½Ô£ï¿½ ÎªNULLÊ±ï¿½ï¿½Ê¾Ä¬ï¿½Ï°ï¿½È«ï¿½ï¿½
+                0,// ï¿½ß³ÌµÄ¶ï¿½Õ»ï¿½ï¿½Ð¡ï¿½ï¿½ Ò»ï¿½ï¿½Ä¬ï¿½ï¿½Îª0
+                Run, // ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ìºï¿½ï¿½ï¿½
+                CompletionPortHandle, // ï¿½ß³Ìºï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ò»ï¿½ï¿½void*ï¿½ï¿½ï¿½Í£ï¿½ ï¿½ï¿½ï¿½Ý¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ã½á¹¹ï¿½ï¿½
+                0,// ï¿½ï¿½ï¿½ß³ÌµÄ³ï¿½Ê¼×´Ì¬ï¿½ï¿½0ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð£ï¿½CREATE_SUSPENDEDï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½ï¿½ï¿½ï¿½
+                NULL);   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½ID
+        }
+    }
 
-	int Ret = 0;
-	if ((Ret = WSAStartup(MAKEWORD(2, 1), &WsaData)) != 0)
-	{
-		log_error("³õÊ¼»¯¿âÊ§°Ü WSAStartup ~~ \n");
-		return false;
-	}
+    int Ret = 0;
+    if ((Ret = WSAStartup(MAKEWORD(2, 1), &WsaData)) != 0)
+    {
+        log_error("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ WSAStartup ~~ \n");
+        return false;
+    }
 
-	//Ö´ÐÐConnetion³õÊ¼»¯
-	MainConnetion->Init();
-	MainConnetion->SetDriveType(DriveType);
+    //Ö´ï¿½ï¿½Connetionï¿½ï¿½Ê¼ï¿½ï¿½
+    MainConnetion->Init();
+    MainConnetion->SetDriveType(DriveType);
 
-	if (DriveType == ESimpleDriveType::DRIVETYPE_LISTEN)
-	{
-		//´´½¨Socket
-		MainConnetion->GetSocket() = INVALID_SOCKET;
-		if ((MainConnetion->GetSocket() = WSASocket(
-			AF_INET,//
-			SOCK_STREAM, //TCP  SOCK_DGRAM
-			0, //Ð­Òé
-			NULL,//
-			0,
-			WSA_FLAG_OVERLAPPED//
-		)) == INVALID_SOCKET)
-		{
-			WSACleanup();
-			log_error("´´½¨¼àÌýSocketÊ§°Ü WSAStartup ~~ \n");
-			return false;
-		}
+    if (DriveType == ESimpleDriveType::DRIVETYPE_LISTEN)
+    {
+        //ï¿½ï¿½ï¿½ï¿½Socket
+        MainConnetion->GetSocket() = INVALID_SOCKET;
+        if ((MainConnetion->GetSocket() = WSASocket(
+            AF_INET,//
+            SOCK_STREAM, //TCP  SOCK_DGRAM
+            0, //Ð­ï¿½ï¿½
+            NULL,//
+            0,
+            WSA_FLAG_OVERLAPPED//
+        )) == INVALID_SOCKET)
+        {
+            WSACleanup();
+            log_error("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½SocketÊ§ï¿½ï¿½ WSAStartup ~~ \n");
+            return false;
+        }
 
-		//·þÎñ¶ËÉèÖÃµØÖ·
-		MainConnetion->GetConnetionAddr().sin_family = AF_INET;//IPV4»¥ÁªÍøÐ­Òé×å
-		MainConnetion->GetConnetionAddr().sin_addr.S_un.S_addr = htonl(INADDR_ANY);//0.0.0.0 ËùÒÔµØÖ·¡¢
-		MainConnetion->GetConnetionAddr().sin_port = htons(98592);
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Ö·
+        MainConnetion->GetConnetionAddr().sin_family = AF_INET;//IPV4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð­ï¿½ï¿½ï¿½ï¿½
+        MainConnetion->GetConnetionAddr().sin_addr.S_un.S_addr = htonl(INADDR_ANY);//0.0.0.0 ï¿½ï¿½ï¿½Ôµï¿½Ö·ï¿½ï¿½
+        MainConnetion->GetConnetionAddr().sin_port = htons(98592);
 
-		if (bind(MainConnetion->GetSocket(), (SOCKADDR*)&MainConnetion->GetConnetionAddr(), sizeof(MainConnetion->GetConnetionAddr())) == SOCKET_ERROR)
-		{
-			closesocket(MainConnetion->GetSocket());
-			WSACleanup();
-			log_error("°ó¶¨Ö÷Á¬½ÓÊ§°Ü ~~ \n");
-			return false;
-		}
+        if (bind(MainConnetion->GetSocket(), (SOCKADDR*)&MainConnetion->GetConnetionAddr(), sizeof(MainConnetion->GetConnetionAddr())) == SOCKET_ERROR)
+        {
+            closesocket(MainConnetion->GetSocket());
+            WSACleanup();
+            log_error("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ ~~ \n");
+            return false;
+        }
 
-		if (listen(MainConnetion->GetSocket(), SOMAXCONN))
-		{
-			closesocket(MainConnetion->GetSocket());
-			WSACleanup();
-			log_error("Æô¶¯¼àÌýÊ§°Ü ~~ \n");
-			return false;
-		}
+        if (listen(MainConnetion->GetSocket(), SOMAXCONN))
+        {
+            closesocket(MainConnetion->GetSocket());
+            WSACleanup();
+            log_error("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ ~~ \n");
+            return false;
+        }
 
-		//³õÊ¼»¯ÎÒÃÇÍ¨µÀ
-		for (int i = 0 ;i < 2000;i++)
-		{
-			Connetions.insert(std::make_pair(i, new FSimpleTCPConnetion()));
-			Connetions[i]->Init();
-			Connetions[i]->SetDriveType(DriveType);
-		}
-	}
-	else
-	{
-		MainConnetion->GetSocket() = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
-		if (MainConnetion->GetSocket() == INVALID_SOCKET)
-		{
-			WSACleanup();
-			log_error("´´½¨¼àÌýSocketÊ§°Ü WSAStartup ~~ \n");
-			return false;
-		}
+        //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½
+        for (int i = 0 ;i < 2000;i++)
+        {
+            Connetions.insert(std::make_pair(i, new FSimpleTCPConnetion()));
+            Connetions[i]->Init();
+            Connetions[i]->SetDriveType(DriveType);
+        }
+    }
+    else
+    {
+        MainConnetion->GetSocket() = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
+        if (MainConnetion->GetSocket() == INVALID_SOCKET)
+        {
+            WSACleanup();
+            log_error("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½SocketÊ§ï¿½ï¿½ WSAStartup ~~ \n");
+            return false;
+        }
 
-		//¿Í»§¶ËÉèÖÃµØÖ·
-		MainConnetion->GetConnetionAddr().sin_family = AF_INET;//IPV4»¥ÁªÍøÐ­Òé×å
-		MainConnetion->GetConnetionAddr().sin_addr.S_un.S_addr = inet_addr("127.0.0.1");//0.0.0.0 ËùÒÔµØÖ·¡¢
-		MainConnetion->GetConnetionAddr().sin_port = htons(98592);
+        //ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Ö·
+        MainConnetion->GetConnetionAddr().sin_family = AF_INET;//IPV4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð­ï¿½ï¿½ï¿½ï¿½
+        MainConnetion->GetConnetionAddr().sin_addr.S_un.S_addr = inet_addr("127.0.0.1");//0.0.0.0 ï¿½ï¿½ï¿½Ôµï¿½Ö·ï¿½ï¿½
+        MainConnetion->GetConnetionAddr().sin_port = htons(98592);
 
-		if (connect(
-			MainConnetion->GetSocket(),
-			(SOCKADDR*)&MainConnetion->GetConnetionAddr(),
-			sizeof(MainConnetion->GetConnetionAddr())) == SOCKET_ERROR)
-		{
-			closesocket(MainConnetion->GetSocket());
-			WSACleanup();
-			log_error("¿Í»§¶ËÁ¬½ÓÊ§°Ü ~~ \n");
-			return false;
-		}
+        if (connect(
+            MainConnetion->GetSocket(),
+            (SOCKADDR*)&MainConnetion->GetConnetionAddr(),
+            sizeof(MainConnetion->GetConnetionAddr())) == SOCKET_ERROR)
+        {
+            closesocket(MainConnetion->GetSocket());
+            WSACleanup();
+            log_error("ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ ~~ \n");
+            return false;
+        }
 
-		//Ïò·þÎñÆ÷·¢ËÍÑéÖ¤
-		if (FSimpleChannel* Channel = MainConnetion->GetMainChannel())
-		{
-			std::string v = "1.0.1";
-			SIMPLE_PROTOCOLS_SEND(SP_Hello, v);
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤
+        if (FSimpleChannel* Channel = MainConnetion->GetMainChannel())
+        {
+            std::string v = "1.0.1";
+            SIMPLE_PROTOCOLS_SEND(SP_Hello, v);
 
-			log_log("Client send [Hello] to server[addr : %s]~~ \n", MainConnetion->GetAddrString().c_str());
-		}
-	}
+            log_log("Client send [Hello] to server[addr : %s]~~ \n", MainConnetion->GetAddrString().c_str());
+        }
+    }
 
-	//ÉèÖÃ·Ç×èÈû
-	SetNonblocking();
+    //ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½
+    SetNonblocking();
 
-	return true;
+    return true;
 }
 
 void FSimpleTCPNetDrive::Tick(double InTimeInterval)
 {
-	Super::Tick(InTimeInterval);
+    Super::Tick(InTimeInterval);
 
-	if (DriveType == ESimpleDriveType::DRIVETYPE_LISTEN)
-	{	
-		//Ö÷Í¨µÀtick
-		MainConnetion->Tick(InTimeInterval);
+    if (DriveType == ESimpleDriveType::DRIVETYPE_LISTEN)
+    {    
+        //ï¿½ï¿½Í¨ï¿½ï¿½tick
+        MainConnetion->Tick(InTimeInterval);
 
-		//×ö½ÓÊÜ¼ì²â
-		for (auto &Tmp :Connetions)
-		{
-			if (Tmp.second->GetConnetionState() != ESimpleConnetionState::FREE)
-			{
-				Tmp.second->Recv();
-			}
-			else if (Tmp.second->GetConnetionState() != ESimpleConnetionState::JOIN)
-			{
-				Tmp.second->Tick(InTimeInterval);
-			}
-		}
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ü¼ï¿½ï¿½
+        for (auto &Tmp :Connetions)
+        {
+            if (Tmp.second->GetConnetionState() != ESimpleConnetionState::FREE)
+            {
+                Tmp.second->Recv();
+            }
+            else if (Tmp.second->GetConnetionState() != ESimpleConnetionState::JOIN)
+            {
+                Tmp.second->Tick(InTimeInterval);
+            }
+        }
 
-		//iocpµÄÍ¶µÝ
-		SOCKET ClientAccept = INVALID_SOCKET;
-		SOCKADDR_IN ClientAddr;
-		int ClientAddrLen = sizeof(ClientAddr);
+        //iocpï¿½ï¿½Í¶ï¿½ï¿½
+        SOCKET ClientAccept = INVALID_SOCKET;
+        SOCKADDR_IN ClientAddr;
+        int ClientAddrLen = sizeof(ClientAddr);
 
-		if ((ClientAccept = WSAAccept(//×èÈû³ÌÐò
-			MainConnetion->GetSocket(),
-			(SOCKADDR*)&ClientAddr,
-			&ClientAddrLen,
-			NULL,
-			0)) == SOCKET_ERROR)
-		{
-			//log_error("½ÓÊÜ¿Í»§¶ËÍ¶µÝÊ§°Ü");
-			return;
-		}
+        if ((ClientAccept = WSAAccept(//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            MainConnetion->GetSocket(),
+            (SOCKADDR*)&ClientAddr,
+            &ClientAddrLen,
+            NULL,
+            0)) == SOCKET_ERROR)
+        {
+            //log_error("ï¿½ï¿½ï¿½Ü¿Í»ï¿½ï¿½ï¿½Í¶ï¿½ï¿½Ê§ï¿½ï¿½");
+            return;
+        }
 
-		//Ê×ÏÈÄÃµ½ÏÐÖÃµÄ
-		if (FSimpleConnetion* FreeConnetion = GetFreeConnetion())
-		{
-			//°ó¶¨Íê³É¶Ë¿Ú
-			if (CreateIoCompletionPort(
-				(HANDLE)ClientAccept,
-				CompletionPortHandle,
-				(DWORD)FreeConnetion, 0) == NULL)
-			{
-				log_error("¿Í»§¶Ë°ó¶¨¶Ë¿ÚÊ§°Ü");
-				return;
-			}
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½Ãµï¿½
+        if (FSimpleConnetion* FreeConnetion = GetFreeConnetion())
+        {
+            //ï¿½ï¿½ï¿½ï¿½É¶Ë¿ï¿½
+            if (CreateIoCompletionPort(
+                (HANDLE)ClientAccept,
+                CompletionPortHandle,
+                (DWORD)FreeConnetion, 0) == NULL)
+            {
+                log_error("ï¿½Í»ï¿½ï¿½Ë°ó¶¨¶Ë¿ï¿½Ê§ï¿½ï¿½");
+                return;
+            }
 
-			//°ó¶¨Socket ºÍ ¾ßÌåµØÖ·
-			FreeConnetion->GetSocket() = ClientAccept;
-			FreeConnetion->GetConnetionAddr() = ClientAddr;
+            //ï¿½ï¿½Socket ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö·
+            FreeConnetion->GetSocket() = ClientAccept;
+            FreeConnetion->GetConnetionAddr() = ClientAddr;
 
-			if (!FreeConnetion->Recv())
-			{
-				//ListRemove(InClient);
-				log_error("¿Í»§¶Ë½ÓÊÜÊ§°Ü");
-				return;
-			}
-			else
-			{
-				FreeConnetion->SetConnetionState(ESimpleConnetionState::VERSION_VERIFICATION);
-			}
-		}
-	}
-	else
-	{
-		MainConnetion->Recv();
+            if (!FreeConnetion->Recv())
+            {
+                //ListRemove(InClient);
+                log_error("ï¿½Í»ï¿½ï¿½Ë½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½");
+                return;
+            }
+            else
+            {
+                FreeConnetion->SetConnetionState(ESimpleConnetionState::VERSION_VERIFICATION);
+            }
+        }
+    }
+    else
+    {
+        MainConnetion->Recv();
 
-		//×ö½âÎö
-		//log_success("¿Í»§¶Ë½ÓÊÜ³É¹¦ %s", MainConnetion->GetIOData().Buffer);
-		if (MainConnetion->GetConnetionState() != ESimpleConnetionState::JOIN)
-		{
-			HandShake(MainConnetion);
-		}
-		else
-		{
-			MainConnetion->Tick(InTimeInterval);
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        //log_success("ï¿½Í»ï¿½ï¿½Ë½ï¿½ï¿½Ü³É¹ï¿½ %s", MainConnetion->GetIOData().Buffer);
+        if (MainConnetion->GetConnetionState() != ESimpleConnetionState::JOIN)
+        {
+            HandShake(MainConnetion);
+        }
+        else
+        {
+            MainConnetion->Tick(InTimeInterval);
 
-			//×öÉÏ²ãÒµÎñµÄ½âÎö
-			MainConnetion->Analysis();
-		}
-	}
+            //ï¿½ï¿½ï¿½Ï²ï¿½Òµï¿½ï¿½Ä½ï¿½ï¿½ï¿½
+            MainConnetion->Analysis();
+        }
+    }
 }
 
 void FSimpleTCPNetDrive::SetNonblocking()
 {
-	unsigned long UL = 1;
-	int Ret = ioctlsocket(MainConnetion->GetSocket(), FIONBIO, &UL);
-	if (Ret == SOCKET_ERROR)
-	{
-		log_error("Set Non-blocking Ê§°Ü");
-	}
+    unsigned long UL = 1;
+    int Ret = ioctlsocket(MainConnetion->GetSocket(), FIONBIO, &UL);
+    if (Ret == SOCKET_ERROR)
+    {
+        log_error("Set Non-blocking Ê§ï¿½ï¿½");
+    }
 }

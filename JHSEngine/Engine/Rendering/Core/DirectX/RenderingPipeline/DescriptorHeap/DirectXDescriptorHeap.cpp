@@ -13,8 +13,8 @@ void FDirectXDescriptorHeap::Build(UINT inNumDescriptor)
 
 void FDirectXDescriptorHeap::PreDraw(float deltaTime)
 {
-	ID3D12DescriptorHeap* descriptorHeaps[] = { GetHeap() };
-	GetGraphicsCommandList()->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+    ID3D12DescriptorHeap* descriptorHeaps[] = { GetHeap() };
+    GetGraphicsCommandList()->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 }
 
 void FDirectXDescriptorHeap::Draw(float deltaTime)

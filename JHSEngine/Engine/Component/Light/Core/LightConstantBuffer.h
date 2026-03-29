@@ -3,8 +3,8 @@
 
 struct FLightConstantBuffer
 {
-	FLightConstantBuffer();
+    FLightConstantBuffer();
 
-	XMFLOAT3 lightIntensity;
-	XMFLOAT3 lightDirection;
+    XMFLOAT3 lightIntensity;
+    XMFLOAT3 lightDirection;
 };

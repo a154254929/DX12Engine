@@ -12,6 +12,8 @@
 #include "../../../../Core/CoreObject/CoreMinimalObject.h"
 #include "../../../../Mesh/Core/MeshManager.h"
 #include "../../../../Mesh/Core/Material/Material.h"
+#include "../../../../Core/World.h"
+#include "../../../../Component/Mesh/Core/MeshComponent.h"
 
 #if defined(_WIN32)
 #include "../../../../Core/WinMainCommandParameters.h"
@@ -71,8 +73,10 @@ int CDirectXRenderingEngine::PostInit()
     {
         //构建Mesh
         //CMesh* boxMesh = meshManager->CreateBoxMesh(3, 2, 4);
-        if (GMesh* planeMesh = meshManager->CreatePlaneMesh(10, 10, 10, 10))
+        if (GPlaneMesh* planeMesh = world->CreateActorObject<GPlaneMesh>())
         {
+            planeMesh->CreateMesh(10, 10, 10, 10);
+            
             planeMesh->SetPosition(XMFLOAT3(.0f, -2.0f, .0f));
             planeMesh->SetScale(fvector_3d(6.0f, 6.0f, 6.0f));
             if (CMaterial* material = (*planeMesh->GetMaterials())[0])
@@ -82,8 +86,9 @@ int CDirectXRenderingEngine::PostInit()
             }
         }
 
-        if (GMesh* sphereMeshLambertain = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshLambertain = world->CreateActorObject<GSphereMesh>())
         {
+            sphereMeshLambertain->CreateMesh(1, 20, 20);
             sphereMeshLambertain->SetPosition(XMFLOAT3(-4, 1, 0));
             {
                 if (CMaterial* material = (*sphereMeshLambertain->GetMaterials())[0])
@@ -94,8 +99,9 @@ int CDirectXRenderingEngine::PostInit()
             }
         }
 
-        if (GMesh* sphereMeshHalfLambertain = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshHalfLambertain = world->CreateActorObject<GSphereMesh>())
         {
+            sphereMeshHalfLambertain->CreateMesh(1, 20, 20);
             sphereMeshHalfLambertain->SetPosition(XMFLOAT3(-1.5, 1, 0));
             {
                 if (CMaterial* material = (*sphereMeshHalfLambertain->GetMaterials())[0])
@@ -106,8 +112,9 @@ int CDirectXRenderingEngine::PostInit()
             }
         }
 
-        if (GMesh* sphereMeshPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshPhong = world->CreateActorObject<GSphereMesh>())
         {
+            sphereMeshPhong->CreateMesh(1, 20, 20);
             sphereMeshPhong->SetPosition(XMFLOAT3(1.5, 1, 0));
             {
                 if (CMaterial* material = (*sphereMeshPhong->GetMaterials())[0])
@@ -119,8 +126,9 @@ int CDirectXRenderingEngine::PostInit()
             }
         }
 
-        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshBlinPhong = world->CreateActorObject<GSphereMesh>())
         {
+            sphereMeshBlinPhong->CreateMesh(1, 20, 20);
             sphereMeshBlinPhong->SetPosition(XMFLOAT3(4, 1, 0));
             {
                 if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
@@ -134,8 +142,9 @@ int CDirectXRenderingEngine::PostInit()
 
         /////////////////////////////////////////////
 
-        if (GMesh* sphereMeshHalfLambertain = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshHalfLambertain = world->CreateActorObject<GSphereMesh>())
         {
+            sphereMeshHalfLambertain->CreateMesh(1, 20, 20);
             sphereMeshHalfLambertain->SetPosition(XMFLOAT3(-4, 3.5, 0));
             {
                 if (CMaterial* material = (*sphereMeshHalfLambertain->GetMaterials())[0])
@@ -146,8 +155,9 @@ int CDirectXRenderingEngine::PostInit()
             }
         }
 
-        if (GMesh* sphereMeshLambertain = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshLambertain = world->CreateActorObject<GSphereMesh>())
         {
+            sphereMeshLambertain->CreateMesh(1, 20, 20);
             sphereMeshLambertain->SetPosition(XMFLOAT3(-1.5, 3.5f, 0));
             {
                 if (CMaterial* material = (*sphereMeshLambertain->GetMaterials())[0])
@@ -158,8 +168,9 @@ int CDirectXRenderingEngine::PostInit()
             }
         }
 
-        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshBlinPhong = world->CreateActorObject<GSphereMesh>())
         {
+            sphereMeshBlinPhong->CreateMesh(1, 20, 20);
             sphereMeshBlinPhong->SetPosition(XMFLOAT3(1.5, 3.5, 0));
             {
                 if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
@@ -170,12 +181,12 @@ int CDirectXRenderingEngine::PostInit()
                 }
             }
         }
-
-        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshBanded = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshBlinPhong->SetPosition(XMFLOAT3(4, 3.5, 0));
+            sphereMeshBanded->CreateMesh(1, 20, 20);
+            sphereMeshBanded->SetPosition(XMFLOAT3(4, 3.5, 0));
             {
-                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshBanded->GetMaterials())[0])
                 {
                     material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
                     material->SetRoughness(.95f);
@@ -186,11 +197,12 @@ int CDirectXRenderingEngine::PostInit()
 
         ////////////////////////////////////////////////////////////////
 
-        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshBanded1 = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshBlinPhong->SetPosition(XMFLOAT3(4.f, 6.f, 0));
+            sphereMeshBanded1->CreateMesh(1, 20, 20);
+            sphereMeshBanded1->SetPosition(XMFLOAT3(4.f, 6.f, 0));
             {
-                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshBanded1->GetMaterials())[0])
                 {
                     material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
                     material->SetRoughness(.95f);
@@ -199,11 +211,12 @@ int CDirectXRenderingEngine::PostInit()
             }
         }
 
-        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshAnisotropyKajiyaKay = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshBlinPhong->SetPosition(XMFLOAT3(1.5f, 6.f, 0));
+            sphereMeshAnisotropyKajiyaKay->CreateMesh(1, 20, 20);
+            sphereMeshAnisotropyKajiyaKay->SetPosition(XMFLOAT3(1.5f, 6.f, 0));
             {
-                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshAnisotropyKajiyaKay->GetMaterials())[0])
                 {
                     material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
                     material->SetRoughness(.95f);
@@ -212,11 +225,12 @@ int CDirectXRenderingEngine::PostInit()
             }
         }
 
-        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshBanded2 = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshBlinPhong->SetPosition(XMFLOAT3(-1.5f, 6.f, 0));
+            sphereMeshBanded2->CreateMesh(1, 20, 20);
+            sphereMeshBanded2->SetPosition(XMFLOAT3(-1.5f, 6.f, 0));
             {
-                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshBanded2->GetMaterials())[0])
                 {
                     material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
                     material->SetRoughness(.95f);
@@ -225,11 +239,12 @@ int CDirectXRenderingEngine::PostInit()
             }
         }
 
-        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshBack = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshBlinPhong->SetPosition(XMFLOAT3(-4.f, 6.f, 0));
+            sphereMeshBack->CreateMesh(1, 20, 20);
+            sphereMeshBack->SetPosition(XMFLOAT3(-4.f, 6.f, 0));
             {
-                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshBack->GetMaterials())[0])
                 {
                     material->SetBaseColor(fvector_4d(.2f, .7f, .2f, 1.f));
                     material->SetRoughness(.95f);
@@ -240,11 +255,12 @@ int CDirectXRenderingEngine::PostInit()
 
         ////////////////////////////////////////////////////////
 
-        if (GMesh* sphereMeshBlinPhong = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshOrenNayar = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshBlinPhong->SetPosition(XMFLOAT3(-4.f, 8.5f, 0));
+            sphereMeshOrenNayar->CreateMesh(1, 20, 20);
+            sphereMeshOrenNayar->SetPosition(XMFLOAT3(-4.f, 8.5f, 0));
             {
-                if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshOrenNayar->GetMaterials())[0])
                 {
                     material->SetBaseColor(fvector_4d(.2f, .7f, .2f, 1.f));
                     material->SetRoughness(.7f);
@@ -270,9 +286,10 @@ int CDirectXRenderingEngine::PostInit()
         //GMesh* aesmaMesh = meshManager->CreateAesmaMesh(3, 1, 10, 20, 3);
         //GMesh* donutMesh = meshManager->CreateDonutMesh(3, .5f, 10, 10);
 
-        if (GMesh* sphereMeshPBR = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshPBR = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshPBR->SetPosition(XMFLOAT3(-1.f, 8.5f, 0));
+            sphereMeshPBR->CreateMesh(1, 20, 20);
+            sphereMeshPBR->SetPosition(XMFLOAT3(-1.5f, 8.5f, 0));
             {
                 if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
                 {
@@ -284,11 +301,12 @@ int CDirectXRenderingEngine::PostInit()
         }
 
         //线框显示
-        if (GMesh* sphereMeshPBR = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshWireframeDisplay = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshPBR->SetPosition(XMFLOAT3(1.f, 8.5f, 0));
+            sphereMeshWireframeDisplay->CreateMesh(1, 20, 20);
+            sphereMeshWireframeDisplay->SetPosition(XMFLOAT3(1.5f, 8.5f, 0));
             {
-                if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshWireframeDisplay->GetMaterials())[0])
                 {
                     material->SetMaterialDisplayStatusType(EMaterialDisplayStatusType::WireframeDisplay);
                 }
@@ -296,11 +314,12 @@ int CDirectXRenderingEngine::PostInit()
         }
 
         //点状显示
-        if (GMesh* sphereMeshPBR = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshPointDisplay = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshPBR->SetPosition(XMFLOAT3(4.f, 8.5f, 0));
+            sphereMeshPointDisplay->CreateMesh(1, 20, 20);
+            sphereMeshPointDisplay->SetPosition(XMFLOAT3(4.f, 8.5f, 0));
             {
-                if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshPointDisplay->GetMaterials())[0])
                 {
                     material->SetMaterialDisplayStatusType(EMaterialDisplayStatusType::PointDisplay);
                 }
@@ -310,11 +329,12 @@ int CDirectXRenderingEngine::PostInit()
         ////////////////////////////////////////////////////////
 
         //BaseColor
-        if (GMesh* sphereMeshPBR = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshBaseColor = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshPBR->SetPosition(XMFLOAT3(-4.f, 11.0f, 0));
+            sphereMeshBaseColor->CreateMesh(1, 20, 20);
+            sphereMeshBaseColor->SetPosition(XMFLOAT3(-4.f, 11.0f, 0));
             {
-                if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshBaseColor->GetMaterials())[0])
                 {
                     material->SetMaterialDisplayStatusType(EMaterialDisplayStatusType::WireframeDisplay);
                     material->SetMaterialType(EMaterialType::BaseColor);
@@ -323,11 +343,12 @@ int CDirectXRenderingEngine::PostInit()
         }
         
         //法线
-        if (GMesh* sphereMeshPBR = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshNormal = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshPBR->SetPosition(XMFLOAT3(-1.5f, 11.0f, 0));
+            sphereMeshNormal->CreateMesh(1, 20, 20);
+            sphereMeshNormal->SetPosition(XMFLOAT3(-1.5f, 11.0f, 0));
             {
-                if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshNormal->GetMaterials())[0])
                 {
                     material->SetMaterialType(EMaterialType::Normal);
                 }
@@ -335,11 +356,12 @@ int CDirectXRenderingEngine::PostInit()
         }
         
         //世界法线
-        if (GMesh* sphereMeshPBR = meshManager->CreateSphereMesh(1, 20, 20))
+        if (GSphereMesh* sphereMeshWorldNormal = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshPBR->SetPosition(XMFLOAT3(1.5f, 11.0f, 0));
+            sphereMeshWorldNormal->CreateMesh(1, 20, 20);
+            sphereMeshWorldNormal->SetPosition(XMFLOAT3(1.5f, 11.0f, 0));
             {
-                if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshWorldNormal->GetMaterials())[0])
                 {
                     material->SetMaterialType(EMaterialType::WorldNormal);
                 }

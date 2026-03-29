@@ -6,29 +6,29 @@
 #include "RootSignature/DirectXRootSignature.h"
 #include "../../../../Core/Viewport/ViewportInfo.h"
 
-class GMesh;
+class CMeshComponent;
 class FRenderingPipeline: public IDirectXDeviceInterface
 {
 public:
-	FRenderingPipeline();
+    FRenderingPipeline();
 
-	void BuildMesh(GMesh* inMesh, const FMeshRenderingData& inMeshData);
+    void BuildMesh(CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
 
-	virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
+    virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 
-	void BuildPipeline();
+    void BuildPipeline();
 
-	virtual void PreDraw(float deltaTime);
-	virtual void Draw(float deltaTime);
-	virtual void PostDraw(float deltaTime);
+    virtual void PreDraw(float deltaTime);
+    virtual void Draw(float deltaTime);
+    virtual void PostDraw(float deltaTime);
 protected:
-	FGeometryMap geometryMap;
+    FGeometryMap geometryMap;
 
-	FShader vertexShader;
-	FShader pixelShader;
+    FShader vertexShader;
+    FShader pixelShader;
 
-	vector<D3D12_INPUT_ELEMENT_DESC> inputElementDesc;
+    vector<D3D12_INPUT_ELEMENT_DESC> inputElementDesc;
 
-	FDirectXPipelineState directXPipelineState;
-	FDirectXRootSignature rootSignature;
+    FDirectXPipelineState directXPipelineState;
+    FDirectXRootSignature rootSignature;
 };

@@ -2,5 +2,5 @@
 
 void CRenderingEngine::SetMainWindowsHandle(HWND inNewMainWindowsHandle)
 {
-	mainWindowsHandle = inNewMainWindowsHandle;
+    mainWindowsHandle = inNewMainWindowsHandle;
 }

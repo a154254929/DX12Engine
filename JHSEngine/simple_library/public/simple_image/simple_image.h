@@ -5,9 +5,9 @@
 
 namespace SimpleImage
 {
-	bool SIMPLE_LIBRARY_API GetRGBImageDataExcludeHeaderInfor(int InWidth,int InHeight, std::vector<unsigned char>& InData);
-	bool SIMPLE_LIBRARY_API GetImageDataExcludeHeaderInfor(const FImageInfo& InImageInfo,std::vector<unsigned char> &InData);
+    bool SIMPLE_LIBRARY_API GetRGBImageDataExcludeHeaderInfor(int InWidth,int InHeight, std::vector<unsigned char>& InData);
+    bool SIMPLE_LIBRARY_API GetImageDataExcludeHeaderInfor(const FImageInfo& InImageInfo,std::vector<unsigned char> &InData);
 
-	bool SIMPLE_LIBRARY_API SaveImageToDisk(const FImageInfo &InImageInfo, const std::wstring& InSavePath, const std::vector<unsigned char> &InData);
-	bool SIMPLE_LIBRARY_API LoadImageToDisk(EImageType ImageType, const std::wstring& InLoadPath, std::vector<unsigned char> &OutData,FImageInfo *OutInfo = NULL);
+    bool SIMPLE_LIBRARY_API SaveImageToDisk(const FImageInfo &InImageInfo, const std::wstring& InSavePath, const std::vector<unsigned char> &InData);
+    bool SIMPLE_LIBRARY_API LoadImageToDisk(EImageType ImageType, const std::wstring& InLoadPath, std::vector<unsigned char> &OutData,FImageInfo *OutInfo = NULL);
 }

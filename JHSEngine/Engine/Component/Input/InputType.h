@@ -3,15 +3,15 @@
 
 enum EPressState
 {
-	Press,		//按下
-	Release,	//松开
+    Press,        //按下
+    Release,    //松开
 };
 
 struct FInputKey
 {
-	FInputKey();
+    FInputKey();
 
-	string keyName;
-	EPressState pressState;
+    string keyName;
+    EPressState pressState;
 
 };

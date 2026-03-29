@@ -1,27 +1,27 @@
 // Copyright (C) RenZhai.2022.All Rights Reserved.
 #pragma once
 
-//ÒýÓÃ¼ÆÊý
+//ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½
 class FRefCounter
 {
 public:
-	FRefCounter()
-		:SharedCount(0)
-		,WeakCount(0)
-	{
+    FRefCounter()
+        :SharedCount(0)
+        ,WeakCount(0)
+    {
 
-	}
+    }
 
-	bool operator>(const int &InCount)
-	{
-		return SharedCount > InCount;
-	}
+    bool operator>(const int &InCount)
+    {
+        return SharedCount > InCount;
+    }
 
-	bool operator<(const int& InCount)
-	{
-		return SharedCount < InCount;
-	}
+    bool operator<(const int& InCount)
+    {
+        return SharedCount < InCount;
+    }
 
-	int SharedCount;
-	int WeakCount;
+    int SharedCount;
+    int WeakCount;
 };

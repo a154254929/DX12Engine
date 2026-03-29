@@ -2,28 +2,28 @@
 #include "../../../../../Interface/DirectXDeviceInterface.h"
 #include "../../../RenderingResourcesUpdate.h"
 
-class GMesh;
+class CMeshComponent;
 struct FRenderingData : public IDirectXDeviceInterface_Struct
 {
 public:
-	FRenderingData();
+    FRenderingData();
 
-	UINT indexSize;//index数量
-	UINT vertexSize;//顶点数量
+    UINT indexSize;//index数量
+    UINT vertexSize;//顶点数量
 
-	UINT indexOffsetPosition;
-	UINT vertexOffsetPosition;
+    UINT indexOffsetPosition;
+    UINT vertexOffsetPosition;
 
-	UINT indexTypeSize;
-	UINT vertexTypeSize;
+    UINT indexTypeSize;
+    UINT vertexTypeSize;
 
 public:
-	UINT GetVertexSizeInBytes() const { return vertexSize * vertexTypeSize; }
-	UINT GetIndexSizeInBytes() const { return indexSize * indexTypeSize; }
+    UINT GetVertexSizeInBytes() const { return vertexSize * vertexTypeSize; }
+    UINT GetIndexSizeInBytes() const { return indexSize * indexTypeSize; }
 public:
-	DXGI_FORMAT indexFormat;
+    DXGI_FORMAT indexFormat;
 
-	XMFLOAT4X4 worldMatrix;
-	GMesh* mesh;
-	shared_ptr<FRenderingResourcesUpdate> objectConstants;
+    XMFLOAT4X4 worldMatrix;
+    CMeshComponent* meshComp;
+    shared_ptr<FRenderingResourcesUpdate> objectConstants;
 };

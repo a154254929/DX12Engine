@@ -6,6 +6,6 @@
 
 namespace simple_cpp_helper_file
 {
-	bool SIMPLE_LIBRARY_API load_file_to_strings(const std::string &in_path,std::vector<std::string> &out_array);
-	bool SIMPLE_LIBRARY_API save_file_to_strings(const std::string& in_path,const std::vector<std::string>& int_array);
+    bool SIMPLE_LIBRARY_API load_file_to_strings(const std::string &in_path,std::vector<std::string> &out_array);
+    bool SIMPLE_LIBRARY_API save_file_to_strings(const std::string& in_path,const std::vector<std::string>& int_array);
 }

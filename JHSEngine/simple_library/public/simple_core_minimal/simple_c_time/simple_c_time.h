@@ -5,15 +5,15 @@
 _CRT_BEGIN_C_HEADER
 typedef enum 
 {
-	LOCAL_TIME,
-	GM
+    LOCAL_TIME,
+    GM
 }etime_type;
 
 char *get_locale(char *in_buffer, const char *in_locale, const char *in_encoding);
 
 struct tm *get_local_time_tm();
 
-//获取的是本地时间
+//锟斤拷取锟斤拷锟角憋拷锟斤拷时锟斤拷
 time_t get_time_t();
 
 void get_local_time_string(char *t_buffer);

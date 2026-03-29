@@ -1,7 +1,15 @@
+# IDE
 .vs/
-JHSEngine/Debug/
+.idea/
+
+# Build output (根目录下的编译输出)
+/Debug/
+/Release/
+/x64/
+/JHSEngine/Debug/
+/JHSEngine/Release/
+/JHSEngine/x64/
+
+# Logs
 log/
-Debug/
-x64/
-JHSEngine/x64
-.idea
+*.log

@@ -2,6 +2,6 @@
 
 enum EPipelineState
 {
-	GrayModel = 4,
-	WireFrame = 5,
+    GrayModel = 4,
+    WireFrame = 5,
 };

@@ -10,20 +10,20 @@
 class CCoreMinimalObject : public IGuidInterface
 {
 public:
-	CCoreMinimalObject();
-	virtual ~CCoreMinimalObject();
+    CCoreMinimalObject();
+    virtual ~CCoreMinimalObject();
 
-	virtual void BeginInit() {};
-	virtual void Tick(float deltaTime) {};
+    virtual void BeginInit() {};
+    virtual void Tick(float deltaTime) {};
 
-	template<class ObjectType>
-	static ObjectType* CreateObject(CCoreMinimalObject* newObject)
-	{
-		return dynamic_cast<ObjectType*>(newObject);
-	}
-	bool IsTick()const { return bTick; }
+    template<class ObjectType>
+    static ObjectType* CreateObject(CCoreMinimalObject* newObject)
+    {
+        return dynamic_cast<ObjectType*>(newObject);
+    }
+    bool IsTick()const { return bTick; }
 protected:
-	bool bTick;
+    bool bTick;
 };
 
 extern vector<CCoreMinimalObject*> gObjects;

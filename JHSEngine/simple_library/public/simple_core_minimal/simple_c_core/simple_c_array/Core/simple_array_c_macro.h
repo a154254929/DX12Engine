@@ -1,59 +1,59 @@
 #pragma once
 //Copyright (C) RenZhai.2019.All Rights Reserved.
-//×÷Õß ÈËÕ¬
-//¸Ãc¿âµÄÏêÏ¸Ô´Âë½²½âÔÚAboutCG ¡¶ÊÖ°ÑÊÖÈëÃÅÓ²ºËcÓïÑÔ¡·ÊÓÆµ¹¤³ÌÀïÃæ£º
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Õ¬
+//ï¿½ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½Ï¸Ô´ï¿½ë½²ï¿½ï¿½ï¿½ï¿½AboutCG ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½cï¿½ï¿½ï¿½Ô¡ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ£º
 //https://www.aboutcg.org/courseDetails/902/introduce
-//Ï£ÍûÑ§Ï°ÆäËû·½Ãæ¼¼Êõ ±ÈÈç×öUE4ÓÎÏ·, ¿ÉÒÔ·ÃÎÊÏÂÁÐÍøÖ·£º
+//Ï£ï¿½ï¿½Ñ§Ï°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ¼¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½UE4ï¿½ï¿½Ï·, ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½
 //https://zhuanlan.zhihu.com/p/60117613
 //
-//bibi¿ÉÒÔ¿´µ½¸÷¸öÈËÕ¬ÏµÁÐ½Ì³Ì½éÉÜ£º
+//bibiï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¬Ïµï¿½Ð½Ì³Ì½ï¿½ï¿½Ü£ï¿½
 //https://space.bilibili.com/29544409
 //
-//¸öÈË²©¿ÍÍøÕ¾
+//ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½ï¿½ï¿½Õ¾
 //http://renzhai.net
 //
-//¹ØÓÚ±¾Ì×°¸ÀýµÄÏêÏ¸²Ù×÷ :
-//ÎÄ×Ö°æ±¾(ÏêÏ¸)£º
+//ï¿½ï¿½ï¿½Ú±ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ :
+//ï¿½ï¿½ï¿½Ö°æ±¾(ï¿½ï¿½Ï¸)ï¿½ï¿½
 //https://zhuanlan.zhihu.com/p/144558934
-//ÊÓÆµ°æ±¾£º
+//ï¿½ï¿½Æµï¿½æ±¾ï¿½ï¿½
 //https://www.bilibili.com/video/BV1x5411s7s3
 #include "../../simple_core_minimal.h"
 
 #define SIMPLE_ARRAY_C_STRUCT(array_c_name,data_type) \
 typedef struct array_c_name##_type \
 { \
-	int size; \
-	data_type *data; \
+    int size; \
+    data_type *data; \
 }array_c_name;
 
 #define SIMPLE_ARRAY_C(array_c_name,data_type) \
 typedef struct array_c_name##_type \
 { \
-	int size; \
-	int max_size; \
-	data_type *data; \
+    int size; \
+    int max_size; \
+    data_type *data; \
 }array_c_name; \
 void init_##array_c_name(array_c_name *array_c) \
 {\
-	assert(array_c); \
-	array_c->size = 0; \
-	array_c->max_size = 1; \
-	array_c->data = malloc(array_c->max_size * sizeof(data_type)); \
-	memset(array_c->data, 0, 1); \
+    assert(array_c); \
+    array_c->size = 0; \
+    array_c->max_size = 1; \
+    array_c->data = malloc(array_c->max_size * sizeof(data_type)); \
+    memset(array_c->data, 0, 1); \
 }\
 void destroy_##array_c_name(array_c_name *array_c) \
 { \
-	assert(array_c); \
-	free(array_c->data); \
+    assert(array_c); \
+    free(array_c->data); \
 } \
 void add_##array_c_name(data_type in_data, array_c_name *array_c) \
 { \
-	assert(array_c && in_data); \
-	if (array_c->size >= array_c->max_size) \
-	{ \
-		array_c->max_size++; \
-		array_c->data = realloc(array_c->data, array_c->max_size * sizeof(data_type));\
-	} \
-	array_c->data[array_c->size] = in_data; \
-	array_c->size++; \
+    assert(array_c && in_data); \
+    if (array_c->size >= array_c->max_size) \
+    { \
+        array_c->max_size++; \
+        array_c->data = realloc(array_c->data, array_c->max_size * sizeof(data_type));\
+    } \
+    array_c->data[array_c->size] = in_data; \
+    array_c->size++; \
 } 

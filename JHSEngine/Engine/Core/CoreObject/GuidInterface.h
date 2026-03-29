@@ -5,15 +5,15 @@
 class IGuidInterface
 {
 public:
-	IGuidInterface();
+    IGuidInterface();
 
-	bool operator==(const IGuidInterface& inOther)
-	{
-		return guid_equal(&guid, &inOther.guid);
-	}
+    bool operator==(const IGuidInterface& inOther)
+    {
+        return guid_equal(&guid, &inOther.guid);
+    }
 
-	simple_c_guid GetGuid() { return guid; }
+    simple_c_guid GetGuid() { return guid; }
 
 private:
-	simple_c_guid guid;
+    simple_c_guid guid;
 };

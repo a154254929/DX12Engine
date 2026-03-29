@@ -6,33 +6,37 @@
 
 class CDirectXRenderingEngine;
 class CWorld;
+class CMeshManager;
 class CWindowsEngine : public CEngine
 {
-	friend class IDirectXDeviceInterface;
+    friend class IDirectXDeviceInterface;
 public:
-	CWindowsEngine();
-	~CWindowsEngine();
+    CWindowsEngine();
+    ~CWindowsEngine();
 
-	virtual int PreInit(FWinMainCommandParameters inParameters);
-	virtual int Init(FWinMainCommandParameters inParameters);
-	virtual int PostInit();
+    virtual int PreInit(FWinMainCommandParameters inParameters);
+    virtual int Init(FWinMainCommandParameters inParameters);
+    virtual int PostInit();
 
-	virtual void Tick(float deltaTime);
+    virtual void Tick(float deltaTime);
 
-	virtual int PreExit();
-	virtual int Exit();
-	virtual int PostExit();
+    virtual int PreExit();
+    virtual int Exit();
+    virtual int PostExit();
 
     CDirectXRenderingEngine* GetRenderingEngine() { return renderingEngine; }
 
+public:
+    CMeshManager* GetMeshManager();
+    CWorld* GetWorld() { return world; }
 private:
     bool InitWindows(FWinMainCommandParameters InParameters);
 
 protected:
-	HWND mainWindowsHandle;         //主窗口句柄
+    HWND mainWindowsHandle;         //主窗口句柄
 
 protected:
     CDirectXRenderingEngine* renderingEngine;
-	CWorld* world;
+    CWorld* world;
 };
 #endif

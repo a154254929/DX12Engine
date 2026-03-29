@@ -2,6 +2,6 @@
 
 enum ECameraType
 {
-	CameraRoaming,
-	OvservationObject,
+    CameraRoaming,
+    OvservationObject,
 };

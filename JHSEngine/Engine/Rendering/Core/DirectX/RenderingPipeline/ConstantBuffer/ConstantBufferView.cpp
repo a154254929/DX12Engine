@@ -2,7 +2,7 @@
 
 void FConstantBufferView::CreateConstant(UINT objectSize, UINT objectCount)
 {
-	constants = make_shared<FRenderingResourcesUpdate>();
+    constants = make_shared<FRenderingResourcesUpdate>();
     constants->Init(GetD3dDevice().Get(), objectSize, objectCount);
 }
 

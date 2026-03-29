@@ -5,5 +5,5 @@
 class FSimpleUDPNetDrive :public FSimpleNetDrive
 {
 public:
-	FSimpleUDPNetDrive(ESimpleDriveType InDriveType);
+    FSimpleUDPNetDrive(ESimpleDriveType InDriveType);
 };

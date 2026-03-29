@@ -4,14 +4,14 @@
 class FMaterialConstantBuffer
 {
 public:
-	FMaterialConstantBuffer();
+    FMaterialConstantBuffer();
 
-	UINT32 materialType;
-	UINT32 xx1;
-	UINT32 xx2;
-	UINT32 xx3;
+    UINT32 materialType;
+    UINT32 xx1;
+    UINT32 xx2;
+    UINT32 xx3;
 
-	XMFLOAT4 baseColor;
-	float roughness;
-	XMFLOAT4X4 transformation;
+    XMFLOAT4 baseColor;
+    float roughness;
+    XMFLOAT4X4 transformation;
 };

@@ -1,43 +1,43 @@
 #pragma once
 //Copyright (C) RenZhai.2019.All Rights Reserved.
-//作者 人宅
-//该c库的详细源码讲解在AboutCG 《手把手入门硬核c语言》视频工程里面：
+//锟斤拷锟斤拷 锟斤拷宅
+//锟斤拷c锟斤拷锟斤拷锟较冈达拷虢诧拷锟斤拷锟紸boutCG 锟斤拷锟街帮拷锟斤拷锟斤拷锟斤拷硬锟斤拷c锟斤拷锟皆★拷锟斤拷频锟斤拷锟斤拷锟斤拷锟芥：
 //https://www.aboutcg.org/courseDetails/902/introduce
-//希望学习其他方面技术 比如做UE4游戏, 可以访问下列网址：
+//希锟斤拷学习锟斤拷锟斤拷锟斤拷锟芥技锟斤拷 锟斤拷锟斤拷锟斤拷UE4锟斤拷戏, 锟斤拷锟皆凤拷锟斤拷锟斤拷锟斤拷锟斤拷址锟斤拷
 //https://zhuanlan.zhihu.com/p/60117613
 //
-//bibi可以看到各个人宅系列教程介绍：
+//bibi锟斤拷锟皆匡拷锟斤拷锟斤拷锟斤拷锟斤拷宅系锟叫教程斤拷锟杰ｏ拷
 //https://space.bilibili.com/29544409
 //
-//个人博客网站
+//锟斤拷锟剿诧拷锟斤拷锟斤拷站
 //http://renzhai.net
 //
-//关于本套案例的详细操作 :
-//文字版本(详细)：
+//锟斤拷锟节憋拷锟阶帮拷锟斤拷锟斤拷锟斤拷细锟斤拷锟斤拷 :
+//锟斤拷锟街版本(锟斤拷细)锟斤拷
 //https://zhuanlan.zhihu.com/p/144558934
-//视频版本：
+//锟斤拷频锟芥本锟斤拷
 //https://www.bilibili.com/video/BV1x5411s7s3
 #include "../simple_c_core/simple_core_minimal.h"
 
 _CRT_BEGIN_C_HEADER
 typedef enum 
 {
-	SIMPLE_BLACK = 0,				// 黑色		
-	SIMPLE_BLUE,					// 蓝色		
-	SIMPLE_GREEN,					// 绿色		
-	SIMPLE_LIGHT_BLUE,				// 浅绿色	
-	SIMPLE_RED,						// 红色		
-	SIMPLE_VIOLET,					// 紫色		
-	SIMPLE_YELLOW,					// 黄色		
-	SIMPLE_WHITE,					// 白色		
-	SIMPLE_GREY,					// 灰色
-	SIMPLE_PALE_BLUE,				// 淡蓝色
-	SIMPLE_PALE_GREEN,				// 淡绿色
-	SIMPLE_LIGHT_GREEN,				// 淡浅绿色
-	SIMPLE_PALE_RED,				// 淡红色
-	SIMPLE_LAVENDER,				// 淡紫色
-	SIMPLE_CANARY_YELLOW,			// 淡黄色
-	SIMPLE_BRIGHT_WHITE,			// 亮白色
+    SIMPLE_BLACK = 0,                // 锟斤拷色        
+    SIMPLE_BLUE,                    // 锟斤拷色        
+    SIMPLE_GREEN,                    // 锟斤拷色        
+    SIMPLE_LIGHT_BLUE,                // 浅锟斤拷色    
+    SIMPLE_RED,                        // 锟斤拷色        
+    SIMPLE_VIOLET,                    // 锟斤拷色        
+    SIMPLE_YELLOW,                    // 锟斤拷色        
+    SIMPLE_WHITE,                    // 锟斤拷色        
+    SIMPLE_GREY,                    // 锟斤拷色
+    SIMPLE_PALE_BLUE,                // 锟斤拷锟斤拷色
+    SIMPLE_PALE_GREEN,                // 锟斤拷锟斤拷色
+    SIMPLE_LIGHT_GREEN,                // 锟斤拷浅锟斤拷色
+    SIMPLE_PALE_RED,                // 锟斤拷锟斤拷色
+    SIMPLE_LAVENDER,                // 锟斤拷锟斤拷色
+    SIMPLE_CANARY_YELLOW,            // 锟斤拷锟斤拷色
+    SIMPLE_BRIGHT_WHITE,            // 锟斤拷锟斤拷色
 }simple_console_w_color;
 
 //set_console_windows_color

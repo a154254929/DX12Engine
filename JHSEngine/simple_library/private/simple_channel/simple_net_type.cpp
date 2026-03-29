@@ -3,13 +3,13 @@
 
 FSimpleIOData::FSimpleIOData()
 {
-	ZeroMemory(this, sizeof(FSimpleIOData));
+    ZeroMemory(this, sizeof(FSimpleIOData));
 }
 
 FSimpleBunchHead::FSimpleBunchHead()
-	:Protocols(0)
-	, ChannelID(0)
-	, ParamNum(0)
+    :Protocols(0)
+    , ChannelID(0)
+    , ParamNum(0)
 {
 
 }

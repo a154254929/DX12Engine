@@ -27,7 +27,7 @@ void FDirectXPipelineState::PostDraw(float deltaTime)
 
 void FDirectXPipelineState::ResetGPSDesc()
 {
-	memset(&gpsDesc, 0, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+    memset(&gpsDesc, 0, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
 }
 
 void FDirectXPipelineState::BindInputLayout(const D3D12_INPUT_ELEMENT_DESC* inInputElementDescs, UINT inSize)

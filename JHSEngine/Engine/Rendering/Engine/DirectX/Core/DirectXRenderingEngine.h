@@ -3,9 +3,11 @@
 #include "../../../../Core/Viewport/ViewportInfo.h"
 
 class CMeshManager;
+class CWorld;
 class CDirectXRenderingEngine : public CRenderingEngine
 {
     friend class IDirectXDeviceInterface;
+    friend class CWindowsEngine;
 public:
     CDirectXRenderingEngine();
     ~CDirectXRenderingEngine();
@@ -30,6 +32,7 @@ public:
     UINT GetDXGISampleCount() const;
     UINT GetDXGISampleQuality() const;
 
+    CMeshManager* GetMeshManager(){ return meshManager; }
 protected:
     void WaitGPUCommandQueueComplete();
 
@@ -38,15 +41,16 @@ protected:
 
 protected:
     CMeshManager* meshManager;
+    CWorld* world;
 protected:
     UINT64 currentFenceIndex;
     int currentSwapBuffIndex;
 
-    ComPtr<IDXGIFactory4> dxgiFactory;	//创建DirectX图形基础结构(DXGI)对象
+    ComPtr<IDXGIFactory4> dxgiFactory;    //创建DirectX图形基础结构(DXGI)对象
     ComPtr<ID3D12Device> d3dDevice;     //创建命令分配器,命令列表,命令队列,Fence,资源,管道状态对象,堆,根
     ComPtr<ID3D12Fence> fence;          //一个用于同步CPU和一个或多个GPU对象
 
-    ComPtr<ID3D12CommandQueue> commandQueue;	                    //队列
+    ComPtr<ID3D12CommandQueue> commandQueue;                        //队列
     ComPtr<ID3D12CommandAllocator> commandAllocator;                //存储
     ComPtr<ID3D12GraphicsCommandList> graphicsCommandList;          //命令列表
 

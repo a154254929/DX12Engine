@@ -7,17 +7,17 @@ class FSimpleConnetion;
 class SIMPLE_LIBRARY_API FSimpleChannel
 {
 public:
-	FSimpleChannel();
+    FSimpleChannel();
 
-	unsigned int GetGuid() { return ID; };
+    unsigned int GetGuid() { return ID; };
 
-	void SetGuid(unsigned int InGuid);
+    void SetGuid(unsigned int InGuid);
 
-	void Send(TArray<unsigned char> &InBuffer);
-	bool Receive(TArray<unsigned char>& InBuffer);
+    void Send(TArray<unsigned char> &InBuffer);
+    bool Receive(TArray<unsigned char>& InBuffer);
 
-	void SetConnetion(FSimpleConnetion* InConnetion);
+    void SetConnetion(FSimpleConnetion* InConnetion);
 protected:
-	FSimpleConnetion* Connetion;
-	unsigned int ID;
+    FSimpleConnetion* Connetion;
+    unsigned int ID;
 };

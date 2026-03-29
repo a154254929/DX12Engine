@@ -7,16 +7,16 @@ class CMeshComponent : public CTransformationComponent
 {
     CVARIABLE()
     vector<CMaterial*> materials;
-	
+    
 public:
-	CMeshComponent();
-	
-	virtual void Init();
+    CMeshComponent();
+    
+    virtual void Init();
 
-	virtual void BuildMesh(const FMeshRenderingData* inRenderingData);
-	
+    virtual void BuildMesh(const FMeshRenderingData* inRenderingData);
+    
 public:
-	UINT GetMaterialNum() const;
-	
-	vector<CMaterial*>* GetMaterials() { return &materials; };
+    UINT GetMaterialNum() const;
+    
+    vector<CMaterial*>* GetMaterials() { return &materials; };
 };

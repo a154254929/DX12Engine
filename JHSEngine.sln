@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JHSEngine", "JHSEngine\JHSEngine.vcxproj", "{A516BAE9-DC9B-4E51-8AC0-D277BAAB40E2}"
 EndProject
@@ -26,6 +26,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7488EC56-05AC-48B8-976E-ED348C916EDA}
+		        SolutionGuid = {7488EC56-05AC-48B8-976E-ED348C916EDA}
+		SolutionGuid = {2ABD507F-3173-4FBE-A584-BF23C00F4535}
 	EndGlobalSection
 EndGlobal

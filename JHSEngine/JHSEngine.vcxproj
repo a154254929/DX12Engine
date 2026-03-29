@@ -90,11 +90,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -117,14 +117,16 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -140,8 +142,16 @@
     <ClCompile Include="Engine\Component\Light\Core\LightComponent.cpp" />
     <ClCompile Include="Engine\Component\Light\Core\LightConstantBuffer.cpp" />
     <ClCompile Include="Engine\Component\Light\ParallelLightComponent.cpp" />
+    <ClCompile Include="Engine\Component\Mesh\AesmaMeshComponent.cpp" />
+    <ClCompile Include="Engine\Component\Mesh\BoxMeshComponent.cpp" />
+    <ClCompile Include="Engine\Component\Mesh\ConeMeshComponent.cpp" />
     <ClCompile Include="Engine\Component\Mesh\Core\MeshComponent.cpp" />
+    <ClCompile Include="Engine\Component\Mesh\CustomMeshComponent.cpp" />
+    <ClCompile Include="Engine\Component\Mesh\CylinderMeshComponent.cpp" />
+    <ClCompile Include="Engine\Component\Mesh\DonutMeshComponent.cpp" />
+    <ClCompile Include="Engine\Component\Mesh\PlaneMeshComponent.cpp" />
     <ClCompile Include="Engine\Component\Mesh\ShellMeshComponent.cpp" />
+    <ClCompile Include="Engine\Component\Mesh\SphereMeshComponent.cpp" />
     <ClCompile Include="Engine\Component\TransformationComponent.cpp" />
     <ClCompile Include="Engine\Config\EngineRenderConfig.cpp" />
     <ClCompile Include="Engine\Core\Camera.cpp" />
@@ -248,8 +258,16 @@
     <ClInclude Include="Engine\Component\Light\Core\LightComponent.h" />
     <ClInclude Include="Engine\Component\Light\Core\LightConstantBuffer.h" />
     <ClInclude Include="Engine\Component\Light\ParallelLightComponent.h" />
+    <ClInclude Include="Engine\Component\Mesh\AesmaMeshComponent.h" />
+    <ClInclude Include="Engine\Component\Mesh\BoxMeshComponent.h" />
+    <ClInclude Include="Engine\Component\Mesh\ConeMeshComponent.h" />
     <ClInclude Include="Engine\Component\Mesh\Core\MeshComponent.h" />
+    <ClInclude Include="Engine\Component\Mesh\CustomMeshComponent.h" />
+    <ClInclude Include="Engine\Component\Mesh\CylinderMeshComponent.h" />
+    <ClInclude Include="Engine\Component\Mesh\DonutMeshComponent.h" />
+    <ClInclude Include="Engine\Component\Mesh\PlaneMeshComponent.h" />
     <ClInclude Include="Engine\Component\Mesh\ShellMeshComponent.h" />
+    <ClInclude Include="Engine\Component\Mesh\SphereMeshComponent.h" />
     <ClInclude Include="Engine\Component\TransformationComponent.h" />
     <ClInclude Include="Engine\Config\EngineRenderConfig.h" />
     <ClInclude Include="Engine\Core\Camera.h" />

@@ -4,7 +4,7 @@
 class FEngineFactory
 {
 public:
-	FEngineFactory();
+    FEngineFactory();
 
-	static CEngine *CreateEngine();
+    static CEngine *CreateEngine();
 };

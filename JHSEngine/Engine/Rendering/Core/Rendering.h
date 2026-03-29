@@ -8,17 +8,17 @@
 //提供渲染内容的接口
 class IRenderingInterface : public IGuidInterface
 {
-	friend class CWindowsEngine;
+    friend class CWindowsEngine;
 public:
-	IRenderingInterface();
-	virtual ~IRenderingInterface();
+    IRenderingInterface();
+    virtual ~IRenderingInterface();
 
-	virtual void Init();
+    virtual void Init();
 
-	virtual void PreDraw(float deltaTime);
-	virtual void Draw(float deltaTime);
-	virtual void PostDraw(float deltaTime);
+    virtual void PreDraw(float deltaTime);
+    virtual void Draw(float deltaTime);
+    virtual void PostDraw(float deltaTime);
 
 private:
-	static vector<IRenderingInterface*> renderingInterfaces;
+    static vector<IRenderingInterface*> renderingInterfaces;
 };

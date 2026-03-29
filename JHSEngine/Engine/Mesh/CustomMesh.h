@@ -3,15 +3,11 @@
 
 class GCustomMesh : public GMesh
 {
-	typedef GMesh Super;
+    typedef GMesh Super;
 public:
-	virtual void Init();
+    virtual void Init();
 
-	virtual void BuildMesh(const FMeshRenderingData* inRenderingData);
+    virtual void Draw(float deltaTime);
 
-	virtual void Draw(float deltaTime);
-
-	static GCustomMesh* CreateMesh(FMeshRenderingData& meshRenderingData, string &inPath);
-
-	static bool LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshData);
+    void CreateMesh(string &inPath);
 };

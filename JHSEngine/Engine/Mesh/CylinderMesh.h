@@ -3,13 +3,11 @@
 
 class GCylinderMesh : public GMesh
 {
-	typedef GMesh Super;
+    typedef GMesh Super;
 public:
-	virtual void Init();
+    virtual void Init();
 
-	virtual void BuildMesh(const FMeshRenderingData* inRenderingData);
+    virtual void Draw(float deltaTime);
 
-	virtual void Draw(float deltaTime);
-
-	static GCylinderMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inTopRadius, float inBottomRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
+    void CreateMesh(float inTopRadius, float inBottomRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
 };

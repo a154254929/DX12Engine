@@ -3,8 +3,8 @@
 #include "../../Config/EngineRenderConfig.h"
 
 FViewport::FViewport()
-	: viewMatrix(EngineMath::IdentityMatrix4x4())
-	, projectMatrix(EngineMath::IdentityMatrix4x4())
+    : viewMatrix(EngineMath::IdentityMatrix4x4())
+    , projectMatrix(EngineMath::IdentityMatrix4x4())
 {
 
 }

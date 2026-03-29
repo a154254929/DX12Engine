@@ -9,18 +9,18 @@
 class SIMPLE_LIBRARY_API FSimpleNetDrive
 {
 public:
-	FSimpleNetDrive();
+    FSimpleNetDrive();
 
-	static FSimpleNetDrive* GetNetDrive(ESimpleSocketType InSokcetType, ESimpleDriveType InDriveType);
+    static FSimpleNetDrive* GetNetDrive(ESimpleSocketType InSokcetType, ESimpleDriveType InDriveType);
 
-	virtual bool Init();
+    virtual bool Init();
 
-	virtual void Tick(double InTimeInterval);
+    virtual void Tick(double InTimeInterval);
 
 protected:
-	FSimpleConnetion* GetFreeConnetion();
-	virtual void SetNonblocking();
+    FSimpleConnetion* GetFreeConnetion();
+    virtual void SetNonblocking();
 protected:
-	FSimpleConnetion* MainConnetion;
-	std::map<int, FSimpleConnetion*> Connetions;
+    FSimpleConnetion* MainConnetion;
+    std::map<int, FSimpleConnetion*> Connetions;
 };

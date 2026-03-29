@@ -2,10 +2,10 @@
 #include "../../../Buffer/ConstructBuffer.h"
 #include "../../../../../Mesh/Core/ObjectTransformation.h"
 #include "../../../../../Core/Viewport/ViewportTransformation.h"
-#include "../../../../../Mesh/Core/Mesh.h"
 #include "../../../../../Mesh/Core/Material/MaterialConstantBuffer.h"
 #include "../../../../../Component/Light/Core/LightConstantBuffer.h"
 #include "../../../../../Mesh/Core/Material/Material.h"
+#include "../../../../../Component/Mesh/Core/MeshComponent.h"
 
 FGeometryMap::FGeometryMap()
 {
@@ -36,6 +36,19 @@ void FGeometryMap::PostDraw(float deltaTime)
 
 void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
 {
+    // DEBUG: 打印相机位置和视图矩阵
+    static int frameCount = 0;
+    if (frameCount++ % 60 == 0) {  // 每60帧打印一次
+        Engine_Log("Camera pos: (%.2f, %.2f, %.2f)", 
+            viewportInfo.viewWorldPosition.x, 
+            viewportInfo.viewWorldPosition.y, 
+            viewportInfo.viewWorldPosition.z);
+        Engine_Log("ViewMatrix[3]: (%.2f, %.2f, %.2f, %.2f)", 
+            viewportInfo.viewMatrix._41, 
+            viewportInfo.viewMatrix._42, 
+            viewportInfo.viewMatrix._43,
+            viewportInfo.viewMatrix._44);
+    }
     //XMINT3 cameraPos = XMINT3(viewportInfo.viewMatrix.m[3][0], viewportInfo.viewMatrix.m[3][1], viewportInfo.viewMatrix.m[3][2]);
     //XMINT3 cameraPos = XMINT3(5.0f, 5.0f, 5.0f);
 
@@ -57,12 +70,12 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
         {
             FRenderingData& inRenderingData = geometrys[i].describeMeshRenderingData[j];
             {
-                XMFLOAT3& position = inRenderingData.mesh->GetPosition();
-                fvector_3d scale = inRenderingData.mesh->GetScale();
+                XMFLOAT3& position = inRenderingData.meshComp->GetPosition();
+                fvector_3d scale = inRenderingData.meshComp->GetScale();
 
-                XMFLOAT3 rightVector = inRenderingData.mesh->GetRightVector();
-                XMFLOAT3 upVector = inRenderingData.mesh->GetUpVector();
-                XMFLOAT3 forwardVector = inRenderingData.mesh->GetForwardVector();
+                XMFLOAT3 rightVector = inRenderingData.meshComp->GetRightVector();
+                XMFLOAT3 upVector = inRenderingData.meshComp->GetUpVector();
+                XMFLOAT3 forwardVector = inRenderingData.meshComp->GetForwardVector();
 
                 inRenderingData.worldMatrix = {
                     rightVector.x * scale.x,    upVector.x,                forwardVector.x ,            0.f,
@@ -80,7 +93,7 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
             //变换材质
             FMaterialConstantBuffer materialConstantBuffer;
             {
-                if (CMaterial* material = (*(inRenderingData.mesh->GetMaterials()))[0])
+                if (CMaterial* material = (*(inRenderingData.meshComp->GetMaterials()))[0])
                 {
                     fvector_4d baseColor = material->GetBaseColor();
                     materialConstantBuffer.baseColor = XMFLOAT4(baseColor.x, baseColor.y, baseColor.z, baseColor.w);
@@ -111,10 +124,10 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
     viewportConstantBufferView.Update(0, &viewportTransformation);
 }
 
-void FGeometryMap::BuildMesh(GMesh* inMesh, const FMeshRenderingData& inMeshData)
+void FGeometryMap::BuildMesh(CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData)
 {
     FGeometry& geometry = geometrys[0];
-    geometry.BuildMesh(inMesh, inMeshData);
+    geometry.BuildMesh(inMeshComponent, inMeshData);
 }
 
 void FGeometryMap::Build()
@@ -188,7 +201,7 @@ UINT FGeometryMap::GetDrawMaterialObjectNumber()
     {
         for (auto& tmpSun : tmp.second.describeMeshRenderingData)
         {
-            count += tmpSun.mesh->GetMaterialNum();
+            count += tmpSun.meshComp->GetMaterialNum();
         }
     }
     return count;
@@ -239,7 +252,7 @@ void FGeometryMap::DrawMesh(float deltaTime)
             );
 
             //定义要绘制哪种图元 点 线 面
-            EMaterialDisplayStatusType displayStatusType = (*inRenderingData.mesh->GetMaterials())[0]->GetMaterialDisplayStatusType();
+            EMaterialDisplayStatusType displayStatusType = (*inRenderingData.meshComp->GetMaterials())[0]->GetMaterialDisplayStatusType();
             GetGraphicsCommandList()->IASetPrimitiveTopology(
                 (D3D_PRIMITIVE_TOPOLOGY)displayStatusType
             );
@@ -264,25 +277,25 @@ void FGeometryMap::DrawMesh(float deltaTime)
     }
 }
 
-bool FGeometry::bRenderingDataExistence(GMesh* inKey)
+bool FGeometry::bRenderingDataExistence(CMeshComponent* inKey)
 {
     for (auto& tmp : describeMeshRenderingData)
     {
-        if (tmp.mesh == inKey)
+        if (tmp.meshComp == inKey)
             return true;
     }
     return false;
 }
 
-void FGeometry::BuildMesh(GMesh* inMesh, const FMeshRenderingData& inMeshData)
+void FGeometry::BuildMesh(CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData)
 {
-    if (!bRenderingDataExistence(inMesh))
+    if (!bRenderingDataExistence(inMeshComponent))
     {
         describeMeshRenderingData.push_back(FRenderingData());
         FRenderingData& inRenderingData = describeMeshRenderingData[describeMeshRenderingData.size() - 1];
 
         //基础信息记录
-        inRenderingData.mesh = inMesh;
+        inRenderingData.meshComp = inMeshComponent;
         inRenderingData.indexSize = inMeshData.indexData.size();
         inRenderingData.vertexSize = inMeshData.vertexData.size();
 

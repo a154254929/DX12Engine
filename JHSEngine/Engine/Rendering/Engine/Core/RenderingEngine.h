@@ -4,8 +4,8 @@
 class CRenderingEngine : public CEngine
 {
 public:
-	void SetMainWindowsHandle(HWND inNewMainWindowsHandle);
+    void SetMainWindowsHandle(HWND inNewMainWindowsHandle);
 
 protected:
-	HWND mainWindowsHandle;         //主窗口句柄
+    HWND mainWindowsHandle;         //主窗口句柄
 };

@@ -8,53 +8,53 @@ class CTransformationComponent;
 class CInputComponent;
 enum ECameraType;
 class GCamera
-	: public GActorObject
-	, public FViewport
-	, public IDirectXDeviceInterface
+    : public GActorObject
+    , public FViewport
+    , public IDirectXDeviceInterface
 {
 
-	CVARIABLE()
-	CInputComponent* inputComponent;
+    CVARIABLE()
+    CInputComponent* inputComponent;
 public:
-	GCamera();
+    GCamera();
 
-	virtual void BeginInit();
-	virtual void Tick(float deltaTime);
+    virtual void BeginInit();
+    virtual void Tick(float deltaTime);
 
-	virtual void ExecuteKeboard(const FInputKey& inputKey);
+    virtual void ExecuteKeboard(const FInputKey& inputKey);
 
-	virtual void BuildViewMatrix(float deltaTime);
+    virtual void BuildViewMatrix(float deltaTime);
 
 public:
-	virtual void OnMouseButtonDown(int x, int y);
-	virtual void OnMouseButtonUp(int x, int y);
-	virtual void OnMouseMove(int x, int y);
-	virtual void OnMouseWheel(int x, int y, float inDelta);
+    virtual void OnMouseButtonDown(int x, int y);
+    virtual void OnMouseButtonUp(int x, int y);
+    virtual void OnMouseMove(int x, int y);
+    virtual void OnMouseWheel(int x, int y, float inDelta);
 
-	virtual void MoveForward(float inValue);
-	virtual void MoveRight(float inValue);
-	virtual void MoveUp(float inValue);
+    virtual void MoveForward(float inValue);
+    virtual void MoveRight(float inValue);
+    virtual void MoveUp(float inValue);
 protected:
-	void RotateAroundYAxis(float inRotateDegrees);
-	void RotateAroundXAxis(float inRotateDegrees);
+    void RotateAroundYAxis(float inRotateDegrees);
+    void RotateAroundXAxis(float inRotateDegrees);
 public:
 
-	FORCEINLINE CInputComponent* GetInputComponent() { return inputComponent; }
+    FORCEINLINE CInputComponent* GetInputComponent() { return inputComponent; }
 
 protected:
-	POINT lsatMousePosition;
+    POINT lsatMousePosition;
 
-	bool bLeftMosueDown{ false };
+    bool bLeftMosueDown{ false };
 
-	//鼠标灵敏度
-	float mounseSensitivity;
+    //鼠标灵敏度
+    float mounseSensitivity;
 
-	ECameraType cameraType;
+    ECameraType cameraType;
 
-	//球面坐标
-	float radius;
-	float theta;
-	float phi;
+    //球面坐标
+    float radius;
+    float theta;
+    float phi;
 
-	float speed = .5f;
+    float speed = .5f;
 };

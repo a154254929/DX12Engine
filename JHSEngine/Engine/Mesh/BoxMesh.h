@@ -3,13 +3,11 @@
 
 class GBoxMesh : public GMesh
 {
-	typedef GMesh Super;
+    typedef GMesh Super;
 public:
-	virtual void Init();
+    virtual void Init();
 
-	virtual void BuildMesh(const FMeshRenderingData* inRenderingData);
+    virtual void Draw(float deltaTime);
 
-	virtual void Draw(float deltaTime);
-
-	static GBoxMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, float inDepth);
+    void CreateMesh(float inHeight, float inWidth, float inDepth);
 };

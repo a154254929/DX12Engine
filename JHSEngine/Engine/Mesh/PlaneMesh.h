@@ -3,13 +3,11 @@
 
 class GPlaneMesh : public GMesh
 {
-	typedef GMesh Super;
+    typedef GMesh Super;
 public:
-	virtual void Init();
+    virtual void Init();
 
-	virtual void BuildMesh(const FMeshRenderingData* inRenderingData);
+    virtual void Draw(float deltaTime);
 
-	virtual void Draw(float deltaTime);
-
-	static GPlaneMesh* CreateMesh(FMeshRenderingData& meshRenderingData, float inHeight, float inWidth, uint32_t inHeightSubdivide, uint32_t inWidthSubdivide);
+    void CreateMesh(float inHeight, float inWidth, uint32_t inHeightSubdivide, uint32_t inWidthSubdivide);
 };

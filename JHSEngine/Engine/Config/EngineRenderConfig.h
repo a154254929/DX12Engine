@@ -2,15 +2,15 @@
 
 struct FEngineRenderConfig
 {
-	FEngineRenderConfig();
+    FEngineRenderConfig();
 
-	int ScreenWidth;
-	int ScreenHeight;
-	int RefreshRate;
-	int SwapChainCount;
+    int ScreenWidth;
+    int ScreenHeight;
+    int RefreshRate;
+    int SwapChainCount;
 
-	static FEngineRenderConfig* GetRenderConfig();
-	static void Destroy();
+    static FEngineRenderConfig* GetRenderConfig();
+    static void Destroy();
 private:
-	static FEngineRenderConfig* renderConfig;
+    static FEngineRenderConfig* renderConfig;
 };

@@ -5,8 +5,8 @@
 
 namespace ConstructBuffer
 {
-	struct FConstructBuffer:IDirectXDeviceInterface_Struct
-	{
-		ComPtr<ID3D12Resource> ConstructDefaultBuffer(ComPtr<ID3D12Resource>& outTmpBuffer, const void* inData, UINT64 inDataSize);
-	};
+    struct FConstructBuffer:IDirectXDeviceInterface_Struct
+    {
+        ComPtr<ID3D12Resource> ConstructDefaultBuffer(ComPtr<ID3D12Resource>& outTmpBuffer, const void* inData, UINT64 inDataSize);
+    };
 }

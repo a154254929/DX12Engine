@@ -11,10 +11,10 @@
 
 //class FVector
 //{
-//	unsigned char r;//255 ->[0,1]
-//	unsigned char g;//255
-//	unsigned char b;//255
-//	unsigned char a;//255
+//    unsigned char r;//255 ->[0,1]
+//    unsigned char g;//255
+//    unsigned char b;//255
+//    unsigned char a;//255
 //};
 
 CWindowsEngine::CWindowsEngine()
@@ -53,6 +53,7 @@ int CWindowsEngine::Init(FWinMainCommandParameters inParameters)
     renderingEngine->Init(inParameters);
 
     world = CreateObject<CWorld>(new CWorld());
+	renderingEngine->world = world;
 
     Engine_Log("Engine initialization complete.");
     return 0;
@@ -66,7 +67,7 @@ int CWindowsEngine::PostInit()
     {
         obj->BeginInit();
     }
-	return 0;
+    return 0;
 }
 
 void CWindowsEngine::Tick(float deltaTime)
@@ -113,6 +114,11 @@ int CWindowsEngine::PostExit()
     renderingEngine->PostExit();
     Engine_Log("Engine post exit complete.");
     return 0;
+}
+
+CMeshManager* CWindowsEngine::GetMeshManager()
+{
+    return renderingEngine->GetMeshManager();
 }
 
 bool CWindowsEngine::InitWindows(FWinMainCommandParameters InParameters)
