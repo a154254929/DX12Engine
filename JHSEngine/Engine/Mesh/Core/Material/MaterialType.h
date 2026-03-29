@@ -18,6 +18,8 @@ enum EMaterialType
     
     //材质属性
     BaseColor,
+    Normal,
+    WorldNormal,
     
     
     PBR = 20,

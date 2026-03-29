@@ -46,6 +46,7 @@ struct Attribute
     float4 worldPosition : TEXCOORD1;
     float4 color : COLOR;
     float3 normal : NORMAL;
+    float3 worldNormal : TEXCOORD2;
     float3 utangent : TANGENT;
 };
 
@@ -54,7 +55,8 @@ Attribute VertexShaderUnlit(Varying input)
     Attribute output;
     output.worldPosition = mul(float4(input.position, 1), WorldMatrix);
     output.position = mul(output.worldPosition, ViewProjectionMatrix);
-    output.normal = normalize(mul(input.normal, (float3x3) WorldMatrix));
+    output.normal = input.normal;
+    output.worldNormal = normalize(mul(input.normal, (float3x3) WorldMatrix));
     output.utangent = input.utangent;
     //output.normal = normalize(mul(input.normal, (float3x3) WorldMatrix)) * .5 + .5;
     //output.normal = input.normal;
@@ -69,11 +71,19 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     {
         return input.color;
     }
+    else if (MaterialType == 13) //phong
+    {
+        return float4(input.normal, 1.0f);
+    }
+    else if (MaterialType == 14) //phong
+    {
+        return float4(input.worldNormal, 1.0f);
+    }
     float4 ambientLight = { .15f, .15f, .25f, 1.0f };
     
     FMaterial material;
     material.BaseColor = BaseColor;
-    float3 normal = normalize(input.normal.xyz);
+    float3 normal = normalize(input.worldNormal.xyz);
     float3 lightDir = normalize(-LightDirection);
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
     
