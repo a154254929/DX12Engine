@@ -2,6 +2,7 @@
 
 enum EMaterialType
 {
+    //局部光照模型
     Lambertain = 0,
     HalfLambertain,
     Phong,
@@ -14,6 +15,11 @@ enum EMaterialType
     Back,
     AnisotropyKajiyaKay,
     OrenNayar,
+    
+    //材质属性
+    BaseColor,
+    
+    
     PBR = 20,
     Fresnel = 100,
     Max

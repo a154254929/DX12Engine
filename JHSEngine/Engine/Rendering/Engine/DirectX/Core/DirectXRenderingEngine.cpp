@@ -306,6 +306,19 @@ int CDirectXRenderingEngine::PostInit()
                 }
             }
         }
+
+        //BaseColor
+        if (GMesh* sphereMeshPBR = meshManager->CreateSphereMesh(1, 20, 20))
+        {
+            sphereMeshPBR->SetPosition(XMFLOAT3(-4.f, 11.0f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshPBR->GetMaterials())[0])
+                {
+                    material->SetMaterialDisplayStatusType(EMaterialDisplayStatusType::WireframeDisplay);
+                    material->SetMaterialType(EMaterialType::BaseColor);
+                }
+            }
+        }
     }
     meshManager->BuildMesh();
 

@@ -64,6 +64,11 @@ Attribute VertexShaderUnlit(Varying input)
 
 float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 {
+    //BaseColor
+    if (MaterialType == 12) //phong
+    {
+        return input.color;
+    }
     float4 ambientLight = { .15f, .15f, .25f, 1.0f };
     
     FMaterial material;
