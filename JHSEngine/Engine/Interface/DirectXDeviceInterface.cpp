@@ -36,6 +36,22 @@ ComPtr<ID3D12Device> IDirectXDeviceInterface::GetD3dDevice()
     }
 }
 
+CLightManager* IDirectXDeviceInterface::GetLightManager()
+{
+#ifdef _WIN32
+    if (CWindowsEngine* inEngine = GetEngine())
+#else
+    if (CEngine* inEngine = GetEngine())
+#endif
+    {
+        if (inEngine->GetRenderingEngine())
+        {
+            return inEngine->GetRenderingEngine()->GetLightManager();
+        }
+    }
+    return NULL;
+}
+
 CMeshManager* IDirectXDeviceInterface::GetMeshManager()
 {
     return GetEngine()->GetMeshManager();

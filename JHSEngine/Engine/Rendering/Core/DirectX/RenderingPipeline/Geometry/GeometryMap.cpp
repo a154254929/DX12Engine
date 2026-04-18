@@ -1,4 +1,6 @@
 ﻿#include "GeometryMap.h"
+
+#include "../../../../../Component/Light/Core/LightComponent.h"
 #include "../../../Buffer/ConstructBuffer.h"
 #include "../../../../../Mesh/Core/ObjectTransformation.h"
 #include "../../../../../Core/Viewport/ViewportTransformation.h"
@@ -6,6 +8,8 @@
 #include "../../../../../Component/Light/Core/LightConstantBuffer.h"
 #include "../../../../../Mesh/Core/Material/Material.h"
 #include "../../../../../Component/Mesh/Core/MeshComponent.h"
+#include "../../../../../Component/Light/Core/LightComponent.h"
+#include "../../../../../Manager/LightManager.h"
 
 FGeometryMap::FGeometryMap()
 {
@@ -108,9 +112,16 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
         }
     }
     //更新灯光
-    FLightConstantBuffer lightConstantBuffer;
+    for (int i = 0; i < GetLightManager()->lights.size(); ++i)
+    {
+        FLightConstantBuffer lightConstantBuffer;
+        if (auto light = GetLightManager()->lights[i])
+        {
+            lightConstantBuffer.lightDirection = light->GetForwardVector();
+        }
 
-    lightConstantBufferView.Update(0, &lightConstantBuffer);
+        lightConstantBufferView.Update(i, &lightConstantBuffer);
+    }
 
     //更新视口
     XMMATRIX projectMatrix = XMLoadFloat4x4(&viewportInfo.projectMatrix);

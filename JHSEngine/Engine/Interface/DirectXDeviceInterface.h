@@ -7,6 +7,7 @@ class CWindowsEngine;
 class CEngine;
 #endif
 //提供渲染内容的接口
+class CLightManager;
 class CMeshManager;
 class CWorld;
 class IDirectXDeviceInterface
@@ -14,6 +15,7 @@ class IDirectXDeviceInterface
 public:
     ComPtr<ID3D12Fence> GetFence();
     ComPtr<ID3D12Device> GetD3dDevice();
+    CLightManager* GetLightManager();
     CMeshManager* GetMeshManager();
     CWorld* GetWorld();
 

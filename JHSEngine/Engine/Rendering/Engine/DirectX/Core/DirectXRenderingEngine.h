@@ -2,6 +2,7 @@
 #include "../../Core/RenderingEngine.h"
 #include "../../../../Core/Viewport/ViewportInfo.h"
 
+class CLightManager;
 class CMeshManager;
 class CWorld;
 class CDirectXRenderingEngine : public CRenderingEngine
@@ -32,6 +33,7 @@ public:
     UINT GetDXGISampleCount() const;
     UINT GetDXGISampleQuality() const;
 
+    CLightManager* GetLightManager(){ return lightManager; }
     CMeshManager* GetMeshManager(){ return meshManager; }
 protected:
     void WaitGPUCommandQueueComplete();
@@ -40,6 +42,7 @@ protected:
     void PostInitDirect3D();
 
 protected:
+    CLightManager* lightManager;
     CMeshManager* meshManager;
     CWorld* world;
 protected:

@@ -14,6 +14,8 @@
 #include "../../../../Mesh/Core/Material/Material.h"
 #include "../../../../Core/World.h"
 #include "../../../../Component/Mesh/Core/MeshComponent.h"
+#include "../../../../Manager/LightManager.h"
+#include "../../../../Actor/Light/ParallelLight.h"
 
 #if defined(_WIN32)
 #include "../../../../Core/WinMainCommandParameters.h"
@@ -41,11 +43,13 @@ CDirectXRenderingEngine::CDirectXRenderingEngine()
     }
     bTick = false;
 
-    meshManager = new CMeshManager();
+    meshManager = CreateObject<CMeshManager>(new CMeshManager());
+    lightManager = CreateObject<CLightManager>(new CLightManager());
 }
 
 CDirectXRenderingEngine::~CDirectXRenderingEngine()
 {
+    delete lightManager;
     delete meshManager;
 }
 
@@ -71,6 +75,14 @@ int CDirectXRenderingEngine::PostInit()
 {
     ANALYSIS_HRESULT(graphicsCommandList->Reset(commandAllocator.Get(), NULL));
     {
+        
+        //构建灯光
+        if (GParallelLight* parallelLight = world->CreateActorObject<GParallelLight>())
+        {
+            parallelLight->SetRotation(fvector_3d(9.0f, .0f, .0f));
+        }
+        
+        
         //构建Mesh
         //CMesh* boxMesh = meshManager->CreateBoxMesh(3, 2, 4);
         if (GPlaneMesh* planeMesh = world->CreateActorObject<GPlaneMesh>())
