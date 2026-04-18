@@ -8,6 +8,22 @@ GRangeLight::GRangeLight()
     
 }
 
+void GRangeLight::SetStartAttenuation(const float inStartAttenuation)
+{
+    if (CRangeLightComponent* rangeLight = dynamic_cast<CRangeLightComponent*>(const_cast<CLightComponent*>(GetLightComponent())))
+    {
+        rangeLight->SetStartAttenuation(inStartAttenuation);
+    }
+}
+
+void GRangeLight::SetEndAttenuation(const float inEndAttenuation)
+{
+    if (CRangeLightComponent* rangeLight = dynamic_cast<CRangeLightComponent*>(const_cast<CLightComponent*>(GetLightComponent())))
+    {
+        rangeLight->SetEndAttenuation(inEndAttenuation);
+    }
+}
+
 float GRangeLight::GetStartAttenuation() const
 {
     if (const CRangeLightComponent* rangeLight = dynamic_cast<const CRangeLightComponent*>(GetLightComponent()))
@@ -24,20 +40,4 @@ float GRangeLight::GetEndAttenuation() const
         return rangeLight->GetEndAttenuation();
     }
     return 0.f;
-}
-
-void GRangeLight::SetStartAttenuation(const float inStartAttenuation)
-{
-    if (CRangeLightComponent* rangeLight = dynamic_cast<CRangeLightComponent*>(const_cast<CLightComponent*>(GetLightComponent())))
-    {
-        rangeLight->SetStartAttenuation(inStartAttenuation);
-    }
-}
-
-void GRangeLight::SetEndAttenuation(const float inEndAttenuation)
-{
-    if (CRangeLightComponent* rangeLight = dynamic_cast<CRangeLightComponent*>(const_cast<CLightComponent*>(GetLightComponent())))
-    {
-        rangeLight->SetEndAttenuation(inEndAttenuation);
-    }
 }

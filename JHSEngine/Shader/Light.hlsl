@@ -60,11 +60,12 @@ float4 ComputeLightStrength(Light light, float3 inWorldNormal, float3 inWorldPos
         
         if (distance < light.EndAttenuation)
         {
-            return AttenuationPointLights1(light, distance) * lightStrength;
-            //return AttenuationPointLights2(light, distance) * lightStrength;
+            return AttenuationPointLights1(light, distance) * lightStrength * float4(light.LightIntensity, 1.0f);;
+            //return AttenuationPointLights2(light, distance) * lightStrength * float4(light.LightIntensity, 1.0f);
         }
     }
     else if (light.LightType == 3)  //Spot
+    /*
     {
         float3 lightVector = light.LightPosition - inWorldPosition;
         float4 lightStrength = pow(saturate(dot(light.LightDirection, normalize(lightVector))), 1.f);
@@ -74,6 +75,27 @@ float4 ComputeLightStrength(Light light, float3 inWorldNormal, float3 inWorldPos
         {
             return AttenuationPointLights1(light, distance) * lightStrength;
             //return AttenuationPointLights2(light, distance, 0.f, 0.7f, 0.9f) * lightStrength;
+        }
+    }
+    */
+    {
+        float3 lightVector = light.LightPosition - inWorldPosition;
+        float l2polightdir = pow(saturate(dot(light.LightDirection, normalize(lightVector))), 1.f);
+        float theta = acos(l2polightdir);
+        float4 lightStrength = 1.0;
+        if (theta <= light.ConicalInnerCorner)
+        {
+            return float4(light.LightIntensity, 1.0f);
+        }
+        else if (theta <= light.ConicalOuterCorner)
+        {
+            float outterInnterDiff = light.ConicalOuterCorner - light.ConicalInnerCorner;
+            float thetaInnerDiff = theta - light.ConicalInnerCorner; 
+            return float4(light.LightIntensity * (1.0f - thetaInnerDiff / outterInnterDiff), 1.0f);
+        }
+        else
+        {
+            return float4(0.f,0.f,0.f,1.f);
         }
     }
     

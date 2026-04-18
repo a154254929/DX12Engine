@@ -8,4 +8,9 @@ public:
     GSpotLight();
 
     virtual void Tick(float deltaTime);
+public:
+    void SetConicalInnerCorner(const float inConicalInnerCorner);
+    void SetConicalOuterCorner(const float inConicalOuterCorner);
+    float GetConicalInnerCorner() const;
+    float GetConicalOuterCorner() const;
 };

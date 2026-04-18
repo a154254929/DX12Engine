@@ -17,3 +17,37 @@ void GSpotLight::Tick(float deltaTime)
     
     SetRotation(rotationV3);
 }
+
+void GSpotLight::SetConicalInnerCorner(float inConicalInnerCorner)
+{
+    if (CSpotLightComponent* spotLight = dynamic_cast<CSpotLightComponent*>(const_cast<CLightComponent*>(GetLightComponent())))
+    {
+        spotLight->SetConicalInnerCorner(inConicalInnerCorner);
+    }
+}
+
+void GSpotLight::SetConicalOuterCorner(const float inConicalOuterCorner)
+{
+    if (CSpotLightComponent* spotLight = dynamic_cast<CSpotLightComponent*>(const_cast<CLightComponent*>(GetLightComponent())))
+    {
+        spotLight->SetConicalOuterCorner(inConicalOuterCorner);
+    }
+}
+
+float GSpotLight::GetConicalInnerCorner() const
+{
+    if (const CSpotLightComponent* spotLight = dynamic_cast<const CSpotLightComponent*>(GetLightComponent()))
+    {
+        return spotLight->GetConicalInnerCorner();
+    }
+    return 0.f;
+}
+
+float GSpotLight::GetConicalOuterCorner() const
+{
+    if (const CSpotLightComponent* spotLight = dynamic_cast<const CSpotLightComponent*>(GetLightComponent()))
+    {
+        return spotLight->GetConicalInnerCorner();
+    }
+    return 0.f;
+}

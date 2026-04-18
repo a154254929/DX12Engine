@@ -107,9 +107,11 @@ int CDirectXRenderingEngine::PostInit()
             spotLight1->SetPosition(XMFLOAT3(0.0f, .0f, -6.0f));
             spotLight1->SetRotation(fvector_3d(0.f, 0.0f, .0f));
             
-            spotLight1->SetLightIntensity(fvector_3d(7.f, 7.f, 7.f));
+            spotLight1->SetLightIntensity(fvector_3d(1.3f, 1.3f, 1.3f));
             //spotLight1->SetStartAttenuation(1.f);
             spotLight1->SetEndAttenuation(130.f);
+            spotLight1->SetConicalInnerCorner(45.f);
+            spotLight1->SetConicalOuterCorner(60.f);
         }
         
         

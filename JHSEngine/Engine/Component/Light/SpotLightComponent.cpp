@@ -33,5 +33,5 @@ void CSpotLightComponent::SetConicalInnerCorner(float inConicalInnerCorner)
 void CSpotLightComponent::SetConicalOuterCorner(float inConicalOuterCorner)
 {
     conicalOuterCorner = inConicalOuterCorner;
-    conicalInnerCorner = min(inConicalOuterCorner, conicalOuterCorner);
+    conicalInnerCorner = min(inConicalOuterCorner, conicalInnerCorner);
 }
