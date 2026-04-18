@@ -105,22 +105,22 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         }
         else if (MaterialType == 2) //phong
         {
-            diffuse += saturate(nol);
+            diffuse += pow(saturate(nol), 2.0f);
             
             float3 reflectLight = normalize(reflect(-lightDir, normal));
             float smoothness = 1.f - saturate(Roughness);
             float m = 100 * smoothness;
-            specularColor.rgb = pow(saturate(dot(view, reflectLight)), m);
+            specularColor.rgb += (m + 2.0f) * pow(saturate(dot(view, reflectLight)), m) / (acos(-1.0f) * 2.0f);
             specularColor.a = 1;
         }
         else if (MaterialType == 3) //blinn-phong
         {
-            diffuse += saturate(nol);
+            diffuse += pow(saturate(nol), 2.0f);
             
             float3 halfView = normalize(view + lightDir);
             float smoothness = 1.f - saturate(Roughness);
             float m = 100 * smoothness;
-            specularColor.rgb += nol > 0 ? pow(saturate(dot(normal, halfView)), m) : 0;
+            specularColor.rgb += (m + 2.0f) * pow(saturate(dot(normal, halfView)), m) / (acos(-1.0f) * 2.0f);
             specularColor.a = 1;
 
         }
