@@ -9,6 +9,9 @@ class GParallelLight :public GActorObject
     CParallelLightComponent* parallelLightComponent;
 public:
     GParallelLight();
+
+    virtual void Tick(float deltaTime);
+public:
     void SetPosition(const XMFLOAT3& inPosition);
     void SetRotation(const fvector_3d& inRotation);
     void SetScale(const fvector_3d& inScale);
