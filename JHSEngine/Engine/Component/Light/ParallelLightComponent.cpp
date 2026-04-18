@@ -7,12 +7,12 @@ CParallelLightComponent::CParallelLightComponent()
 {
     //读取模型资源
     static string meshPath = "../JHSEngine/Asset/SunMesh.obj";
-    parallelLightMesh = GetMeshManager()->CreateMeshComponent(meshPath);
+    SetLightMesh(GetMeshManager()->CreateMeshComponent(meshPath));
     
     //设置现况模式
-    if (parallelLightMesh)
+    if (GetLightMesh())
     {
-        if (CMaterial* sunMaterial = (*parallelLightMesh->GetMaterials())[0])
+        if (CMaterial* sunMaterial = (*GetLightMesh()->GetMaterials())[0])
         {
             sunMaterial->SetMaterialType(EMaterialType::BaseColor);
             sunMaterial->SetMaterialDisplayStatusType(EMaterialDisplayStatusType::WireframeDisplay);
