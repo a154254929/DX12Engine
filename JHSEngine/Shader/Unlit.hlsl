@@ -96,7 +96,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         float nol = dot(lightDir, normal);
         if (MaterialType == 0)  //lambertain
         {
-            diffuse += saturate(nol);
+            diffuse += pow(saturate(nol), 2.0f);
         }
         else if (MaterialType == 1) //half-lambertain
         {
@@ -134,7 +134,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         {
             float smoothness = 1.f - saturate(Roughness);
             float r = 20 * smoothness;
-            diffuse += saturate(nol) * pow(dot(normal, view) * saturate(nol), r);
+            diffuse += pow(saturate(nol), 2.0f) * pow(dot(normal, view) * pow(saturate(nol), 2.0f), r);
         }
         else if (MaterialType == 6) //Bended
         {
@@ -216,7 +216,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float a = 1 - .5f * (roughness / (roughness + .33f));
             float b = .45f * (roughness / (roughness + .09f));
 
-            diffuse += saturate(nol) * (a + b * saturate(phiri) * sin(alpha) * tan(beta));
+            diffuse += pow(saturate(nol), 2.0f) * (a + b * saturate(phiri) * sin(alpha) * tan(beta));
 
         }
         else if (MaterialType == 20) //PBR
