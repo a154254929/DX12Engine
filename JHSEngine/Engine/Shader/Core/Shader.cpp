@@ -28,10 +28,30 @@ void FShader::BuildShaders(const wstring& inFileName, const string& inEntryFunNa
         &shaderCode,
         &errorShaderMsg
     );
-    if (errorShaderMsg)
+    if (FAILED(compileResult))
     {
-        Engine_Log_Error("%s", (char*)errorShaderMsg->GetBufferPointer());
+        char errorBuf[2048];
+        if (errorShaderMsg)
+        {
+            const char* shaderError = (char*)errorShaderMsg->GetBufferPointer();
+            sprintf_s(errorBuf, 2048, "Shader Compile Failed:\nFile: %ws\nEntry: %s\nVersion: %s\n\n%s", 
+                inFileName.c_str(), 
+                inEntryFunName.c_str(), 
+                inShaderVersion.c_str(),
+                shaderError);
+            Engine_Log_Error("%s", errorBuf);
+            MessageBoxA(NULL, errorBuf, "Shader Compile Error", MB_OK | MB_ICONERROR);
+        }
+        else
+        {
+            sprintf_s(errorBuf, 2048, "Shader Compile Failed:\nFile: %ws\nEntry: %s\nVersion: %s\n\nNo error message available. HRESULT: 0x%08X", 
+                inFileName.c_str(), 
+                inEntryFunName.c_str(), 
+                inShaderVersion.c_str(),
+                compileResult);
+            Engine_Log_Error("%s", errorBuf);
+            MessageBoxA(NULL, errorBuf, "Shader Compile Error", MB_OK | MB_ICONERROR);
+        }
+        assert(0);
     }
-
-    ANALYSIS_HRESULT(compileResult);
 }

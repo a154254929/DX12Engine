@@ -27,9 +27,9 @@ void CTransformationComponent::SetRotation(const fvector_3d& inRotation)
     XMVECTOR up = XMLoadFloat3(&upVector);
     XMVECTOR forward = XMLoadFloat3(&forwardVector);
 
-    XMStoreFloat3(&rightVector, XMVector3TransformNormal(XMLoadFloat3(&rightVector), rotationPitchYawRoll));
-    XMStoreFloat3(&upVector, XMVector3TransformNormal(XMLoadFloat3(&upVector), rotationPitchYawRoll));
-    XMStoreFloat3(&forwardVector, XMVector3TransformNormal(XMLoadFloat3(&forwardVector), rotationPitchYawRoll));
+    XMStoreFloat3(&rightVector, XMVector3TransformNormal(right, rotationPitchYawRoll));
+    XMStoreFloat3(&upVector, XMVector3TransformNormal(up, rotationPitchYawRoll));
+    XMStoreFloat3(&forwardVector, XMVector3TransformNormal(forward, rotationPitchYawRoll));
 }
 
 void CTransformationComponent::SetScale(const fvector_3d& inScale)

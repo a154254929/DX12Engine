@@ -14,6 +14,9 @@ public:
     
     CMeshComponent* GetLightMesh(){return lightMesh;}
     
+    const fvector_3d GetLightInstensity(){return lightInstensity;}
+    void SetLightInstansity(const fvector_3d& inLightIntensity){lightInstensity = inLightIntensity;}
+    
     void SetPosition(const XMFLOAT3& inPosition);
     void SetRotation(const fvector_3d& inRotation);
     void SetScale(const fvector_3d& inScale);
@@ -22,4 +25,7 @@ public:
     void SetUpVector(const XMFLOAT3& inUpVector);
 protected:
     void SetLightMesh(CMeshComponent* inLightMesh);
+    
+protected:
+    fvector_3d lightInstensity;
 };

@@ -77,10 +77,16 @@ int CDirectXRenderingEngine::PostInit()
     {
         
         //构建灯光
-        if (GParallelLight* parallelLight = world->CreateActorObject<GParallelLight>())
+        if (GParallelLight* parallelLight1 = world->CreateActorObject<GParallelLight>())
         {
-            parallelLight->SetPosition(XMFLOAT3(0.0f, .0f, -8.0f));
-            parallelLight->SetRotation(fvector_3d(45.f, 90.0f, .0f));
+            parallelLight1->SetPosition(XMFLOAT3(0.0f, .0f, -8.0f));
+            parallelLight1->SetRotation(fvector_3d(45.f, 90.0f, .0f));
+        }
+        
+        if (GParallelLight* parallelLight2 = world->CreateActorObject<GParallelLight>())
+        {
+            parallelLight2->SetPosition(XMFLOAT3(0.0f, 2.0f, -8.0f));
+            parallelLight2->SetRotation(fvector_3d(45.f, -30.0f, .0f));
         }
         
         

@@ -27,10 +27,8 @@ cbuffer MaterialConstBuffer : register(b2)
 
 cbuffer LightConstBuffer : register(b3)
 {
-    float3 LightIntensity;
-    float xx;
-    float3 LightDirection;
-    float xx1;
+    int4 LightInfo;
+    Light ScreenLights[16];
 }
 
 
@@ -86,184 +84,184 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     FMaterial material;
     material.BaseColor = BaseColor;
     float3 normal = normalize(input.worldNormal.xyz);
-    float3 lightDir = normalize(-LightDirection);
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
-    
-    float diffuse = 1.f;
-    float nol = dot(lightDir, normal);
+    float diffuse = 0.f;
     float4 specularColor = 0;
-    if (MaterialType == 0)  //lambertain
+    for (int i = 0; i < LightInfo.x; i++)
     {
-        diffuse = saturate(nol);
-    }
-    else if (MaterialType == 1) //half-lambertain
-    {
-        float halfLambert = nol * .5f + .5f;
-        diffuse = halfLambert;
-    }
-    else if (MaterialType == 2) //phong
-    {
-        diffuse = saturate(nol);
-        
-        float3 reflectLight = normalize(reflect(-lightDir, normal));
-        float smoothness = 1.f - saturate(Roughness);
-        float m = 100 * smoothness;
-        specularColor.rgb = pow(saturate(dot(view, reflectLight)), m);
-        specularColor.a = 1;
-    }
-    else if (MaterialType == 3) //blinn-phong
-    {
-        diffuse = saturate(nol);
-        
-        float3 halfView = normalize(view + lightDir);
-        float smoothness = 1.f - saturate(Roughness);
-        float m = 100 * smoothness;
-        specularColor.rgb += nol > 0 ? pow(saturate(dot(normal, halfView)), m) : 0;
-        specularColor.a = 1;
+        float3 lightIntensity = ScreenLights[i].LightIntensity;
+        if (length(lightIntensity) <= 0) continue;
+        float3 lightDir = normalize(-ScreenLights[i].LightDirection);
+    
+        float nol = dot(lightDir, normal);
+        if (MaterialType == 0)  //lambertain
+        {
+            diffuse += saturate(nol);
+        }
+        else if (MaterialType == 1) //half-lambertain
+        {
+            float halfLambert = nol * .5f + .5f;
+            diffuse += halfLambert;
+        }
+        else if (MaterialType == 2) //phong
+        {
+            diffuse += saturate(nol);
+            
+            float3 reflectLight = normalize(reflect(-lightDir, normal));
+            float smoothness = 1.f - saturate(Roughness);
+            float m = 100 * smoothness;
+            specularColor.rgb = pow(saturate(dot(view, reflectLight)), m);
+            specularColor.a = 1;
+        }
+        else if (MaterialType == 3) //blinn-phong
+        {
+            diffuse += saturate(nol);
+            
+            float3 halfView = normalize(view + lightDir);
+            float smoothness = 1.f - saturate(Roughness);
+            float m = 100 * smoothness;
+            specularColor.rgb += nol > 0 ? pow(saturate(dot(normal, halfView)), m) : 0;
+            specularColor.a = 1;
 
-    }
-    else if (MaterialType == 4) //WrapLight
-    {
-        //float wrapValue = 1.f; //lambertain
-        float wrapValue = 2.f;
-        diffuse = saturate((nol + wrapValue) / (1 + wrapValue));
-    }
-    else if (MaterialType == 5) //Minnaert
-    {
-        float smoothness = 1.f - saturate(Roughness);
-        float r = 20 * smoothness;
-        diffuse = saturate(nol) * pow(dot(normal, view) * saturate(nol), r);
-    }
-    else if (MaterialType == 6) //Bended
-    {
-        float diffuseLayer = 4.0f;
-        diffuse = nol * .5f + .5f;
-        diffuse = floor(diffuse * diffuseLayer) / diffuseLayer;
-        
-        float specularLayer = 2;
-        float3 f0 = .1f;
-        specularColor.rgb += FresnelSchlickMethod(f0, normal, view, 3).rgb;
-        
-        specularColor.rgb = floor(saturate(specularColor.rgb) * specularLayer) / specularLayer;
-        
-        specularColor.a = 1;
-    }
-    else if (MaterialType == 7) //Bended
-    {
-        
-        float diffuseLayer = 4.0f;
-        diffuse = nol * .5f + .5f;
-        diffuse = floor(diffuse * diffuseLayer) / diffuseLayer;
-        
-        float specularLayer = 2;
-        float3 f0 = .1f;
-        specularColor.rgb += FresnelSchlickMethod(f0, normal, view, 3).rgb;
-        
-        specularColor.rgb = floor(saturate(specularColor.rgb) * specularLayer) / specularLayer;
-        
-        specularColor.a = 1;
-        float4 color2 = float4(.4f, .5f, .8f, 1);
-        material.BaseColor = lerp(color2, material.BaseColor, nol);
-    }
-    else if (MaterialType == 8) //Bended
-    {
-        float diffuseLayer = 4.0f;
-        diffuse = nol * .5f + .5f;
-        diffuse = floor(diffuse * diffuseLayer) / diffuseLayer;
-        
-        float specularLayer = 2;
-        float3 f0 = .1f;
-        specularColor.rgb += FresnelSchlickMethod(f0, normal, view, 3).rgb;
-        
-        float smoothness = 1.f - saturate(Roughness);
-        float m = 100 * smoothness;
-        //float3 halfView = normalize(view + lightDir);
-        //specularColor.rgb += nol > 0 ? pow(saturate(dot(normal, halfView)), m) :0;
-        float3 reflectLight = normalize(reflect(-lightDir, normal));
-        specularColor.rgb += pow(saturate(dot(view, reflectLight)), m) * 31.25;
-        
-        specularColor.rgb = saturate(specularColor.rgb) * specularLayer;
-        
-        specularColor.a = 1;
-    }
-    else if (MaterialType == 9) //Back Light
-    {
-        float sssValue = .3f;
-        diffuse = pow(saturate(dot(-normalize(normal * sssValue + lightDir), view)), 15.f);
-        float wrapValue = 2.f;
-        diffuse += saturate((nol + wrapValue) / (1 + wrapValue));
-        
-        float3 reflectLight = normalize(reflect(-lightDir, normal));
-        float smoothness = 1.f - saturate(Roughness);
-        float m = 100 * smoothness;
-        specularColor.rgb = pow(saturate(dot(view, reflectLight)), m);
-        specularColor.a = 1;
+        }
+        else if (MaterialType == 4) //WrapLight
+        {
+            //float wrapValue = 1.f; //lambertain
+            float wrapValue = 2.f;
+            diffuse += saturate((nol + wrapValue) / (1 + wrapValue));
+        }
+        else if (MaterialType == 5) //Minnaert
+        {
+            float smoothness = 1.f - saturate(Roughness);
+            float r = 20 * smoothness;
+            diffuse += saturate(nol) * pow(dot(normal, view) * saturate(nol), r);
+        }
+        else if (MaterialType == 6) //Bended
+        {
+            float diffuseLayer = 4.0f;
+            diffuse += floor((nol * .5f + .5f) * diffuseLayer) / diffuseLayer;
+            
+            float specularLayer = 2;
+            float3 f0 = .1f;
+            
+            specularColor.rgb += floor(saturate(FresnelSchlickMethod(f0, normal, view, 3).rgb) * specularLayer) / specularLayer;
+            
+            specularColor.a = 1;
+        }
+        else if (MaterialType == 7) //Bended
+        {
+            
+            float diffuseLayer = 4.0f;
+            diffuse += floor((nol * .5f + .5f) * diffuseLayer) / diffuseLayer;
+            
+            float specularLayer = 2;
+            float3 f0 = .1f;
+            
+            specularColor.rgb += floor(saturate(FresnelSchlickMethod(f0, normal, view, 3).rgb) * specularLayer) / specularLayer;
+            
+            specularColor.a = 1;
+            float4 color2 = float4(.4f, .5f, .8f, 1);
+            material.BaseColor = lerp(color2, material.BaseColor, nol);
+        }
+        else if (MaterialType == 8) //Bended
+        {
+            float diffuseLayer = 4.0f;
+            diffuse += floor((nol * .5f + .5f) * diffuseLayer) / diffuseLayer;
+            
+            float specularLayer = 2;
+            float3 f0 = .1f;
+            
+            float smoothness = 1.f - saturate(Roughness);
+            float m = 100 * smoothness;
+            //float3 halfView = normalize(view + lightDir);
+            //specularColor.rgb += nol > 0 ? pow(saturate(dot(normal, halfView)), m) :0;
+            float3 reflectLight = normalize(reflect(-lightDir, normal));
+            
+            specularColor.rgb = saturate((pow(saturate(dot(view, reflectLight)), m) * 31.25)) * specularLayer;
+            
+            specularColor.a = 1;
+        }
+        else if (MaterialType == 9) //Back Light
+        {
+            float sssValue = .3f;
+            diffuse = pow(saturate(dot(-normalize(normal * sssValue + lightDir), view)), 15.f);
+            float wrapValue = 2.f;
+            diffuse += saturate((nol + wrapValue) / (1 + wrapValue));
+            
+            float3 reflectLight = normalize(reflect(-lightDir, normal));
+            float smoothness = 1.f - saturate(Roughness);
+            float m = 100 * smoothness;
+            specularColor.rgb += pow(saturate(dot(view, reflectLight)), m);
+            specularColor.a = 1;
 
-    }
-    else if (MaterialType == 10) //AnisotropyKajiyaKay
-    {
-        
+        }
+        else if (MaterialType == 10) //AnisotropyKajiyaKay
+        {
+            
 
-    }
-    else if (MaterialType == 11) //OrenNayar
-    {
-        float nov = dot(normal, view);
-        float phiri = length(view - normal * nov) * length(lightDir - normal * nol);
-        
-        float acosNOV = acos(nov);
-        float acosNOL = acos(nol);
-        
-        float alpha = max(acosNOV, acosNOL);
-        float beta = min(acosNOV, acosNOL);
-        
-        float roughness = pow(Roughness, 2);
-        
-        float a = 1 - .5f * (roughness / (roughness + .33f));
-        float b = .45f * (roughness / (roughness + .09f));
+        }
+        else if (MaterialType == 11) //OrenNayar
+        {
+            float nov = dot(normal, view);
+            float phiri = length(view - normal * nov) * length(lightDir - normal * nol);
+            
+            float acosNOV = acos(nov);
+            float acosNOL = acos(nol);
+            
+            float alpha = max(acosNOV, acosNOL);
+            float beta = min(acosNOV, acosNOL);
+            
+            float roughness = pow(Roughness, 2);
+            
+            float a = 1 - .5f * (roughness / (roughness + .33f));
+            float b = .45f * (roughness / (roughness + .09f));
 
-        diffuse = saturate(nol) * (a + b * saturate(phiri) * sin(alpha) * tan(beta));
+            diffuse += saturate(nol) * (a + b * saturate(phiri) * sin(alpha) * tan(beta));
 
-    }
-    else if (MaterialType == 20) //PBR
-    {
-        float3 L = lightDir;
-        float3 V = view;
-        float3 H = normalize(V + L);
-        float3 N = normal;
-        float PI = acos(-1.0f);
-        
-        float Roughness = .2f;
-        float Metallic = .2f;
+        }
+        else if (MaterialType == 20) //PBR
+        {
+            float3 L = lightDir;
+            float3 V = view;
+            float3 H = normalize(V + L);
+            float3 N = normal;
+            float PI = acos(-1.0f);
+            
+            float Roughness = .2f;
+            float Metallic = .2f;
 
-        float4 D = GetDistributionGGX(N, H, Roughness);
+            float4 D = GetDistributionGGX(N, H, Roughness);
+            
+            float3 F0 = 0.04;
+            F0 = lerp(F0, material.BaseColor.rgb, Metallic);
+            float4 F = float4(FresnelSchlickMethod(F0, N, V, 5), 1.0f);
+            
+            float G = GSmith(N, V, L, Roughness);
+            
+            float4 Kd = 1.0f - F;
+            Kd *= 1.0f - Metallic;
+            
+            float3 Diffuse = Kd.rgb * GetDiffuseLambert(material.BaseColor.rgb);
+            
+            float NoV = saturate(dot(N, V));
+            float NoL = nol;
+            
+            float4 Value = (D * G * F) / (4 * NoV * NoL);
+            float4 Specalur = float4 (Value.rgb, 1.0f);
+            
+            float3 Radiance = lightIntensity;
+            float3 finalColor = (Diffuse + Specalur.rgb) * NoL * Radiance;
+            
+            return float4(finalColor.rgb, 1.0f);
+        }
+        else if (MaterialType == 100) //Fresnel
+        {
+            float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
+            float3 f0 = .1f;
+            specularColor.rgb = FresnelSchlickMethod(f0, normal, view, 3).rgb;
+            break;
+        }
         
-        float3 F0 = 0.04;
-        F0 = lerp(F0, material.BaseColor.rgb, Metallic);
-        float4 F = float4(FresnelSchlickMethod(F0, N, V, 5), 1.0f);
-        
-        float G = GSmith(N, V, L, Roughness);
-        
-        float4 Kd = 1.0f - F;
-        Kd *= 1.0f - Metallic;
-        
-        float3 Diffuse = Kd.rgb * GetDiffuseLambert(material.BaseColor.rgb);
-        
-        float NoV = saturate(dot(N, V));
-        float NoL = nol;
-        
-        float4 Value = (D * G * F) / (4 * NoV * NoL);
-        float4 Specalur = float4 (Value.rgb, 1.0f);
-        
-        float3 Radiance = LightIntensity;
-        float3 finalColor = (Diffuse + Specalur.rgb) * NoL * Radiance;
-        
-        return float4(finalColor.rgb, 1.0f);
-    }
-    else if (MaterialType == 100) //Fresnel
-    {
-        float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
-        float3 f0 = .1f;
-        specularColor.rgb = FresnelSchlickMethod(f0, normal, view, 3).rgb;
     }
     
     return material.BaseColor * diffuse + material.BaseColor * ambientLight + material.BaseColor * specularColor;

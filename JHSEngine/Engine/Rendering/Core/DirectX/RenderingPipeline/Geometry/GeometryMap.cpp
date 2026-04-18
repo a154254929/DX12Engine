@@ -112,16 +112,19 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
         }
     }
     //更新灯光
+    FLightConstantBuffer lightConstantBuffer;
+    lightConstantBuffer.lightInfo.x = GetLightManager()->lights.size();
     for (int i = 0; i < GetLightManager()->lights.size(); ++i)
     {
-        FLightConstantBuffer lightConstantBuffer;
         if (auto light = GetLightManager()->lights[i])
         {
-            lightConstantBuffer.lightDirection = light->GetForwardVector();
+            lightConstantBuffer.screenLight[i].lightDirection = light->GetForwardVector();
+            fvector_3d lightIntensity = light->GetLightInstensity();
+            lightConstantBuffer.screenLight[i].lightIntensity = XMFLOAT3(lightIntensity.x, lightIntensity.y, lightIntensity.z);
         }
-
-        lightConstantBufferView.Update(i, &lightConstantBuffer);
     }
+
+    lightConstantBufferView.Update(0, &lightConstantBuffer);
 
     //更新视口
     XMMATRIX projectMatrix = XMLoadFloat4x4(&viewportInfo.projectMatrix);
