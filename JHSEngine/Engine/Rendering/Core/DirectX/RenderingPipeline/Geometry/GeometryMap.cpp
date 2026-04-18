@@ -130,17 +130,22 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
             switch (lightType)
             {
                 case ELightType::PointLight:
-                    if (CPointLightComponent* pointLight = dynamic_cast<CPointLightComponent*>(light))
-                    {
-                        lightConstantBuffer.sceneLights[i].startAttenuation = pointLight->GetStartAttenuation();
-                        lightConstantBuffer.sceneLights[i].endAttenuation = pointLight->GetEndAttenuation();
-                    }
-                    break;
                 case ELightType::SpotLight:
-                    if (CSpotLightComponent* SpotLight = dynamic_cast<CSpotLightComponent*>(light))
+                    if (CRangeLightComponent* rangeLight = dynamic_cast<CRangeLightComponent*>(light))
                     {
-                        lightConstantBuffer.sceneLights[i].startAttenuation = SpotLight->GetStartAttenuation();
-                        lightConstantBuffer.sceneLights[i].endAttenuation = SpotLight->GetEndAttenuation();
+                        lightConstantBuffer.sceneLights[i].startAttenuation = rangeLight->GetStartAttenuation();
+                        lightConstantBuffer.sceneLights[i].endAttenuation = rangeLight->GetEndAttenuation();
+                        if (lightType == ELightType::SpotLight)
+                        {
+                            if(CSpotLightComponent* spotLight = dynamic_cast<CSpotLightComponent*>(rangeLight))
+                            {
+                               lightConstantBuffer.sceneLights[i].startAttenuation = spotLight->GetStartAttenuation();
+                               lightConstantBuffer.sceneLights[i].endAttenuation = spotLight->GetEndAttenuation();
+                               float angle2Radian = acos(-1.0) / 180.f;
+                               lightConstantBuffer.sceneLights[i].conicalInnerCorner = math_utils::angle_to_radian(spotLight->GetConicalInnerCorner());
+                               lightConstantBuffer.sceneLights[i].conicalOuterCorner = spotLight->GetConicalOuterCorner() * angle2Radian;
+                            }
+                        }
                     }
                     break;
             }

@@ -23,3 +23,15 @@ CSpotLightComponent::CSpotLightComponent()
     
     lightType = ELightType::SpotLight;
 }
+
+void CSpotLightComponent::SetConicalInnerCorner(float inConicalInnerCorner)
+{
+    conicalInnerCorner = inConicalInnerCorner;
+    conicalOuterCorner = max(inConicalInnerCorner, conicalOuterCorner);
+}
+
+void CSpotLightComponent::SetConicalOuterCorner(float inConicalOuterCorner)
+{
+    conicalOuterCorner = inConicalOuterCorner;
+    conicalInnerCorner = min(inConicalOuterCorner, conicalOuterCorner);
+}

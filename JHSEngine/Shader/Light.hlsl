@@ -3,10 +3,16 @@ struct Light
 {
     float3 LightIntensity;
     float StartAttenuation;
+    
     float3 LightDirection;
     float EndAttenuation;
+    
     float3 LightPosition;
     int LightType;
+    
+    float ConicalInnerCorner; //for spot light
+    float ConicalOuterCorner; //for spot light
+    float2 xx;
 };
 
 float3 GetLightDirection(Light light, float3 inWorldPosition)
