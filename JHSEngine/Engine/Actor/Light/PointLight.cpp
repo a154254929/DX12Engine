@@ -1,8 +1,10 @@
 #include "PointLight.h"
+#include "../../Component/Light/PointLightComponent.h"
 
 GPointLight::GPointLight()
+    : Super()
 {
-    PointLightComponent = CreateObject<CPointLightComponent>(new CPointLightComponent());
+    SetLightComponent(CreateObject<CPointLightComponent>(new CPointLightComponent()));
 }
 
 void GPointLight::Tick(float deltaTime)
@@ -14,37 +16,4 @@ void GPointLight::Tick(float deltaTime)
     //rotationV3.x += deltaTime * 15.0f;
     
     SetRotation(rotationV3);
-}
-
-void GPointLight::SetPosition(const XMFLOAT3& inPosition)
-{
-    Super::SetPosition(inPosition);
-    PointLightComponent->SetPosition(inPosition);
-}
-
-void GPointLight::SetRotation(const fvector_3d& inRotation)
-{
-    Super::SetRotation(inRotation);
-    PointLightComponent->SetRotation(inRotation);
-}
-
-void GPointLight::SetScale(const fvector_3d& inScale)
-{
-    Super::SetScale(inScale);
-    PointLightComponent->SetScale(inScale);
-}
-
-void GPointLight::SetLightIntensity(const fvector_3d& inLightIntensity)
-{
-    PointLightComponent->SetLightIntensity(inLightIntensity);
-}
-
-void GPointLight::SetStartAttenuation(const float inStartAttenuation)
-{
-    PointLightComponent->SetStartAttenuation(inStartAttenuation);
-}
-
-void GPointLight::SetEndAttenuation(const float inEndAttenuation)
-{
-    PointLightComponent->SetEndAttenuation(inEndAttenuation);
 }

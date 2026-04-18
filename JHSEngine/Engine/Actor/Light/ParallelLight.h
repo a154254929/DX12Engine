@@ -1,18 +1,11 @@
 #pragma once
-#include "../Core/ActorObject.h"
-#include "../../Component/Light/ParallelLightComponent.h"
+#include "Core/Light.h"
 
-class GParallelLight :public GActorObject
+class GParallelLight :public GLight
 {
-    typedef GActorObject Super;
-    CVARIABLE()
-    CParallelLightComponent* parallelLightComponent;
+    typedef GLight Super;
 public:
     GParallelLight();
 
     virtual void Tick(float deltaTime);
-public:
-    void SetPosition(const XMFLOAT3& inPosition);
-    void SetRotation(const fvector_3d& inRotation);
-    void SetScale(const fvector_3d& inScale);
 };

@@ -1,21 +1,11 @@
 #pragma once
-#include "../Core/ActorObject.h"
-#include "../../Component/Light/PointLightComponent.h"
+#include "Core/RangeLight.h"
 
-class GPointLight :public GActorObject
+class GPointLight :public GRangeLight
 {
-    typedef GActorObject Super;
-    CVARIABLE()
-    CPointLightComponent* PointLightComponent;
+    typedef GRangeLight Super;
 public:
     GPointLight();
 
     virtual void Tick(float deltaTime);
-public:
-    void SetPosition(const XMFLOAT3& inPosition);
-    void SetRotation(const fvector_3d& inRotation);
-    void SetScale(const fvector_3d& inScale);
-    void SetLightIntensity(const fvector_3d& inLightIntensity);
-    void SetStartAttenuation(const float inStartAttenuation);
-    void SetEndAttenuation(const float inEndAttenuation);
 };

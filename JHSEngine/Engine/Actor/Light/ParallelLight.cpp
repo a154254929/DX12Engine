@@ -1,8 +1,10 @@
 #include "ParallelLight.h"
+#include "../../Component/Light/ParallelLightComponent.h"
 
 GParallelLight::GParallelLight()
+    : Super()
 {
-    parallelLightComponent = CreateObject<CParallelLightComponent>(new CParallelLightComponent());
+    SetLightComponent(CreateObject<CParallelLightComponent>(new CParallelLightComponent()));
 }
 
 void GParallelLight::Tick(float deltaTime)
@@ -14,22 +16,4 @@ void GParallelLight::Tick(float deltaTime)
     //rotationV3.x += deltaTime * 15.0f;
     
     SetRotation(rotationV3);
-}
-
-void GParallelLight::SetPosition(const XMFLOAT3& inPosition)
-{
-    Super::SetPosition(inPosition);
-    parallelLightComponent->SetPosition(inPosition);
-}
-
-void GParallelLight::SetRotation(const fvector_3d& inRotation)
-{
-    Super::SetRotation(inRotation);
-    parallelLightComponent->SetRotation(inRotation);
-}
-
-void GParallelLight::SetScale(const fvector_3d& inScale)
-{
-    Super::SetScale(inScale);
-    parallelLightComponent->SetScale(inScale);
 }

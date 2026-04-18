@@ -5,8 +5,6 @@
 
 CSpotLightComponent::CSpotLightComponent()
     : Super()
-    , startAttenuation(1.0f)
-    , endAttenuation(10.0f)
 {
     //读取模型资源
     static string meshPath = "../JHSEngine/Asset/SpotLightMesh.obj";
