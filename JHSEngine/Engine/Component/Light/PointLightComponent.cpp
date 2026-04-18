@@ -1,12 +1,15 @@
-#include "ParallelLightComponent.h"
+#include "PointLightComponent.h"
 #include "../../Mesh/Core/MeshManager.h"
 #include "../../Mesh/Core/Material/Material.h"
 #include "../Mesh/Core/MeshComponent.h"
 
-CParallelLightComponent::CParallelLightComponent()
+CPointLightComponent::CPointLightComponent()
+    : Super()
+    , startAttenuation(1.0f)
+    , endAttenuation(10.0f)
 {
     //读取模型资源
-    static string meshPath = "../JHSEngine/Asset/SunMesh.obj";
+    static string meshPath = "../JHSEngine/Asset/PointLightMesh.obj";
     SetLightMesh(GetMeshManager()->CreateMeshComponent(meshPath));
     
     //设置现况模式
@@ -20,5 +23,5 @@ CParallelLightComponent::CParallelLightComponent()
         }
     }
     
-    lightType = ELightType::ParallelLight;
+    lightType = ELightType::PointLight;
 }

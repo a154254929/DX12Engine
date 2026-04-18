@@ -1,4 +1,5 @@
 #pragma once
+#include "LightType.h"
 #include "../../TransformationComponent.h"
 #include "../../../Interface/DirectXDeviceInterface.h"
 
@@ -17,6 +18,8 @@ public:
     const fvector_3d GetLightInstensity(){return lightInstensity;}
     void SetLightInstansity(const fvector_3d& inLightIntensity){lightInstensity = inLightIntensity;}
     
+    const ELightType GetLightType(){return lightType;}
+    
     void SetPosition(const XMFLOAT3& inPosition);
     void SetRotation(const fvector_3d& inRotation);
     void SetScale(const fvector_3d& inScale);
@@ -28,4 +31,5 @@ protected:
     
 protected:
     fvector_3d lightInstensity;
+    ELightType lightType;
 };

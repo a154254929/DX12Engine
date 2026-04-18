@@ -9,7 +9,10 @@
 #include "../../../../../Mesh/Core/Material/Material.h"
 #include "../../../../../Component/Mesh/Core/MeshComponent.h"
 #include "../../../../../Component/Light/Core/LightComponent.h"
+#include "../../../../../Component/Light/Core/LightType.h"
 #include "../../../../../Manager/LightManager.h"
+#include "../../../../../Component/Light/PointLightComponent.h"
+#include "../../../../../Component/Light/SpotLightComponent.h"
 
 FGeometryMap::FGeometryMap()
 {
@@ -121,6 +124,26 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
             lightConstantBuffer.screenLight[i].lightDirection = light->GetForwardVector();
             fvector_3d lightIntensity = light->GetLightInstensity();
             lightConstantBuffer.screenLight[i].lightIntensity = XMFLOAT3(lightIntensity.x, lightIntensity.y, lightIntensity.z);
+            lightConstantBuffer.screenLight[i].lightPosition = light->GetPosition();
+            ELightType lightType = light->GetLightType();
+            lightConstantBuffer.screenLight[i].lightType = (int)lightType;
+            switch (lightType)
+            {
+                case ELightType::PointLight:
+                    if (CPointLightComponent* pointLight = dynamic_cast<CPointLightComponent*>(light))
+                    {
+                        lightConstantBuffer.screenLight[i].startAttenuation = pointLight->GetStartAttenuation();
+                        lightConstantBuffer.screenLight[i].endAttenuation = pointLight->GetEndAttenuation();
+                    }
+                    break;
+                case ELightType::SpotLight:
+                    if (CSpotLightComponent* SpotLight = dynamic_cast<CSpotLightComponent*>(light))
+                    {
+                        lightConstantBuffer.screenLight[i].startAttenuation = SpotLight->GetStartAttenuation();
+                        lightConstantBuffer.screenLight[i].endAttenuation = SpotLight->GetEndAttenuation();
+                    }
+                    break;
+            }
         }
     }
 

@@ -16,6 +16,8 @@
 #include "../../../../Component/Mesh/Core/MeshComponent.h"
 #include "../../../../Manager/LightManager.h"
 #include "../../../../Actor/Light/ParallelLight.h"
+#include "../../../../Actor/Light/PointLight.h"
+#include "../../../../Actor/Light/SpotLight.h"
 
 #if defined(_WIN32)
 #include "../../../../Core/WinMainCommandParameters.h"
@@ -77,16 +79,27 @@ int CDirectXRenderingEngine::PostInit()
     {
         
         //构建灯光
+        /*
         if (GParallelLight* parallelLight1 = world->CreateActorObject<GParallelLight>())
         {
             parallelLight1->SetPosition(XMFLOAT3(0.0f, .0f, -8.0f));
             parallelLight1->SetRotation(fvector_3d(45.f, 90.0f, .0f));
         }
-        
         if (GParallelLight* parallelLight2 = world->CreateActorObject<GParallelLight>())
         {
             parallelLight2->SetPosition(XMFLOAT3(0.0f, 2.0f, -8.0f));
             parallelLight2->SetRotation(fvector_3d(45.f, -30.0f, .0f));
+        }
+        */
+        if (GPointLight* pointLight1 = world->CreateActorObject<GPointLight>())
+        {
+            pointLight1->SetPosition(XMFLOAT3(0.0f, .0f, -8.0f));
+            pointLight1->SetRotation(fvector_3d(0.f, 0.0f, .0f));
+        }
+        if (GSpotLight* spotLight1 = world->CreateActorObject<GSpotLight>())
+        {
+            spotLight1->SetPosition(XMFLOAT3(0.0f, .0f, -6.0f));
+            spotLight1->SetRotation(fvector_3d(0.f, 0.0f, .0f));
         }
         
         

@@ -3,10 +3,13 @@
 
 struct FLight
 {
+    FLight();
     XMFLOAT3 lightIntensity;
-    float XX = 0.f;
+    float startAttenuation;
     XMFLOAT3 lightDirection;
-    float xx1 = 0.f;
+    float endAttenuation;
+    XMFLOAT3 lightPosition;
+    int lightType;
 };
 
 struct FLightConstantBuffer

@@ -2,9 +2,11 @@
 struct Light
 {
     float3 LightIntensity;
-    float xx;
+    float StartAttenuation;
     float3 LightDirection;
-    float xx1;
+    float EndAttenuation;
+    float3 LightPosition;
+    int LightType;
 };
 #define LIGHT_DEFINED
 #endif
