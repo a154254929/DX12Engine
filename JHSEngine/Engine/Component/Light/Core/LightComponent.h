@@ -15,8 +15,8 @@ public:
     
     CMeshComponent* GetLightMesh(){return lightMesh;}
     
-    const fvector_3d GetLightInstensity(){return lightInstensity;}
-    void SetLightInstansity(const fvector_3d& inLightIntensity){lightInstensity = inLightIntensity;}
+    const fvector_3d GetLightIntensity(){return lightIntensity;}
+    void SetLightIntensity(const fvector_3d& inLightIntensity){lightIntensity = inLightIntensity;}
     
     const ELightType GetLightType(){return lightType;}
     
@@ -30,6 +30,6 @@ protected:
     void SetLightMesh(CMeshComponent* inLightMesh);
     
 protected:
-    fvector_3d lightInstensity;
+    fvector_3d lightIntensity;
     ELightType lightType;
 };

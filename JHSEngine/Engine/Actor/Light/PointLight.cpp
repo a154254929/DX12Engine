@@ -33,3 +33,18 @@ void GPointLight::SetScale(const fvector_3d& inScale)
     Super::SetScale(inScale);
     PointLightComponent->SetScale(inScale);
 }
+
+void GPointLight::SetLightIntensity(const fvector_3d& inLightIntensity)
+{
+    PointLightComponent->SetLightIntensity(inLightIntensity);
+}
+
+void GPointLight::SetStartAttenuation(const float inStartAttenuation)
+{
+    PointLightComponent->SetStartAttenuation(inStartAttenuation);
+}
+
+void GPointLight::SetEndAttenuation(const float inEndAttenuation)
+{
+    PointLightComponent->SetEndAttenuation(inEndAttenuation);
+}

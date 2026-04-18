@@ -121,26 +121,26 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
     {
         if (auto light = GetLightManager()->lights[i])
         {
-            lightConstantBuffer.screenLight[i].lightDirection = light->GetForwardVector();
-            fvector_3d lightIntensity = light->GetLightInstensity();
-            lightConstantBuffer.screenLight[i].lightIntensity = XMFLOAT3(lightIntensity.x, lightIntensity.y, lightIntensity.z);
-            lightConstantBuffer.screenLight[i].lightPosition = light->GetPosition();
+            lightConstantBuffer.sceneLights[i].lightDirection = light->GetForwardVector();
+            fvector_3d lightIntensity = light->GetLightIntensity();
+            lightConstantBuffer.sceneLights[i].lightIntensity = XMFLOAT3(lightIntensity.x, lightIntensity.y, lightIntensity.z);
+            lightConstantBuffer.sceneLights[i].lightPosition = light->GetPosition();
             ELightType lightType = light->GetLightType();
-            lightConstantBuffer.screenLight[i].lightType = (int)lightType;
+            lightConstantBuffer.sceneLights[i].lightType = (int)lightType;
             switch (lightType)
             {
                 case ELightType::PointLight:
                     if (CPointLightComponent* pointLight = dynamic_cast<CPointLightComponent*>(light))
                     {
-                        lightConstantBuffer.screenLight[i].startAttenuation = pointLight->GetStartAttenuation();
-                        lightConstantBuffer.screenLight[i].endAttenuation = pointLight->GetEndAttenuation();
+                        lightConstantBuffer.sceneLights[i].startAttenuation = pointLight->GetStartAttenuation();
+                        lightConstantBuffer.sceneLights[i].endAttenuation = pointLight->GetEndAttenuation();
                     }
                     break;
                 case ELightType::SpotLight:
                     if (CSpotLightComponent* SpotLight = dynamic_cast<CSpotLightComponent*>(light))
                     {
-                        lightConstantBuffer.screenLight[i].startAttenuation = SpotLight->GetStartAttenuation();
-                        lightConstantBuffer.screenLight[i].endAttenuation = SpotLight->GetEndAttenuation();
+                        lightConstantBuffer.sceneLights[i].startAttenuation = SpotLight->GetStartAttenuation();
+                        lightConstantBuffer.sceneLights[i].endAttenuation = SpotLight->GetEndAttenuation();
                     }
                     break;
             }

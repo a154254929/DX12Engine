@@ -8,9 +8,9 @@ public:
     CSpotLightComponent();
     
     const float GetStartAttenuation(){return startAttenuation;}
-    float SetStartAttenuation(float inStartAttenuation){startAttenuation = inStartAttenuation;}
+    void SetStartAttenuation(float inStartAttenuation){startAttenuation = inStartAttenuation;}
     const float GetEndAttenuation(){return endAttenuation;}
-    float SetEndAttenuation(float inEndAttenuation){endAttenuation = inEndAttenuation;}
+    void SetEndAttenuation(float inEndAttenuation){endAttenuation = inEndAttenuation;}
     
 protected:
     float startAttenuation;

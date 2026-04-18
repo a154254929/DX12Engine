@@ -3,7 +3,7 @@
 #include "../../Mesh/Core/MeshComponent.h"
 
 CLightComponent::CLightComponent()
-    :lightInstensity(1.f, 1.f, 1.f)
+    :lightIntensity(1.f, 1.f, 1.f)
 {
     GetLightManager()->AddLight(this);
 }

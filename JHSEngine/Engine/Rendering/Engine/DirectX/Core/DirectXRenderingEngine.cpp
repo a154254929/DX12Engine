@@ -91,15 +91,19 @@ int CDirectXRenderingEngine::PostInit()
             parallelLight2->SetRotation(fvector_3d(45.f, -30.0f, .0f));
         }
         */
-        if (GPointLight* pointLight1 = world->CreateActorObject<GPointLight>())
-        {
-            pointLight1->SetPosition(XMFLOAT3(0.0f, .0f, -8.0f));
-            pointLight1->SetRotation(fvector_3d(0.f, 0.0f, .0f));
-        }
+        // if (GPointLight* pointLight1 = world->CreateActorObject<GPointLight>())
+        // {
+        //     pointLight1->SetPosition(XMFLOAT3(0.0f, .0f, -8.0f));
+        //     pointLight1->SetRotation(fvector_3d(0.f, 0.0f, .0f));
+        // }
         if (GSpotLight* spotLight1 = world->CreateActorObject<GSpotLight>())
         {
             spotLight1->SetPosition(XMFLOAT3(0.0f, .0f, -6.0f));
             spotLight1->SetRotation(fvector_3d(0.f, 0.0f, .0f));
+            
+            spotLight1->SetLightIntensity(fvector_3d(7.f, 7.f, 7.f));
+            //spotLight1->SetStartAttenuation(1.f);
+            spotLight1->SetEndAttenuation(130.f);
         }
         
         

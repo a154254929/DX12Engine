@@ -17,5 +17,5 @@ struct FLightConstantBuffer
     FLightConstantBuffer();
     
     XMINT4 lightInfo;
-    FLight screenLight[16];
+    FLight sceneLights[16];
 };

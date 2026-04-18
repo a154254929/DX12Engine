@@ -28,7 +28,7 @@ cbuffer MaterialConstBuffer : register(b2)
 cbuffer LightConstBuffer : register(b3)
 {
     int4 LightInfo;
-    Light ScreenLights[16];
+    Light SceneLights[16];
 }
 
 
@@ -85,13 +85,13 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     material.BaseColor = BaseColor;
     float3 normal = normalize(input.worldNormal.xyz);
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
-    float diffuse = 0.f;
+    float4 lightStrengths = { 0.f,0.f,0.f,1.f };
     float4 specularColor = 0;
     for (int i = 0; i < LightInfo.x; i++)
     {
-        float3 lightIntensity = ScreenLights[i].LightIntensity;
-        if (length(lightIntensity) <= 0) continue;
-        float3 lightDir = normalize(-ScreenLights[i].LightDirection);
+        float diffuse = 0.f;
+        float4 lightStrength = ComputeLightStrength(SceneLights[i], normal, input.worldPosition.xyz);
+        float3 lightDir = normalize(GetLightDirection(SceneLights[i], input.worldPosition.xyz));
     
         float nol = dot(lightDir, normal);
         if (MaterialType == 0)  //lambertain
@@ -219,6 +219,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             diffuse += pow(saturate(nol), 2.0f) * (a + b * saturate(phiri) * sin(alpha) * tan(beta));
 
         }
+        /*
         else if (MaterialType == 20) //PBR
         {
             float3 L = lightDir;
@@ -254,6 +255,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             
             return float4(finalColor.rgb, 1.0f);
         }
+        */
         else if (MaterialType == 100) //Fresnel
         {
             float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
@@ -262,9 +264,11 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             break;
         }
         
+        lightStrengths += lightStrength * diffuse * float4(SceneLights[i].LightIntensity,1.f);
     }
     
-    return material.BaseColor * diffuse + material.BaseColor * ambientLight + material.BaseColor * specularColor;
+    return lightStrengths * (material.BaseColor + material.BaseColor * specularColor)
+        + material.BaseColor * ambientLight;
     //return material.BaseColor;
     
     //return float4(input.normal, 1);

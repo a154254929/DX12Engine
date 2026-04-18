@@ -53,7 +53,7 @@ int CWindowsEngine::Init(FWinMainCommandParameters inParameters)
     renderingEngine->Init(inParameters);
 
     world = CreateObject<CWorld>(new CWorld());
-	renderingEngine->world = world;
+    renderingEngine->world = world;
 
     Engine_Log("Engine initialization complete.");
     return 0;

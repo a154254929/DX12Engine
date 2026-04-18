@@ -9,7 +9,7 @@ CSpotLightComponent::CSpotLightComponent()
     , endAttenuation(10.0f)
 {
     //读取模型资源
-    static string meshPath = "../JHSEngine/Asset/PointLightMesh.obj";
+    static string meshPath = "../JHSEngine/Asset/SpotLightMesh.obj";
     SetLightMesh(GetMeshManager()->CreateMeshComponent(meshPath));
     
     //设置现况模式

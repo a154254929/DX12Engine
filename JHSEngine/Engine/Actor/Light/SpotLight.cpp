@@ -9,7 +9,7 @@ void GSpotLight::Tick(float deltaTime)
 {
     fvector_3d rotationV3 = GetRotation();
     
-    //rotationV3.x += deltaTime * 15.0f;
+    rotationV3.x += deltaTime * 15.0f;
     //rotationV3.y += deltaTime * 25.0f;
     //rotationV3.x += deltaTime * 15.0f;
     
@@ -32,4 +32,19 @@ void GSpotLight::SetScale(const fvector_3d& inScale)
 {
     Super::SetScale(inScale);
     SpotLightComponent->SetScale(inScale);
+}
+
+void GSpotLight::SetLightIntensity(const fvector_3d& inLightIntensity)
+{
+    SpotLightComponent->SetLightIntensity(inLightIntensity);
+}
+
+void GSpotLight::SetStartAttenuation(const float inStartAttenuation)
+{
+    SpotLightComponent->SetStartAttenuation(inStartAttenuation);
+}
+
+void GSpotLight::SetEndAttenuation(const float inEndAttenuation)
+{
+    SpotLightComponent->SetEndAttenuation(inEndAttenuation);
 }
