@@ -21,7 +21,7 @@ void CLightComponent::SetPosition(const XMFLOAT3& inPosition)
 void CLightComponent::SetRotation(const fvector_3d& inRotation)
 {
     Super::SetRotation(inRotation);
-    lightMesh->SetRotation(inRotation);
+    lightMesh->SetRotation(inRotation * -1);
 }
 
 void CLightComponent::SetScale(const fvector_3d& inScale)
