@@ -21,7 +21,7 @@ void FDirectXRootSignature::BuildRootSignature()
 {
 
     //构建根签名
-    CD3DX12_ROOT_PARAMETER rootParam[4];
+    CD3DX12_ROOT_PARAMETER rootParam[5];
 
     //Object cbv描述表
     CD3DX12_DESCRIPTOR_RANGE descriptorRangeObjCBV;
@@ -55,16 +55,37 @@ void FDirectXRootSignature::BuildRootSignature()
         3
     );
 
+    //Texture srv描述表
+    CD3DX12_DESCRIPTOR_RANGE descriptorRangeTextureSRV;
+    descriptorRangeTextureSRV.Init(
+        D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
+        1,
+        4
+    );
+
     rootParam[0].InitAsDescriptorTable(1, &descriptorRangeObjCBV);
     rootParam[1].InitAsDescriptorTable(1, &descriptorRangeViewportCBV);
     rootParam[2].InitAsDescriptorTable(1, &descriptorRangeMaterialCBV);
     rootParam[3].InitAsDescriptorTable(1, &descriptorRangeLightCBV);
+    rootParam[4].InitAsDescriptorTable(1, &descriptorRangeTextureSRV);
+    
+    //静态采样方式
+    std::vector<CD3DX12_STATIC_SAMPLER_DESC> samplerDescs;
+    samplerDescs.push_back(
+        CD3DX12_STATIC_SAMPLER_DESC(
+            0,
+            D3D12_FILTER_MIN_MAG_MIP_POINT,
+            D3D12_TEXTURE_ADDRESS_MODE_BORDER,
+            D3D12_TEXTURE_ADDRESS_MODE_BORDER,
+            D3D12_TEXTURE_ADDRESS_MODE_BORDER
+        )
+    );
 
     CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc(
-        4,
+        5,
         rootParam,
-        0,
-        nullptr,
+        samplerDescs.size(),    //数量
+        samplerDescs.data(),    //实际指针
         D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT
     );
 

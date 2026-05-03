@@ -2,6 +2,8 @@
 #include "Material.hlsl"
 #include "BRDF.hlsl"
 
+SamplerState SampleTextureState : register(s0);
+
 cbuffer ObjectConstBuffer : register(b0) //b0->b14
 {
     float4x4 WorldMatrix;
