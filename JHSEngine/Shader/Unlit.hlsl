@@ -20,14 +20,12 @@ cbuffer ViewportConstBuffer : register(b1)
 cbuffer MaterialConstBuffer : register(b2)
 {
     uint MaterialType;
-    uint XX1;
+    float Roughness;
     uint XX2;
     uint XX3;
     
     float4 BaseColor;
-    float Roughness;
     float4x4 Transformation;
-    float4x4 TextureTransform;
 }
 
 cbuffer LightConstBuffer : register(b3)

@@ -56,5 +56,5 @@ protected:
     float theta;
     float phi;
 
-    float speed = .5f;
+    float speed = .1f;
 };
