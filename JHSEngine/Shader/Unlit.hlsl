@@ -9,6 +9,10 @@ cbuffer ObjectConstBuffer : register(b0) //b0->b14
 {
     float4x4 WorldMatrix;
 	float4x4 ObjectTextureTransform;
+	uint MaterialIndex;
+	uint RR0;
+	uint RR1;
+	uint RR2;
 }
 
 cbuffer ViewportConstBuffer : register(b1)
@@ -17,7 +21,7 @@ cbuffer ViewportConstBuffer : register(b1)
     float4x4 ViewProjectionMatrix;
 }
 
-cbuffer MaterialConstBuffer : register(b2)
+struct MaterialConstBuffer
 {
     uint MaterialType;
     float Roughness;
@@ -26,7 +30,9 @@ cbuffer MaterialConstBuffer : register(b2)
     
     float4 BaseColor;
     float4x4 Transformation;
-}
+};
+
+StructuredBuffer<MaterialConstBuffer> Materials : register(t0, space1);
 
 cbuffer LightConstBuffer : register(b3)
 {
@@ -77,23 +83,25 @@ Attribute VertexShaderUnlit(Varying input)
 float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 {
 
+	MaterialConstBuffer materialConst = Materials[MaterialIndex];
+
     //BaseColor
-    if (MaterialType == 12) //phong
+    if (materialConst.MaterialType == 12) //phong
     {
         return input.color;
     }
-    else if (MaterialType == 13) //phong
+    else if (materialConst.MaterialType == 13) //phong
     {
         return float4(input.normal, 1.0f);
     }
-    else if (MaterialType == 14) //phong
+    else if (materialConst.MaterialType == 14) //phong
     {
         return float4(input.worldNormal, 1.0f);
     }
     float4 ambientLight = { .15f, .15f, .25f, 1.0f };
     
     FMaterial material;
-    material.BaseColor = BaseColor * BaseColorIndex >= 0 ? Texture2DMap[BaseColorIndex].Sample(Texture2DMap_Sampler, input.uv) : 1.0f;
+    material.BaseColor = materialConst.BaseColor;// * (materialConst.BaseColorIndex >= 0 ? Texture2DMap[materialConst.BaseColorIndex].Sample(Texture2DMap_Sampler, input.uv) : 1.0f);
     float3 normal = normalize(input.worldNormal.xyz);
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
     float4 lightStrengths = { 0.f,0.f,0.f,1.f };
@@ -106,49 +114,49 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         float3 lightDir = normalize(GetLightDirection(SceneLights[i], input.worldPosition.xyz));
     
         float nol = dot(lightDir, normal);
-        if (MaterialType == 0)  //lambertain
+        if (materialConst.MaterialType == 0)  //lambertain
         {
             diffuse += pow(saturate(nol), 2.0f);
         }
-        else if (MaterialType == 1) //half-lambertain
+        else if (materialConst.MaterialType == 1) //half-lambertain
         {
             float halfLambert = nol * .5f + .5f;
             diffuse += halfLambert;
         }
-        else if (MaterialType == 2) //phong
+        else if (materialConst.MaterialType == 2) //phong
         {
             diffuse += pow(saturate(nol), 2.0f);
             
             float3 reflectLight = normalize(reflect(-lightDir, normal));
-            float smoothness = 1.f - saturate(Roughness);
+            float smoothness = 1.f - saturate(materialConst.Roughness);
             float m = 100 * smoothness;
             specularColor.rgb += (m + 2.0f) * pow(saturate(dot(view, reflectLight)), m) / (acos(-1.0f) * 2.0f);
             specularColor.a = 1;
         }
-        else if (MaterialType == 3) //blinn-phong
+        else if (materialConst.MaterialType == 3) //blinn-phong
         {
             diffuse += pow(saturate(nol), 2.0f);
             
             float3 halfView = normalize(view + lightDir);
-            float smoothness = 1.f - saturate(Roughness);
+            float smoothness = 1.f - saturate(materialConst.Roughness);
             float m = 100 * smoothness;
             specularColor.rgb += (m + 2.0f) * pow(saturate(dot(normal, halfView)), m) / (acos(-1.0f) * 2.0f);
             specularColor.a = 1;
 
         }
-        else if (MaterialType == 4) //WrapLight
+        else if (materialConst.MaterialType == 4) //WrapLight
         {
             //float wrapValue = 1.f; //lambertain
             float wrapValue = 2.f;
             diffuse += saturate((nol + wrapValue) / (1 + wrapValue));
         }
-        else if (MaterialType == 5) //Minnaert
+        else if (materialConst.MaterialType == 5) //Minnaert
         {
-            float smoothness = 1.f - saturate(Roughness);
+            float smoothness = 1.f - saturate(materialConst.Roughness);
             float r = 20 * smoothness;
             diffuse += pow(saturate(nol), 2.0f) * pow(dot(normal, view) * pow(saturate(nol), 2.0f), r);
         }
-        else if (MaterialType == 6) //Bended
+        else if (materialConst.MaterialType == 6) //Bended
         {
             float diffuseLayer = 4.0f;
             diffuse += floor((nol * .5f + .5f) * diffuseLayer) / diffuseLayer;
@@ -160,7 +168,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             
             specularColor.a = 1;
         }
-        else if (MaterialType == 7) //Bended
+        else if (materialConst.MaterialType == 7) //Bended
         {
             
             float diffuseLayer = 4.0f;
@@ -175,7 +183,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float4 color2 = float4(.4f, .5f, .8f, 1);
             material.BaseColor = lerp(color2, material.BaseColor, nol);
         }
-        else if (MaterialType == 8) //Bended
+        else if (materialConst.MaterialType == 8) //Bended
         {
             float diffuseLayer = 4.0f;
             diffuse += floor((nol * .5f + .5f) * diffuseLayer) / diffuseLayer;
@@ -183,7 +191,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float specularLayer = 2;
             float3 f0 = .1f;
             
-            float smoothness = 1.f - saturate(Roughness);
+            float smoothness = 1.f - saturate(materialConst.Roughness);
             float m = 100 * smoothness;
             //float3 halfView = normalize(view + lightDir);
             //specularColor.rgb += nol > 0 ? pow(saturate(dot(normal, halfView)), m) :0;
@@ -193,7 +201,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             
             specularColor.a = 1;
         }
-        else if (MaterialType == 9) //Back Light
+        else if (materialConst.MaterialType == 9) //Back Light
         {
             float sssValue = .3f;
             diffuse = pow(saturate(dot(-normalize(normal * sssValue + lightDir), view)), 15.f);
@@ -201,18 +209,18 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             diffuse += saturate((nol + wrapValue) / (1 + wrapValue));
             
             float3 reflectLight = normalize(reflect(-lightDir, normal));
-            float smoothness = 1.f - saturate(Roughness);
+            float smoothness = 1.f - saturate(materialConst.Roughness);
             float m = 100 * smoothness;
             specularColor.rgb += pow(saturate(dot(view, reflectLight)), m);
             specularColor.a = 1;
 
         }
-        else if (MaterialType == 10) //AnisotropyKajiyaKay
+        else if (materialConst.MaterialType == 10) //AnisotropyKajiyaKay
         {
             
 
         }
-        else if (MaterialType == 11) //OrenNayar
+        else if (materialConst.MaterialType == 11) //OrenNayar
         {
             float nov = dot(normal, view);
             float phiri = length(view - normal * nov) * length(lightDir - normal * nol);
@@ -223,7 +231,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float alpha = max(acosNOV, acosNOL);
             float beta = min(acosNOV, acosNOL);
             
-            float roughness = pow(Roughness, 2);
+            float roughness = pow(materialConst.Roughness, 2);
             
             float a = 1 - .5f * (roughness / (roughness + .33f));
             float b = .45f * (roughness / (roughness + .09f));
@@ -232,7 +240,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 
         }
         /*
-        else if (MaterialType == 20) //PBR
+        else if (materialConst.MaterialType == 20) //PBR
         {
             float3 L = lightDir;
             float3 V = view;
@@ -240,16 +248,16 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float3 N = normal;
             float PI = acos(-1.0f);
             
-            float Roughness = .2f;
+            float roughness = .2f;
             float Metallic = .2f;
 
-            float4 D = GetDistributionGGX(N, H, Roughness);
+            float4 D = GetDistributionGGX(N, H, roughness);
             
             float3 F0 = 0.04;
             F0 = lerp(F0, material.BaseColor.rgb, Metallic);
             float4 F = float4(FresnelSchlickMethod(F0, N, V, 5), 1.0f);
             
-            float G = GSmith(N, V, L, Roughness);
+            float G = GSmith(N, V, L, roughness);
             
             float4 Kd = 1.0f - F;
             Kd *= 1.0f - Metallic;
@@ -268,7 +276,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             return float4(finalColor.rgb, 1.0f);
         }
         */
-        else if (MaterialType == 100) //Fresnel
+        else if (materialConst.MaterialType == 100) //Fresnel
         {
             float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
             float3 f0 = .1f;

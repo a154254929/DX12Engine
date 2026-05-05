@@ -38,6 +38,9 @@ void FGeometryMap::Draw(float deltaTime)
     //绘制贴图
     DrawTexture(deltaTime);
 
+    //绘制材质
+    DrawMaterial(deltaTime);
+
     //渲染模型
     DrawMesh(deltaTime);
 }
@@ -103,6 +106,13 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
             FObjectTransformation objectTransformation;
             XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(artixWorld));
             XMStoreFloat4x4(&objectTransformation.textureTransformation, XMMatrixTranspose(artixTextureTransfom));
+            
+            //收集材质Index
+            if (auto &inMat = (*inRenderingData.meshComp->GetMaterials())[0])
+            {
+                objectTransformation.materialIndex = inMat->GetMaterialIndex();
+            }
+            
             meshConstantBufferView.Update(j, &objectTransformation);
         }
     }
@@ -178,7 +188,7 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                 materialConstantBuffer.materialType = inMaterial->GetMaterialType();
                         
                 //外部资源导入
-                if (auto baseColorTextureResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(material->GetBaseColorIndexKey()))
+                if (auto baseColorTextureResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(inMaterial->GetBaseColorIndexKey()))
                 {
                     materialConstantBuffer.baseColorIndex = baseColorTextureResourcePtr->get()->renderingTextureID;
                 }
@@ -246,7 +256,7 @@ void FGeometryMap::BuildMaterialShaderResourceView()
             {
                 for (int j = 0; j < meshCompMaterials->size(); ++j)
                 {
-                    (*meshCompMaterials)[j]->SetDirty(shaderIndex);
+                    (*meshCompMaterials)[j]->SetMaterialIndex(shaderIndex);
                     materials.push_back((*meshCompMaterials)[j]);
                     shaderIndex++;
                 }
@@ -339,7 +349,6 @@ void FGeometryMap::DrawMesh(float deltaTime)
         for (int j = 0; j < tmp.second.describeMeshRenderingData.size(); ++j)
         {
             CD3DX12_GPU_DESCRIPTOR_HANDLE meshDesHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetGPUDescriptorHandleForHeapStart());
-            CD3DX12_GPU_DESCRIPTOR_HANDLE materialDesHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
             FRenderingData& inRenderingData = tmp.second.describeMeshRenderingData[j];
             GetGraphicsCommandList()->IASetIndexBuffer(&ibv);
@@ -360,10 +369,6 @@ void FGeometryMap::DrawMesh(float deltaTime)
             meshDesHandle.Offset(j, descriptorOffset);
             GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, meshDesHandle);
 
-            //材质起始地址偏移
-            materialDesHandle.Offset(GetDrawMeshObjectNumber() + j, descriptorOffset);
-            GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(2, materialDesHandle);
-
             //真正绘制
             GetGraphicsCommandList()->DrawIndexedInstanced(
                 inRenderingData.indexSize,//顶点索引数量
@@ -376,13 +381,22 @@ void FGeometryMap::DrawMesh(float deltaTime)
     }
 }
 
+void FGeometryMap::DrawMaterial(float deltaTime)
+{
+   
+    GetGraphicsCommandList()->SetGraphicsRootShaderResourceView(
+        2,
+        materialConstantBufferView.GetBuffer()->GetGPUVirtualAddress()
+    );
+}
+
 void FGeometryMap::DrawTexture(float deltaTime)
 {
     UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
     CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
     desHandle.Offset(
-        GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber() + GetDrawLightObjectNumber() + 1,
+        GetDrawMeshObjectNumber() + GetDrawLightObjectNumber() + 1,
         descriptorOffset);
     GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(4, desHandle);
 }

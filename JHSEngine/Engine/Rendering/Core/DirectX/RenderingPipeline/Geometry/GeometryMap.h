@@ -91,6 +91,8 @@ public:
 
     void DrawMesh(float deltaTime);
     
+    void DrawMaterial(float deltaTime);
+    
     void DrawTexture(float deltaTime);
     
     void LoadTexture();

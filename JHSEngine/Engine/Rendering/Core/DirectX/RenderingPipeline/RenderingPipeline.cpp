@@ -33,8 +33,8 @@ void FRenderingPipeline::BuildPipeline()
         "Texture2DMap_Count", _itoa(geometryMap.GetDrawTextureResourcesNumber(), textureNumBuff, 10),
         NULL, NULL
     };
-    vertexShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "VertexShaderUnlit", "vs_5_0", shaderMacro);
-    pixelShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "PixelShaderUnlit", "ps_5_0", shaderMacro);
+    vertexShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "VertexShaderUnlit", "vs_5_1", shaderMacro);
+    pixelShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "PixelShaderUnlit", "ps_5_1", shaderMacro);
     directXPipelineState.BindShader(vertexShader, pixelShader);
 
     //输入布局
