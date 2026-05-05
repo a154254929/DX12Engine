@@ -354,7 +354,22 @@ void FGeometryMap::DrawTexture(float deltaTime)
 
 void FGeometryMap::LoadTexture()
 {
-    renderingTextureResourcesUpdate->LoadTextureResource(L"../JHSEngine/Asset/Texture/Texture1.dds");
+    def_c_paths filePaths;
+    init_def_c_paths(&filePaths);
+    
+    char rootPath[] = "../JHSEngine/Asset/Texture";
+    find_files(rootPath, &filePaths, true);
+    
+    for (int i = 0; i < filePaths.index; i++)
+    {
+        if (find_string(filePaths.paths[i], ".dds", 0) != -1)
+        {
+            normalization_path(filePaths.paths[i]);
+            wchar_t texturePath[1024] = {0};
+            char_to_wchar_t(texturePath, 1024, filePaths.paths[i]);
+            renderingTextureResourcesUpdate->LoadTextureResource(texturePath);
+        }
+    }
 }
 
 bool FGeometry::bRenderingDataExistence(CMeshComponent* inKey)

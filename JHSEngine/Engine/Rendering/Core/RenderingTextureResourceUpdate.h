@@ -4,10 +4,16 @@
 
 struct FRenderingTexture
 {
+    FRenderingTexture()
+        : renderingTextureID(0u)
+    {
+        
+    }
     ComPtr<ID3D12Resource> uploadBuffer;
     ComPtr<ID3D12Resource> data;
     wstring name;        //贴图名称
     wstring fName;      //路径
+    UINT renderingTextureID;
 };
 
 class FRenderingTextureResourcesUpdate

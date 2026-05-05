@@ -17,6 +17,7 @@ void FRenderingTextureResourcesUpdate::LoadTextureResource(const wstring& inFile
             myTexture->data,
             myTexture->uploadBuffer
         );
+        myTexture->renderingTextureID = texturesMapping.size() + 1;
         
         texturesMapping[myTexture->name] = std::move(myTexture);
 }
