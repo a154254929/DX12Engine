@@ -34,9 +34,13 @@ void FRenderingPipeline::BuildPipeline()
         {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
         {"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
         {"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-        {"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 40, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
+        {"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 40, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+        {"TEXCOORD0", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 52, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
     };
     directXPipelineState.BindInputLayout(inputElementDesc.data(), inputElementDesc.size());
+    
+    //读取贴图纹理
+    geometryMap.LoadTexture();
 
     //构建模型
     geometryMap.Build();
@@ -55,6 +59,9 @@ void FRenderingPipeline::BuildPipeline()
 
     //构建视口常量缓冲区
     geometryMap.BuildViewportConstantBuffer();
+
+    //构建贴图
+    geometryMap.BuildTextureConstantBuffer();
 
     //构建管线
     directXPipelineState.Build();

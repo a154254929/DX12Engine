@@ -13,10 +13,13 @@
 #include "../../../../../Manager/LightManager.h"
 #include "../../../../../Component/Light/PointLightComponent.h"
 #include "../../../../../Component/Light/SpotLightComponent.h"
+#include "../../../RenderingTextureResourceUpdate.h"
 
 FGeometryMap::FGeometryMap()
 {
     geometrys.insert(pair<int, FGeometry>(0, FGeometry()));
+    
+    renderingTextureResourcesUpdate = std::make_shared<FRenderingTextureResourcesUpdate>();
 }
 
 void FGeometryMap::PreDraw(float deltaTime)
@@ -231,6 +234,14 @@ void FGeometryMap::BuildViewportConstantBuffer()
     viewportConstantBufferView.BuildConstantBuffer(desHandle, 1, GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber() + GetDrawLightObjectNumber());
 }
 
+void FGeometryMap::BuildTextureConstantBuffer()
+{
+    renderingTextureResourcesUpdate->BuildTextureConstantBuffer(
+        descriptorHeap.GetHeap(),
+        GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber() + GetDrawLightObjectNumber() + 1
+    );
+}
+
 UINT FGeometryMap::GetDrawMeshObjectNumber()
 {
     return geometrys[0].GetDrawObjectNumber();
@@ -317,6 +328,11 @@ void FGeometryMap::DrawMesh(float deltaTime)
             );
         }
     }
+}
+
+void FGeometryMap::LoadTexture()
+{
+    renderingTextureResourcesUpdate->LoadTextureResource(L"");
 }
 
 bool FGeometry::bRenderingDataExistence(CMeshComponent* inKey)

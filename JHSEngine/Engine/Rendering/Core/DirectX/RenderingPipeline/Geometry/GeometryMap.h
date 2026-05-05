@@ -65,6 +65,9 @@ public:
     //构建光源常量缓冲区
     void BuildLightConstantBuffer();
 
+    //构建贴图SRV视图
+    void BuildTextureConstantBuffer();
+
     /*后面会有变化*/
     UINT GetDrawMeshObjectNumber();
 
@@ -80,6 +83,8 @@ public:
     void DrawLight(float deltaTime);
 
     void DrawMesh(float deltaTime);
+    
+    void LoadTexture();
 public:
     ID3D12DescriptorHeap* GetHeap() const { return descriptorHeap.GetHeap(); }
 protected:
@@ -90,4 +95,5 @@ protected:
     FConstantBufferView materialConstantBufferView;
     FConstantBufferView viewportConstantBufferView;
     FConstantBufferView lightConstantBufferView;
+    shared_ptr<class FRenderingTextureResourcesUpdate> renderingTextureResourcesUpdate;
 };
