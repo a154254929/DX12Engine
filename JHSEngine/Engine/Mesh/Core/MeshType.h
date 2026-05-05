@@ -5,13 +5,14 @@
 struct FVertex
 {
     FVertex(const XMFLOAT3& inPos, const XMFLOAT4& inColor);
-    FVertex(const XMFLOAT3& inPos, const XMFLOAT4& inColor, const XMFLOAT3& inNormal);
+    FVertex(const XMFLOAT3& inPos, const XMFLOAT4& inColor, const XMFLOAT3& inNormal, const XMFLOAT2& inTexCoord = XMFLOAT2(0.f, 0.f));
 
     XMFLOAT3 position;
     XMFLOAT4 color;
     XMFLOAT3 normal;
     XMFLOAT3 utangent;
     XMFLOAT3 vtangent;
+    XMFLOAT2 texcoord;
 };
 
 struct FMeshRenderingData

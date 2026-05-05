@@ -16,10 +16,10 @@ void CSphereMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, flo
 
     meshRenderingData.vertexData.push_back(FVertex(
         XMFLOAT3(0.f, inRadius, 0.f),
-        XMFLOAT4( 0.f, 0.f, 1.f, 1.f)
+        XMFLOAT4( 0.f, 0.f, 1.f, 1.f),
+        XMFLOAT3(0.f, 1, 0.f),
+        XMFLOAT2(0.5f, 0.f)
     ));
-    XMVECTOR topVertexPos = XMLoadFloat3(&meshRenderingData.vertexData[0].position);
-    XMStoreFloat3(&meshRenderingData.vertexData[0].normal, XMVector3Normalize(topVertexPos));
     for (uint32_t i = 1; i < inHeightSubdivision; ++i)
     {
         float beta = betaValue * i;
@@ -42,6 +42,7 @@ void CSphereMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, flo
             curVert.utangent.x = -layerRadius * sinf(theta);
             curVert.utangent.y = 0;
             curVert.utangent.z = layerRadius * cosf(theta);
+            curVert.texcoord = XMFLOAT2(theta / XM_2PI, beta / XM_PI) ;
             XMVECTOR utangent = XMLoadFloat3(&curVert.utangent);
             XMStoreFloat3(&curVert.utangent, XMVector3Normalize(utangent));
         }
@@ -70,7 +71,10 @@ void CSphereMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, flo
         }
     }
     meshRenderingData.vertexData.push_back(FVertex(
-        XMFLOAT3(0.f, -inRadius, 0.f), XMFLOAT4(Colors::White), XMFLOAT3(0.f, -1.f, 0.f)
+        XMFLOAT3(0.f, -inRadius, 0.f),
+        XMFLOAT4(Colors::White),
+        XMFLOAT3(0.f, -1.f, 0.f),
+        XMFLOAT2(0.5f, 1.f)
     ));
     uint32_t finalIndex = (inHeightSubdivision - 1) * inAxialSubdivision + 1;
     uint32_t finalRoundStart = (inHeightSubdivision - 2) * inAxialSubdivision + 1;
