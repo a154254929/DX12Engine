@@ -4,7 +4,7 @@
 
 struct FConstantBufferView : public IDirectXDeviceInterface_Struct
 {
-    void CreateConstant(UINT objectSize, UINT objectCount);
+    void CreateConstant(UINT objectSize, UINT objectCount, bool bConstantBuffer = true);
 
     void BuildConstantBuffer(CD3DX12_CPU_DESCRIPTOR_HANDLE inHandle, UINT inConstantBufferNum, UINT inHandleOffset = 0);
 

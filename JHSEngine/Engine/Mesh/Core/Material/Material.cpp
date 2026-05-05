@@ -3,12 +3,25 @@
 
 CMaterial::CMaterial()
     : bDirty(true)
+    , materialIndex(-1)
     , baseColor(.5f, .5f, .5f, 1.f)
     , roughness(.2f)
     , materialType(EMaterialType::Lambertain)
     , materialDisplayStatusType(EMaterialDisplayStatusType::TriangleDisplay)
     , materialTransform(EngineMath::IdentityMatrix4x4())
 {
+}
+
+void CMaterial::SetDirty(bool inDirty)
+{
+    bDirty = inDirty;
+}
+
+void CMaterial::SetMaterialIndex(int inMaterialIndex)
+{
+    materialIndex = inMaterialIndex;
+    
+    SetDirty(true);
 }
 
 void CMaterial::SetBaseColor(fvector_4d inBaseColor)
@@ -37,9 +50,4 @@ void CMaterial::SetBaseColorIndexKey(std::string& inAssetFileName)
     baseColorIndexKey = inAssetFileName;
     
     SetDirty(true);
-}
-
-void CMaterial::SetDirty(bool inDirty)
-{
-    bDirty = inDirty;
 }

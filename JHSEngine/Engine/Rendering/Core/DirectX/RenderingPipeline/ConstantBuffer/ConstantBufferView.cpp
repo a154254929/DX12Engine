@@ -1,9 +1,9 @@
 ﻿#include "ConstantBufferView.h"
 
-void FConstantBufferView::CreateConstant(UINT objectSize, UINT objectCount)
+void FConstantBufferView::CreateConstant(UINT objectSize, UINT objectCount, bool bConstantBuffer)
 {
     constants = make_shared<FRenderingResourcesUpdate>();
-    constants->Init(GetD3dDevice().Get(), objectSize, objectCount);
+    constants->Init(GetD3dDevice().Get(), objectSize, objectCount, bConstantBuffer);
 }
 
 void FConstantBufferView::BuildConstantBuffer(CD3DX12_CPU_DESCRIPTOR_HANDLE inHandle, UINT inConstantBufferNum, UINT inHandleOffset)

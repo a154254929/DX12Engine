@@ -10,7 +10,7 @@ public:
     FRenderingResourcesUpdate();
     ~FRenderingResourcesUpdate();
 
-    void Init(ID3D12Device* inDevice, UINT inElemetSize, UINT inElemetCount);
+    void Init(ID3D12Device* inDevice, UINT inElemetSize, UINT inElemetCount, bool bConstantBuffer = true);
 
     void Update(int index, const void* inData);
 

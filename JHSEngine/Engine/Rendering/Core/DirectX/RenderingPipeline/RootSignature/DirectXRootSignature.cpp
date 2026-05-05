@@ -40,12 +40,12 @@ void FDirectXRootSignature::BuildRootSignature(UINT inTextureNum)
     );
 
     //Material cbv描述表
-    CD3DX12_DESCRIPTOR_RANGE descriptorRangeMaterialCBV;
-    descriptorRangeMaterialCBV.Init(
-        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
-        1,
-        2
-    );
+    // CD3DX12_DESCRIPTOR_RANGE descriptorRangeMaterialCBV;
+    // descriptorRangeMaterialCBV.Init(
+    //     D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+    //     1,
+    //     2
+    // );
 
     //Light cbv描述表
     CD3DX12_DESCRIPTOR_RANGE descriptorRangeLightCBV;
@@ -65,7 +65,8 @@ void FDirectXRootSignature::BuildRootSignature(UINT inTextureNum)
 
     rootParam[0].InitAsDescriptorTable(1, &descriptorRangeObjCBV);
     rootParam[1].InitAsDescriptorTable(1, &descriptorRangeViewportCBV);
-    rootParam[2].InitAsDescriptorTable(1, &descriptorRangeMaterialCBV);
+    //rootParam[2].InitAsDescriptorTable(1, &descriptorRangeMaterialCBV);
+    rootParam[2].InitAsShaderResourceView(0, 1);
     rootParam[3].InitAsDescriptorTable(1, &descriptorRangeLightCBV);
     rootParam[4].InitAsDescriptorTable(1, &descriptorRangeTextureSRV);
     

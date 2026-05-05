@@ -17,7 +17,7 @@ FRenderingResourcesUpdate::~FRenderingResourcesUpdate()
     }
 }
 
-void FRenderingResourcesUpdate::Init(ID3D12Device* inDevice, UINT inElementSize, UINT inElementCount)
+void FRenderingResourcesUpdate::Init(ID3D12Device* inDevice, UINT inElementSize, UINT inElementCount, bool bConstantBuffer)
 {
     assert(inDevice);
     elementSize = GetConstantBufferByteSize(inElementSize);

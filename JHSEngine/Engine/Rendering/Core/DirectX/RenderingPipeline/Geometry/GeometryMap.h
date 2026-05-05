@@ -7,6 +7,8 @@
 #include "../../../../../Core/Viewport/ViewportInfo.h"
 
 
+class CMaterial;
+
 class FGeometry : public IDirectXDeviceInterface_Struct
 {
     friend struct FGeometryMap;
@@ -46,6 +48,8 @@ public:
     void PostDraw(float deltaTime);
 
     virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
+    
+    virtual void UpdateMaterialShaderResourceView(float deltaTime, const FViewportInfo viewportInfo);
 
     void BuildMesh(CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
 
@@ -57,7 +61,7 @@ public:
     void BuildMeshConstantBuffer();
 
     //构建材质常量缓冲区
-    void BuildMaterialConstantBuffer();
+    void BuildMaterialShaderResourceView();
 
     //构建视口常量缓冲区
     void BuildViewportConstantBuffer();
@@ -100,5 +104,7 @@ protected:
     FConstantBufferView materialConstantBufferView;
     FConstantBufferView viewportConstantBufferView;
     FConstantBufferView lightConstantBufferView;
+    
     shared_ptr<class FRenderingTextureResourcesUpdate> renderingTextureResourcesUpdate;
+    std::vector<CMaterial*> materials;
 };
