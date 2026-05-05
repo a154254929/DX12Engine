@@ -74,10 +74,7 @@ void FDirectXRootSignature::BuildRootSignature()
     samplerDescs.push_back(
         CD3DX12_STATIC_SAMPLER_DESC(
             0,
-            D3D12_FILTER_MIN_MAG_MIP_POINT,
-            D3D12_TEXTURE_ADDRESS_MODE_BORDER,
-            D3D12_TEXTURE_ADDRESS_MODE_BORDER,
-            D3D12_TEXTURE_ADDRESS_MODE_BORDER
+            D3D12_FILTER_MIN_MAG_MIP_POINT
         )
     );
 

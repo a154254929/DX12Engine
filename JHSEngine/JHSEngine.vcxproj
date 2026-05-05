@@ -206,6 +206,7 @@
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RootSignature\DirectXRootSignature.cpp" />
     <ClCompile Include="Engine\Rendering\Core\Rendering.cpp" />
     <ClCompile Include="Engine\Rendering\Core\RenderingResourcesUpdate.cpp" />
+    <ClCompile Include="Engine\Rendering\Core\RenderingTextureResourceUpdate.cpp" />
     <ClCompile Include="Engine\Rendering\DirectX12\DDSTextureLoader.cpp" />
     <ClCompile Include="Engine\Rendering\Engine\Core\RenderingEngine.cpp" />
     <ClCompile Include="Engine\Rendering\Engine\DirectX\Core\DirectXRenderingEngine.cpp" />
@@ -336,6 +337,7 @@
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RootSignature\DirectXRootSignature.h" />
     <ClInclude Include="Engine\Rendering\Core\Rendering.h" />
     <ClInclude Include="Engine\Rendering\Core\RenderingResourcesUpdate.h" />
+    <ClInclude Include="Engine\Rendering\Core\RenderingTextureResourceUpdate.h" />
     <ClInclude Include="Engine\Rendering\DirectX12\d3dx12.h" />
     <ClInclude Include="Engine\Rendering\DirectX12\DDSTextureLoader.h" />
     <ClInclude Include="Engine\Rendering\Engine\Core\RenderingEngine.h" />
