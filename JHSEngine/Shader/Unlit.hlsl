@@ -98,7 +98,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
     float4 lightStrengths = { 0.f,0.f,0.f,1.f };
     float4 specularColor = 0;
-	//return float4(input.uv > .5f, 0, 1);
+	//return float4(input.uv.x > 0.95, .05f, 0, 1);
     for (int i = 0; i < LightInfo.x; i++)
     {
         float diffuse = 0.f;
