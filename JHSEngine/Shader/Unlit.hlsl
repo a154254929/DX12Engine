@@ -3,7 +3,7 @@
 #include "BRDF.hlsl"
 
 SamplerState Texture2DMap_Sampler : register(s0);
-Texture2D Texture2DMap[Texture2DMap_Count] : register(t4);
+Texture2D Texture2DMap[Texture2DMap_Count] : register(t3);
 
 cbuffer ObjectConstBuffer : register(b0) //b0->b14
 {
@@ -21,6 +21,12 @@ cbuffer ViewportConstBuffer : register(b1)
     float4x4 ViewProjectionMatrix;
 }
 
+cbuffer LightConstBuffer : register(b2)
+{
+    int4 LightInfo;
+    Light SceneLights[16];
+}
+
 struct MaterialConstBuffer
 {
     uint MaterialType;
@@ -32,13 +38,7 @@ struct MaterialConstBuffer
     float4x4 Transformation;
 };
 
-StructuredBuffer<MaterialConstBuffer> Materials : register(t0, space1);
-
-cbuffer LightConstBuffer : register(b3)
-{
-    int4 LightInfo;
-    Light SceneLights[16];
-}
+StructuredBuffer<MaterialConstBuffer> Materials : register(t4, space1);
 
 
 struct Varying
@@ -101,7 +101,14 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     float4 ambientLight = { .15f, .15f, .25f, 1.0f };
     
     FMaterial material;
-    material.BaseColor = materialConst.BaseColor;// * (materialConst.BaseColorIndex >= 0 ? Texture2DMap[materialConst.BaseColorIndex].Sample(Texture2DMap_Sampler, input.uv) : 1.0f);
+	if(materialConst.BaseColorIndex >= 0)
+	{
+		material.BaseColor = materialConst.BaseColor * Texture2DMap[materialConst.BaseColorIndex].Sample(Texture2DMap_Sampler, input.uv);
+	}
+	else
+	{
+		material.BaseColor = materialConst.BaseColor;
+	}
     float3 normal = normalize(input.worldNormal.xyz);
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
     float4 lightStrengths = { 0.f,0.f,0.f,1.f };

@@ -39,20 +39,12 @@ void FDirectXRootSignature::BuildRootSignature(UINT inTextureNum)
         1
     );
 
-    //Material cbv描述表
-    // CD3DX12_DESCRIPTOR_RANGE descriptorRangeMaterialCBV;
-    // descriptorRangeMaterialCBV.Init(
-    //     D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
-    //     1,
-    //     2
-    // );
-
     //Light cbv描述表
     CD3DX12_DESCRIPTOR_RANGE descriptorRangeLightCBV;
     descriptorRangeLightCBV.Init(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
         1,
-        3
+        2
     );
 
     //Texture srv描述表
@@ -60,15 +52,15 @@ void FDirectXRootSignature::BuildRootSignature(UINT inTextureNum)
     descriptorRangeTextureSRV.Init(
         D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
         inTextureNum,
-        4
+        3
     );
 
     rootParam[0].InitAsDescriptorTable(1, &descriptorRangeObjCBV);
     rootParam[1].InitAsDescriptorTable(1, &descriptorRangeViewportCBV);
-    //rootParam[2].InitAsDescriptorTable(1, &descriptorRangeMaterialCBV);
-    rootParam[2].InitAsShaderResourceView(0, 1);
-    rootParam[3].InitAsDescriptorTable(1, &descriptorRangeLightCBV);
-    rootParam[4].InitAsDescriptorTable(1, &descriptorRangeTextureSRV);
+    rootParam[2].InitAsDescriptorTable(1, &descriptorRangeLightCBV);
+    rootParam[3].InitAsDescriptorTable(1, &descriptorRangeTextureSRV);
+    
+    rootParam[4].InitAsShaderResourceView(4, 1);
     
     //静态采样方式
     std::vector<CD3DX12_STATIC_SAMPLER_DESC> samplerDescs;

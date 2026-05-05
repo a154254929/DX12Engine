@@ -52,28 +52,31 @@ void FRenderingTextureResourcesUpdate::BuildTextureConstantBuffer(ID3D12Descript
 
 std::unique_ptr<FRenderingTexture>* FRenderingTextureResourcesUpdate::FindRenderingTextureByName(const std::string& inKey)
 {
-    const char* InString = inKey.c_str();
-    wchar_t texturePath[1024] = {0};
-    char_to_wchar_t(texturePath, 1024, InString);
-    if (texturesMapping.find(texturePath) != texturesMapping.end())
+    if (!inKey.empty())
     {
-        return &texturesMapping[texturePath];
-    }
-    else
-    {
-        for (auto &tmp : texturesMapping)
+        const char* InString = inKey.c_str();
+        wchar_t texturePath[1024] = {0};
+        char_to_wchar_t(texturePath, 1024, InString);
+        if (texturesMapping.find(texturePath) != texturesMapping.end())
         {
-            if (tmp.second->fileName != texturePath)
+            return &texturesMapping[texturePath];
+        }
+        else
+        {
+            for (auto &tmp : texturesMapping)
             {
-                return &tmp.second;
-            }
-            if (tmp.second->assetFileName == texturePath)
-            {
-                return &tmp.second;
-            }
-            if (tmp.second->simpleAssetFileName == texturePath)
-            {
-                return &tmp.second;
+                if (tmp.second->fileName != texturePath)
+                {
+                    return &tmp.second;
+                }
+                if (tmp.second->assetFileName == texturePath)
+                {
+                    return &tmp.second;
+                }
+                if (tmp.second->simpleAssetFileName == texturePath)
+                {
+                    return &tmp.second;
+                }
             }
         }
     }

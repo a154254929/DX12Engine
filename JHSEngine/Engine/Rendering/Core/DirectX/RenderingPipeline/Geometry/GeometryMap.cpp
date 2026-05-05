@@ -194,7 +194,7 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                 }
                 else
                 {
-                    materialConstantBuffer.baseColorIndex = 1;
+                    materialConstantBuffer.baseColorIndex = -1;
                 }
                     
                 XMMATRIX materialTransform = XMLoadFloat4x4(&inMaterial->GetMaterialTransform());
@@ -336,7 +336,7 @@ void FGeometryMap::DrawLight(float deltaTime)
     CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
     desHandle.Offset(GetDrawMeshObjectNumber(), descriptorOffset);
-    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(3, desHandle);
+    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(2, desHandle);
 }
 
 void FGeometryMap::DrawMesh(float deltaTime)
@@ -385,7 +385,7 @@ void FGeometryMap::DrawMaterial(float deltaTime)
 {
    
     GetGraphicsCommandList()->SetGraphicsRootShaderResourceView(
-        2,
+        4,
         materialConstantBufferView.GetBuffer()->GetGPUVirtualAddress()
     );
 }
@@ -398,7 +398,7 @@ void FGeometryMap::DrawTexture(float deltaTime)
     desHandle.Offset(
         GetDrawMeshObjectNumber() + GetDrawLightObjectNumber() + 1,
         descriptorOffset);
-    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(4, desHandle);
+    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(3, desHandle);
 }
 
 void FGeometryMap::LoadTexture()
