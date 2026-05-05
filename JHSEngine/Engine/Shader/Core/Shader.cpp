@@ -10,12 +10,17 @@ SIZE_T FShader::GetBufferSize() const
     return shaderCode->GetBufferSize();
 }
 
-void FShader::BuildShaders(const wstring& inFileName, const string& inEntryFunName, const string& inShaderVersion)
+void FShader::BuildShaders(
+    const wstring& inFileName,
+    const string& inEntryFunName,
+    const string& inShaderVersion,
+    const D3D_SHADER_MACRO* inShaderMacro
+)
 {
     ComPtr<ID3DBlob> errorShaderMsg;
     HRESULT compileResult = D3DCompileFromFile(
         inFileName.c_str(),
-        NULL,
+        inShaderMacro,
         D3D_COMPILE_STANDARD_FILE_INCLUDE,
         inEntryFunName.c_str(),
         inShaderVersion.c_str(),

@@ -77,6 +77,9 @@ public:
     /*后面会有变化*/
     UINT GetDrawLightObjectNumber();
 
+    /*后面会有变化*/
+    UINT GetDrawTextureResourcesNumber();
+
 public:
     void DrawViewport(float deltaTime);
 

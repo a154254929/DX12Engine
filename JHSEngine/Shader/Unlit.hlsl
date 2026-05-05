@@ -2,8 +2,8 @@
 #include "Material.hlsl"
 #include "BRDF.hlsl"
 
-SamplerState BaseColorMap_Sampler : register(s0);
-Texture2D BaseColorMap : register(t4);
+SamplerState Texture2DMap_Sampler : register(s0);
+Texture2D Texture2DMap[Texture2DMap_Count] : register(t4);
 
 cbuffer ObjectConstBuffer : register(b0) //b0->b14
 {
@@ -93,7 +93,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     float4 ambientLight = { .15f, .15f, .25f, 1.0f };
     
     FMaterial material;
-    material.BaseColor = BaseColor * BaseColorMap.Sample(BaseColorMap_Sampler, input.uv);;
+    material.BaseColor = BaseColor * Texture2DMap[0].Sample(Texture2DMap_Sampler, input.uv);;
     float3 normal = normalize(input.worldNormal.xyz);
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
     float4 lightStrengths = { 0.f,0.f,0.f,1.f };

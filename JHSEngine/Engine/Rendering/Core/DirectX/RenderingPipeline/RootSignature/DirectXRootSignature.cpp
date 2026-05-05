@@ -17,7 +17,7 @@ void FDirectXRootSignature::PostDraw(float deltaTime)
 {
 }
 
-void FDirectXRootSignature::BuildRootSignature()
+void FDirectXRootSignature::BuildRootSignature(UINT inTextureNum)
 {
 
     //构建根签名
@@ -59,7 +59,7 @@ void FDirectXRootSignature::BuildRootSignature()
     CD3DX12_DESCRIPTOR_RANGE descriptorRangeTextureSRV;
     descriptorRangeTextureSRV.Init(
         D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
-        1,
+        inTextureNum,
         4
     );
 

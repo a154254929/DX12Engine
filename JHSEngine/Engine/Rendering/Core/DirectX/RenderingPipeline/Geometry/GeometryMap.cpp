@@ -198,7 +198,7 @@ void FGeometryMap::Build()
 void FGeometryMap::BuildDescriptorHeap()
 {
     //+1是因为有摄像机
-    descriptorHeap.Build(GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber() + GetDrawLightObjectNumber() + 1 + 1);
+    descriptorHeap.Build(GetDrawMeshObjectNumber() + GetDrawMaterialObjectNumber() + GetDrawLightObjectNumber() + 1 + GetDrawTextureResourcesNumber());
 }
 
 void FGeometryMap::BuildMeshConstantBuffer()
@@ -274,6 +274,11 @@ UINT FGeometryMap::GetDrawMaterialObjectNumber()
 UINT FGeometryMap::GetDrawLightObjectNumber()
 {
     return 1;
+}
+
+UINT FGeometryMap::GetDrawTextureResourcesNumber()
+{
+    return renderingTextureResourcesUpdate->Size();
 }
 
 void FGeometryMap::DrawViewport(float deltaTime)

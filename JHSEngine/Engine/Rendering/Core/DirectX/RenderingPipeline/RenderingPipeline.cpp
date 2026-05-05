@@ -19,14 +19,21 @@ void FRenderingPipeline::BuildPipeline()
 {
     //初始化GPS描述
     directXPipelineState.ResetGPSDesc();
+    
+    //读取贴图纹理
+    geometryMap.LoadTexture();
 
     //构建根签名
-    rootSignature.BuildRootSignature();
+    rootSignature.BuildRootSignature(geometryMap.GetDrawTextureResourcesNumber());
     directXPipelineState.BindRootSignature(rootSignature.GetRootSignature());
 
     //构建shader
-    vertexShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "VertexShaderUnlit", "vs_5_0");
-    pixelShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "PixelShaderUnlit", "ps_5_0");
+    D3D_SHADER_MACRO shaderMacro[] = {
+        "Texture2DMap_Count", "2",
+        NULL, NULL
+    };
+    vertexShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "VertexShaderUnlit", "vs_5_0", shaderMacro);
+    pixelShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "PixelShaderUnlit", "ps_5_0", shaderMacro);
     directXPipelineState.BindShader(vertexShader, pixelShader);
 
     //输入布局
@@ -39,9 +46,6 @@ void FRenderingPipeline::BuildPipeline()
         {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 64, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
     };
     directXPipelineState.BindInputLayout(inputElementDesc.data(), inputElementDesc.size());
-    
-    //读取贴图纹理
-    geometryMap.LoadTexture();
 
     //构建模型
     geometryMap.Build();

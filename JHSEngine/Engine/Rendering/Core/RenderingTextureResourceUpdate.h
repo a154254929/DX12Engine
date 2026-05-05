@@ -23,6 +23,7 @@ class FRenderingTextureResourcesUpdate
 public:
     void LoadTextureResource(const wstring &inFileName);
     void BuildTextureConstantBuffer(ID3D12DescriptorHeap* inHeap, int offset);
+    UINT Size() const{ return texturesMapping.size(); }
 protected:
     std::unordered_map<std::wstring, std::unique_ptr<FRenderingTexture>> texturesMapping;
 };
