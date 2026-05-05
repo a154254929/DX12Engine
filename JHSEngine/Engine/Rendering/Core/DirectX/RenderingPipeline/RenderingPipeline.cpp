@@ -26,10 +26,11 @@ void FRenderingPipeline::BuildPipeline()
     //构建根签名
     rootSignature.BuildRootSignature(geometryMap.GetDrawTextureResourcesNumber());
     directXPipelineState.BindRootSignature(rootSignature.GetRootSignature());
-
+    
+    char textureNumBuff[10] = {0};
     //构建shader
     D3D_SHADER_MACRO shaderMacro[] = {
-        "Texture2DMap_Count", "2",
+        "Texture2DMap_Count", _itoa(geometryMap.GetDrawTextureResourcesNumber(), textureNumBuff, 10),
         NULL, NULL
     };
     vertexShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "VertexShaderUnlit", "vs_5_0", shaderMacro);

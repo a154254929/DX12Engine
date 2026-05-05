@@ -8,7 +8,7 @@ public:
 
     UINT32 materialType;
     float roughness;
-    UINT32 xx2;
+    int baseColorIndex;
     UINT32 xx3;
 
     XMFLOAT4 baseColor;

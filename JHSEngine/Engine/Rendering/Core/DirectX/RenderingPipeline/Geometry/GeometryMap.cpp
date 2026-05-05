@@ -109,19 +109,33 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
             FMaterialConstantBuffer materialConstantBuffer;
             {
                 if (CMaterial* material = (*(inRenderingData.meshComp->GetMaterials()))[0])
-                {
-                    fvector_4d baseColor = material->GetBaseColor();
-                    materialConstantBuffer.baseColor = XMFLOAT4(baseColor.x, baseColor.y, baseColor.z, baseColor.w);
+                { 
+                    if (material->IsDirty())
+                    {
+                        fvector_4d baseColor = material->GetBaseColor();
+                        materialConstantBuffer.baseColor = XMFLOAT4(baseColor.x, baseColor.y, baseColor.z, baseColor.w);
 
-                    materialConstantBuffer.roughness = material->GetRoughness();
+                        materialConstantBuffer.roughness = material->GetRoughness();
 
-                    materialConstantBuffer.materialType = material->GetMaterialType();
+                        materialConstantBuffer.materialType = material->GetMaterialType();
+                        
+                        //外部资源导入
+                        if (auto baseColorTextureResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(material->GetBaseColorIndexKey()))
+                        {
+                            materialConstantBuffer.baseColorIndex = baseColorTextureResourcePtr->get()->renderingTextureID;
+                        }
+                        else
+                        {
+                            materialConstantBuffer.baseColorIndex = 1;
+                        }
                     
-                    XMMATRIX materialTransform = XMLoadFloat4x4(&material->GetMaterialTransform());
-                    XMStoreFloat4x4(
-                        &materialConstantBuffer.transformation,
-                        XMMatrixTranspose(materialTransform)
-                    );
+                        XMMATRIX materialTransform = XMLoadFloat4x4(&material->GetMaterialTransform());
+                        XMStoreFloat4x4(
+                            &materialConstantBuffer.transformation,
+                            XMMatrixTranspose(materialTransform)
+                        );
+                        material->SetDirty(false);
+                    }
                 }
 
             }

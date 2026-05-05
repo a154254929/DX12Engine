@@ -11,8 +11,10 @@ struct FRenderingTexture
     }
     ComPtr<ID3D12Resource> uploadBuffer;
     ComPtr<ID3D12Resource> data;
-    wstring name;        //贴图名称
-    wstring fName;      //路径
+    wstring name;               //贴图名称
+    wstring fileName;           //路径
+    wstring assetFileName;      //资源路径
+    wstring simpleAssetFileName;      //资源路径
     UINT renderingTextureID;
 };
 
@@ -24,6 +26,8 @@ public:
     void LoadTextureResource(const wstring &inFileName);
     void BuildTextureConstantBuffer(ID3D12DescriptorHeap* inHeap, int offset);
     UINT Size() const{ return texturesMapping.size(); }
+    
+    std::unique_ptr<FRenderingTexture> *FindRenderingTextureByName(const std::string &inKey);
 protected:
     std::unordered_map<std::wstring, std::unique_ptr<FRenderingTexture>> texturesMapping;
 };

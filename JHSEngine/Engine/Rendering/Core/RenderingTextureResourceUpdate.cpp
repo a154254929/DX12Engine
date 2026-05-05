@@ -3,7 +3,7 @@
 void FRenderingTextureResourcesUpdate::LoadTextureResource(const wstring& inFileName)
 {
         unique_ptr<FRenderingTexture> myTexture = std::make_unique<FRenderingTexture>();
-        myTexture->fName = inFileName;
+        myTexture->fileName = inFileName;
         
         wchar_t fileName[1024] = {0};
         get_path_clean_filename_w(fileName, inFileName.c_str());
@@ -48,4 +48,34 @@ void FRenderingTextureResourcesUpdate::BuildTextureConstantBuffer(ID3D12Descript
         handle.Offset(1, descriptorOffset);
     }
     
+}
+
+std::unique_ptr<FRenderingTexture>* FRenderingTextureResourcesUpdate::FindRenderingTextureByName(const std::string& inKey)
+{
+    const char* InString = inKey.c_str();
+    wchar_t texturePath[1024] = {0};
+    char_to_wchar_t(texturePath, 1024, InString);
+    if (texturesMapping.find(texturePath) != texturesMapping.end())
+    {
+        return &texturesMapping[texturePath];
+    }
+    else
+    {
+        for (auto &tmp : texturesMapping)
+        {
+            if (tmp.second->fileName != texturePath)
+            {
+                return &tmp.second;
+            }
+            if (tmp.second->assetFileName == texturePath)
+            {
+                return &tmp.second;
+            }
+            if (tmp.second->simpleAssetFileName == texturePath)
+            {
+                return &tmp.second;
+            }
+        }
+    }
+    return nullptr;
 }

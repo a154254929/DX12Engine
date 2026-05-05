@@ -21,7 +21,7 @@ cbuffer MaterialConstBuffer : register(b2)
 {
     uint MaterialType;
     float Roughness;
-    uint XX2;
+    int BaseColorIndex;
     uint XX3;
     
     float4 BaseColor;
@@ -93,7 +93,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     float4 ambientLight = { .15f, .15f, .25f, 1.0f };
     
     FMaterial material;
-    material.BaseColor = BaseColor * Texture2DMap[0].Sample(Texture2DMap_Sampler, input.uv);;
+    material.BaseColor = BaseColor * BaseColorIndex >= 0 ? Texture2DMap[BaseColorIndex].Sample(Texture2DMap_Sampler, input.uv) : 1.0f;
     float3 normal = normalize(input.worldNormal.xyz);
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
     float4 lightStrengths = { 0.f,0.f,0.f,1.f };
