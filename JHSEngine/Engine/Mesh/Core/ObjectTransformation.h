@@ -6,4 +6,5 @@ struct FObjectTransformation
     FObjectTransformation();
 
     XMFLOAT4X4 world;
+    XMFLOAT4X4 textureTransformation;
 };

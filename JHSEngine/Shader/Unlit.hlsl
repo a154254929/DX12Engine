@@ -2,11 +2,13 @@
 #include "Material.hlsl"
 #include "BRDF.hlsl"
 
-SamplerState SampleTextureState : register(s0);
+SamplerState BaseColorMap_Sampler : register(s0);
+Texture2D BaseColorMap : register(t4);
 
 cbuffer ObjectConstBuffer : register(b0) //b0->b14
 {
     float4x4 WorldMatrix;
+	float4x4 ObjectTextureTransform;
 }
 
 cbuffer ViewportConstBuffer : register(b1)
@@ -25,6 +27,7 @@ cbuffer MaterialConstBuffer : register(b2)
     float4 BaseColor;
     float Roughness;
     float4x4 Transformation;
+    float4x4 TextureTransform;
 }
 
 cbuffer LightConstBuffer : register(b3)
@@ -40,6 +43,7 @@ struct Varying
     float4 color : COLOR;
     float3 normal : NORMAL;
     float3 utangent : TANGENT;
+    float2 texcoord : TEXCOORD;
 };
 
 struct Attribute
@@ -50,6 +54,7 @@ struct Attribute
     float3 normal : NORMAL;
     float3 worldNormal : TEXCOORD2;
     float3 utangent : TANGENT;
+    float2 uv : TEXCOORD;
 };
 
 Attribute VertexShaderUnlit(Varying input)
@@ -63,11 +68,16 @@ Attribute VertexShaderUnlit(Varying input)
     //output.normal = normalize(mul(input.normal, (float3x3) WorldMatrix)) * .5 + .5;
     //output.normal = input.normal;
     output.color = input.color;
+	
+	//uv坐标
+	float4 myTexcoord = mul(float4(input.texcoord, 0.f, 1.0f), ObjectTextureTransform);
+	output.uv = myTexcoord.xy;
     return output;
 }
 
 float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 {
+
     //BaseColor
     if (MaterialType == 12) //phong
     {
@@ -84,7 +94,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     float4 ambientLight = { .15f, .15f, .25f, 1.0f };
     
     FMaterial material;
-    material.BaseColor = BaseColor;
+    material.BaseColor = BaseColor * BaseColorMap.Sample(BaseColorMap_Sampler, input.uv);;
     float3 normal = normalize(input.worldNormal.xyz);
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
     float4 lightStrengths = { 0.f,0.f,0.f,1.f };

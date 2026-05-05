@@ -84,6 +84,8 @@ public:
 
     void DrawMesh(float deltaTime);
     
+    void DrawTexture(float deltaTime);
+    
     void LoadTexture();
 public:
     ID3D12DescriptorHeap* GetHeap() const { return descriptorHeap.GetHeap(); }

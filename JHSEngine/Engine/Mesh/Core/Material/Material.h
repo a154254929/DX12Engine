@@ -16,10 +16,12 @@ public:
     FORCEINLINE fvector_4d GetBaseColor() { return baseColor; }
     FORCEINLINE float GetRoughness() { return roughness; }
     FORCEINLINE EMaterialType GetMaterialType() { return materialType; }
+    FORCEINLINE XMFLOAT4X4& GetMaterialTransform() { return materialTransform; }
 private:
     fvector_4d baseColor;
     float roughness;
     EMaterialType materialType;
     
     EMaterialDisplayStatusType materialDisplayStatusType;
+    XMFLOAT4X4 materialTransform;
 };

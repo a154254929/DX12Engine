@@ -10,6 +10,7 @@ FRenderingData::FRenderingData()
     , vertexTypeSize(sizeof(FVertex))
     , indexFormat(DXGI_FORMAT_R16_UINT)
     , worldMatrix(EngineMath::IdentityMatrix4x4())
+    , textureTransform(EngineMath::IdentityMatrix4x4())
     , meshComp(NULL)
 {
 }

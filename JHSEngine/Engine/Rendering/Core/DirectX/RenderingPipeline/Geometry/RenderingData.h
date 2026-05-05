@@ -24,6 +24,7 @@ public:
     DXGI_FORMAT indexFormat;
 
     XMFLOAT4X4 worldMatrix;
+    XMFLOAT4X4 textureTransform;
     CMeshComponent* meshComp;
     shared_ptr<FRenderingResourcesUpdate> objectConstants;
 };
