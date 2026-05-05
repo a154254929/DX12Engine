@@ -45,7 +45,7 @@ void CMaterial::SetMaterialType(EMaterialType inMaterialType)
     SetDirty(true);
 }
 
-void CMaterial::SetBaseColorIndexKey(std::string& inAssetFileName)
+void CMaterial::SetBaseColorIndexKey(std::string inAssetFileName)
 {
     baseColorIndexKey = inAssetFileName;
     

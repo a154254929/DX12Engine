@@ -1,5 +1,9 @@
 #include "RenderingTextureResourceUpdate.h"
 
+const wchar_t DDS[] = L".dds";
+const wchar_t Asset[] = L"/Asset/";
+const wchar_t Project[] = L"/Project/";
+
 void FRenderingTextureResourcesUpdate::LoadTextureResource(const wstring& inFileName)
 {
         unique_ptr<FRenderingTexture> myTexture = std::make_unique<FRenderingTexture>();
@@ -17,7 +21,24 @@ void FRenderingTextureResourcesUpdate::LoadTextureResource(const wstring& inFile
             myTexture->data,
             myTexture->uploadBuffer
         );
-        myTexture->renderingTextureID = texturesMapping.size() + 1;
+        myTexture->renderingTextureID = texturesMapping.size();
+    
+        wchar_t assetFilenameBuff[1024] = { 0 };
+        {
+                wchar_t AssetFilenameBuff1[1024] = { 0 };
+                wchar_t* AssetFilenamePtr = const_cast<wchar_t*>(myTexture->fileName.c_str());
+
+                int Pos = wfind_string(AssetFilenamePtr, Asset);
+
+                wchar_t* Value = wstring_mid(AssetFilenamePtr, AssetFilenameBuff1, Pos, wcslen(AssetFilenamePtr));
+	    
+                wreplace_string_inline(Value, Asset, Project);
+                wreplace_string_inline(Value, DDS, (L"." + myTexture->name).c_str());
+
+                wget_printf_s(assetFilenameBuff, L"Texture'%s'", Value);
+        }
+
+	    myTexture->assetFileName = assetFilenameBuff;
         
         texturesMapping[myTexture->name] = std::move(myTexture);
 }
@@ -65,7 +86,7 @@ std::unique_ptr<FRenderingTexture>* FRenderingTextureResourcesUpdate::FindRender
         {
             for (auto &tmp : texturesMapping)
             {
-                if (tmp.second->fileName != texturePath)
+                if (tmp.second->fileName == texturePath)
                 {
                     return &tmp.second;
                 }

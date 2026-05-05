@@ -14,7 +14,7 @@ public:
     void SetBaseColor(fvector_4d inBaseColor);
     void SetRoughness(float inRoughness);
     void SetMaterialType(EMaterialType inMaterialType);
-    void SetBaseColorIndexKey(std::string &inAssetFileName);
+    void SetBaseColorIndexKey(std::string inAssetFileName);
 
     FORCEINLINE bool IsDirty() const { return true; }
     FORCEINLINE int GetMaterialIndex() const { return materialIndex; }
