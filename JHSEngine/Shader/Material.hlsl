@@ -13,7 +13,7 @@ void GetMaterialBaseColor(MaterialConstBuffer materialConst, float2 inTexcoord, 
 {
     if(materialConst.BaseColorIndex >= 0)
     {
-        inoutMaterial.BaseColor = materialConst.BaseColor * Texture2DMap[materialConst.BaseColorIndex].Sample(Texture2DMap_Sampler, inTexcoord);
+        inoutMaterial.BaseColor = materialConst.BaseColor * Texture2DMap[materialConst.BaseColorIndex].Sample(Point_Sampler, inTexcoord);
     }
     else
     {
@@ -30,7 +30,7 @@ float3 GetMaterialNormal(
     float3 normal;
     if(materialConst.NormalMapIndex >= 0)
     {
-        float3 sampleNormal = Texture2DMap[materialConst.NormalMapIndex].Sample(Texture2DMap_Sampler, inTexcoord);
+        float3 sampleNormal = Texture2DMap[materialConst.NormalMapIndex].Sample(Anisotropic_Sampler, inTexcoord);
         sampleNormal = sampleNormal * 2.0f - 1.0f;
         float3x3 TBN = GetTBNMatrix(inNormal, inTangent);
         normal = mul(sampleNormal, TBN);

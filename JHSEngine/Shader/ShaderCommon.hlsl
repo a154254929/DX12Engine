@@ -1,5 +1,6 @@
 
-SamplerState Texture2DMap_Sampler : register(s0);
+SamplerState Point_Sampler : register(s0);
+SamplerState Anisotropic_Sampler : register(s1);
 Texture2D Texture2DMap[Texture2DMap_Count] : register(t3);
 
 cbuffer ObjectConstBuffer : register(b0) //b0->b14

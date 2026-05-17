@@ -172,6 +172,21 @@ int CDirectXRenderingEngine::PostInit()
                 }
             }
         }
+
+        if (GSphereMesh* sphereMeshLambertain = world->CreateActorObject<GSphereMesh>())
+        {
+            sphereMeshLambertain->CreateMesh(1, 20, 20);
+            sphereMeshLambertain->SetPosition(XMFLOAT3(4.5, 1, 4));
+            {
+                if (CMaterial* material = (*sphereMeshLambertain->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
+                    material->SetBaseColorIndexKey("Texture'/Project/Texture/Texture1.Texture1.dds'");
+                    material->SetNormalMapIndexKey("Texture'/Project/Texture/Texture1_NRM.Texture1_NRM.dds'");
+                    material->SetMaterialType(EMaterialType::HalfLambertain);
+                }
+            }
+        }
         /////////////////////////////////////////////
 
         if (GSphereMesh* sphereMeshLambertain = world->CreateActorObject<GSphereMesh>())
