@@ -37,7 +37,7 @@ float4 AttenuationPointLights1(Light light, float distance)
 {
     float4 lightStrength = 1.0f;
     float4 attenuationRange = light.EndAttenuation - light.StartAttenuation;
-    return lightStrength * (1.0 - distance / attenuationRange);
+    return lightStrength * (1.0 - (distance - light.StartAttenuation) / attenuationRange);
 }
 
 float4 AttenuationPointLights2(Light light, float distance, float c, float i, float q)

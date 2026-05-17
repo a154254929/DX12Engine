@@ -32,7 +32,15 @@ struct MaterialConstBuffer
     int BaseColorIndex;
     int NormalMapIndex;
     
+    int SpecularMapIndex;
+    int ReversedMapIndex1;
+    int ReversedMapIndex2;
+    int ReversedMapIndex3;
+    
     float4 BaseColor;
+    float3 SpecularColor;
+    int xx;
+    
     float4x4 Transformation;
 };
 

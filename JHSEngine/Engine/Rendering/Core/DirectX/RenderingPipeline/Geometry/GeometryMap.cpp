@@ -181,7 +181,9 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
             if (inMaterial->IsDirty())
             {
                 fvector_4d baseColor = inMaterial->GetBaseColor();
+                fvector_3d specularColor = inMaterial->GetSpecularColor();
                 materialConstantBuffer.baseColor = XMFLOAT4(baseColor.x, baseColor.y, baseColor.z, baseColor.w);
+                materialConstantBuffer.specularColor = XMFLOAT3(specularColor.x, specularColor.y, specularColor.z);
 
                 materialConstantBuffer.roughness = inMaterial->GetRoughness();
 
@@ -196,6 +198,7 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                 {
                     materialConstantBuffer.baseColorIndex = -1;
                 }
+                
                 if (auto normalMapResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(inMaterial->GetNormalMapIndexKey()))
                 {
                     materialConstantBuffer.normalMapIndex = normalMapResourcePtr->get()->renderingTextureID;
@@ -203,6 +206,15 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                 else
                 {
                     materialConstantBuffer.normalMapIndex = -1;
+                }
+                
+                if (auto specularMapResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(inMaterial->GetSpecularMapIndexKey()))
+                {
+                    materialConstantBuffer.specualrMapIndex = specularMapResourcePtr->get()->renderingTextureID;
+                }
+                else
+                {
+                    materialConstantBuffer.specualrMapIndex = -1;
                 }
                     
                 XMMATRIX materialTransform = XMLoadFloat4x4(&inMaterial->GetMaterialTransform());

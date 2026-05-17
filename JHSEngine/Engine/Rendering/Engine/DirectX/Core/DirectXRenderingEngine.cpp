@@ -79,12 +79,12 @@ int CDirectXRenderingEngine::PostInit()
     {
         
         //构建灯光
-        /*
         if (GParallelLight* parallelLight1 = world->CreateActorObject<GParallelLight>())
         {
             parallelLight1->SetPosition(XMFLOAT3(0.0f, .0f, -8.0f));
-            parallelLight1->SetRotation(fvector_3d(45.f, 90.0f, .0f));
+            parallelLight1->SetRotation(fvector_3d(45.f, 45.0f, .0f));
         }
+        /*
         if (GParallelLight* parallelLight2 = world->CreateActorObject<GParallelLight>())
         {
             parallelLight2->SetPosition(XMFLOAT3(0.0f, 2.0f, -8.0f));
@@ -99,7 +99,7 @@ int CDirectXRenderingEngine::PostInit()
             
             pointLight1->SetLightIntensity(fvector_3d(2.f, 2.f, 2.f));
             //spotLight1->SetStartAttenuation(1.f);
-            pointLight1->SetEndAttenuation(150.f);
+            pointLight1->SetEndAttenuation(10.f);
         }
         
         if (GSpotLight* spotLight1 = world->CreateActorObject<GSpotLight>())
@@ -126,7 +126,7 @@ int CDirectXRenderingEngine::PostInit()
             if (CMaterial* material = (*planeMesh->GetMaterials())[0])
             {
                 material->SetBaseColor(fvector_4d(.5f, .8f, .5f, 1.f));
-                material->SetMaterialType(EMaterialType::Lambertain);
+                material->SetMaterialType(EMaterialType::HalfLambertain);
             }
         }
 
@@ -140,7 +140,7 @@ int CDirectXRenderingEngine::PostInit()
                     material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
                     material->SetBaseColorIndexKey("../JHSEngine/Asset/Texture/Texture2.dds");
                     material->SetNormalMapIndexKey("../JHSEngine/Asset/Texture/Texture2_NRM.dds");
-                    material->SetMaterialType(EMaterialType::HalfLambertain);
+                    material->SetMaterialType(EMaterialType::BlinnPhong);
                 }
             }
         }
@@ -154,7 +154,8 @@ int CDirectXRenderingEngine::PostInit()
                 {
                     material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
                     material->SetBaseColorIndexKey("Texture2.dds");
-                    material->SetMaterialType(EMaterialType::HalfLambertain);
+                    material->SetSpecularMapIndexKey("Texture2_SPEC.dds");
+                    material->SetMaterialType(EMaterialType::BlinnPhong);
                 }
             }
         }
@@ -168,7 +169,7 @@ int CDirectXRenderingEngine::PostInit()
                 {
                     material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
                     material->SetBaseColorIndexKey("Texture'/Project/Texture/Texture1.Texture1.dds'");
-                    material->SetMaterialType(EMaterialType::HalfLambertain);
+                    material->SetMaterialType(EMaterialType::BlinnPhong);
                 }
             }
         }
@@ -183,7 +184,7 @@ int CDirectXRenderingEngine::PostInit()
                     material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
                     material->SetBaseColorIndexKey("Texture'/Project/Texture/Texture1.Texture1.dds'");
                     material->SetNormalMapIndexKey("Texture'/Project/Texture/Texture1_NRM.Texture1_NRM.dds'");
-                    material->SetMaterialType(EMaterialType::HalfLambertain);
+                    material->SetMaterialType(EMaterialType::BlinnPhong);
                 }
             }
         }

@@ -41,3 +41,18 @@ float3 GetMaterialNormal(
     }
     return normalize(mul(normal, (float3x3) WorldMatrix));
 }
+
+float3 GetMaterialSpecularColor(
+    MaterialConstBuffer materialConst,
+    float2 inTexcoord)
+{
+    if(materialConst.SpecularMapIndex >= 0)
+    {
+        float4 specularColor = Texture2DMap[materialConst.SpecularMapIndex].Sample(Anisotropic_Sampler, inTexcoord);
+        return specularColor.rgb;
+    }
+    else
+    {
+        return materialConst.SpecularColor;
+    }
+}

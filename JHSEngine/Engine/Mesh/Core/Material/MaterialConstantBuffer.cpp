@@ -5,6 +5,10 @@ FMaterialConstantBuffer::FMaterialConstantBuffer()
     , roughness(.2f)
     , baseColorIndex(-1)
     , normalMapIndex(-1)
+    , specualrMapIndex(-1)
+    , reversedMapIndex1(-1)
+    , reversedMapIndex2(-1)
+    , reversedMapIndex3(-1)
     , transformation(EngineMath::IdentityMatrix4x4())
 {
 

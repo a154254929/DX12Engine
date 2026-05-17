@@ -5,6 +5,7 @@ CMaterial::CMaterial()
     : bDirty(true)
     , materialIndex(-1)
     , baseColor(.5f, .5f, .5f, 1.f)
+    , specularColor(.5f, .5f, .5f)
     , roughness(.2f)
     , materialType(EMaterialType::Lambertain)
     , materialDisplayStatusType(EMaterialDisplayStatusType::TriangleDisplay)
@@ -55,6 +56,20 @@ void CMaterial::SetBaseColorIndexKey(std::string inAssetFileName)
 void CMaterial::SetNormalMapIndexKey(std::string inAssetFileName)
 {
     normalMapIndexKey = inAssetFileName;
+    
+    SetDirty(true);
+}
+
+void CMaterial::SetSpecularMapIndexKey(std::string inAssetFileName)
+{
+    specularMapIndexKey = inAssetFileName;
+    
+    SetDirty(true);
+}
+
+void CMaterial::SetSpecularColor(fvector_3d& inSpecularColor)
+{
+    specularColor = inSpecularColor;
     
     SetDirty(true);
 }

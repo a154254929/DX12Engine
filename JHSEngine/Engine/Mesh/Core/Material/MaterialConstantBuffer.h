@@ -10,7 +10,15 @@ public:
     float roughness;
     int baseColorIndex;
     int normalMapIndex;
+    
+    int specualrMapIndex;
+    int reversedMapIndex1;
+    int reversedMapIndex2;
+    int reversedMapIndex3;
 
     XMFLOAT4 baseColor;
+    XMFLOAT3 specularColor;
+    int XX;
+    
     XMFLOAT4X4 transformation;
 };

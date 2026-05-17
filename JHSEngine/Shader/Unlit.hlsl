@@ -71,7 +71,9 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
     float4 lightStrengths = { 0.f,0.f,0.f,1.f };
     float4 specularColor = 0;
-	//return float4(input.uv.x > 0.95, .05f, 0, 1);
+    //float4 specularColor = 1;
+	float3 specular = GetMaterialSpecularColor(materialConst, input.uv);
+	//return float4(specular, 1);
     for (int i = 0; i < LightInfo.x; i++)
     {
         float diffuse = 0.f;
@@ -81,7 +83,8 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         float nol = dot(lightDir, worldNormal);
         if (materialConst.MaterialType == 0)  //lambertain
         {
-            diffuse += pow(saturate(nol), 2.0f);
+            //diffuse += pow(saturate(nol), 2.0f);
+            diffuse += saturate(nol);
         }
         else if (materialConst.MaterialType == 1) //half-lambertain
         {
@@ -95,7 +98,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float3 reflectLight = normalize(reflect(-lightDir, worldNormal));
             float smoothness = 1.f - saturate(materialConst.Roughness);
             float m = 100 * smoothness;
-            specularColor.rgb += (m + 2.0f) * pow(saturate(dot(view, reflectLight)), m) / (acos(-1.0f) * 2.0f);
+            specularColor.rgb += saturate(specular * (m + 2.0f) * pow(saturate(dot(view, reflectLight)), m) / (acos(-1.0f) * 2.0f));
             specularColor.a = 1;
         }
         else if (materialConst.MaterialType == 3) //blinn-phong
@@ -105,7 +108,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float3 halfView = normalize(view + lightDir);
             float smoothness = 1.f - saturate(materialConst.Roughness);
             float m = 100 * smoothness;
-            specularColor.rgb += (m + 2.0f) * pow(saturate(dot(worldNormal, halfView)), m) / (acos(-1.0f) * 2.0f);
+            specularColor.rgb += saturate(specular * (m + 2.0f) * pow(saturate(dot(worldNormal, halfView)), m) / (acos(-1.0f) * 2.0f));
             specularColor.a = 1;
 
         }
@@ -129,7 +132,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float specularLayer = 2;
             float3 f0 = .1f;
             
-            specularColor.rgb += floor(saturate(FresnelSchlickMethod(f0, worldNormal, view, 3).rgb) * specularLayer) / specularLayer;
+            specularColor.rgb += saturate(specular * floor(saturate(FresnelSchlickMethod(f0, worldNormal, view, 3).rgb) * specularLayer) / specularLayer);
             
             specularColor.a = 1;
         }
@@ -142,7 +145,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float specularLayer = 2;
             float3 f0 = .1f;
             
-            specularColor.rgb += floor(saturate(FresnelSchlickMethod(f0, worldNormal, view, 3).rgb) * specularLayer) / specularLayer;
+            specularColor.rgb += saturate(specular * floor(saturate(FresnelSchlickMethod(f0, worldNormal, view, 3).rgb) * specularLayer) / specularLayer);
             
             specularColor.a = 1;
             float4 color2 = float4(.4f, .5f, .8f, 1);
@@ -159,10 +162,10 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float smoothness = 1.f - saturate(materialConst.Roughness);
             float m = 100 * smoothness;
             //float3 halfView = normalize(view + lightDir);
-            //specularColor.rgb += nol > 0 ? pow(saturate(dot(worldNormal, halfView)), m) :0;
+            //specularColor.rgb += nol > 0 ? saturate(pow(saturate(dot(worldNormal, halfView)), m)) :0;
             float3 reflectLight = normalize(reflect(-lightDir, worldNormal));
             
-            specularColor.rgb = saturate((pow(saturate(dot(view, reflectLight)), m) * 31.25)) * specularLayer;
+            specularColor.rgb = saturate(specular * saturate((pow(saturate(dot(view, reflectLight)), m) * 31.25)) * specularLayer);
             
             specularColor.a = 1;
         }
@@ -176,7 +179,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float3 reflectLight = normalize(reflect(-lightDir, worldNormal));
             float smoothness = 1.f - saturate(materialConst.Roughness);
             float m = 100 * smoothness;
-            specularColor.rgb += pow(saturate(dot(view, reflectLight)), m);
+            specularColor.rgb += saturate(specular * pow(saturate(dot(view, reflectLight)), m));
             specularColor.a = 1;
 
         }
@@ -245,15 +248,21 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         {
             float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
             float3 f0 = .1f;
-            specularColor.rgb = FresnelSchlickMethod(f0, worldNormal, view, 3).rgb;
+            specularColor.rgb = saturate(specular * FresnelSchlickMethod(f0, worldNormal, view, 3).rgb);
             break;
         }
         
         lightStrengths += lightStrength * diffuse * float4(SceneLights[i].LightIntensity,1.f);
     }
+
+	//lightStrengths = saturate(lightStrengths);
+	//material.BaseColor = saturate(material.BaseColor);
+	//specularColor = saturate(specularColor);
     
-    return lightStrengths * (material.BaseColor + material.BaseColor * specularColor)
-        + material.BaseColor * ambientLight;
+    return lightStrengths * (
+		material.BaseColor
+		+ material.BaseColor * specularColor)
+    + material.BaseColor * ambientLight;
     //return material.BaseColor;
     
     //return float4(input.worldNormal, 1);
