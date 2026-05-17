@@ -1,6 +1,7 @@
 #include "Light.hlsl"
 #include "Material.hlsl"
 #include "BRDF.hlsl"
+#include "ShaderFunctionLibrary.hlsl"
 
 SamplerState Texture2DMap_Sampler : register(s0);
 Texture2D Texture2DMap[Texture2DMap_Count] : register(t3);
