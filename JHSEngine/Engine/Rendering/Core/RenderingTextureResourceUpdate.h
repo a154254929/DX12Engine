@@ -29,5 +29,5 @@ public:
     
     std::unique_ptr<FRenderingTexture> *FindRenderingTextureByName(const std::string &inKey);
 protected:
-    std::unordered_map<std::wstring, std::unique_ptr<FRenderingTexture>> texturesMapping;
+    std::map<std::wstring, std::unique_ptr<FRenderingTexture>> texturesMapping;
 };

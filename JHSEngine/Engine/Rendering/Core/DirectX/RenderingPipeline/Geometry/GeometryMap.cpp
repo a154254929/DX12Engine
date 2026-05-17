@@ -196,6 +196,14 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                 {
                     materialConstantBuffer.baseColorIndex = -1;
                 }
+                if (auto normalMapResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(inMaterial->GetNormalMapIndexKey()))
+                {
+                    materialConstantBuffer.normalMapIndex = normalMapResourcePtr->get()->renderingTextureID;
+                }
+                else
+                {
+                    materialConstantBuffer.normalMapIndex = -1;
+                }
                     
                 XMMATRIX materialTransform = XMLoadFloat4x4(&inMaterial->GetMaterialTransform());
                 XMStoreFloat4x4(
@@ -408,16 +416,47 @@ void FGeometryMap::LoadTexture()
     
     char rootPath[] = "../JHSEngine/Asset/Texture";
     find_files(rootPath, &filePaths, true);
-    
-    for (int i = 0; i < filePaths.index; i++)
+
+    std::vector<std::string> ddsPaths;
+    ddsPaths.reserve(filePaths.index);
+
+    for (int i = 0; i < filePaths.index; ++i)
     {
         if (find_string(filePaths.paths[i], ".dds", 0) != -1)
         {
             normalization_path(filePaths.paths[i]);
-            wchar_t texturePath[1024] = {0};
-            char_to_wchar_t(texturePath, 1024, filePaths.paths[i]);
-            renderingTextureResourcesUpdate->LoadTextureResource(texturePath);
+            ddsPaths.emplace_back(filePaths.paths[i]);
         }
+    }
+
+    auto getFileName = [](const std::string& p) -> std::string
+    {
+        size_t pos = p.find_last_of("/\\");
+        return (pos == std::string::npos) ? p : p.substr(pos + 1);
+    };
+
+    auto toLower = [](std::string s) -> std::string
+    {
+        std::transform(s.begin(), s.end(), s.begin(),
+            [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+        return s;
+    };
+
+    // 先按文件名排序；文件名相同再按完整路径排序，保证结果稳定
+    std::sort(ddsPaths.begin(), ddsPaths.end(),
+        [&](const std::string& a, const std::string& b)
+        {
+            std::string an = toLower(getFileName(a));
+            std::string bn = toLower(getFileName(b));
+            if (an != bn) return an < bn;
+            return toLower(a) < toLower(b);
+        });
+
+    for (const std::string& p : ddsPaths)
+    {
+        wchar_t texturePath[1024] = { 0 };
+        char_to_wchar_t(texturePath, 1024, p.c_str());
+        renderingTextureResourcesUpdate->LoadTextureResource(texturePath);
     }
 }
 

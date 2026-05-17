@@ -139,6 +139,7 @@ int CDirectXRenderingEngine::PostInit()
                 {
                     material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
                     material->SetBaseColorIndexKey("../JHSEngine/Asset/Texture/Texture2.dds");
+                    material->SetNormalMapIndexKey("../JHSEngine/Asset/Texture/Texture2_NRM.dds");
                     material->SetMaterialType(EMaterialType::HalfLambertain);
                 }
             }

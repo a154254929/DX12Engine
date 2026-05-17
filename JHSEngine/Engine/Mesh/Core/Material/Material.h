@@ -15,6 +15,7 @@ public:
     void SetRoughness(float inRoughness);
     void SetMaterialType(EMaterialType inMaterialType);
     void SetBaseColorIndexKey(std::string inAssetFileName);
+    void SetNormalMapIndexKey(std::string inAssetFileName);
 
     FORCEINLINE bool IsDirty() const { return true; }
     FORCEINLINE int GetMaterialIndex() const { return materialIndex; }
@@ -23,6 +24,7 @@ public:
     FORCEINLINE EMaterialType GetMaterialType() { return materialType; }
     FORCEINLINE XMFLOAT4X4& GetMaterialTransform() { return materialTransform; }
     FORCEINLINE const string& GetBaseColorIndexKey() { return baseColorIndexKey; }
+    FORCEINLINE const string& GetNormalMapIndexKey() { return normalMapIndexKey; }
 private:
     bool bDirty;
     int materialIndex;
@@ -32,6 +34,7 @@ private:
     EMaterialType materialType;
     
     std::string baseColorIndexKey;
+    std::string normalMapIndexKey;
     
     EMaterialDisplayStatusType materialDisplayStatusType;
     XMFLOAT4X4 materialTransform;

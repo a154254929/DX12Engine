@@ -51,3 +51,10 @@ void CMaterial::SetBaseColorIndexKey(std::string inAssetFileName)
     
     SetDirty(true);
 }
+
+void CMaterial::SetNormalMapIndexKey(std::string inAssetFileName)
+{
+    normalMapIndexKey = inAssetFileName;
+    
+    SetDirty(true);
+}
