@@ -6,7 +6,13 @@ CSphereMeshComponent::CSphereMeshComponent()
     
 }
 
-void CSphereMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
+void CSphereMeshComponent::CreateMesh(
+    FMeshRenderingData& meshRenderingData,
+    float inRadius,
+    uint32_t inAxialSubdivision,
+    uint32_t inHeightSubdivision,
+    bool bReverse
+)
 {
     inAxialSubdivision = max(inAxialSubdivision, 3);
     inHeightSubdivision = max(inHeightSubdivision, 2);
@@ -54,9 +60,18 @@ void CSphereMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, flo
         {
             for (uint32_t j = 0; j < inAxialSubdivision; ++j)
             {
-                meshRenderingData.indexData.push_back(roundStart + j);
-                meshRenderingData.indexData.push_back(j);
-                meshRenderingData.indexData.push_back(roundStart + 1 + j);
+                if (bReverse)
+                {
+                    meshRenderingData.indexData.push_back(roundStart + j);
+                    meshRenderingData.indexData.push_back(roundStart + 1 + j);
+                    meshRenderingData.indexData.push_back(j);
+                }
+                else
+                {
+                    meshRenderingData.indexData.push_back(roundStart + j);
+                    meshRenderingData.indexData.push_back(j);
+                    meshRenderingData.indexData.push_back(roundStart + 1 + j);
+                }
             }
         }
         else
@@ -64,13 +79,26 @@ void CSphereMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, flo
             uint32_t lastRoundStart = (i - 2) * (inAxialSubdivision + 1) + inAxialSubdivision;
             for (uint32_t j = 0; j < inAxialSubdivision; ++j)
             {
-                meshRenderingData.indexData.push_back(roundStart + j);
-                meshRenderingData.indexData.push_back(lastRoundStart + j);
-                meshRenderingData.indexData.push_back(lastRoundStart + ((j + 1) % (inAxialSubdivision + 1)));
+                if (bReverse)
+                {
+                    meshRenderingData.indexData.push_back(roundStart + j);
+                    meshRenderingData.indexData.push_back(lastRoundStart + ((j + 1) % (inAxialSubdivision + 1)));
+                    meshRenderingData.indexData.push_back(lastRoundStart + j);
 
-                meshRenderingData.indexData.push_back(roundStart + j);
-                meshRenderingData.indexData.push_back(lastRoundStart + ((j + 1) % (inAxialSubdivision + 1)));
-                meshRenderingData.indexData.push_back(roundStart + ((j + 1) % (inAxialSubdivision + 1)));
+                    meshRenderingData.indexData.push_back(roundStart + j);
+                    meshRenderingData.indexData.push_back(roundStart + ((j + 1) % (inAxialSubdivision + 1)));
+                    meshRenderingData.indexData.push_back(lastRoundStart + ((j + 1) % (inAxialSubdivision + 1)));
+                }
+                else
+                {
+                    meshRenderingData.indexData.push_back(roundStart + j);
+                    meshRenderingData.indexData.push_back(lastRoundStart + j);
+                    meshRenderingData.indexData.push_back(lastRoundStart + ((j + 1) % (inAxialSubdivision + 1)));
+
+                    meshRenderingData.indexData.push_back(roundStart + j);
+                    meshRenderingData.indexData.push_back(lastRoundStart + ((j + 1) % (inAxialSubdivision + 1)));
+                    meshRenderingData.indexData.push_back(roundStart + ((j + 1) % (inAxialSubdivision + 1)));
+                }
             }
         }
     }
@@ -88,8 +116,17 @@ void CSphereMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, flo
     uint32_t finalRoundStart = (inHeightSubdivision - 2) * (inAxialSubdivision + 1) + inAxialSubdivision;
     for (uint32_t i = 0; i < inAxialSubdivision; ++i)
     {
-        meshRenderingData.indexData.push_back(finalIndex + i);
-        meshRenderingData.indexData.push_back(finalRoundStart + i);
-        meshRenderingData.indexData.push_back(finalRoundStart + i + 1);
+        if (bReverse)
+        {
+            meshRenderingData.indexData.push_back(finalIndex + i);
+            meshRenderingData.indexData.push_back(finalRoundStart + i + 1);
+            meshRenderingData.indexData.push_back(finalRoundStart + i);
+        }
+        else
+        {
+            meshRenderingData.indexData.push_back(finalIndex + i);
+            meshRenderingData.indexData.push_back(finalRoundStart + i);
+            meshRenderingData.indexData.push_back(finalRoundStart + i + 1);
+        }
     }
 }

@@ -18,6 +18,7 @@ public:
     void SetBaseColorIndexKey(std::string inAssetFileName);
     void SetNormalMapIndexKey(std::string inAssetFileName);
     void SetSpecularMapIndexKey(std::string inAssetFileName);
+    void SetRoughnessMapIndexKey(std::string inAssetFileName);
 
     FORCEINLINE bool IsDirty() const { return true; }
     FORCEINLINE int GetMaterialIndex() const { return materialIndex; }
@@ -29,6 +30,7 @@ public:
     FORCEINLINE const string& GetBaseColorIndexKey() { return baseColorIndexKey; }
     FORCEINLINE const string& GetNormalMapIndexKey() { return normalMapIndexKey; }
     FORCEINLINE const string& GetSpecularMapIndexKey() { return specularMapIndexKey; }
+    FORCEINLINE const string& GetRoughnessMapIndexKey() { return roughnessMapIndexKey; }
 private:
     bool bDirty;
     int materialIndex;
@@ -43,6 +45,7 @@ private:
     std::string baseColorIndexKey;
     std::string normalMapIndexKey;
     std::string specularMapIndexKey;
+    std::string roughnessMapIndexKey;
     
     EMaterialDisplayStatusType materialDisplayStatusType;
     XMFLOAT4X4 materialTransform;

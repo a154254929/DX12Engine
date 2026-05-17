@@ -37,7 +37,7 @@ public:
 
     CMeshComponent* CreateDonutMeshComponent(float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision);
 
-    CMeshComponent* CreateSphereMeshComponent(float InRadius, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision);
+    CMeshComponent* CreateSphereMeshComponent(float InRadius, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision, bool bReverse = false);
 
     CMeshComponent* CreateMeshComponent(string& InPath);
 

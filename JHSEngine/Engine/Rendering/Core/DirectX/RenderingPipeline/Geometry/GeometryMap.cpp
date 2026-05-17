@@ -210,11 +210,20 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                 
                 if (auto specularMapResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(inMaterial->GetSpecularMapIndexKey()))
                 {
-                    materialConstantBuffer.specualrMapIndex = specularMapResourcePtr->get()->renderingTextureID;
+                    materialConstantBuffer.specularMapIndex = specularMapResourcePtr->get()->renderingTextureID;
                 }
                 else
                 {
-                    materialConstantBuffer.specualrMapIndex = -1;
+                    materialConstantBuffer.specularMapIndex = -1;
+                }
+                
+                if (auto roughnessMapResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(inMaterial->GetSpecularMapIndexKey()))
+                {
+                    materialConstantBuffer.roughnessMapIndex = roughnessMapResourcePtr->get()->renderingTextureID;
+                }
+                else
+                {
+                    materialConstantBuffer.roughnessMapIndex = -1;
                 }
                     
                 XMMATRIX materialTransform = XMLoadFloat4x4(&inMaterial->GetMaterialTransform());

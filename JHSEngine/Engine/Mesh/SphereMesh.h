@@ -9,5 +9,9 @@ public:
 
     virtual void Draw(float deltaTime);
 
-    void CreateMesh(float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
+    void CreateMesh(
+        float inRadius,
+        uint32_t inAxialSubdivision,
+        uint32_t inHeightSubdivision,
+        bool bReverse = false);
 };

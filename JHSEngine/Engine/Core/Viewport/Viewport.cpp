@@ -16,7 +16,7 @@ void FViewport::ViewportInit()
         0.25f * XM_PI, //以弧度为单位的自上而下的视场角
         aspectRatio,//宽高比
         1.0f,//近裁剪面
-        1000.f//原剪裁面
+        10000.f//原剪裁面
     );
 
     XMStoreFloat4x4(&projectMatrix, project);

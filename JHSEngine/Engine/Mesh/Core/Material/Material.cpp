@@ -32,6 +32,13 @@ void CMaterial::SetBaseColor(fvector_4d inBaseColor)
     SetDirty(true);
 }
 
+void CMaterial::SetSpecularColor(fvector_3d& inSpecularColor)
+{
+    specularColor = inSpecularColor;
+    
+    SetDirty(true);
+}
+
 void CMaterial::SetRoughness(float inRoughness)
 {
     roughness = inRoughness; 
@@ -67,9 +74,9 @@ void CMaterial::SetSpecularMapIndexKey(std::string inAssetFileName)
     SetDirty(true);
 }
 
-void CMaterial::SetSpecularColor(fvector_3d& inSpecularColor)
+void CMaterial::SetRoughnessMapIndexKey(std::string inAssetFileName)
 {
-    specularColor = inSpecularColor;
+    roughnessMapIndexKey = inAssetFileName;
     
     SetDirty(true);
 }

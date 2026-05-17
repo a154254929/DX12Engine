@@ -33,7 +33,7 @@ struct MaterialConstBuffer
     int NormalMapIndex;
     
     int SpecularMapIndex;
-    int ReversedMapIndex1;
+    int RoughnessMapIndex;
     int ReversedMapIndex2;
     int ReversedMapIndex3;
     

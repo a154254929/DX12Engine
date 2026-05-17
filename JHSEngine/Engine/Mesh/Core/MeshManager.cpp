@@ -46,9 +46,9 @@ void CMeshManager::PostDraw(float deltaTime)
     renderingPipeline.PostDraw(deltaTime);
 }
 
-CMeshComponent* CMeshManager::CreateSphereMeshComponent(float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
+CMeshComponent* CMeshManager::CreateSphereMeshComponent(float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision, bool bReverse)
 {
-    return CreateMeshComponent<CSphereMeshComponent>(inRadius, inAxialSubdivision, inHeightSubdivision);
+    return CreateMeshComponent<CSphereMeshComponent>(inRadius, inAxialSubdivision, inHeightSubdivision, bReverse);
 }
 
 CMeshComponent* CMeshManager::CreateMeshComponent(string& inPath)

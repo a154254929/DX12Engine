@@ -48,22 +48,23 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 	MaterialConstBuffer materialConst = Materials[MaterialIndex];
 
     //BaseColor
-    if (materialConst.MaterialType == 12) //phong
+    float4 ambientLight = { .15f, .15f, .25f, 1.0f };
+    
+    FMaterial material = (FMaterial)0;
+	GetMaterialBaseColor(materialConst, input.uv, material);
+	GetMaterialRoughness(materialConst, input.uv, material);
+    float3 normal = normalize(input.normal.xyz);
+	normal = GetMaterialNormal(materialConst, input.uv, normal, input.utangent);
+	float3 worldNormal = normalize(mul(normal, (float3x3) WorldMatrix));
+    if (materialConst.MaterialType == 12) //BaseColor
     {
-        return input.color;
+        return material.BaseColor;
     }
-    else if (materialConst.MaterialType == 13) //phong
+	else if (materialConst.MaterialType == 13) //Normal
     {
         return float4(input.normal, 1.0f);
     }
-    float4 ambientLight = { .15f, .15f, .25f, 1.0f };
-    
-    FMaterial material;
-	GetMaterialBaseColor(materialConst, input.uv, material);
-    float3 normal = normalize(input.normal.xyz);
-	float3 worldNormal = GetMaterialNormal(materialConst, input.uv, normal, input.utangent);
-
-    if (materialConst.MaterialType == 14) //phong
+    else if (materialConst.MaterialType == 14) //WorldNormal
     {
         return float4(worldNormal, 1.0f);
     }
@@ -96,7 +97,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             diffuse += pow(saturate(nol), 2.0f);
             
             float3 reflectLight = normalize(reflect(-lightDir, worldNormal));
-            float smoothness = 1.f - saturate(materialConst.Roughness);
+            float smoothness = 1.f - saturate(material.Roughness);
             float m = 100 * smoothness;
             specularColor.rgb += saturate(specular * (m + 2.0f) * pow(saturate(dot(view, reflectLight)), m) / (acos(-1.0f) * 2.0f));
             specularColor.a = 1;
@@ -106,7 +107,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             diffuse += pow(saturate(nol), 2.0f);
             
             float3 halfView = normalize(view + lightDir);
-            float smoothness = 1.f - saturate(materialConst.Roughness);
+            float smoothness = 1.f - saturate(material.Roughness);
             float m = 100 * smoothness;
             specularColor.rgb += saturate(specular * (m + 2.0f) * pow(saturate(dot(worldNormal, halfView)), m) / (acos(-1.0f) * 2.0f));
             specularColor.a = 1;
@@ -120,7 +121,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         }
         else if (materialConst.MaterialType == 5) //Minnaert
         {
-            float smoothness = 1.f - saturate(materialConst.Roughness);
+            float smoothness = 1.f - saturate(material.Roughness);
             float r = 20 * smoothness;
             diffuse += pow(saturate(nol), 2.0f) * pow(dot(worldNormal, view) * pow(saturate(nol), 2.0f), r);
         }
@@ -159,7 +160,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float specularLayer = 2;
             float3 f0 = .1f;
             
-            float smoothness = 1.f - saturate(materialConst.Roughness);
+            float smoothness = 1.f - saturate(material.Roughness);
             float m = 100 * smoothness;
             //float3 halfView = normalize(view + lightDir);
             //specularColor.rgb += nol > 0 ? saturate(pow(saturate(dot(worldNormal, halfView)), m)) :0;
@@ -177,7 +178,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             diffuse += saturate((nol + wrapValue) / (1 + wrapValue));
             
             float3 reflectLight = normalize(reflect(-lightDir, worldNormal));
-            float smoothness = 1.f - saturate(materialConst.Roughness);
+            float smoothness = 1.f - saturate(material.Roughness);
             float m = 100 * smoothness;
             specularColor.rgb += saturate(specular * pow(saturate(dot(view, reflectLight)), m));
             specularColor.a = 1;
@@ -199,7 +200,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float alpha = max(acosNOV, acosNOL);
             float beta = min(acosNOV, acosNOL);
             
-            float roughness = pow(materialConst.Roughness, 2);
+            float roughness = pow(material.Roughness, 2);
             
             float a = 1 - .5f * (roughness / (roughness + .33f));
             float b = .45f * (roughness / (roughness + .09f));
@@ -255,9 +256,9 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         lightStrengths += lightStrength * diffuse * float4(SceneLights[i].LightIntensity,1.f);
     }
 
-	//lightStrengths = saturate(lightStrengths);
-	//material.BaseColor = saturate(material.BaseColor);
-	//specularColor = saturate(specularColor);
+	lightStrengths = saturate(lightStrengths);
+	material.BaseColor = saturate(material.BaseColor);
+	specularColor = saturate(specularColor);
     
     return lightStrengths * (
 		material.BaseColor

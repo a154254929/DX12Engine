@@ -11,8 +11,8 @@ public:
     int baseColorIndex;
     int normalMapIndex;
     
-    int specualrMapIndex;
-    int reversedMapIndex1;
+    int specularMapIndex;
+    int roughnessMapIndex;
     int reversedMapIndex2;
     int reversedMapIndex3;
 

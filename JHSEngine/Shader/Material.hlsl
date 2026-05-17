@@ -2,6 +2,7 @@
 struct FMaterial
 {
     float4 BaseColor;
+    float Roughness;
 };
 
 float3 FresnelSchlickMethod(float3 inF0, float3 inNormal, float3 inView, float inM)
@@ -21,6 +22,18 @@ void GetMaterialBaseColor(MaterialConstBuffer materialConst, float2 inTexcoord, 
     }
 }
 
+void GetMaterialRoughness(MaterialConstBuffer materialConst, float2 inTexcoord, inout FMaterial inoutMaterial)
+{
+    if(materialConst.RoughnessMapIndex >= 0)
+    {
+        inoutMaterial.Roughness = Texture2DMap[materialConst.RoughnessMapIndex].Sample(Point_Sampler, inTexcoord).r;
+    }
+    else
+    {
+        inoutMaterial.Roughness = materialConst.Roughness;
+    }
+}
+
 float3 GetMaterialNormal(
     MaterialConstBuffer materialConst,
     float2 inTexcoord,
@@ -30,7 +43,7 @@ float3 GetMaterialNormal(
     float3 normal;
     if(materialConst.NormalMapIndex >= 0)
     {
-        float3 sampleNormal = Texture2DMap[materialConst.NormalMapIndex].Sample(Anisotropic_Sampler, inTexcoord);
+        float3 sampleNormal = Texture2DMap[materialConst.NormalMapIndex].Sample(Anisotropic_Sampler, inTexcoord).rgb;
         sampleNormal = sampleNormal * 2.0f - 1.0f;
         float3x3 TBN = GetTBNMatrix(inNormal, inTangent);
         normal = mul(sampleNormal, TBN);
@@ -39,7 +52,7 @@ float3 GetMaterialNormal(
     {
         normal = inNormal;
     }
-    return normalize(mul(normal, (float3x3) WorldMatrix));
+    return normal;
 }
 
 float3 GetMaterialSpecularColor(
