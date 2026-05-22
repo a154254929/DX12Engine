@@ -21,6 +21,7 @@
 
 #if defined(_WIN32)
 #include "../../../../Core/WinMainCommandParameters.h"
+#include "../../../../Mesh/DonutMesh.h"
 
 
 //class FVector
@@ -129,6 +130,7 @@ int CDirectXRenderingEngine::PostInit()
                 material->SetMaterialType(EMaterialType::HalfLambertain);
             }
         }
+        
         if (GSphereMesh* skySphere = world->CreateActorObject<GSphereMesh>())
         {
             skySphere->CreateMesh(1, 20, 20, true);
@@ -139,6 +141,19 @@ int CDirectXRenderingEngine::PostInit()
             {
                 material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
                 material->SetBaseColorIndexKey("../JHSEngine/Asset/Texture/EpicQuadPanorama_CC.dds");
+                material->SetMaterialType(EMaterialType::BaseColor);
+            }
+        }
+        
+        if (GDonutMesh* donutMesh = world->CreateActorObject<GDonutMesh>())
+        {
+            donutMesh->CreateMesh(3, 1, 20, 20);
+            
+            donutMesh->SetPosition(XMFLOAT3(0, 3.5, 4));
+            if (CMaterial* material = (*donutMesh->GetMaterials())[0])
+            {
+                material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
+                material->SetBaseColorIndexKey("../JHSEngine/Asset/Texture/Texture2.dds");
                 material->SetMaterialType(EMaterialType::BaseColor);
             }
         }
