@@ -71,7 +71,7 @@ void CAesmaMeshComponent::CreateMesh(
                 XMFLOAT3(inOuterRadius * cosf(theta), height, inOuterRadius * sinf(theta)),
                 XMFLOAT4(.25f, j * 1.f / inAxialSubdivision, 1.f, 1.f),
                 XMFLOAT3(cosf(theta), 0, sinf(theta)),
-                XMFLOAT2(j * 1.0f / inAxialSubdivision, i * 1.0f / inHeightSubdivision)
+                XMFLOAT2(j * 1.0f / inAxialSubdivision, 1.0 - i * 1.0f / inHeightSubdivision)
             ));
         }
         if (i > 0)
@@ -103,7 +103,7 @@ void CAesmaMeshComponent::CreateMesh(
                 XMFLOAT3(inInnerRadius * cosf(theta), height, inInnerRadius * sinf(theta)),
                 XMFLOAT4(.25f, j * 1.f / inAxialSubdivision, 1.f, 1.f),
                 XMFLOAT3(-cosf(theta), 0, -sinf(theta)),
-                XMFLOAT2(j * 1.0f / inAxialSubdivision, i * 1.0f / inHeightSubdivision)
+                XMFLOAT2(1.0 - j * 1.0f / inAxialSubdivision, 1.0 - i * 1.0f / inHeightSubdivision)
             ));
         }
         if (i != 0)

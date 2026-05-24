@@ -159,7 +159,6 @@ int CDirectXRenderingEngine::PostInit()
                 material->SetMaterialType(EMaterialType::BaseColor);
             }
         }
-        */
         
         if (GAesmaMesh* aesmaMesh = world->CreateActorObject<GAesmaMesh>())
         {
@@ -167,6 +166,20 @@ int CDirectXRenderingEngine::PostInit()
             
             aesmaMesh->SetPosition(XMFLOAT3(0, 3.5, 4));
             if (CMaterial* material = (*aesmaMesh->GetMaterials())[0])
+            {
+                material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
+                material->SetBaseColorIndexKey("../JHSEngine/Asset/Texture/Texture2.dds");
+                material->SetMaterialType(EMaterialType::BaseColor);
+            }
+        }
+        */
+        
+        if (GBoxMesh* boxMesh = world->CreateActorObject<GBoxMesh>())
+        {
+            boxMesh->CreateMesh(1, 1, 1);
+            
+            boxMesh->SetPosition(XMFLOAT3(0, 3.5, 4));
+            if (CMaterial* material = (*boxMesh->GetMaterials())[0])
             {
                 material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
                 material->SetBaseColorIndexKey("../JHSEngine/Asset/Texture/Texture2.dds");
