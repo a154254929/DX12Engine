@@ -7,6 +7,12 @@ FOpaqueRenderLayer::FOpaqueRenderLayer()
     renderPriority = 2000;
 }
 
+void FOpaqueRenderLayer::Draw(float deltaTime)
+{
+    directXPipelineState->ResetPSO(Opaque);
+    Super::Draw(deltaTime);
+}
+
 void FOpaqueRenderLayer::BuildShader()
 {
     char textureNumBuff[10] = {0};
@@ -33,7 +39,10 @@ void FOpaqueRenderLayer::BuildShader()
 
 void FOpaqueRenderLayer::BuildPSO()
 {
+    directXPipelineState->SetFillMode(false);
+    directXPipelineState->Build(EPipelineState::Opaque);
     //构建管线
+    directXPipelineState->SetFillMode(true);
     directXPipelineState->Build(EPipelineState::WireFrame);
     
     directXPipelineState->SetFillMode(false);

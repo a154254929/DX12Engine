@@ -18,9 +18,9 @@ public:
     //基础注册环境
     virtual void Init(FGeometryMap* inGeometryMap, FDirectXPipelineState* inDirectXPipelineState);
 
-    void PreDraw(float deltaTime);
-    void Draw(float deltaTime);
-    void PostDraw(float deltaTime);
+    virtual void PreDraw(float deltaTime);
+    virtual void Draw(float deltaTime);
+    virtual void PostDraw(float deltaTime);
     
     virtual void BuildPSO() = 0;
 

@@ -3,8 +3,11 @@
 
 class FOpaqueRenderLayer : public FRenderLayer
 {
+    typedef FRenderLayer Super;
 public:
     FOpaqueRenderLayer();
+    
+    virtual void Draw(float deltaTime);
 
     virtual void BuildShader();
     

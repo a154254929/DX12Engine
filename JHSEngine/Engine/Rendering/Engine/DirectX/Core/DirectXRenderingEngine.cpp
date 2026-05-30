@@ -529,6 +529,20 @@ int CDirectXRenderingEngine::PostInit()
                 }
             }
         }
+        //世界法线
+        if (GSphereMesh* sphereMeshTransparent = world->CreateActorObject<GSphereMesh>())
+        {
+            sphereMeshTransparent->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_TRANSPARENT);
+            
+            sphereMeshTransparent->CreateMesh(1, 20, 20);
+            sphereMeshTransparent->SetPosition(XMFLOAT3(4.5f, 11.0f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshTransparent->GetMaterials())[0])
+                {
+                    material->SetMaterialType(EMaterialType::WorldNormal);
+                }
+            }
+        }
     }
     meshManager->BuildMesh();
 

@@ -6,6 +6,12 @@ FPostProcessRenderLayer::FPostProcessRenderLayer()
     renderPriority = 3500;
 }
 
+void FPostProcessRenderLayer::Draw(float deltaTime)
+{
+    directXPipelineState->ResetPSO(PostProcess);
+    Super::Draw(deltaTime);
+}
+
 void FPostProcessRenderLayer::BuildShader()
 {
 }
@@ -13,8 +19,6 @@ void FPostProcessRenderLayer::BuildShader()
 void FPostProcessRenderLayer::BuildPSO()
 {
     //构建管线
-    directXPipelineState->Build(EPipelineState::WireFrame);
-    
     directXPipelineState->SetFillMode(false);
-    directXPipelineState->Build(EPipelineState::GrayModel);
+    directXPipelineState->Build(EPipelineState::PostProcess);
 }

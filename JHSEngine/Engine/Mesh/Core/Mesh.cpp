@@ -44,6 +44,11 @@ void GMesh::SetMeshComponent(CMeshComponent* InMeshComponent)
     meshComponent = InMeshComponent;
 }
 
+void GMesh::SetRenderLayerType(EMeshRenderLayerType inMeshRenderLayerType)
+{
+    meshComponent->SetRenderLayerType(inMeshRenderLayerType);
+}
+
 void GMesh::SetPosition(const XMFLOAT3& inPosition)
 {
     GActorObject::SetPosition(inPosition);

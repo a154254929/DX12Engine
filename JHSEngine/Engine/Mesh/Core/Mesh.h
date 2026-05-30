@@ -7,6 +7,7 @@
 
 class CMeshComponent;
 class CMaterial;
+enum EMeshRenderLayerType;
 class GMesh
     : public GActorObject,
     public IRenderingInterface,
@@ -31,6 +32,9 @@ public:
     {
         return dynamic_cast<T*>(meshComponent);
     }
+    
+public:
+    virtual void SetRenderLayerType(EMeshRenderLayerType inMeshRenderLayerType);
 protected:
     virtual void SetMeshComponent(CMeshComponent* inMeshComponent);
 public:

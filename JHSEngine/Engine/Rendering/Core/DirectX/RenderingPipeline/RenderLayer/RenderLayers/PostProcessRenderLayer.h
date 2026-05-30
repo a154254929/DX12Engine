@@ -3,8 +3,11 @@
 
 class FPostProcessRenderLayer : public FRenderLayer
 {
+    typedef FRenderLayer Super;
 public:
     FPostProcessRenderLayer();
+    
+    virtual void Draw(float deltaTime);
 
     virtual void BuildShader();
     

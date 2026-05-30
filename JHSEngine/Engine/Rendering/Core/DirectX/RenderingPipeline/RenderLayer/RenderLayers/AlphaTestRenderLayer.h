@@ -3,8 +3,11 @@
 
 class FAlphaTestRenderLayer : public FRenderLayer
 {
+    typedef FRenderLayer Super;
 public:
     FAlphaTestRenderLayer();
+    
+    virtual void Draw(float deltaTime);
     
     virtual void BuildShader();
     

@@ -3,8 +3,11 @@
 
 class FTransparentRenderLayer : public FRenderLayer
 {
+    typedef FRenderLayer Super;
 public:
     FTransparentRenderLayer();
+    
+    virtual void Draw(float deltaTime);
 
     virtual void BuildShader();
     

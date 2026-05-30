@@ -6,6 +6,13 @@ FTransparentRenderLayer::FTransparentRenderLayer()
     renderPriority = 3000;
 }
 
+void FTransparentRenderLayer::Draw(float deltaTime)
+{
+    directXPipelineState->ResetPSO(Transparent);
+    
+    Super::Draw(deltaTime);
+}
+
 void FTransparentRenderLayer::BuildShader()
 {
 }
@@ -13,8 +20,6 @@ void FTransparentRenderLayer::BuildShader()
 void FTransparentRenderLayer::BuildPSO()
 {
     //构建管线
-    directXPipelineState->Build(EPipelineState::WireFrame);
-    
     directXPipelineState->SetFillMode(false);
-    directXPipelineState->Build(EPipelineState::GrayModel);
+    directXPipelineState->Build(EPipelineState::Transparent);
 }

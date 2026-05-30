@@ -6,6 +6,13 @@ FAlphaTestRenderLayer::FAlphaTestRenderLayer()
     renderPriority = 2450;
 }
 
+void FAlphaTestRenderLayer::Draw(float deltaTime)
+{
+    directXPipelineState->ResetPSO(AlphaTest);
+    
+    Super::Draw(deltaTime);
+}
+
 void FAlphaTestRenderLayer::BuildShader()
 {
 }
@@ -13,8 +20,6 @@ void FAlphaTestRenderLayer::BuildShader()
 void FAlphaTestRenderLayer::BuildPSO()
 {
     //构建管线
-    directXPipelineState->Build(EPipelineState::WireFrame);
-    
     directXPipelineState->SetFillMode(false);
-    directXPipelineState->Build(EPipelineState::GrayModel);
+    directXPipelineState->Build(EPipelineState::AlphaTest);
 }
