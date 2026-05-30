@@ -45,3 +45,13 @@ void FRenderLayerManager::SortRenderLayer()
     };
     std::sort(renderLayers.begin(), renderLayers.end(), compRenderLayer);
 }
+
+std::shared_ptr<FRenderLayer> FRenderLayerManager::FindByRenderLayer(int inRenderLayerType)
+{
+    for (auto& tmp : renderLayers)
+    {
+        if (tmp->GetRenderLayerPriority() == inRenderLayerType)
+            return tmp;
+    }
+    return NULL;
+}

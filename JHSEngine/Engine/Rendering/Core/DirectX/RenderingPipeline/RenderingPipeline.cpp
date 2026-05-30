@@ -14,9 +14,9 @@ void FRenderingPipeline::DuplicateMesh(CMeshComponent* inMeshComponent, const FR
     geometryMap.DuplicateMesh(inMeshComponent, meshRenderingData);
 }
 
-bool FRenderingPipeline::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData)
+bool FRenderingPipeline::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType)
 {
-    return geometryMap.FindMeshRenderingData(inHash, meshData);
+    return geometryMap.FindMeshRenderingData(inHash, meshData, inRenderLayerType);
 }
 
 void FRenderingPipeline::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)

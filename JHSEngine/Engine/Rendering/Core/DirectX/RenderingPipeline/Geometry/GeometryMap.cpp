@@ -14,6 +14,7 @@
 #include "../../../../../Component/Light/PointLightComponent.h"
 #include "../../../../../Component/Light/SpotLightComponent.h"
 #include "../../../RenderingTextureResourceUpdate.h"
+#include "../RenderLayer/RenderLayerManager.h"
 
 FGeometryMap::FGeometryMap()
 {
@@ -80,11 +81,11 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
      //XMMATRIX wvp = artixWorld * viewLookAt * artixProject;
 
     //XMMATRIX wrold = XMLoadFloat4x4(&worldMatrix);
-    for (int i = 0; i < geometrys.size(); ++i)
+    int meshIndex = 0;
+    for (auto& tmpRenderLayer : FRenderLayerManager::renderLayers)
     {
-        for (size_t j = 0; j < geometrys[i].describeMeshRenderingData.size(); ++j)
+        for (auto& inRenderingData : tmpRenderLayer->renderingDatas)
         {
-            FRenderingData& inRenderingData = geometrys[i].describeMeshRenderingData[j];
             {
                 XMFLOAT3& position = inRenderingData.meshComp->GetPosition();
                 fvector_3d scale = inRenderingData.meshComp->GetScale();
@@ -113,7 +114,8 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
                 objectTransformation.materialIndex = inMat->GetMaterialIndex();
             }
             
-            meshConstantBufferView.Update(j, &objectTransformation);
+            meshConstantBufferView.Update(meshIndex, &objectTransformation);
+            meshIndex++;
         }
     }
     
@@ -250,11 +252,11 @@ void FGeometryMap::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderi
     geometry.DuplicateMesh(inMeshComponent, meshRenderingData);
 }
 
-bool FGeometryMap::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData)
+bool FGeometryMap::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType)
 {
     for (auto &tmp : geometrys)
     {
-        if (tmp.second.FindMeshRenderingData(inHash, meshData))
+        if (tmp.second.FindMeshRenderingData(inHash, meshData, inRenderLayerType))
         {
             return true;
         }
@@ -294,12 +296,11 @@ void FGeometryMap::BuildMaterialShaderResourceView()
     
     //收集材质,真正收集shader-Index
     int shaderIndex = 0;
-    for (auto& tmp : geometrys)
+    for (auto& renderLayer : FRenderLayerManager::renderLayers)
     {
-        auto& describeMeshRenderingData = tmp.second.describeMeshRenderingData;
-        for (int i = 0; i < describeMeshRenderingData.size(); ++i)
+        for (auto& renderingData : renderLayer->renderingDatas)
         {
-            if (auto meshCompMaterials = describeMeshRenderingData[i].meshComp->GetMaterials())
+            if (auto meshCompMaterials = renderingData.meshComp->GetMaterials())
             {
                 for (int j = 0; j < meshCompMaterials->size(); ++j)
                 {
@@ -348,11 +349,11 @@ UINT FGeometryMap::GetDrawMeshObjectNumber()
 UINT FGeometryMap::GetDrawMaterialObjectNumber()
 {
     UINT count = 0;
-    for (auto& tmp : geometrys)
+    for (auto& renderLayer : FRenderLayerManager::renderLayers)
     {
-        for (auto& tmpSun : tmp.second.describeMeshRenderingData)
+        for (auto& renderingData : renderLayer->renderingDatas)
         {
-            count += tmpSun.meshComp->GetMaterialNum();
+            count += renderingData.meshComp->GetMaterialNum();
         }
     }
     return count;
@@ -393,37 +394,43 @@ void FGeometryMap::DrawMesh(float deltaTime)
     {
         D3D12_VERTEX_BUFFER_VIEW vbv = tmp.second.GetVertexBufferView();
         D3D12_INDEX_BUFFER_VIEW ibv = tmp.second.GetIndexBufferView();
-        for (int j = 0; j < tmp.second.describeMeshRenderingData.size(); ++j)
+        
+        int j = 0;
+        for (auto& renderLayer : FRenderLayerManager::renderLayers)
         {
-            CD3DX12_GPU_DESCRIPTOR_HANDLE meshDesHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetGPUDescriptorHandleForHeapStart());
+            for (auto& inRenderingData : renderLayer->renderingDatas)
+            {
+                CD3DX12_GPU_DESCRIPTOR_HANDLE meshDesHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
-            FRenderingData& inRenderingData = tmp.second.describeMeshRenderingData[j];
-            GetGraphicsCommandList()->IASetIndexBuffer(&ibv);
-            //绑定渲染流水线是的输入槽,可以在输入装配阶段转入顶点数据
-            GetGraphicsCommandList()->IASetVertexBuffers(
-                0,//起始输入槽0-15
-                1,
-                &vbv
-            );
+                GetGraphicsCommandList()->IASetIndexBuffer(&ibv);
+                //绑定渲染流水线是的输入槽,可以在输入装配阶段转入顶点数据
+                GetGraphicsCommandList()->IASetVertexBuffers(
+                    0,//起始输入槽0-15
+                    1,
+                    &vbv
+                );
 
-            //定义要绘制哪种图元 点 线 面
-            EMaterialDisplayStatusType displayStatusType = (*inRenderingData.meshComp->GetMaterials())[0]->GetMaterialDisplayStatusType();
-            GetGraphicsCommandList()->IASetPrimitiveTopology(
-                (D3D_PRIMITIVE_TOPOLOGY)displayStatusType
-            );
+                //定义要绘制哪种图元 点 线 面
+                EMaterialDisplayStatusType displayStatusType = (*inRenderingData.meshComp->GetMaterials())[0]->GetMaterialDisplayStatusType();
+                GetGraphicsCommandList()->IASetPrimitiveTopology(
+                    (D3D_PRIMITIVE_TOPOLOGY)displayStatusType
+                );
 
-            //模型起始地址偏移
-            meshDesHandle.Offset(j, descriptorOffset);
-            GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, meshDesHandle);
+                //模型起始地址偏移
+                meshDesHandle.Offset(j, descriptorOffset);
+                GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, meshDesHandle);
 
-            //真正绘制
-            GetGraphicsCommandList()->DrawIndexedInstanced(
-                inRenderingData.indexSize,//顶点索引数量
-                1,//绘制数量
-                inRenderingData.indexOffsetPosition,//顶点缓冲区第一个被绘制的索引
-                inRenderingData.vertexOffsetPosition,//GPU从索引缓冲区读取的第一个索引位置
-                0//在从顶点缓冲区中读取每个实例数据之前天道到每个索引的值
-            );
+                //真正绘制
+                GetGraphicsCommandList()->DrawIndexedInstanced(
+                    inRenderingData.indexSize,//顶点索引数量
+                    1,//绘制数量
+                    inRenderingData.indexOffsetPosition,//顶点缓冲区第一个被绘制的索引
+                    inRenderingData.vertexOffsetPosition,//GPU从索引缓冲区读取的第一个索引位置
+                    0//在从顶点缓冲区中读取每个实例数据之前天道到每个索引的值
+                );
+                
+                j++;
+            }
         }
     }
 }
@@ -499,66 +506,101 @@ void FGeometryMap::LoadTexture()
     }
 }
 
-bool FGeometry::bRenderingDataExistence(CMeshComponent* inKey)
+bool FGeometry::IsRenderingDataExistence(CMeshComponent* inKey)
 {
-    for (auto& tmp : describeMeshRenderingData)
+    if (std::shared_ptr<FRenderLayer> renderLayer = FRenderLayerManager::FindByRenderLayer((int)inKey->GetRenderLayerType()))
     {
-        if (tmp.meshComp == inKey)
-            return true;
+        for (auto& tmp : renderLayer->renderingDatas)
+        {
+            if (tmp.meshComp == inKey)
+                return true;
+        }
     }
     return false;
 }
 
 void FGeometry::BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData)
 {
-    if (!bRenderingDataExistence(inMeshComponent))
+    if (!IsRenderingDataExistence(inMeshComponent))
     {
-        describeMeshRenderingData.push_back(FRenderingData());
-        FRenderingData& inRenderingData = describeMeshRenderingData[describeMeshRenderingData.size() - 1];
+        //找到对于层级
+        if (auto renderLayer = FRenderLayerManager::FindByRenderLayer((int)inMeshComponent->GetRenderLayerType()))
+        {
+            renderLayer->renderingDatas.push_back(FRenderingData());
+            FRenderingData& inRenderingData = renderLayer->renderingDatas[renderLayer->renderingDatas.size() - 1];
 
-        //基础信息记录
-        inRenderingData.meshComp = inMeshComponent;
-        inRenderingData.meshHash = inMeshHash;
-        inRenderingData.indexSize = inMeshData.indexData.size();
-        inRenderingData.vertexSize = inMeshData.vertexData.size();
+            //基础信息记录
+            inRenderingData.meshComp = inMeshComponent;
+            inRenderingData.meshHash = inMeshHash;
+            inRenderingData.indexSize = inMeshData.indexData.size();
+            inRenderingData.vertexSize = inMeshData.vertexData.size();
 
-        inRenderingData.indexOffsetPosition = meshRenderingData.indexData.size();
-        inRenderingData.vertexOffsetPosition = meshRenderingData.vertexData.size();
+            inRenderingData.indexOffsetPosition = meshRenderingData.indexData.size();
+            inRenderingData.vertexOffsetPosition = meshRenderingData.vertexData.size();
 
-        //索引的合并
-        meshRenderingData.indexData.insert(
-            meshRenderingData.indexData.end(),
-            inMeshData.indexData.begin(),
-            inMeshData.indexData.end()
-        );
-        //顶点的合并
-        meshRenderingData.vertexData.insert(
-            meshRenderingData.vertexData.end(),
-            inMeshData.vertexData.begin(),
-            inMeshData.vertexData.end()
-        );
+            //索引的合并
+            meshRenderingData.indexData.insert(
+                meshRenderingData.indexData.end(),
+                inMeshData.indexData.begin(),
+                inMeshData.indexData.end()
+            );
+            //顶点的合并
+            meshRenderingData.vertexData.insert(
+                meshRenderingData.vertexData.end(),
+                inMeshData.vertexData.begin(),
+                inMeshData.vertexData.end()
+            );
+        }
     }
 }
 
 void FGeometry::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData)
 {
-    if (!bRenderingDataExistence(inMeshComponent))
+    if (!IsRenderingDataExistence(inMeshComponent))
     {
-        describeMeshRenderingData.push_back(meshRenderingData);
-        FRenderingData& inRenderingData = describeMeshRenderingData[describeMeshRenderingData.size() - 1];
+        if (auto renderLayer = FRenderLayerManager::FindByRenderLayer((int)inMeshComponent->GetRenderLayerType()))
+        {
+            renderLayer->renderingDatas.push_back(meshRenderingData);
+            FRenderingData& inRenderingData = renderLayer->renderingDatas[renderLayer->renderingDatas.size() - 1];
 
-        //基础信息记录
-        inRenderingData.meshComp = inMeshComponent;
+            //基础信息记录
+            inRenderingData.meshComp = inMeshComponent;
+        }
     }
 }
 
-bool FGeometry::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData)
+bool FGeometry::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType)
 {
-    for (auto &tmp : describeMeshRenderingData)
+    //寻找RenderingData
+    auto FindMeshRenderDataByHash = [&](std::shared_ptr<FRenderLayer> inRenderingLayer ) -> FRenderingData*
     {
-        if (tmp.meshHash == inHash)
+        for (auto& tmp : inRenderingLayer->renderingDatas)
         {
-            meshData = tmp;
+            if (tmp.meshHash == inHash)
+            {
+                return &tmp;
+            }
+        }
+        return NULL;
+    };
+    //暴力寻找
+    if (inRenderLayerType == -1)
+    {
+        for (auto& tmpRenderLayer : FRenderLayerManager::renderLayers)
+        {
+            if (FRenderingData* outRenderingData = FindMeshRenderDataByHash(tmpRenderLayer))
+            {
+                meshData = *outRenderingData;
+                return true;
+            }
+        }
+    }
+    //精准寻找
+    else if (auto renderLayer = FRenderLayerManager::FindByRenderLayer(inRenderLayerType))
+    {
+        if (FRenderingData* outRenderingData = FindMeshRenderDataByHash(renderLayer))
+        {
+            meshData = *outRenderingData;
             return true;
         }
     }
@@ -602,6 +644,19 @@ void FGeometry::Build()
         meshRenderingData.indexData.data(),
         indexSizeInBytes
     );
+}
+
+UINT FGeometry::GetDrawObjectNumber() const
+{
+    int objCount = 0;
+    for (auto& tmpRenderLayer : FRenderLayerManager::renderLayers)
+    {
+        for (auto& tmp : tmpRenderLayer->renderingDatas)
+        {
+            objCount++;
+        }
+    }
+    return objCount;
 }
 
 D3D12_VERTEX_BUFFER_VIEW FGeometry::GetVertexBufferView()

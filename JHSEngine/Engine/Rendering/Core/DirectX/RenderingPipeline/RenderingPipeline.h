@@ -17,7 +17,7 @@ public:
 
     void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData);
 
-    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData);
+    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType = -1);
 
     virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 

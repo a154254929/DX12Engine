@@ -4,6 +4,8 @@
 class FRenderLayerManager
 {
     friend class FRenderLayer;
+    friend class FGeometryMap;
+    friend class FGeometry;
 public:
     FRenderLayerManager();
     
@@ -15,6 +17,7 @@ public:
     
     void SortRenderLayer();
     
+    static std::shared_ptr<FRenderLayer> FindByRenderLayer(int inRenderLayerType);
 protected:
     static std::vector<shared_ptr<FRenderLayer>> renderLayers;
 };

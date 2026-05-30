@@ -13,19 +13,19 @@ class FGeometry : public IDirectXDeviceInterface_Struct
 {
     friend struct FGeometryMap;
 public:
-    bool bRenderingDataExistence(CMeshComponent* inKey);
+    bool IsRenderingDataExistence(CMeshComponent* inKey);
     
     void BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
 
     void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData);
 
-    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData);
+    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType = -1);
 
     //构建模型
     void Build();
 
     /*后面会有变化*/
-    UINT GetDrawObjectNumber() const { return describeMeshRenderingData.size(); }
+    UINT GetDrawObjectNumber() const;
 
     D3D12_VERTEX_BUFFER_VIEW GetVertexBufferView();
     D3D12_INDEX_BUFFER_VIEW GetIndexBufferView();
@@ -40,7 +40,6 @@ protected:
     ComPtr<ID3D12Resource> indexBufferTmpPtr;
 
     FMeshRenderingData meshRenderingData;
-    vector<FRenderingData> describeMeshRenderingData;
 };
 
 class FGeometryMap : public IDirectXDeviceInterface
@@ -60,7 +59,7 @@ public:
 
     void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData);
 
-    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData);
+    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType = -1);
 
     void Build();
     //描述堆

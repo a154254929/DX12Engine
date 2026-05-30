@@ -94,7 +94,7 @@ T* CMeshManager::CreateMeshComponent(ParamTypes && ...params)
     size_t meshHashKey = 0;
     myMeshComp->BuildKey(meshHashKey, forward<ParamTypes>(params)...);
     FRenderingData renderingData;
-    if (renderingPipeline.FindMeshRenderingData(meshHashKey, renderingData))
+    if (renderingPipeline.FindMeshRenderingData(meshHashKey, renderingData, (int)myMeshComp->GetMeshRenderLayerType()))
     {
         renderingPipeline.DuplicateMesh(myMeshComp, renderingData);
     }

@@ -7,6 +7,8 @@ class FGeometryMap;
 struct FDirectXPipelineState;
 class FRenderLayer : public IDirectXDeviceInterface, public std::enable_shared_from_this<FRenderLayer>
 {
+    friend class FGeometry;
+    friend class FGeometryMap;
 public:
     FRenderLayer();
     
@@ -15,10 +17,12 @@ public:
     //基础注册环境
     virtual void Init(FGeometryMap* inGeometryMap, FDirectXPipelineState* inDirectXPipelineState);
 public:  
-    const UINT GetRenderLayerPriority() const {return renderPriority;};
+    const UINT GetRenderLayerPriority() const {return renderPriority;}
     
 public:
     virtual void BuildShader() = 0;
+    
+    virtual int FetRenderLayerType() = 0;
     
 protected:
     UINT renderPriority;

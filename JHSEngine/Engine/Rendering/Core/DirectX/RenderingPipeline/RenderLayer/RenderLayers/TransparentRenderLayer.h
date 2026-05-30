@@ -7,4 +7,6 @@ public:
     FTransparentRenderLayer();
 
     virtual void BuildShader();
+    
+    virtual int FetRenderLayerType() const {return 2;}
 };
