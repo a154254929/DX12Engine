@@ -14,7 +14,12 @@ class FGeometry : public IDirectXDeviceInterface_Struct
     friend struct FGeometryMap;
 public:
     bool bRenderingDataExistence(CMeshComponent* inKey);
-    void BuildMesh(CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
+    
+    void BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
+
+    void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData);
+
+    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData);
 
     //构建模型
     void Build();
@@ -51,7 +56,11 @@ public:
     
     virtual void UpdateMaterialShaderResourceView(float deltaTime, const FViewportInfo viewportInfo);
 
-    void BuildMesh(CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
+    void BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
+
+    void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData);
+
+    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData);
 
     void Build();
     //描述堆

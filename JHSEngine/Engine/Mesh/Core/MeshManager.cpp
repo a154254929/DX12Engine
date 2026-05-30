@@ -90,13 +90,23 @@ template<class T, typename ...ParamTypes>
 T* CMeshManager::CreateMeshComponent(ParamTypes && ...params)
 {
     T* myMeshComp = new T();
+    
+    size_t meshHashKey = 0;
+    myMeshComp->BuildKey(meshHashKey, forward<ParamTypes>(params)...);
+    FRenderingData renderingData;
+    if (renderingPipeline.FindMeshRenderingData(meshHashKey, renderingData))
+    {
+        renderingPipeline.DuplicateMesh(myMeshComp, renderingData);
+    }
+    else
+    {
 
-    FMeshRenderingData meshRenderingData;
-    myMeshComp->CreateMesh(meshRenderingData, forward<ParamTypes>(params)...);
+        FMeshRenderingData meshRenderingData;
+        myMeshComp->CreateMesh(meshRenderingData, forward<ParamTypes>(params)...);
 
-    renderingPipeline.BuildMesh(myMeshComp, meshRenderingData);
+        renderingPipeline.BuildMesh(meshHashKey, myMeshComp, meshRenderingData);
 
-    myMeshComp->Init();
-
+        myMeshComp->Init();
+    }
     return myMeshComp;
 }

@@ -7,6 +7,8 @@ public:
     CCustomMeshComponent();
 
     void CreateMesh(FMeshRenderingData& meshRenderingData, string &inPath);
+    
+    void BuildKey(size_t& meshHashKey, string &inPath);
 
     static bool LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshData);
 };

@@ -6,5 +6,19 @@ class CConeMeshComponent : public CShellMeshComponent
 public:
     CConeMeshComponent();
 
-    void CreateMesh(FMeshRenderingData& meshRenderingData, float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
+    void CreateMesh(
+        FMeshRenderingData& meshRenderingData,
+        float inRadius,
+        float inHeight,
+        uint32_t inAxialSubdivision,
+        uint32_t inHeightSubdivision
+    );
+
+    void BuildKey(
+        size_t& meshHashKey,
+        float inRadius,
+        float inHeight,
+        uint32_t inAxialSubdivision,
+        uint32_t inHeightSubdivision
+    );
 };

@@ -2,5 +2,4 @@
 
 CShellMeshComponent::CShellMeshComponent()
 {
-    
 }

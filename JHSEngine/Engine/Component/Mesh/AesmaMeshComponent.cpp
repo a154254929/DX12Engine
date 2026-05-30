@@ -156,3 +156,16 @@ void CAesmaMeshComponent::CreateMesh(
         meshRenderingData.indexData.push_back(bottomIndexStart + (i + 1) % inAxialSubdivision + inAxialSubdivision);
     }
 }
+
+void CAesmaMeshComponent::BuildKey(size_t& meshHashKey, float inOuterRadius, float inInnerRadius, float inHeight,
+    uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
+{
+    std::hash<float> floatHash;
+    std::hash<int> intHash;
+    
+    meshHashKey = floatHash(inOuterRadius);
+    meshHashKey += floatHash(inInnerRadius);
+    meshHashKey += floatHash(inHeight);
+    meshHashKey += intHash._Do_hash(inAxialSubdivision);
+    meshHashKey += intHash._Do_hash(inHeightSubdivision);
+}

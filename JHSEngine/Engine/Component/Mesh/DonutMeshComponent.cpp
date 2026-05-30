@@ -50,3 +50,16 @@ void CDonutMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, floa
         }
     }
 }
+
+void CDonutMeshComponent::BuildKey(size_t& meshHashKey, float inDonutRadius, float inThicknessRadius,
+    uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision)
+{
+    std::hash<float> floatHash;
+    std::hash<int> intHash;
+    
+    meshHashKey = 5;
+    meshHashKey += floatHash(inDonutRadius);
+    meshHashKey += floatHash(inThicknessRadius);
+    meshHashKey += intHash._Do_hash(inDonutAxialSubdivision);
+    meshHashKey += intHash._Do_hash(inThicknessAxialSubdivision);
+}

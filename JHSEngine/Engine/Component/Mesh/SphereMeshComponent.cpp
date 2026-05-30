@@ -130,3 +130,19 @@ void CSphereMeshComponent::CreateMesh(
         }
     }
 }
+
+void CSphereMeshComponent::BuildKey(size_t& meshHashKey, float inRadius, uint32_t inAxialSubdivision,
+    uint32_t inHeightSubdivision, bool bReverse)
+{
+    std::hash<float> floatHash;
+    std::hash<int> intHash;
+    std::hash<bool> boolHash;
+    
+    meshHashKey = 7;
+    meshHashKey += floatHash(inRadius);
+    meshHashKey += intHash._Do_hash(inAxialSubdivision);
+    meshHashKey += intHash._Do_hash(inHeightSubdivision);
+    meshHashKey += intHash._Do_hash(inHeightSubdivision);
+    meshHashKey += boolHash._Do_hash(bReverse);
+    
+}

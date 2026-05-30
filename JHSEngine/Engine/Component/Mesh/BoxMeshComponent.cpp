@@ -133,3 +133,13 @@ void CBoxMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, float 
         meshRenderingData.indexData.push_back(0 + i * 4);meshRenderingData.indexData.push_back(3 + i * 4);meshRenderingData.indexData.push_back(1 + i * 4);
     }
 }
+
+void CBoxMeshComponent::BuildKey(size_t& meshHashKey, float inHeight, float inWidth, float inDepth)
+{
+    std::hash<float> floatHash;
+    
+    meshHashKey = 1;
+    meshHashKey += floatHash(inHeight);
+    meshHashKey += floatHash(inWidth);
+    meshHashKey += floatHash(inDepth);
+}

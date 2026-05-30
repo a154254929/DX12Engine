@@ -26,6 +26,14 @@ void CCustomMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, str
     }
 }
 
+void CCustomMeshComponent::BuildKey(size_t& meshHashKey, string& inPath)
+{
+    std::hash<string> stringHash;
+    
+    meshHashKey = 3;
+    meshHashKey += stringHash(inPath);
+}
+
 bool CCustomMeshComponent::LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshRenderingData)
 {
     if (buffSize > 0)

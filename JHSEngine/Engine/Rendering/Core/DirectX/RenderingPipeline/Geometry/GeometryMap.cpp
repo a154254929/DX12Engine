@@ -238,10 +238,28 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
     }
 }
 
-void FGeometryMap::BuildMesh(CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData)
+void FGeometryMap::BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData)
 {
     FGeometry& geometry = geometrys[0];
-    geometry.BuildMesh(inMeshComponent, inMeshData);
+    geometry.BuildMesh(inMeshHash, inMeshComponent, inMeshData);
+}
+
+void FGeometryMap::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData)
+{
+    FGeometry& geometry = geometrys[0];
+    geometry.DuplicateMesh(inMeshComponent, meshRenderingData);
+}
+
+bool FGeometryMap::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData)
+{
+    for (auto &tmp : geometrys)
+    {
+        if (tmp.second.FindMeshRenderingData(inHash, meshData))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void FGeometryMap::Build()
@@ -491,7 +509,7 @@ bool FGeometry::bRenderingDataExistence(CMeshComponent* inKey)
     return false;
 }
 
-void FGeometry::BuildMesh(CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData)
+void FGeometry::BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData)
 {
     if (!bRenderingDataExistence(inMeshComponent))
     {
@@ -500,6 +518,7 @@ void FGeometry::BuildMesh(CMeshComponent* inMeshComponent, const FMeshRenderingD
 
         //基础信息记录
         inRenderingData.meshComp = inMeshComponent;
+        inRenderingData.meshHash = inMeshHash;
         inRenderingData.indexSize = inMeshData.indexData.size();
         inRenderingData.vertexSize = inMeshData.vertexData.size();
 
@@ -519,6 +538,31 @@ void FGeometry::BuildMesh(CMeshComponent* inMeshComponent, const FMeshRenderingD
             inMeshData.vertexData.end()
         );
     }
+}
+
+void FGeometry::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData)
+{
+    if (!bRenderingDataExistence(inMeshComponent))
+    {
+        describeMeshRenderingData.push_back(meshRenderingData);
+        FRenderingData& inRenderingData = describeMeshRenderingData[describeMeshRenderingData.size() - 1];
+
+        //基础信息记录
+        inRenderingData.meshComp = inMeshComponent;
+    }
+}
+
+bool FGeometry::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData)
+{
+    for (auto &tmp : describeMeshRenderingData)
+    {
+        if (tmp.meshHash == inHash)
+        {
+            meshData = tmp;
+            return true;
+        }
+    }
+    return false;
 }
 
 void FGeometry::Build()
