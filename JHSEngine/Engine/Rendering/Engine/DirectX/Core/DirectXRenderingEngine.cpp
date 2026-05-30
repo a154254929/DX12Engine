@@ -539,7 +539,8 @@ int CDirectXRenderingEngine::PostInit()
             {
                 if (CMaterial* material = (*sphereMeshTransparent->GetMaterials())[0])
                 {
-                    material->SetMaterialType(EMaterialType::WorldNormal);
+                    material->SetBaseColorIndexKey("Noise_RGBA_1024.dds");
+                    material->SetMaterialType(EMaterialType::BaseColor);
                 }
             }
         }

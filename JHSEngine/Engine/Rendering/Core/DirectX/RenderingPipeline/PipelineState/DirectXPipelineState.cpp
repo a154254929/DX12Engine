@@ -102,6 +102,11 @@ void FDirectXPipelineState::SetFillMode(bool bWireframe)
     gpsDesc.RasterizerState.FillMode = bWireframe ? D3D12_FILL_MODE_WIREFRAME : D3D12_FILL_MODE_SOLID;
 }
 
+void FDirectXPipelineState::SetRenderTarget(int index, D3D12_RENDER_TARGET_BLEND_DESC& inRenderTargetBlendDesc)
+{
+    gpsDesc.BlendState.RenderTarget[index] = inRenderTargetBlendDesc;
+}
+
 void FDirectXPipelineState::CaptureKeyboardKeys()
 {
     if (GetAsyncKeyState('4') & 0x8000)

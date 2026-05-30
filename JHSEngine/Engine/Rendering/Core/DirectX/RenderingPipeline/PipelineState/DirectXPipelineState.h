@@ -35,6 +35,9 @@ public:
     
 public:
     void SetFillMode(bool bWireframe);
+    
+    //设置RT
+    void SetRenderTarget(int index, D3D12_RENDER_TARGET_BLEND_DESC& inRenderTargetBlendDesc);
 
 private:
     //按键捕获
