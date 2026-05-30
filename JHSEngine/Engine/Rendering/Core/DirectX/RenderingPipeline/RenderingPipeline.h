@@ -5,6 +5,7 @@
 #include "PipelineState/DirectXPipelineState.h"
 #include "RootSignature/DirectXRootSignature.h"
 #include "../../../../Core/Viewport/ViewportInfo.h"
+#include "RenderLayer/RenderLayerManager.h"
 
 class CMeshComponent;
 class FRenderingPipeline: public IDirectXDeviceInterface
@@ -30,6 +31,8 @@ protected:
 
     FShader vertexShader;
     FShader pixelShader;
+    
+    FRenderLayerManager renderLayerMananer;
 
     vector<D3D12_INPUT_ELEMENT_DESC> inputElementDesc;
 
