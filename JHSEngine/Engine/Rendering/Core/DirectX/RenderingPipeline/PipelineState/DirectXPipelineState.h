@@ -23,9 +23,15 @@ public:
     //绑定顶点着色器和像素着色器
     void BindShader(const FShader& inVertextShader, const FShader& inPixelShader);
 
-    void Build();
+    //构建参数
+    void BuildParam();
+
+    void Build(int inPSOType);
 
     ID3D12PipelineState* GetPSO() { return PSO[pipelineState].Get(); }
+    
+public:
+    void SetFillMode(bool bWireframe);
 
 private:
     //按键捕获

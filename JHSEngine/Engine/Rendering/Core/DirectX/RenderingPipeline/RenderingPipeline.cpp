@@ -69,8 +69,14 @@ void FRenderingPipeline::BuildPipeline()
     //构建贴图
     geometryMap.BuildTextureConstantBuffer();
 
+    //构建PSO参数
+    directXPipelineState.BuildParam();
+    
     //构建管线
-    directXPipelineState.Build();
+    directXPipelineState.Build(EPipelineState::WireFrame);
+    
+    directXPipelineState.SetFillMode(false);
+    directXPipelineState.Build(EPipelineState::GrayModel);
 }
 
 void FRenderingPipeline::PreDraw(float deltaTime)

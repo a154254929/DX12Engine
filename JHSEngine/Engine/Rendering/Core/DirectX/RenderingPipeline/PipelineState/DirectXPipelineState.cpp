@@ -54,7 +54,7 @@ void FDirectXPipelineState::BindShader(const FShader& inVertextShader, const FSh
     gpsDesc.PS.BytecodeLength = inPixelShader.GetBufferSize();
 }
 
-void FDirectXPipelineState::Build()
+void FDirectXPipelineState::BuildParam()
 {
 
     //配置光栅化状态
@@ -76,12 +76,25 @@ void FDirectXPipelineState::Build()
     gpsDesc.RTVFormats[0] = GetEngine()->GetRenderingEngine()->GetBackBufferFormat();
     gpsDesc.DSVFormat = GetEngine()->GetRenderingEngine()->GetDepthStencilBufferFormat();
     
+}
+
+void FDirectXPipelineState::Build(int inPSOType)
+{
+    if (PSO.find(inPSOType) == PSO.end())
+    {
+        PSO.insert(pair<int, ComPtr<ID3D12PipelineState>>(inPSOType, ComPtr<ID3D12PipelineState>()));
+    }
     //线框模式注册
-    ANALYSIS_HRESULT(GetD3dDevice()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&PSO[EPipelineState::WireFrame])))
+    ANALYSIS_HRESULT(GetD3dDevice()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&PSO[inPSOType])))
 
     //实体模式注册
-    gpsDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;//实体方式渲染
-    ANALYSIS_HRESULT(GetD3dDevice()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&PSO[EPipelineState::GrayModel])))
+    // gpsDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;//实体方式渲染
+    // ANALYSIS_HRESULT(GetD3dDevice()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&PSO[EPipelineState::GrayModel])))
+}
+
+void FDirectXPipelineState::SetFillMode(bool bWireframe)
+{
+    gpsDesc.RasterizerState.FillMode = bWireframe ? D3D12_FILL_MODE_WIREFRAME : D3D12_FILL_MODE_SOLID;
 }
 
 void FDirectXPipelineState::CaptureKeyboardKeys()
