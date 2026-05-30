@@ -3,6 +3,7 @@
 #include "RenderLayers/OpaqueRenderLayer.h"
 #include "RenderLayers/PostProcessRenderLayer.h"
 #include "RenderLayers/TransparentRenderLayer.h"
+#include "../../../../../Core/Viewport/ViewportInfo.h"
 
 std::vector<shared_ptr<FRenderLayer>> FRenderLayerManager::renderLayers;
 
@@ -53,6 +54,14 @@ void FRenderLayerManager::PostDraw(float deltaTime)
     }
 }
 
+void FRenderLayerManager::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
+{
+    for (auto& tmp : renderLayers)
+    {
+        tmp->UpdateCalculations(deltaTime, viewportInfo);
+    }
+}
+
 void FRenderLayerManager::BuildShader()
 {
     for (auto& tmp : renderLayers)
@@ -74,7 +83,7 @@ std::shared_ptr<FRenderLayer> FRenderLayerManager::FindByRenderLayer(int inRende
 {
     for (auto& tmp : renderLayers)
     {
-        if (tmp->GetRenderLayerPriority() == inRenderLayerType)
+        if (tmp->GetRenderLayerType() == inRenderLayerType)
             return tmp;
     }
     return NULL;

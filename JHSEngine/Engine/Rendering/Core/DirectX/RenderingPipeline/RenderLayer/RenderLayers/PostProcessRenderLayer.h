@@ -8,5 +8,5 @@ public:
 
     virtual void BuildShader();
     
-    virtual int FetRenderLayerType() const {return 3;}
+    virtual int GetRenderLayerType() const {return 3;}
 };

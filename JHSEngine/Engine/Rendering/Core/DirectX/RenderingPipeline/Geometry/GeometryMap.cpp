@@ -61,6 +61,7 @@ void FGeometryMap::PostDraw(float deltaTime)
 void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
 {
     // DEBUG: 打印相机位置和视图矩阵
+    /*
     static int frameCount = 0;
     if (frameCount++ % 60 == 0) {  // 每60帧打印一次
         Engine_Log("Camera pos: (%.2f, %.2f, %.2f)", 
@@ -73,58 +74,7 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
             viewportInfo.viewMatrix._43,
             viewportInfo.viewMatrix._44);
     }
-    //XMINT3 cameraPos = XMINT3(viewportInfo.viewMatrix.m[3][0], viewportInfo.viewMatrix.m[3][1], viewportInfo.viewMatrix.m[3][2]);
-    //XMINT3 cameraPos = XMINT3(5.0f, 5.0f, 5.0f);
-
-     //XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
-     //XMVECTOR viewTarget = XMVectorZero();
-     //XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
-
-     //XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
-     //XMStoreFloat4x4(const_cast<XMFLOAT4X4*>(&viewportInfo.viewMatrix), viewLookAt);
-     //XMMATRIX viewLookAt = XMLoadFloat4x4(&viewportInfo.viewMatrix);
-
-     //XMMATRIX artixProject = XMLoadFloat4x4(&viewportInfo.projectMatrix);
-     //XMMATRIX wvp = artixWorld * viewLookAt * artixProject;
-
-    //XMMATRIX wrold = XMLoadFloat4x4(&worldMatrix);
-    int meshIndex = 0;
-    for (auto& tmpRenderLayer : FRenderLayerManager::renderLayers)
-    {
-        for (auto& inRenderingData : tmpRenderLayer->renderingDatas)
-        {
-            {
-                XMFLOAT3& position = inRenderingData.meshComp->GetPosition();
-                fvector_3d scale = inRenderingData.meshComp->GetScale();
-
-                XMFLOAT3 rightVector = inRenderingData.meshComp->GetRightVector();
-                XMFLOAT3 upVector = inRenderingData.meshComp->GetUpVector();
-                XMFLOAT3 forwardVector = inRenderingData.meshComp->GetForwardVector();
-
-                inRenderingData.worldMatrix = {
-                    rightVector.x * scale.x,    upVector.x,                forwardVector.x ,            0.f,
-                    rightVector.y,                upVector.y * scale.y,    forwardVector.y,            0.f,
-                    rightVector.z,                upVector.z ,            forwardVector.z * scale.z,    0.f,
-                    position.x,                    position.y,                position.z,                    1.f
-                };
-            }
-            //更新模型位置
-            XMMATRIX artixWorld = XMLoadFloat4x4(&inRenderingData.worldMatrix);
-            XMMATRIX artixTextureTransfom = XMLoadFloat4x4(&inRenderingData.textureTransform);
-            FObjectTransformation objectTransformation;
-            XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(artixWorld));
-            XMStoreFloat4x4(&objectTransformation.textureTransformation, XMMatrixTranspose(artixTextureTransfom));
-            
-            //收集材质Index
-            if (auto &inMat = (*inRenderingData.meshComp->GetMaterials())[0])
-            {
-                objectTransformation.materialIndex = inMat->GetMaterialIndex();
-            }
-            
-            meshConstantBufferView.Update(meshIndex, &objectTransformation);
-            meshIndex++;
-        }
-    }
+    */
     
     UpdateMaterialShaderResourceView(deltaTime, viewportInfo);
     
@@ -302,9 +252,6 @@ void FGeometryMap::BuildMeshConstantBuffer()
 
 void FGeometryMap::BuildMaterialShaderResourceView()
 {
-    //创建常量缓冲区
-    materialConstantBufferView.CreateConstant(sizeof(FMaterialConstantBuffer), GetDrawMaterialObjectNumber(), false);
-    
     //收集材质,真正收集shader-Index
     int shaderIndex = 0;
     for (auto& renderLayer : FRenderLayerManager::renderLayers)
@@ -322,6 +269,9 @@ void FGeometryMap::BuildMaterialShaderResourceView()
             }
         }
     }
+    
+    //创建常量缓冲区
+    materialConstantBufferView.CreateConstant(sizeof(FMaterialConstantBuffer), GetDrawMaterialObjectNumber(), false);
 }
 
 void FGeometryMap::BuildLightConstantBuffer()
@@ -359,15 +309,7 @@ UINT FGeometryMap::GetDrawMeshObjectNumber()
 
 UINT FGeometryMap::GetDrawMaterialObjectNumber()
 {
-    UINT count = 0;
-    for (auto& renderLayer : FRenderLayerManager::renderLayers)
-    {
-        for (auto& renderingData : renderLayer->renderingDatas)
-        {
-            count += renderingData.meshComp->GetMaterialNum();
-        }
-    }
-    return count;
+    return materials.size();
 }
 
 UINT FGeometryMap::GetDrawLightObjectNumber()
@@ -400,50 +342,7 @@ void FGeometryMap::DrawLight(float deltaTime)
 
 void FGeometryMap::DrawMesh(float deltaTime)
 {
-    UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-    for (auto& tmp : geometrys)
-    {
-        D3D12_VERTEX_BUFFER_VIEW vbv = tmp.second.GetVertexBufferView();
-        D3D12_INDEX_BUFFER_VIEW ibv = tmp.second.GetIndexBufferView();
-        
-        int j = 0;
-        for (auto& renderLayer : FRenderLayerManager::renderLayers)
-        {
-            for (auto& inRenderingData : renderLayer->renderingDatas)
-            {
-                CD3DX12_GPU_DESCRIPTOR_HANDLE meshDesHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(descriptorHeap.GetHeap()->GetGPUDescriptorHandleForHeapStart());
-
-                GetGraphicsCommandList()->IASetIndexBuffer(&ibv);
-                //绑定渲染流水线是的输入槽,可以在输入装配阶段转入顶点数据
-                GetGraphicsCommandList()->IASetVertexBuffers(
-                    0,//起始输入槽0-15
-                    1,
-                    &vbv
-                );
-
-                //定义要绘制哪种图元 点 线 面
-                EMaterialDisplayStatusType displayStatusType = (*inRenderingData.meshComp->GetMaterials())[0]->GetMaterialDisplayStatusType();
-                GetGraphicsCommandList()->IASetPrimitiveTopology(
-                    (D3D_PRIMITIVE_TOPOLOGY)displayStatusType
-                );
-
-                //模型起始地址偏移
-                meshDesHandle.Offset(j, descriptorOffset);
-                GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, meshDesHandle);
-
-                //真正绘制
-                GetGraphicsCommandList()->DrawIndexedInstanced(
-                    inRenderingData.indexSize,//顶点索引数量
-                    1,//绘制数量
-                    inRenderingData.indexOffsetPosition,//顶点缓冲区第一个被绘制的索引
-                    inRenderingData.vertexOffsetPosition,//GPU从索引缓冲区读取的第一个索引位置
-                    0//在从顶点缓冲区中读取每个实例数据之前天道到每个索引的值
-                );
-                
-                j++;
-            }
-        }
-    }
+    
 }
 
 void FGeometryMap::DrawMaterial(float deltaTime)

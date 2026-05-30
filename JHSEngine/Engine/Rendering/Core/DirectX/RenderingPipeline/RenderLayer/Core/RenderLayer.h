@@ -5,6 +5,7 @@
 
 class FGeometryMap;
 struct FDirectXPipelineState;
+class FViewportInfo;
 class FRenderLayer : public IDirectXDeviceInterface, public std::enable_shared_from_this<FRenderLayer>
 {
     friend class FGeometry;
@@ -20,13 +21,15 @@ public:
     void PreDraw(float deltaTime);
     void Draw(float deltaTime);
     void PostDraw(float deltaTime);
+
+    virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 public:  
     const UINT GetRenderLayerPriority() const {return renderPriority;}
     
 public:
     virtual void BuildShader() = 0;
     
-    virtual int FetRenderLayerType() const = 0;
+    virtual int GetRenderLayerType() const = 0;
     
 
 protected:

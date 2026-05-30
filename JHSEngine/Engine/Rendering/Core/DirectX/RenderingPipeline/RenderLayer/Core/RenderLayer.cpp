@@ -5,7 +5,6 @@
 #include "../../../../../../Mesh/Core/Material/Material.h"
 #include "../../../../../../Component/Mesh/Core/MeshComponent.h"
 #include "../../../../../../Mesh/Core/ObjectTransformation.h"
-#include "../../../../../../Core/Viewport/Viewport.h"
 
 FRenderLayer::FRenderLayer()
     : renderPriority(0)
@@ -68,4 +67,43 @@ void FRenderLayer::Draw(float deltaTime)
 
 void FRenderLayer::PostDraw(float deltaTime)
 {
+}
+
+void FRenderLayer::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
+{
+
+    int meshIndex = 0;
+    for (auto& tmpRenderingData :renderingDatas)
+    { 
+        {
+            XMFLOAT3& position = tmpRenderingData.meshComp->GetPosition();
+            fvector_3d scale = tmpRenderingData.meshComp->GetScale();
+
+            XMFLOAT3 rightVector = tmpRenderingData.meshComp->GetRightVector();
+            XMFLOAT3 upVector = tmpRenderingData.meshComp->GetUpVector();
+            XMFLOAT3 forwardVector = tmpRenderingData.meshComp->GetForwardVector();
+
+            tmpRenderingData.worldMatrix = {
+                rightVector.x * scale.x,    upVector.x,                forwardVector.x ,            0.f,
+                rightVector.y,                upVector.y * scale.y,    forwardVector.y,            0.f,
+                rightVector.z,                upVector.z ,            forwardVector.z * scale.z,    0.f,
+                position.x,                    position.y,                position.z,                    1.f
+            };
+        }
+        //更新模型位置
+        XMMATRIX artixWorld = XMLoadFloat4x4(&tmpRenderingData.worldMatrix);
+        XMMATRIX artixTextureTransfom = XMLoadFloat4x4(&tmpRenderingData.textureTransform);
+        FObjectTransformation objectTransformation;
+        XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(artixWorld));
+        XMStoreFloat4x4(&objectTransformation.textureTransformation, XMMatrixTranspose(artixTextureTransfom));
+        
+        //收集材质Index
+        if (auto &inMat = (*tmpRenderingData.meshComp->GetMaterials())[0])
+        {
+            objectTransformation.materialIndex = inMat->GetMaterialIndex();
+        }
+        
+        geometryMap->meshConstantBufferView.Update(tmpRenderingData.meshObjectIndex, &objectTransformation);
+        meshIndex++;
+    }
 }

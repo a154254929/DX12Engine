@@ -22,6 +22,8 @@ bool FRenderingPipeline::FindMeshRenderingData(const size_t& inHash, FRenderingD
 void FRenderingPipeline::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
 {
     geometryMap.UpdateCalculations(deltaTime, viewportInfo);
+    
+    renderLayerMananer.UpdateCalculations(deltaTime, viewportInfo);
 }
 
 
