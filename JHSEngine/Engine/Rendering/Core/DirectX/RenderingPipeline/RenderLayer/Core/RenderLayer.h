@@ -16,14 +16,19 @@ public:
     
     //基础注册环境
     virtual void Init(FGeometryMap* inGeometryMap, FDirectXPipelineState* inDirectXPipelineState);
+
+    void PreDraw(float deltaTime);
+    void Draw(float deltaTime);
+    void PostDraw(float deltaTime);
 public:  
     const UINT GetRenderLayerPriority() const {return renderPriority;}
     
 public:
     virtual void BuildShader() = 0;
     
-    virtual int FetRenderLayerType() = 0;
+    virtual int FetRenderLayerType() const = 0;
     
+
 protected:
     UINT renderPriority;
 protected:

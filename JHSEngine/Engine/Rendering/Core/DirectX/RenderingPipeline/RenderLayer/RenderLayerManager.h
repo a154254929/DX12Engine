@@ -12,6 +12,10 @@ public:
     ~FRenderLayerManager();
     
     virtual void Init(FGeometryMap* inGeometryMap, FDirectXPipelineState* inDirectXPipelineState);
+
+    void PreDraw(float deltaTime);
+    void Draw(float deltaTime);
+    void PostDraw(float deltaTime);
     
     virtual void BuildShader();
     

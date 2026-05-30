@@ -1,6 +1,6 @@
 ﻿#include "Mesh.h"
 
-#include "../../Component/Mesh/ShellMeshComponent.h"
+#include "../../Component/Mesh/Core/ShellMeshComponent.h"
 #include "../../Config/EngineRenderConfig.h"
 
 GMesh::GMesh()

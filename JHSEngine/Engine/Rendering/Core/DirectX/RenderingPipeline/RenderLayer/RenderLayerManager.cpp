@@ -29,6 +29,30 @@ void FRenderLayerManager::Init(FGeometryMap* inGeometryMap, FDirectXPipelineStat
     }
 }
 
+void FRenderLayerManager::PreDraw(float deltaTime)
+{
+    for (auto& tmp : renderLayers)
+    {
+        tmp->PreDraw(deltaTime);
+    }
+}
+
+void FRenderLayerManager::Draw(float deltaTime)
+{
+    for (auto& tmp : renderLayers)
+    {
+        tmp->Draw(deltaTime);
+    }
+}
+
+void FRenderLayerManager::PostDraw(float deltaTime)
+{
+    for (auto& tmp : renderLayers)
+    {
+        tmp->PostDraw(deltaTime);
+    }
+}
+
 void FRenderLayerManager::BuildShader()
 {
     for (auto& tmp : renderLayers)

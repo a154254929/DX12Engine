@@ -15,9 +15,9 @@ class FGeometry : public IDirectXDeviceInterface_Struct
 public:
     bool IsRenderingDataExistence(CMeshComponent* inKey);
     
-    void BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
+    void BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData, int inGeometryKey);
 
-    void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData);
+    void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData, int inGeometryKey);
 
     bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType = -1);
 
@@ -44,8 +44,10 @@ protected:
 
 class FGeometryMap : public IDirectXDeviceInterface
 {
+    friend class FRenderLayer;
 public:
     FGeometryMap();
+    ~FGeometryMap();
 
     void PreDraw(float deltaTime);
     void Draw(float deltaTime);

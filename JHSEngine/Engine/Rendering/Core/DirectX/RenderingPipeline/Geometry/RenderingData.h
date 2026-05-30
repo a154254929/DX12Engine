@@ -19,6 +19,8 @@ public:
 
 public:
     size_t meshHash;
+    int geometryKey;
+    int meshObjectIndex;
     
 public:
     UINT GetVertexSizeInBytes() const { return vertexSize * vertexTypeSize; }

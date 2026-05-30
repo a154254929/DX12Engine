@@ -16,11 +16,18 @@
 #include "../../../RenderingTextureResourceUpdate.h"
 #include "../RenderLayer/RenderLayerManager.h"
 
+UINT meshCount = 0;
+
 FGeometryMap::FGeometryMap()
 {
     geometrys.insert(pair<int, FGeometry>(0, FGeometry()));
     
     renderingTextureResourcesUpdate = std::make_shared<FRenderingTextureResourcesUpdate>();
+}
+
+FGeometryMap::~FGeometryMap()
+{
+    meshCount = 0;
 }
 
 void FGeometryMap::PreDraw(float deltaTime)
@@ -242,14 +249,18 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
 
 void FGeometryMap::BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData)
 {
-    FGeometry& geometry = geometrys[0];
-    geometry.BuildMesh(inMeshHash, inMeshComponent, inMeshData);
+    for (auto& tmp : geometrys)
+    {
+        tmp.second.BuildMesh(inMeshHash, inMeshComponent, inMeshData, tmp.first);
+    }
 }
 
 void FGeometryMap::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData)
 {
-    FGeometry& geometry = geometrys[0];
-    geometry.DuplicateMesh(inMeshComponent, meshRenderingData);
+    for (auto& tmp : geometrys)
+    {
+        tmp.second.DuplicateMesh(inMeshComponent, meshRenderingData, tmp.first);
+    }
 }
 
 bool FGeometryMap::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType)
@@ -519,7 +530,12 @@ bool FGeometry::IsRenderingDataExistence(CMeshComponent* inKey)
     return false;
 }
 
-void FGeometry::BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData)
+void FGeometry::BuildMesh(
+    const size_t inMeshHash,
+    CMeshComponent* inMeshComponent,
+    const FMeshRenderingData& inMeshData,
+    int inGeometryKey
+)
 {
     if (!IsRenderingDataExistence(inMeshComponent))
     {
@@ -532,6 +548,8 @@ void FGeometry::BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshCompone
             //基础信息记录
             inRenderingData.meshComp = inMeshComponent;
             inRenderingData.meshHash = inMeshHash;
+            inRenderingData.meshObjectIndex = meshCount++;
+            inRenderingData.geometryKey = inGeometryKey;
             inRenderingData.indexSize = inMeshData.indexData.size();
             inRenderingData.vertexSize = inMeshData.vertexData.size();
 
@@ -554,7 +572,11 @@ void FGeometry::BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshCompone
     }
 }
 
-void FGeometry::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData)
+void FGeometry::DuplicateMesh(
+    CMeshComponent* inMeshComponent,
+    const FRenderingData& meshRenderingData,
+    int inGeometryKey
+)
 {
     if (!IsRenderingDataExistence(inMeshComponent))
     {
@@ -565,6 +587,8 @@ void FGeometry::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingD
 
             //基础信息记录
             inRenderingData.meshComp = inMeshComponent;
+            inRenderingData.meshObjectIndex = meshCount++;
+            inRenderingData.geometryKey = inGeometryKey;
         }
     }
 }
@@ -648,6 +672,7 @@ void FGeometry::Build()
 
 UINT FGeometry::GetDrawObjectNumber() const
 {
+    return meshCount;
     int objCount = 0;
     for (auto& tmpRenderLayer : FRenderLayerManager::renderLayers)
     {
