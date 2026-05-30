@@ -2,4 +2,5 @@
 
 FAlphaTestRenderLayer::FAlphaTestRenderLayer()
 {
+    renderPriority = 2450;
 }

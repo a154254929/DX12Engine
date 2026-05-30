@@ -2,4 +2,5 @@
 
 FOpaqueRenderLayer::FOpaqueRenderLayer()
 {
+    renderPriority = 2000;
 }

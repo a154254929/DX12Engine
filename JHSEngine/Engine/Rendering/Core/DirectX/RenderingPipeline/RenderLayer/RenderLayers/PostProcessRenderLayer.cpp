@@ -2,4 +2,5 @@
 
 FPostProcessRenderLayer::FPostProcessRenderLayer()
 {
+    renderPriority = 3500;
 }

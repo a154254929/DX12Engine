@@ -2,4 +2,5 @@
 
 FTransparentRenderLayer::FTransparentRenderLayer()
 {
+    renderPriority = 3000;
 }

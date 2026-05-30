@@ -10,6 +10,8 @@ public:
     
     void RegisterRenderLayer();
     
+    const UINT GetRenderLayerPriority() const {return renderPriority;};
+    
 protected:
     UINT renderPriority;
 };

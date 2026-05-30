@@ -23,4 +23,9 @@ FRenderLayerManager::~FRenderLayerManager()
 
 void FRenderLayerManager::SortRenderLayer()
 {
+    auto compRenderLayer = [&](const std::shared_ptr<FRenderLayer> renderLayerA, std::shared_ptr<FRenderLayer> renderLayerB)
+    {
+        return renderLayerA->GetRenderLayerPriority() < renderLayerB->GetRenderLayerPriority();
+    };
+    std::sort(renderLayers.begin(), renderLayers.end(), compRenderLayer);
 }

@@ -30,6 +30,9 @@ void FRenderingPipeline::BuildPipeline()
     //初始化GPS描述
     directXPipelineState.ResetGPSDesc();
     
+    //统一排序渲染层级
+   renderLayerMananer.SortRenderLayer();
+    
     //读取贴图纹理
     geometryMap.LoadTexture();
 
