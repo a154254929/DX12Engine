@@ -5,4 +5,6 @@ class FTransparentRenderLayer : public FRenderLayer
 {
 public:
     FTransparentRenderLayer();
+
+    virtual void BuildShader();
 };

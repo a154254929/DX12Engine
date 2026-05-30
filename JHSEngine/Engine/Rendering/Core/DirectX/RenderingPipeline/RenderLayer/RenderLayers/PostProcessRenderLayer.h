@@ -5,4 +5,6 @@ class FPostProcessRenderLayer : public FRenderLayer
 {
 public:
     FPostProcessRenderLayer();
+
+    virtual void BuildShader();
 };

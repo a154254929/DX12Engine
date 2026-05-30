@@ -21,6 +21,22 @@ FRenderLayerManager::~FRenderLayerManager()
     renderLayers.clear();
 }
 
+void FRenderLayerManager::Init(FGeometryMap* inGeometryMap, FDirectXPipelineState* inDirectXPipelineState)
+{
+    for (auto& tmp : renderLayers)
+    {
+        tmp->Init(inGeometryMap, inDirectXPipelineState);
+    }
+}
+
+void FRenderLayerManager::BuildShader()
+{
+    for (auto& tmp : renderLayers)
+    {
+        tmp->BuildShader();
+    }
+}
+
 void FRenderLayerManager::SortRenderLayer()
 {
     auto compRenderLayer = [&](const std::shared_ptr<FRenderLayer> renderLayerA, std::shared_ptr<FRenderLayer> renderLayerB)

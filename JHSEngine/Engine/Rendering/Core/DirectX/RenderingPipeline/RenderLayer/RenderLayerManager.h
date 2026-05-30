@@ -9,6 +9,10 @@ public:
     
     ~FRenderLayerManager();
     
+    virtual void Init(FGeometryMap* inGeometryMap, FDirectXPipelineState* inDirectXPipelineState);
+    
+    virtual void BuildShader();
+    
     void SortRenderLayer();
     
 protected:

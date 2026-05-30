@@ -5,4 +5,6 @@ class FAlphaTestRenderLayer : public FRenderLayer
 {
 public:
     FAlphaTestRenderLayer();
+
+    virtual void BuildShader();
 };

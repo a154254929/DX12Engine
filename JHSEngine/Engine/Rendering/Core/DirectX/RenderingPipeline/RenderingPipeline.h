@@ -28,13 +28,8 @@ public:
     virtual void PostDraw(float deltaTime);
 protected:
     FGeometryMap geometryMap;
-
-    FShader vertexShader;
-    FShader pixelShader;
     
     FRenderLayerManager renderLayerMananer;
-
-    vector<D3D12_INPUT_ELEMENT_DESC> inputElementDesc;
 
     FDirectXPipelineState directXPipelineState;
     FDirectXRootSignature rootSignature;
