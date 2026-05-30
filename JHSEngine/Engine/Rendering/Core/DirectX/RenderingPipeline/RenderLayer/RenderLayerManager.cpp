@@ -54,6 +54,14 @@ void FRenderLayerManager::PostDraw(float deltaTime)
     }
 }
 
+void FRenderLayerManager::BuildPSO()
+{
+    for (auto& tmp : renderLayers)
+    {
+        tmp->BuildPSO();
+    }
+}
+
 void FRenderLayerManager::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
 {
     for (auto& tmp : renderLayers)

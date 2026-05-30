@@ -92,6 +92,11 @@ void FDirectXPipelineState::Build(int inPSOType)
     // ANALYSIS_HRESULT(GetD3dDevice()->CreateGraphicsPipelineState(&gpsDesc, IID_PPV_ARGS(&PSO[EPipelineState::GrayModel])))
 }
 
+void FDirectXPipelineState::ResetPSO(int inPSOType)
+{
+    GetGraphicsCommandList()->SetPipelineState(PSO[inPSOType].Get());
+}
+
 void FDirectXPipelineState::SetFillMode(bool bWireframe)
 {
     gpsDesc.RasterizerState.FillMode = bWireframe ? D3D12_FILL_MODE_WIREFRAME : D3D12_FILL_MODE_SOLID;

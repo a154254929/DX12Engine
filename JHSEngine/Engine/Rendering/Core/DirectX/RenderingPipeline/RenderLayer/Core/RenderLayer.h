@@ -21,6 +21,8 @@ public:
     void PreDraw(float deltaTime);
     void Draw(float deltaTime);
     void PostDraw(float deltaTime);
+    
+    virtual void BuildPSO() = 0;
 
     virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 public:  

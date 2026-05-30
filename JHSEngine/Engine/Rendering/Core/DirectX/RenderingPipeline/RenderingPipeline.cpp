@@ -72,11 +72,8 @@ void FRenderingPipeline::BuildPipeline()
     //构建PSO参数
     directXPipelineState.BuildParam();
     
-    //构建管线
-    directXPipelineState.Build(EPipelineState::WireFrame);
-    
-    directXPipelineState.SetFillMode(false);
-    directXPipelineState.Build(EPipelineState::GrayModel);
+    //通过层级构建PSO
+    renderLayerMananer.BuildPSO();
 }
 
 void FRenderingPipeline::PreDraw(float deltaTime)

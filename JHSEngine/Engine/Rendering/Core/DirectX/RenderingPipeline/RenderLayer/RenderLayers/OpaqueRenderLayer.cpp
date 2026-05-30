@@ -30,3 +30,12 @@ void FOpaqueRenderLayer::BuildShader()
     };
     directXPipelineState->BindInputLayout(inputElementDesc.data(), inputElementDesc.size());
 }
+
+void FOpaqueRenderLayer::BuildPSO()
+{
+    //构建管线
+    directXPipelineState->Build(EPipelineState::WireFrame);
+    
+    directXPipelineState->SetFillMode(false);
+    directXPipelineState->Build(EPipelineState::GrayModel);
+}

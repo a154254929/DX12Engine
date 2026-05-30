@@ -17,6 +17,8 @@ public:
     void Draw(float deltaTime);
     void PostDraw(float deltaTime);
 
+    virtual void BuildPSO();
+
     virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
     
     virtual void BuildShader();

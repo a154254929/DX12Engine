@@ -27,6 +27,9 @@ public:
     void BuildParam();
 
     void Build(int inPSOType);
+    
+    //绘制时调用
+    void ResetPSO(int inPSOType);
 
     ID3D12PipelineState* GetPSO() { return PSO[pipelineState].Get(); }
     
