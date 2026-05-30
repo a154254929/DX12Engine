@@ -1,6 +1,13 @@
 #include "AesmaMesh.h"
 #include "Core/MeshType.h"
 #include "../Mesh/Core/MeshManager.h"
+#include "../Core/Consttruction/MacroConstruction.h"
+#include "../Component/Mesh/AesmaMeshComponent.h"
+
+GAesmaMesh::GAesmaMesh()
+{
+    SetMeshComponent(ConstructionObject<CAesmaMeshComponent>());
+}
 
 void GAesmaMesh::Init()
 {
@@ -20,5 +27,7 @@ void GAesmaMesh::CreateMesh(
     uint32_t inHeightSubdivision
 )
 {
-    SetMeshComponent(GetMeshManager()->CreateAesmaMeshComponent(inOuterRadius, inInnerRadius, inHeight, inAxialSubdivision, inHeightSubdivision));
+    CREATE_RENDER_DATA(CAesmaMeshComponent, inOuterRadius, inInnerRadius, inHeight, inAxialSubdivision, inHeightSubdivision);
+    
+    //SetMeshComponent(GetMeshManager()->CreateAesmaMeshComponent(inOuterRadius, inInnerRadius, inHeight, inAxialSubdivision, inHeightSubdivision));
 }

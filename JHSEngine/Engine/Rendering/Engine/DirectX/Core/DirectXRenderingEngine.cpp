@@ -172,6 +172,7 @@ int CDirectXRenderingEngine::PostInit()
                 material->SetMaterialType(EMaterialType::BaseColor);
             }
         }
+        */
         
         if (GBoxMesh* boxMesh = world->CreateActorObject<GBoxMesh>())
         {
@@ -185,7 +186,6 @@ int CDirectXRenderingEngine::PostInit()
                 material->SetMaterialType(EMaterialType::BaseColor);
             }
         }
-        */
 
         if (GSphereMesh* sphereMeshLambertain = world->CreateActorObject<GSphereMesh>())
         {

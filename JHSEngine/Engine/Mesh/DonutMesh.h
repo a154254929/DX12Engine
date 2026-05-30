@@ -5,6 +5,8 @@ class GDonutMesh : public GMesh
 {
     typedef GMesh Super;
 public:
+    GDonutMesh();
+    
     virtual void Init();
 
     virtual void Draw(float deltaTime);

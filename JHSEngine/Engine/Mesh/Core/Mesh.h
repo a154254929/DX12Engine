@@ -25,6 +25,12 @@ public:
 
 public:
     virtual CMeshComponent * GetMeshComponent() { return meshComponent; }
+    
+    template<class T>
+    T* GetMeshComponent()
+    {
+        return dynamic_cast<T*>(meshComponent);
+    }
 protected:
     virtual void SetMeshComponent(CMeshComponent* inMeshComponent);
 public:

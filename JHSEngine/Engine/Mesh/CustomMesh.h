@@ -5,6 +5,8 @@ class GCustomMesh : public GMesh
 {
     typedef GMesh Super;
 public:
+    GCustomMesh();
+    
     virtual void Init();
 
     virtual void Draw(float deltaTime);

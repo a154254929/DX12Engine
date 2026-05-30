@@ -5,6 +5,8 @@ class GPlaneMesh : public GMesh
 {
     typedef GMesh Super;
 public:
+    GPlaneMesh();
+    
     virtual void Init();
 
     virtual void Draw(float deltaTime);

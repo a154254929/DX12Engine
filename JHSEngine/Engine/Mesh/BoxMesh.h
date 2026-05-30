@@ -5,6 +5,8 @@ class GBoxMesh : public GMesh
 {
     typedef GMesh Super;
 public:
+    GBoxMesh();
+    
     virtual void Init();
 
     virtual void Draw(float deltaTime);

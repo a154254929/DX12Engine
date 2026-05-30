@@ -40,6 +40,8 @@ public:
     CMeshComponent* CreateSphereMeshComponent(float InRadius, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision, bool bReverse = false);
 
     CMeshComponent* CreateMeshComponent(string& InPath);
+    
+    FRenderingPipeline& GetRenderingPipeline() {return renderingPipeline;};
 
 protected:
     template<class T, typename ...ParamTypes>

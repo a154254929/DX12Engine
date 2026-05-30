@@ -11,6 +11,7 @@
 #include "../../Component/Mesh/SphereMeshComponent.h"
 #include "../../Component/Mesh/AesmaMeshComponent.h"
 #include "../../Component/Mesh/DonutMeshComponent.h"
+#include "../../Core/Consttruction/MeshConstruction.h"
 
 CMeshManager::CMeshManager()
 {
@@ -48,42 +49,42 @@ void CMeshManager::PostDraw(float deltaTime)
 
 CMeshComponent* CMeshManager::CreateSphereMeshComponent(float inRadius, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision, bool bReverse)
 {
-    return CreateMeshComponent<CSphereMeshComponent>(inRadius, inAxialSubdivision, inHeightSubdivision, bReverse);
+    return MeshConstruction::CreateMeshComponent<CSphereMeshComponent>(this, inRadius, inAxialSubdivision, inHeightSubdivision, bReverse);
 }
 
 CMeshComponent* CMeshManager::CreateMeshComponent(string& inPath)
 {
-    return CreateMeshComponent<CCustomMeshComponent>(inPath);
+    return MeshConstruction::CreateMeshComponent<CCustomMeshComponent>(this, inPath);
 }
 
 CMeshComponent* CMeshManager::CreateBoxMeshComponent(float inHeight, float inWidth, float inDepth)
 {
-    return CreateMeshComponent<CBoxMeshComponent>(inDepth, inDepth, inDepth);
+    return MeshConstruction::CreateMeshComponent<CBoxMeshComponent>(this, inDepth, inDepth, inDepth);
 }
 
 CMeshComponent* CMeshManager::CreateConeMeshComponent(float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
 {
-    return CreateMeshComponent<CConeMeshComponent>(inRadius, inHeight, inAxialSubdivision, inHeightSubdivision);
+    return MeshConstruction::CreateMeshComponent<CConeMeshComponent>(this, inRadius, inHeight, inAxialSubdivision, inHeightSubdivision);
 }
 
 CMeshComponent* CMeshManager::CreateCylinderMeshComponent(float inTopRadius, float inBottomRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
 {
-    return CreateMeshComponent<CCylinderMeshComponent>(inTopRadius, inBottomRadius, inHeight, inAxialSubdivision, inHeightSubdivision);
+    return MeshConstruction::CreateMeshComponent<CCylinderMeshComponent>(this, inTopRadius, inBottomRadius, inHeight, inAxialSubdivision, inHeightSubdivision);
 }
 
 CMeshComponent* CMeshManager::CreatePlaneMeshComponent(float inHeight, float inWidth, uint32_t inHeightSubdivide, uint32_t inWidthSubdivide)
 {
-    return CreateMeshComponent<CPlaneMeshComponent>(inHeight, inWidth, inHeightSubdivide, inWidthSubdivide);
+    return MeshConstruction::CreateMeshComponent<CPlaneMeshComponent>(this, inHeight, inWidth, inHeightSubdivide, inWidthSubdivide);
 }
 
 CMeshComponent* CMeshManager::CreateAesmaMeshComponent(float inOuterRadius, float inInnerRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision)
 {
-    return CreateMeshComponent<CAesmaMeshComponent>(inOuterRadius, inInnerRadius, inHeight, inAxialSubdivision, inHeightSubdivision);
+    return MeshConstruction::CreateMeshComponent<CAesmaMeshComponent>(this, inOuterRadius, inInnerRadius, inHeight, inAxialSubdivision, inHeightSubdivision);
 }
 
 CMeshComponent* CMeshManager::CreateDonutMeshComponent(float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision)
 {
-    return CreateMeshComponent<CDonutMeshComponent>(inDonutRadius, inThicknessRadius, inDonutAxialSubdivision, inThicknessAxialSubdivision);
+    return MeshConstruction::CreateMeshComponent<CDonutMeshComponent>(this, inDonutRadius, inThicknessRadius, inDonutAxialSubdivision, inThicknessAxialSubdivision);
 }
 
 template<class T, typename ...ParamTypes>

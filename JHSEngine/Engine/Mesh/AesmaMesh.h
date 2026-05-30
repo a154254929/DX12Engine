@@ -5,6 +5,8 @@ class GAesmaMesh : public GMesh
 {
     typedef GMesh Super;
 public:
+    GAesmaMesh();
+    
     virtual void Init();
 
     virtual void Draw(float deltaTime);

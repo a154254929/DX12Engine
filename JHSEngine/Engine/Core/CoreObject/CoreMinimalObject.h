@@ -5,6 +5,7 @@
 #include "../../EngineMinimal.h"
 #include "../../CodeReflection/CodeReflectionMacroTag.h"
 #include "GuidInterface.h"
+#include "../Consttruction/ObjectConstruction.h"
 
 //提供核心对象
 class CCoreMinimalObject : public IGuidInterface
