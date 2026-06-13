@@ -18,6 +18,7 @@ void FPostProcessRenderLayer::BuildShader()
 
 void FPostProcessRenderLayer::BuildPSO()
 {
+    Super::BuildPSO();
     //构建管线
     directXPipelineState->SetFillMode(false);
     directXPipelineState->Build(EPipelineState::PostProcess);

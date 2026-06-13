@@ -59,7 +59,7 @@ void FDirectXPipelineState::BuildParam()
 
     //配置光栅化状态
     gpsDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-    gpsDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;//线框方式渲染
+    gpsDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;//线框方式渲染
 
     gpsDesc.SampleMask = UINT_MAX;
 

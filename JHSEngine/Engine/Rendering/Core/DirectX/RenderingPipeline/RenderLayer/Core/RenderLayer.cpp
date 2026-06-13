@@ -69,6 +69,14 @@ void FRenderLayer::PostDraw(float deltaTime)
 {
 }
 
+void FRenderLayer::BuildPSO()
+{
+    BuildShader();
+    
+    //构建PSO
+    directXPipelineState->BuildParam();
+}
+
 void FRenderLayer::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
 {
 

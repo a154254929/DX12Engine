@@ -19,6 +19,7 @@ void FAlphaTestRenderLayer::BuildShader()
 
 void FAlphaTestRenderLayer::BuildPSO()
 {
+    Super::BuildPSO();
     //构建管线
     directXPipelineState->SetFillMode(false);
     directXPipelineState->Build(EPipelineState::AlphaTest);

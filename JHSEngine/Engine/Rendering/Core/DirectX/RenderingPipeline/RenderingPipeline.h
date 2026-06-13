@@ -29,7 +29,7 @@ public:
 protected:
     FGeometryMap geometryMap;
     
-    FRenderLayerManager renderLayerMananer;
+    FRenderLayerManager renderLayerManager;
 
     FDirectXPipelineState directXPipelineState;
     FDirectXRootSignature rootSignature;

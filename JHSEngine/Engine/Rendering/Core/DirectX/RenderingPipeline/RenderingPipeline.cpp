@@ -23,7 +23,7 @@ void FRenderingPipeline::UpdateCalculations(float deltaTime, const FViewportInfo
 {
     geometryMap.UpdateCalculations(deltaTime, viewportInfo);
     
-    renderLayerMananer.UpdateCalculations(deltaTime, viewportInfo);
+    renderLayerManager.UpdateCalculations(deltaTime, viewportInfo);
 }
 
 
@@ -33,10 +33,10 @@ void FRenderingPipeline::BuildPipeline()
     directXPipelineState.ResetGPSDesc();
     
     //渲染层级初始化
-   renderLayerMananer.Init(&geometryMap, &directXPipelineState);
+   renderLayerManager.Init(&geometryMap, &directXPipelineState);
     
     //统一排序渲染层级
-   renderLayerMananer.SortRenderLayer();
+   renderLayerManager.SortRenderLayer();
     
     //读取贴图纹理
     geometryMap.LoadTexture();
@@ -46,7 +46,7 @@ void FRenderingPipeline::BuildPipeline()
     directXPipelineState.BindRootSignature(rootSignature.GetRootSignature());
     
     //构建每个层级的shader
-    renderLayerMananer.BuildShader();
+    //renderLayerManager.BuildShader();
 
     //构建模型
     geometryMap.Build();
@@ -70,17 +70,17 @@ void FRenderingPipeline::BuildPipeline()
     geometryMap.BuildTextureConstantBuffer();
 
     //构建PSO参数
-    directXPipelineState.BuildParam();
+    //directXPipelineState.BuildParam();
     
     //通过层级构建PSO
-    renderLayerMananer.BuildPSO();
+    renderLayerManager.BuildPSO();
 }
 
 void FRenderingPipeline::PreDraw(float deltaTime)
 {
     directXPipelineState.PreDraw(deltaTime);
     
-    renderLayerMananer.PreDraw(deltaTime);
+    renderLayerManager.PreDraw(deltaTime);
 }
 
 void FRenderingPipeline::Draw(float deltaTime)
@@ -89,13 +89,13 @@ void FRenderingPipeline::Draw(float deltaTime)
     geometryMap.PreDraw(deltaTime);
 
     geometryMap.Draw(deltaTime);
-    renderLayerMananer.Draw(deltaTime);
+    renderLayerManager.Draw(deltaTime);
     directXPipelineState.Draw(deltaTime);
 }
 
 void FRenderingPipeline::PostDraw(float deltaTime)
 {
     geometryMap.PostDraw(deltaTime);
-    renderLayerMananer.PostDraw(deltaTime);
+    renderLayerManager.PostDraw(deltaTime);
     directXPipelineState.PostDraw(deltaTime);
 }

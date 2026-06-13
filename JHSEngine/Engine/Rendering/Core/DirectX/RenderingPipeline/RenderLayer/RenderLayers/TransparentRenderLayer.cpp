@@ -40,6 +40,7 @@ void FTransparentRenderLayer::BuildShader()
 
 void FTransparentRenderLayer::BuildPSO()
 {
+    Super::BuildPSO();
     D3D12_RENDER_TARGET_BLEND_DESC blendDesc = {
         true,
         false,

@@ -39,12 +39,13 @@ void FOpaqueRenderLayer::BuildShader()
 
 void FOpaqueRenderLayer::BuildPSO()
 {
+    Super::BuildPSO();
     directXPipelineState->SetFillMode(false);
     directXPipelineState->Build(EPipelineState::Opaque);
-    //构建管线
-    directXPipelineState->SetFillMode(true);
-    directXPipelineState->Build(EPipelineState::WireFrame);
     
     directXPipelineState->SetFillMode(false);
     directXPipelineState->Build(EPipelineState::GrayModel);
+    //构建管线
+    directXPipelineState->SetFillMode(true);
+    directXPipelineState->Build(EPipelineState::WireFrame);
 }

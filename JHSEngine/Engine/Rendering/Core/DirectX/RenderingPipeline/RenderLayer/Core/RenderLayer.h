@@ -22,14 +22,14 @@ public:
     virtual void Draw(float deltaTime);
     virtual void PostDraw(float deltaTime);
     
-    virtual void BuildPSO() = 0;
+    virtual void BuildPSO();
 
     virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 public:  
     const UINT GetRenderLayerPriority() const {return renderPriority;}
     
 public:
-    virtual void BuildShader() = 0;
+    virtual void BuildShader(){};
     
     virtual int GetRenderLayerType() const = 0;
     
