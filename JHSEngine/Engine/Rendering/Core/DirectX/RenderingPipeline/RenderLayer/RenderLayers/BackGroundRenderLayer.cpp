@@ -19,7 +19,7 @@ void FBackGroundRenderLayer::BuildShader()
     char textureNumBuff[10] = {0};
     //构建shader
     D3D_SHADER_MACRO shaderMacro[] = {
-        "Texture2DMap_Count", _itoa(geometryMap->GetDrawTextureResourcesNumber(), textureNumBuff, 10),
+        "Texture2DMap_Count", _itoa(geometryMap->GetDrawTexture2DResourcesNumber(), textureNumBuff, 10),
         NULL, NULL
     };
     vertexShader.BuildShaders(L"../JHSEngine/Shader/Sky.hlsl", "VertexShaderUnlit", "vs_5_1", shaderMacro);
@@ -38,6 +38,15 @@ void FBackGroundRenderLayer::BuildShader()
 void FBackGroundRenderLayer::BuildPSO()
 {
     Super::BuildPSO();
+    
+    CD3DX12_RASTERIZER_DESC rasterizerDesc = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+    rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+    rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
+    directXPipelineState->SetRasterizerState(rasterizerDesc);
+    CD3DX12_DEPTH_STENCIL_DESC depthStencilDesc = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+    depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+    directXPipelineState->SetDepthStencilState(depthStencilDesc);
+    
     //构建管线
     directXPipelineState->SetFillMode(false);
     directXPipelineState->Build(EPipelineState::BackGround);

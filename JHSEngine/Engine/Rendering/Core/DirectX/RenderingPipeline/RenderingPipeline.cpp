@@ -42,7 +42,7 @@ void FRenderingPipeline::BuildPipeline()
     geometryMap.LoadTexture();
 
     //构建根签名
-    rootSignature.BuildRootSignature(geometryMap.GetDrawTextureResourcesNumber());
+    rootSignature.BuildRootSignature(geometryMap.GetDrawTexture2DResourcesNumber());
     directXPipelineState.BindRootSignature(rootSignature.GetRootSignature());
     
     //构建每个层级的shader

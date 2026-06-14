@@ -22,7 +22,10 @@ FGeometryMap::FGeometryMap()
 {
     geometrys.insert(pair<int, FGeometry>(0, FGeometry()));
     
-    renderingTextureResourcesUpdate = std::make_shared<FRenderingTextureResourcesUpdate>();
+    renderingTexture2DResourcesUpdate = std::make_shared<FRenderingTextureResourcesUpdate>();
+    renderingTexture2DResourcesUpdate->SetViewDimension(D3D12_SRV_DIMENSION_TEXTURE2D);
+    renderingTextureCubemapResourcesUpdate = std::make_shared<FRenderingTextureResourcesUpdate>();
+    renderingTexture2DResourcesUpdate->SetViewDimension(D3D12_SRV_DIMENSION_TEXTURECUBE);
 }
 
 FGeometryMap::~FGeometryMap()
@@ -149,7 +152,7 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                 materialConstantBuffer.materialType = inMaterial->GetMaterialType();
                         
                 //外部资源导入
-                if (auto baseColorTextureResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(inMaterial->GetBaseColorIndexKey()))
+                if (auto baseColorTextureResourcePtr = FindRenderingTextureByName(inMaterial->GetBaseColorIndexKey()))
                 {
                     materialConstantBuffer.baseColorIndex = baseColorTextureResourcePtr->get()->renderingTextureID;
                 }
@@ -158,7 +161,7 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                     materialConstantBuffer.baseColorIndex = -1;
                 }
                 
-                if (auto normalMapResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(inMaterial->GetNormalMapIndexKey()))
+                if (auto normalMapResourcePtr = FindRenderingTextureByName(inMaterial->GetNormalMapIndexKey()))
                 {
                     materialConstantBuffer.normalMapIndex = normalMapResourcePtr->get()->renderingTextureID;
                 }
@@ -167,7 +170,7 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                     materialConstantBuffer.normalMapIndex = -1;
                 }
                 
-                if (auto specularMapResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(inMaterial->GetSpecularMapIndexKey()))
+                if (auto specularMapResourcePtr = FindRenderingTextureByName(inMaterial->GetSpecularMapIndexKey()))
                 {
                     materialConstantBuffer.specularMapIndex = specularMapResourcePtr->get()->renderingTextureID;
                 }
@@ -176,7 +179,7 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                     materialConstantBuffer.specularMapIndex = -1;
                 }
                 
-                if (auto roughnessMapResourcePtr = renderingTextureResourcesUpdate->FindRenderingTextureByName(inMaterial->GetSpecularMapIndexKey()))
+                if (auto roughnessMapResourcePtr = FindRenderingTextureByName(inMaterial->GetSpecularMapIndexKey()))
                 {
                     materialConstantBuffer.roughnessMapIndex = roughnessMapResourcePtr->get()->renderingTextureID;
                 }
@@ -237,7 +240,7 @@ void FGeometryMap::Build()
 void FGeometryMap::BuildDescriptorHeap()
 {
     //+1是因为有摄像机
-    descriptorHeap.Build(GetDrawMeshObjectNumber() + GetDrawLightObjectNumber() + 1 + GetDrawTextureResourcesNumber());
+    descriptorHeap.Build(GetDrawMeshObjectNumber() + GetDrawLightObjectNumber() + 1 + GetDrawTexture2DResourcesNumber() + GetDrawTextureCubemapResourcesNumber());
 }
 
 void FGeometryMap::BuildMeshConstantBuffer()
@@ -296,9 +299,15 @@ void FGeometryMap::BuildViewportConstantBuffer()
 
 void FGeometryMap::BuildTextureConstantBuffer()
 {
-    renderingTextureResourcesUpdate->BuildTextureConstantBuffer(
+    //构建Texture2D
+    renderingTexture2DResourcesUpdate->BuildTextureConstantBuffer(
         descriptorHeap.GetHeap(),
         GetDrawMeshObjectNumber() + GetDrawLightObjectNumber() + 1
+    );
+    //构建TextureCubemap
+    renderingTextureCubemapResourcesUpdate->BuildTextureConstantBuffer(
+        descriptorHeap.GetHeap(),
+        GetDrawMeshObjectNumber() + GetDrawLightObjectNumber() + 1 + GetDrawTexture2DResourcesNumber()
     );
 }
 
@@ -317,9 +326,27 @@ UINT FGeometryMap::GetDrawLightObjectNumber()
     return 1;
 }
 
-UINT FGeometryMap::GetDrawTextureResourcesNumber()
+UINT FGeometryMap::GetDrawTexture2DResourcesNumber()
 {
-    return renderingTextureResourcesUpdate->Size();
+    return renderingTexture2DResourcesUpdate->Size();
+}
+
+UINT FGeometryMap::GetDrawTextureCubemapResourcesNumber()
+{
+    return renderingTextureCubemapResourcesUpdate->Size();
+}
+
+std::unique_ptr<FRenderingTexture>* FGeometryMap::FindRenderingTextureByName(const std::string& inKey)
+{
+    if (auto texture2DPtr = renderingTexture2DResourcesUpdate->FindRenderingTextureByName(inKey))
+    {
+        return texture2DPtr;
+    }
+    else if (auto textureCubemapPtr = renderingTextureCubemapResourcesUpdate->FindRenderingTextureByName(inKey))
+    {
+        return textureCubemapPtr;
+    }
+    return nullptr;
 }
 
 void FGeometryMap::DrawViewport(float deltaTime)
@@ -412,7 +439,14 @@ void FGeometryMap::LoadTexture()
     {
         wchar_t texturePath[1024] = { 0 };
         char_to_wchar_t(texturePath, 1024, p.c_str());
-        renderingTextureResourcesUpdate->LoadTextureResource(texturePath);
+        if (wfind_string(texturePath, L"_CubeMap.") != -1 || wfind_string(texturePath, L"_cubemap.") != -1)
+        {
+            renderingTextureCubemapResourcesUpdate->LoadTextureResource(texturePath);
+        }
+        else
+        {
+            renderingTexture2DResourcesUpdate->LoadTextureResource(texturePath);
+        }
     }
 }
 

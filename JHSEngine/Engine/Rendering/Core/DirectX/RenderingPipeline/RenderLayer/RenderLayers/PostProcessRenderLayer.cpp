@@ -18,7 +18,7 @@ void FPostProcessRenderLayer::BuildShader()
     char textureNumBuff[10] = {0};
     //构建shader
     D3D_SHADER_MACRO shaderMacro[] = {
-        "Texture2DMap_Count", _itoa(geometryMap->GetDrawTextureResourcesNumber(), textureNumBuff, 10),
+        "Texture2DMap_Count", _itoa(geometryMap->GetDrawTexture2DResourcesNumber(), textureNumBuff, 10),
         NULL, NULL
     };
     vertexShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "VertexShaderUnlit", "vs_5_1", shaderMacro);

@@ -41,6 +41,10 @@ public:
     
     //设置RT
     void SetRenderTarget(int index, D3D12_RENDER_TARGET_BLEND_DESC& inRenderTargetBlendDesc);
+    
+    void SetRasterizerState(const CD3DX12_RASTERIZER_DESC& inRasterizerState);
+    
+    void SetDepthStencilState(const CD3DX12_DEPTH_STENCIL_DESC& inDepthStencilState);
 
 private:
     //按键捕获

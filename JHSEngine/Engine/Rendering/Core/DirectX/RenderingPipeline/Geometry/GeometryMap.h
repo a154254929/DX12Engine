@@ -7,6 +7,7 @@
 #include "../../../../../Core/Viewport/ViewportInfo.h"
 
 
+struct FRenderingTexture;
 class CMaterial;
 
 class FGeometry : public IDirectXDeviceInterface_Struct
@@ -92,7 +93,12 @@ public:
     UINT GetDrawLightObjectNumber();
 
     /*后面会有变化*/
-    UINT GetDrawTextureResourcesNumber();
+    UINT GetDrawTexture2DResourcesNumber();
+    
+    UINT GetDrawTextureCubemapResourcesNumber();
+    
+public:
+    std::unique_ptr<FRenderingTexture> *FindRenderingTextureByName(const std::string &inKey);
 
 public:
     void DrawViewport(float deltaTime);
@@ -117,6 +123,7 @@ protected:
     FConstantBufferView viewportConstantBufferView;
     FConstantBufferView lightConstantBufferView;
     
-    shared_ptr<class FRenderingTextureResourcesUpdate> renderingTextureResourcesUpdate;
+    shared_ptr<class FRenderingTextureResourcesUpdate> renderingTexture2DResourcesUpdate;
+    shared_ptr<class FRenderingTextureResourcesUpdate> renderingTextureCubemapResourcesUpdate;
     std::vector<CMaterial*> materials;
 };
