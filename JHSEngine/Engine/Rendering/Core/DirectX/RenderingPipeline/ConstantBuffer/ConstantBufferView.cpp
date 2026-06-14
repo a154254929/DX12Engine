@@ -31,3 +31,8 @@ void FConstantBufferView::Update(int index, const void* inData)
 {
     constants->Update(index, inData);
 }
+
+UINT FConstantBufferView::GetConstantBufferByteSize()
+{
+    return constants->GetConstantBufferByteSize();
+}

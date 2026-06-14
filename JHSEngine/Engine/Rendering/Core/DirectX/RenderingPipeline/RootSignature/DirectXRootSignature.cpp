@@ -23,44 +23,22 @@ void FDirectXRootSignature::BuildRootSignature(UINT inTextureNum)
     //构建根签名
     CD3DX12_ROOT_PARAMETER rootParam[5];
 
-    //Object cbv描述表
-    CD3DX12_DESCRIPTOR_RANGE descriptorRangeObjCBV;
-    descriptorRangeObjCBV.Init(
-        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
-        1,
-        0
-    );
-
-    //ViewPort cbv描述表
-    CD3DX12_DESCRIPTOR_RANGE descriptorRangeViewportCBV;
-    descriptorRangeViewportCBV.Init(
-        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
-        1,
-        1
-    );
-
-    //Light cbv描述表
-    CD3DX12_DESCRIPTOR_RANGE descriptorRangeLightCBV;
-    descriptorRangeLightCBV.Init(
-        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
-        1,
-        2
-    );
-
     //Texture srv描述表
     CD3DX12_DESCRIPTOR_RANGE descriptorRangeTextureSRV;
     descriptorRangeTextureSRV.Init(
         D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
         inTextureNum,
-        3
+        1
     );
 
-    rootParam[0].InitAsDescriptorTable(1, &descriptorRangeObjCBV);
-    rootParam[1].InitAsDescriptorTable(1, &descriptorRangeViewportCBV);
-    rootParam[2].InitAsDescriptorTable(1, &descriptorRangeLightCBV);
-    rootParam[3].InitAsDescriptorTable(1, &descriptorRangeTextureSRV);
+    rootParam[0].InitAsConstantBufferView(0);   //对象
+    rootParam[1].InitAsConstantBufferView(1);   //视口
+    rootParam[2].InitAsConstantBufferView(2);   //灯光
     
-    rootParam[4].InitAsShaderResourceView(4, 1);
+    //t
+    rootParam[3].InitAsShaderResourceView(0, 1);    //材质
+    
+    rootParam[4].InitAsDescriptorTable(1, &descriptorRangeTextureSRV, D3D12_SHADER_VISIBILITY_ALL);//贴图
     
     //构建静态采样
     staticSamplerObject.BuildStaticSample();

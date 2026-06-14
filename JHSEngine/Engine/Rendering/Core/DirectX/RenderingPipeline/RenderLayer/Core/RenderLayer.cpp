@@ -28,13 +28,15 @@ void FRenderLayer::PreDraw(float deltaTime)
 
 void FRenderLayer::Draw(float deltaTime)
 {
-    UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+    //UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+    UINT meshOffset = geometryMap->meshConstantBufferView.GetConstantBufferByteSize();
+    
     for (auto& renderingData : renderingDatas)
     {
         D3D12_VERTEX_BUFFER_VIEW vbv = geometryMap->geometrys[renderingData.geometryKey].GetVertexBufferView();
         D3D12_INDEX_BUFFER_VIEW ibv = geometryMap->geometrys[renderingData.geometryKey].GetIndexBufferView();
         
-        CD3DX12_GPU_DESCRIPTOR_HANDLE meshDesHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(geometryMap->descriptorHeap.GetHeap()->GetGPUDescriptorHandleForHeapStart());
+        //CD3DX12_GPU_DESCRIPTOR_HANDLE meshDesHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(geometryMap->descriptorHeap.GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
         GetGraphicsCommandList()->IASetIndexBuffer(&ibv);
         //绑定渲染流水线是的输入槽,可以在输入装配阶段转入顶点数据
@@ -51,8 +53,16 @@ void FRenderLayer::Draw(float deltaTime)
         );
 
         //模型起始地址偏移
-        meshDesHandle.Offset(renderingData.meshObjectIndex, descriptorOffset);
-        GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, meshDesHandle);
+        // meshDesHandle.Offset(renderingData.meshObjectIndex, descriptorOffset);
+        // GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(0, meshDesHandle);
+        
+        //拿到每一个对象相对首地址的便宜
+        D3D12_GPU_VIRTUAL_ADDRESS virtualMeshAddress = geometryMap->meshConstantBufferView.GetBuffer()->GetGPUVirtualAddress();
+        D3D12_GPU_VIRTUAL_ADDRESS vAddress = virtualMeshAddress + renderingData.meshObjectIndex * meshOffset;
+        GetGraphicsCommandList()->SetGraphicsRootConstantBufferView(
+            0,
+            vAddress
+        );
 
         //真正绘制
         GetGraphicsCommandList()->DrawIndexedInstanced(

@@ -1,8 +1,8 @@
 
 SamplerState Point_Sampler : register(s0);
 SamplerState Anisotropic_Sampler : register(s1);
-Texture2D Texture2DMap[Texture2DMap_Count] : register(t3);
-//TextureCube TextureCubeMap[CUBE_MAP_NUM] : register(t5, Space1);
+Texture2D Texture2DMap[Texture2DMap_Count] : register(t1);
+//TextureCube TextureCubeMap[CUBE_MAP_NUM] : register(t2, Space1);
 
 cbuffer ObjectConstBuffer : register(b0) //b0->b14
 {
@@ -45,4 +45,4 @@ struct MaterialConstBuffer
     float4x4 Transformation;
 };
 
-StructuredBuffer<MaterialConstBuffer> Materials : register(t4, Space1);
+StructuredBuffer<MaterialConstBuffer> Materials : register(t0, Space1);
