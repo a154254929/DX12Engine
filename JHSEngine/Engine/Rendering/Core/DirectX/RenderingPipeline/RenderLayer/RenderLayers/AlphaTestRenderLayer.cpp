@@ -16,14 +16,14 @@ void FAlphaTestRenderLayer::Draw(float deltaTime)
 
 void FAlphaTestRenderLayer::BuildShader()
 {
-    char textureNumBuff[10] = {0};
-    //构建shader
-    D3D_SHADER_MACRO shaderMacro[] = {
-        "Texture2DMap_Count", _itoa(geometryMap->GetDrawTexture2DResourcesNumber(), textureNumBuff, 10),
-        NULL, NULL
-    };
-    vertexShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "VertexShaderUnlit", "vs_5_1", shaderMacro);
-    pixelShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "PixelShaderUnlit", "ps_5_1", shaderMacro);
+    std::vector<ShaderType::FShaderMacro> shaderMacros;
+    BuildShaderMacro(shaderMacros);
+    
+    std::vector<D3D_SHADER_MACRO> d3DShaderMacro;
+    ShaderType::ToD3DShaderMacro(shaderMacros, d3DShaderMacro);
+    
+    vertexShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "VertexShaderUnlit", "vs_5_1", d3DShaderMacro.data());
+    pixelShader.BuildShaders(L"../JHSEngine/Shader/Unlit.hlsl", "PixelShaderUnlit", "ps_5_1", d3DShaderMacro.data());
     directXPipelineState->BindShader(vertexShader, pixelShader);
 
     //输入布局

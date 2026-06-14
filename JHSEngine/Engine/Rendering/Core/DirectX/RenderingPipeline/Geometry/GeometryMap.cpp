@@ -518,6 +518,11 @@ void FGeometryMap::BuildFog()
     }
 }
 
+bool FGeometryMap::IsFogOn()
+{
+    return fogComponent != NULL;
+}
+
 bool FGeometry::IsRenderingDataExistence(CMeshComponent* inKey)
 {
     if (std::shared_ptr<FRenderLayer> renderLayer = FRenderLayerManager::FindByRenderLayer((int)inKey->GetRenderLayerType()))

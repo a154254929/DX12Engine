@@ -304,6 +304,7 @@
     <ClCompile Include="Engine\Rendering\Engine\DirectX\DirectX11RenderingEngine.cpp" />
     <ClCompile Include="Engine\Rendering\Engine\DirectX\DirectX12RenderingEngine.cpp" />
     <ClCompile Include="Engine\Shader\Core\Shader.cpp" />
+    <ClCompile Include="Engine\Shader\Core\ShaderType.cpp" />
     <ClCompile Include="simple_library\private\simple_channel\simple_io_stream\simple_io_stream.cpp" />
     <ClCompile Include="simple_library\private\simple_channel\simple_net_channel\simple_channel.cpp" />
     <ClCompile Include="simple_library\private\simple_channel\simple_net_connetion\simple_connetion.cpp" />
@@ -452,6 +453,7 @@
     <ClInclude Include="Engine\Rendering\Engine\DirectX\DirectX11RenderingEngine.h" />
     <ClInclude Include="Engine\Rendering\Engine\DirectX\DirectX12RenderingEngine.h" />
     <ClInclude Include="Engine\Shader\Core\Shader.h" />
+    <ClInclude Include="Engine\Shader\Core\ShaderType.h" />
     <ClInclude Include="simple_library\private\simple_channel\simple_net_connetion\simple_connetion_tcp.h" />
     <ClInclude Include="simple_library\private\simple_channel\simple_net_connetion\simple_connetion_udp.h" />
     <ClInclude Include="simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.h" />

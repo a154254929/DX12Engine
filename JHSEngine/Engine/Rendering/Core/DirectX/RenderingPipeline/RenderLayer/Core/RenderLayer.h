@@ -2,6 +2,7 @@
 #include "../../../../../../Interface/DirectXDeviceInterface.h"
 #include "../../../../../../Shader/Core/Shader.h"
 #include "../../Geometry/RenderingData.h"
+#include "../../../../../../Shader/Core/ShaderType.h"
 
 class FGeometryMap;
 struct FDirectXPipelineState;
@@ -30,6 +31,8 @@ public:
     
 public:
     virtual void BuildShader(){};
+    
+    virtual void BuildShaderMacro(std::vector<ShaderType::FShaderMacro>& intShaderMacro);
     
     virtual int GetRenderLayerType() const = 0;
     

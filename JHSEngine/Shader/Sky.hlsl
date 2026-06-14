@@ -1,5 +1,6 @@
 #include "Light.hlsl"
 #include "ShaderCommon.hlsl"
+#include "SkyFunction.hlsl"
 
 struct Varying
 {
@@ -12,22 +13,25 @@ struct Attribute
 {
     float4 position : SV_POSITION;
     float4 localPosition : POSITION;
+    float4 worldPosition : TEXCOORD;
 };
 
 
-Attribute VertexShaderUnlit(Varying input)
+Attribute VertexShaderSky(Varying input)
 {
     Attribute output = (Attribute)0;
     output.localPosition = float4(input.position, 1.0);
     
-    float4 worldPosition = mul(float4(input.position, 1), WorldMatrix);
-    output.position = mul(worldPosition, ViewProjectionMatrix);
+    output.worldPosition = mul(float4(input.position, 1), WorldMatrix);
+    output.position = mul(output.worldPosition, ViewProjectionMatrix);
     
     return output;
 }
 
-float4 PixelShaderUnlit(Attribute input) : SV_TARGET
+float4 PixelShaderSky(Attribute input) : SV_TARGET
 {
-    return TextureCubeMap.Sample(Anisotropic_Sampler, input.localPosition);
+    float4 outColor = TextureCubeMap[0].Sample(Anisotropic_Sampler, input.localPosition);
+    //outColor = GetFogValue(outColor);
+    return outColor;
     //return float4(.5, .5, .5, 1);
 }

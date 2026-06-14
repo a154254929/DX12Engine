@@ -125,3 +125,34 @@ void FRenderLayer::UpdateCalculations(float deltaTime, const FViewportInfo viewp
         meshIndex++;
     }
 }
+
+void FRenderLayer::BuildShaderMacro(std::vector<ShaderType::FShaderMacro>& intShaderMacro)
+{
+    {
+        ShaderType::FShaderMacro shaderMacro;
+        char textureNumBuff[10] = {0};
+        shaderMacro.Name = "Texture2DMap_Count";
+        shaderMacro.Definition = _itoa(geometryMap->GetDrawTexture2DResourcesNumber(), textureNumBuff, 10);
+        intShaderMacro.push_back(shaderMacro);
+    }
+    {
+        ShaderType::FShaderMacro shaderMacro;
+        char textureNumBuff[10] = {0};
+        shaderMacro.Name = "Texture2DMap_Count";
+        shaderMacro.Definition = _itoa(geometryMap->GetDrawTexture2DResourcesNumber(), textureNumBuff, 10);
+        intShaderMacro.push_back(shaderMacro);
+    }
+    {
+        ShaderType::FShaderMacro shaderMacro;
+        char textureNumBuff[10] = {0};
+        shaderMacro.Name = "CUBE_MAP_NUM";
+        shaderMacro.Definition = _itoa(geometryMap->GetDrawTextureCubemapResourcesNumber(), textureNumBuff, 10);
+        intShaderMacro.push_back(shaderMacro);
+    }
+    {
+        ShaderType::FShaderMacro shaderMacro;
+        shaderMacro.Name = "FOG_ON";
+        shaderMacro.Definition =geometryMap->IsFogOn() ? "1" : "0";
+        intShaderMacro.push_back(shaderMacro);
+    }
+}

@@ -120,6 +120,9 @@ public:
     void LoadTexture();
     
     void BuildFog();
+    
+public:
+    bool IsFogOn();
 public:
     ID3D12DescriptorHeap* GetHeap() const { return descriptorHeap.GetHeap(); }
 protected:

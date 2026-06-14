@@ -3,6 +3,7 @@
 #include "ShaderFunctionLibrary.hlsl"
 #include "Material.hlsl"
 #include "BRDF.hlsl"
+#include "SkyFunction.hlsl"
 
 
 struct Varying
@@ -260,10 +261,14 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 	material.BaseColor = saturate(material.BaseColor);
 	specularColor = saturate(specularColor);
     
-    return lightStrengths * (
+    float4 outColor = lightStrengths * (
 		material.BaseColor
 		+ material.BaseColor * specularColor)
     + material.BaseColor * ambientLight;
+    
+    outColor = GetFogValue(outColor, input.worldPosition);
+    
+    return outColor;
     //return material.BaseColor;
     
     //return float4(input.worldNormal, 1);
