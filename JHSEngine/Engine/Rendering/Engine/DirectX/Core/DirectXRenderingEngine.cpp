@@ -18,6 +18,7 @@
 #include "../../../../Actor/Light/ParallelLight.h"
 #include "../../../../Actor/Light/PointLight.h"
 #include "../../../../Actor/Light/SpotLight.h"
+#include "../../../../Actor/Sky/Fog.h"
 
 #if defined(_WIN32)
 #include "../../../../Core/WinMainCommandParameters.h"
@@ -146,6 +147,13 @@ int CDirectXRenderingEngine::PostInit()
                 material->SetBaseColorIndexKey("../JHSEngine/Asset/Texture/EpicQuadPanorama_CC.dds");
                 material->SetMaterialType(EMaterialType::BaseColor);
             }
+        }
+        
+        if (GFog* fog = world->CreateActorObject<GFog>())
+        {
+            fog->SetFogColor(fvector_color(0.1f, 0.3f, 0.8f, 1.0f));
+            fog->SetFogStart(10.0f);
+            fog->SetFogColor(101.f);
         }
         
         /*
