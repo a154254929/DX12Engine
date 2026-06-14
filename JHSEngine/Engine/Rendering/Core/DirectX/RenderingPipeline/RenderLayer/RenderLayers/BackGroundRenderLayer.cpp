@@ -1,20 +1,20 @@
-#include "AlphaTestRenderLayer.h"
+#include "BackGroundRenderLayer.h"
 #include "../../PipelineState/DirectXPipelineState.h"
 #include "../../Geometry/GeometryMap.h"
 
-FAlphaTestRenderLayer::FAlphaTestRenderLayer()
+FBackGroundRenderLayer::FBackGroundRenderLayer()
 {
-    renderPriority = 2450;
+    renderPriority = 1000;
 }
 
-void FAlphaTestRenderLayer::Draw(float deltaTime)
+void FBackGroundRenderLayer::Draw(float deltaTime)
 {
     directXPipelineState->ResetPSO(AlphaTest);
     
     Super::Draw(deltaTime);
 }
 
-void FAlphaTestRenderLayer::BuildShader()
+void FBackGroundRenderLayer::BuildShader()
 {
     char textureNumBuff[10] = {0};
     //构建shader
@@ -38,10 +38,10 @@ void FAlphaTestRenderLayer::BuildShader()
     directXPipelineState->BindInputLayout(inputElementDesc.data(), inputElementDesc.size());
 }
 
-void FAlphaTestRenderLayer::BuildPSO()
+void FBackGroundRenderLayer::BuildPSO()
 {
     Super::BuildPSO();
     //构建管线
     directXPipelineState->SetFillMode(false);
-    directXPipelineState->Build(EPipelineState::AlphaTest);
+    directXPipelineState->Build(EPipelineState::BackGround);
 }

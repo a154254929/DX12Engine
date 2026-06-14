@@ -3,6 +3,7 @@
 #include "RenderLayers/OpaqueRenderLayer.h"
 #include "RenderLayers/PostProcessRenderLayer.h"
 #include "RenderLayers/TransparentRenderLayer.h"
+#include "RenderLayers/BackGroundRenderLayer.h"
 #include "../../../../../Core/Viewport/ViewportInfo.h"
 
 std::vector<shared_ptr<FRenderLayer>> FRenderLayerManager::renderLayers;
@@ -15,6 +16,7 @@ FRenderLayerManager::FRenderLayerManager()
     CreateRenderLayer<FOpaqueRenderLayer>();
     CreateRenderLayer<FPostProcessRenderLayer>();
     CreateRenderLayer<FTransparentRenderLayer>();
+    CreateRenderLayer<FBackGroundRenderLayer>();
 }
 
 FRenderLayerManager::~FRenderLayerManager()

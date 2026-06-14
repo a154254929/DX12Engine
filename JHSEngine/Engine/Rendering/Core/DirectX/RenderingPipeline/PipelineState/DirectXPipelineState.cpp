@@ -5,9 +5,9 @@
 FDirectXPipelineState::FDirectXPipelineState()
 {
     //线框
-    PSO.insert(pair<int, ComPtr<ID3D12PipelineState>>(4, ComPtr<ID3D12PipelineState>()));
+    PSO.insert(pair<int, ComPtr<ID3D12PipelineState>>((int)EPipelineState::GrayModel, ComPtr<ID3D12PipelineState>()));
     //Shader
-    PSO.insert(pair<int, ComPtr<ID3D12PipelineState>>(5, ComPtr<ID3D12PipelineState>()));
+    PSO.insert(pair<int, ComPtr<ID3D12PipelineState>>((int)EPipelineState::WireFrame, ComPtr<ID3D12PipelineState>()));
 }
 
 void FDirectXPipelineState::PreDraw(float deltaTime)
