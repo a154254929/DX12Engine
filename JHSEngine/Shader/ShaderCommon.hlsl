@@ -26,6 +26,15 @@ cbuffer LightConstBuffer : register(b2)
     Light SceneLights[16];
 }
 
+cbuffer FogConstBuffer : register(b3)
+{
+    float3 FogColor;
+    float FogStart;
+
+    float FogRange;
+    float FogHeight;
+}
+
 struct MaterialConstBuffer
 {
     uint MaterialType;

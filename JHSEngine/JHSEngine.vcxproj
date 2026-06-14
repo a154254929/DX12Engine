@@ -238,6 +238,7 @@
     <ClCompile Include="Engine\Component\Mesh\DonutMeshComponent.cpp" />
     <ClCompile Include="Engine\Component\Mesh\PlaneMeshComponent.cpp" />
     <ClCompile Include="Engine\Component\Mesh\SphereMeshComponent.cpp" />
+    <ClCompile Include="Engine\Component\Sky\Core\FogConstantBuffer.cpp" />
     <ClCompile Include="Engine\Component\Sky\FogComponent.cpp" />
     <ClCompile Include="Engine\Component\TransformationComponent.cpp" />
     <ClCompile Include="Engine\Config\EngineRenderConfig.cpp" />
@@ -380,6 +381,7 @@
     <ClInclude Include="Engine\Component\Mesh\DonutMeshComponent.h" />
     <ClInclude Include="Engine\Component\Mesh\PlaneMeshComponent.h" />
     <ClInclude Include="Engine\Component\Mesh\SphereMeshComponent.h" />
+    <ClInclude Include="Engine\Component\Sky\Core\FogConstantBuffer.h" />
     <ClInclude Include="Engine\Component\Sky\FogComponent.h" />
     <ClInclude Include="Engine\Component\TransformationComponent.h" />
     <ClInclude Include="Engine\Config\EngineRenderConfig.h" />

@@ -40,6 +40,9 @@ void FRenderingPipeline::BuildPipeline()
     
     //读取贴图纹理
     geometryMap.LoadTexture();
+    
+    //构建雾
+    geometryMap.BuildFog();
 
     //构建根签名
     rootSignature.BuildRootSignature(
@@ -71,6 +74,9 @@ void FRenderingPipeline::BuildPipeline()
 
     //构建贴图
     geometryMap.BuildTextureConstantBuffer();
+
+    //构建雾效
+    geometryMap.BuildFogConstantBuffer();
 
     //构建PSO参数
     //directXPipelineState.BuildParam();

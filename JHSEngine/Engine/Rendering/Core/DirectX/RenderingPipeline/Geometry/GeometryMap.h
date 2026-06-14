@@ -7,6 +7,7 @@
 #include "../../../../../Core/Viewport/ViewportInfo.h"
 
 
+class CFogComponent;
 struct FRenderingTexture;
 class CMaterial;
 
@@ -80,6 +81,9 @@ public:
     //构建光源常量缓冲区
     void BuildLightConstantBuffer();
 
+    //构建雾常量缓冲区
+    void BuildFogConstantBuffer();
+
     //构建贴图SRV视图
     void BuildTextureConstantBuffer();
 
@@ -106,12 +110,16 @@ public:
     void DrawLight(float deltaTime);
 
     void DrawMesh(float deltaTime);
+
+    void DrawFog(float deltaTime);
     
     void DrawMaterial(float deltaTime);
     
     void DrawTexture(float deltaTime);
     
     void LoadTexture();
+    
+    void BuildFog();
 public:
     ID3D12DescriptorHeap* GetHeap() const { return descriptorHeap.GetHeap(); }
 protected:
@@ -122,8 +130,11 @@ protected:
     FConstantBufferView materialConstantBufferView;
     FConstantBufferView viewportConstantBufferView;
     FConstantBufferView lightConstantBufferView;
+    FConstantBufferView fogConstantBufferView;
     
     shared_ptr<class FRenderingTextureResourcesUpdate> renderingTexture2DResourcesUpdate;
     shared_ptr<class FRenderingTextureResourcesUpdate> renderingTextureCubemapResourcesUpdate;
     std::vector<CMaterial*> materials;
+    
+    CFogComponent* fogComponent; 
 };
