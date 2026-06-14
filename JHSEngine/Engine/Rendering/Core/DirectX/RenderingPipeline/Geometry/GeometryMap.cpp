@@ -148,6 +148,7 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
             fogConstantBuffer.fogStart = fogComponent->GetFogStart();
             fogConstantBuffer.fogRange = fogComponent->GetFogRange();
             fogConstantBuffer.fogHeight = fogComponent->GetFogHeight();
+            fogConstantBuffer.fogTransparentCoefficient = fogComponent->GetFogTransparentCoefficient();
         }
         fogConstantBufferView.Update(0, &fogConstantBuffer);
     }

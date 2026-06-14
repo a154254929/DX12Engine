@@ -155,6 +155,7 @@ int CDirectXRenderingEngine::PostInit()
             fog->SetFogStart(10.0f);
             fog->SetFogRange(101.f);
             fog->SetFogHeight(500.f);
+            fog->SetFogTransparentCoefficient(0.05f);
         }
         
         /*

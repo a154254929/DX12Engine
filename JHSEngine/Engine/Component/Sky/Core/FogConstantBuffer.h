@@ -10,6 +10,6 @@ struct FFogConstantBuffer
     
     float fogRange;
     float fogHeight;
-    float XX1;
+    float fogTransparentCoefficient;
     float XX2;
 };

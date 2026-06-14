@@ -9,7 +9,7 @@ float4 GetFogValue(float4 inColor, float3 inWorldPosition)
     
     float3 fogColor = lerp(inColor.rgb, FogColor.rgb, fogValue);
     
-    inColor.rgb = lerp(fogColor.rgb, inColor.rgb, heightFogValue);
+    inColor.rgb = lerp(fogColor.rgb, inColor.rgb, heightFogValue - FogTransparentCoefficient);
 #endif
     return inColor;
 }

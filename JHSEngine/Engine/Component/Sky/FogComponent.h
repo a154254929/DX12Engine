@@ -11,6 +11,7 @@ public:
     void SetFogStart (float inStart);
     void SetFogRange (float inRange);
     void SetFogHeight (float inHeight);
+    void SetFogTransparentCoefficient (float inTransparentCoefficient);
     void SetDirty (bool inDirty);
     
 public:
@@ -18,6 +19,7 @@ public:
     FORCEINLINE float GetFogStart () const {return fogStart;}
     FORCEINLINE float GetFogRange () const {return fogRange;}
     FORCEINLINE float GetFogHeight () const {return fogHeight;}
+    FORCEINLINE float GetFogTransparentCoefficient () const {return fogTransparentCoefficient;}
     FORCEINLINE bool IsDirty () const {return bDirty;}
     
 protected:
@@ -25,6 +27,7 @@ protected:
     float fogStart;
     float fogRange;
     float fogHeight;
+    float fogTransparentCoefficient;
     
     bool bDirty;
 };

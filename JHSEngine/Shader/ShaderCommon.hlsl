@@ -33,6 +33,7 @@ cbuffer FogConstBuffer : register(b3)
 
     float FogRange;
     float FogHeight;
+    float FogTransparentCoefficient;
 }
 
 struct MaterialConstBuffer
