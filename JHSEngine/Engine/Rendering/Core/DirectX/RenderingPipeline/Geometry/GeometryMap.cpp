@@ -147,6 +147,7 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
             fogConstantBuffer.fogColor = XMFLOAT3(fogColor.r, fogColor.g, fogColor.b);
             fogConstantBuffer.fogStart = fogComponent->GetFogStart();
             fogConstantBuffer.fogRange = fogComponent->GetFogRange();
+            fogConstantBuffer.fogHeight = fogComponent->GetFogHeight();
         }
         fogConstantBufferView.Update(0, &fogConstantBuffer);
     }

@@ -15,11 +15,13 @@ public:
     void SetFogColor (const fvector_color& inColor);
     void SetFogStart (float inStart);
     void SetFogRange (float inRange);
+    void SetFogHeight (float inHeight);
     
 public:
     FORCEINLINE fvector_color GetFogColor () const {return fogComponent->GetFogColor();}
     FORCEINLINE float GetFogStart () const {return fogComponent->GetFogStart();}
     FORCEINLINE float GetFogRange () const {return fogComponent->GetFogRange();}
+    FORCEINLINE float GetFogHeight () const {return fogComponent->GetFogHeight();}
     
 public:
 };

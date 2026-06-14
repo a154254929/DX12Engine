@@ -151,9 +151,10 @@ int CDirectXRenderingEngine::PostInit()
         
         if (GFog* fog = world->CreateActorObject<GFog>())
         {
-            fog->SetFogColor(fvector_color(0.1f, 0.3f, 0.8f, 1.0f));
+            fog->SetFogColor(fvector_color(0.6f, 0.6f, 0.6f, 1.0f));
             fog->SetFogStart(10.0f);
             fog->SetFogRange(101.f);
+            fog->SetFogHeight(500.f);
         }
         
         /*

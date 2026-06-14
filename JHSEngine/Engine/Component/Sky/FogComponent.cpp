@@ -4,6 +4,7 @@ CFogComponent::CFogComponent()
     : fogColor (1.0f, 1.0f,1.0f,1.0f)
     , fogStart(5.0f)
     , fogRange(100.0f)
+    , fogHeight(100.0f)
     , bDirty(false)
 {
 }
@@ -23,6 +24,12 @@ void CFogComponent::SetFogStart(float inStart)
 void CFogComponent::SetFogRange(float inRange)
 {
     fogRange = inRange;
+    SetDirty(true);
+}
+
+void CFogComponent::SetFogHeight(float inHeight)
+{
+    fogHeight = inHeight;
     SetDirty(true);
 }
 

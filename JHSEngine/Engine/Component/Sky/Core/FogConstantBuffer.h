@@ -1,23 +1,6 @@
 #pragma once
 #include "../../../EngineMinimal.h"
 
-struct FFog
-{
-    FFog();
-    XMFLOAT3 lightIntensity;
-    float startAttenuation;
-    
-    XMFLOAT3 lightDirection;
-    float endAttenuation;
-    
-    XMFLOAT3 lightPosition;
-    int lightType;
-    
-    float conicalInnerCorner; // Radian
-    float conicalOuterCorner; // Radian
-    XMFLOAT2 xx;
-};
-
 struct FFogConstantBuffer
 {
     FFogConstantBuffer();
@@ -27,4 +10,6 @@ struct FFogConstantBuffer
     
     float fogRange;
     float fogHeight;
+    float XX1;
+    float XX2;
 };

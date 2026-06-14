@@ -21,3 +21,8 @@ void GFog::SetFogRange(float inRange)
 {
     fogComponent->SetFogRange(inRange);
 }
+
+void GFog::SetFogHeight(float inHeight)
+{
+    fogComponent->SetFogHeight(inHeight);
+}
