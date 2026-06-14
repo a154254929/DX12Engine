@@ -30,6 +30,9 @@ public:
     
     //绘制时调用
     void ResetPSO(int inPSOType);
+    
+    //只提供不透明层使用
+    void ResetPSO();
 
     ID3D12PipelineState* GetPSO() { return PSO[pipelineState].Get(); }
     

@@ -134,8 +134,8 @@ int CDirectXRenderingEngine::PostInit()
         
         if (GSphereMesh* skySphere = world->CreateActorObject<GSphereMesh>())
         {
-            skySphere->CreateMesh(1, 20, 20, true);
             skySphere->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_BACKGROUND);
+            skySphere->CreateMesh(1, 20, 20, true);
             
             skySphere->SetPosition(XMFLOAT3(0, 0, 0));
             skySphere->SetScale(fvector_3d(999.f, 999.f, 500.f));

@@ -9,7 +9,7 @@ FOpaqueRenderLayer::FOpaqueRenderLayer()
 
 void FOpaqueRenderLayer::Draw(float deltaTime)
 {
-    directXPipelineState->ResetPSO(Opaque);
+    directXPipelineState->ResetPSO();
     Super::Draw(deltaTime);
 }
 

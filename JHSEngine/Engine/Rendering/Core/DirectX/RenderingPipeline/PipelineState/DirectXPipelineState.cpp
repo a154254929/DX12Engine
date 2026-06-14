@@ -59,7 +59,7 @@ void FDirectXPipelineState::BuildParam()
 
     //配置光栅化状态
     gpsDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-    gpsDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;//线框方式渲染
+    gpsDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;//面方式渲染
 
     gpsDesc.SampleMask = UINT_MAX;
 
@@ -95,6 +95,11 @@ void FDirectXPipelineState::Build(int inPSOType)
 void FDirectXPipelineState::ResetPSO(int inPSOType)
 {
     GetGraphicsCommandList()->SetPipelineState(PSO[inPSOType].Get());
+}
+
+void FDirectXPipelineState::ResetPSO()
+{
+    ResetPSO(pipelineState);
 }
 
 void FDirectXPipelineState::SetFillMode(bool bWireframe)
