@@ -6,7 +6,7 @@ struct FDirectXRootSignature : public IDirectXDeviceInterface_Struct
 {
     FDirectXRootSignature();
 
-    void BuildRootSignature(UINT inTextureNum = 1);
+    void BuildRootSignature(UINT inTexture2DNum = 1, UINT inTextureCubemapNum = 1);
 
     void PreDraw(float deltaTime);
     void Draw(float deltaTime);

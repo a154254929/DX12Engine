@@ -305,10 +305,10 @@ void FGeometryMap::BuildTextureConstantBuffer()
         0
     );
     //构建TextureCubemap
-    // renderingTextureCubemapResourcesUpdate->BuildTextureConstantBuffer(
-    //     descriptorHeap.GetHeap(),
-    //     GetDrawMeshObjectNumber() + GetDrawLightObjectNumber() + 1 + GetDrawTexture2DResourcesNumber()
-    // );
+    renderingTextureCubemapResourcesUpdate->BuildTextureConstantBuffer(
+        descriptorHeap.GetHeap(),
+        GetDrawTexture2DResourcesNumber()
+    );
 }
 
 UINT FGeometryMap::GetDrawMeshObjectNumber()
@@ -394,13 +394,25 @@ void FGeometryMap::DrawMaterial(float deltaTime)
 void FGeometryMap::DrawTexture(float deltaTime)
 {
     UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-    CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(GetHeap()->GetGPUDescriptorHandleForHeapStart());
+    {
+        CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
-    desHandle.Offset(
-        0,
-        descriptorOffset
-    );
-    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(4, desHandle);
+        desHandle.Offset(
+            0,
+            descriptorOffset
+        );
+        GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(4, desHandle);
+    }
+    
+    {
+        CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(GetHeap()->GetGPUDescriptorHandleForHeapStart());
+
+        desHandle.Offset(
+            GetDrawTexture2DResourcesNumber(),
+            descriptorOffset
+        );
+        GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(5, desHandle);
+    }
 }
 
 void FGeometryMap::LoadTexture()
