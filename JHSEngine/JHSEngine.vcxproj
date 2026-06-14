@@ -142,6 +142,7 @@
     <ClCompile Include="Engine\Actor\Light\PointLight.cpp" />
     <ClCompile Include="Engine\Actor\Light\SpotLight.cpp" />
     <ClCompile Include="Engine\Actor\Sky\Fog.cpp" />
+    <ClCompile Include="Engine\Actor\Sky\Sky.cpp" />
     <ClCompile Include="Engine\Component\Core\Component.cpp" />
     <ClCompile Include="Engine\Component\InputComponent.cpp" />
     <ClCompile Include="Engine\Component\Input\Input.cpp" />
@@ -359,6 +360,7 @@
     <ClInclude Include="Engine\Actor\Light\PointLight.h" />
     <ClInclude Include="Engine\Actor\Light\SpotLight.h" />
     <ClInclude Include="Engine\Actor\Sky\Fog.h" />
+    <ClInclude Include="Engine\Actor\Sky\Sky.h" />
     <ClInclude Include="Engine\CodeReflection\CodeReflectionMacroTag.h" />
     <ClInclude Include="Engine\Component\Core\Component.h" />
     <ClInclude Include="Engine\Component\InputComponent.h" />
