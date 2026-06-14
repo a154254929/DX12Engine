@@ -153,7 +153,7 @@ int CDirectXRenderingEngine::PostInit()
         {
             fog->SetFogColor(fvector_color(0.1f, 0.3f, 0.8f, 1.0f));
             fog->SetFogStart(10.0f);
-            fog->SetFogColor(101.f);
+            fog->SetFogRange(101.f);
         }
         
         /*

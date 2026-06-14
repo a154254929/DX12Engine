@@ -1,6 +1,6 @@
 #ifndef SKY_FUNCTION_INCLUDED
 #define SKY_FUNCTION_INCLUDED
-float GetFogValue(float4 inColor, float3 inWorldPosition)
+float4 GetFogValue(float4 inColor, float3 inWorldPosition)
 {
 #if FOG_ON
     float viewLength = length(ViewportWorldPosition.xyz - inWorldPosition.xyz);

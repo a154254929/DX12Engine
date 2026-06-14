@@ -31,7 +31,7 @@ Attribute VertexShaderSky(Varying input)
 float4 PixelShaderSky(Attribute input) : SV_TARGET
 {
     float4 outColor = TextureCubeMap[0].Sample(Anisotropic_Sampler, input.localPosition);
-    //outColor = GetFogValue(outColor);
+    outColor = GetFogValue(outColor, input.worldPosition);
     return outColor;
     //return float4(.5, .5, .5, 1);
 }
