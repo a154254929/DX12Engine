@@ -11,20 +11,22 @@ public:
     EMaterialDisplayStatusType GetMaterialDisplayStatusType() { return materialDisplayStatusType; }
     void SetDirty(bool inDirty);
     void SetMaterialIndex(int inMaterialIndex);
-    void SetBaseColor(fvector_4d inBaseColor);
-    void SetSpecularColor(fvector_3d& inSpecularColor);
-    void SetRoughness(float inRoughness);
+    void SetBaseColor(const fvector_4d inBaseColor);
+    void SetSpecularColor(const fvector_3d& inSpecularColor);
+    void SetRoughness(const float inRoughness);
     void SetMaterialType(EMaterialType inMaterialType);
-    void SetBaseColorIndexKey(std::string inAssetFileName);
-    void SetNormalMapIndexKey(std::string inAssetFileName);
-    void SetSpecularMapIndexKey(std::string inAssetFileName);
-    void SetRoughnessMapIndexKey(std::string inAssetFileName);
+    void SetFresnelF0(const fvector_3d& inFresnelF0);
+    void SetBaseColorIndexKey(const std::string inAssetFileName);
+    void SetNormalMapIndexKey(const std::string inAssetFileName);
+    void SetSpecularMapIndexKey(const std::string inAssetFileName);
+    void SetRoughnessMapIndexKey(const std::string inAssetFileName);
 
     FORCEINLINE bool IsDirty() const { return true; }
     FORCEINLINE int GetMaterialIndex() const { return materialIndex; }
     FORCEINLINE fvector_4d GetBaseColor() { return baseColor; }
     FORCEINLINE const fvector_3d& GetSpecularColor() { return specularColor; }
     FORCEINLINE float GetRoughness() { return roughness; }
+    FORCEINLINE fvector_3d& GetFresenlF0() { return fresenlF0; }
     FORCEINLINE EMaterialType GetMaterialType() { return materialType; }
     FORCEINLINE XMFLOAT4X4& GetMaterialTransform() { return materialTransform; }
     FORCEINLINE const string& GetBaseColorIndexKey() { return baseColorIndexKey; }
@@ -46,6 +48,8 @@ private:
     std::string normalMapIndexKey;
     std::string specularMapIndexKey;
     std::string roughnessMapIndexKey;
+    
+    fvector_3d fresenlF0;
     
     EMaterialDisplayStatusType materialDisplayStatusType;
     XMFLOAT4X4 materialTransform;

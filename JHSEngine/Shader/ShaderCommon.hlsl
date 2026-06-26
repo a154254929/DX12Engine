@@ -49,8 +49,12 @@ struct MaterialConstBuffer
     int ReversedMapIndex3;
     
     float4 BaseColor;
+    
     float3 SpecularColor;
     int xx;
+    
+    float3 FresnelF0;
+    float xx1;
     
     float4x4 Transformation;
 };

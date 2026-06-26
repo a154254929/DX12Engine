@@ -141,6 +141,7 @@ int CDirectXRenderingEngine::PostInit()
             sky->SetPosition(XMFLOAT3(0, 0, 0));
         }
         
+        /*
         if (GFog* fog = world->CreateActorObject<GFog>())
         {
             fog->SetFogColor(fvector_color(0.6f, 0.6f, 0.6f, 1.0f));
@@ -150,7 +151,6 @@ int CDirectXRenderingEngine::PostInit()
             fog->SetFogTransparentCoefficient(0.05f);
         }
         
-        /*
         if (GDonutMesh* donutMesh = world->CreateActorObject<GDonutMesh>())
         {
             donutMesh->CreateMesh(3, 1, 20, 20);
@@ -188,6 +188,7 @@ int CDirectXRenderingEngine::PostInit()
                 material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
                 material->SetBaseColorIndexKey("../JHSEngine/Asset/Texture/Texture2.dds");
                 material->SetMaterialType(EMaterialType::BaseColor);
+                material->SetFresnelF0(fvector_3d(1.f));
             }
         }
 

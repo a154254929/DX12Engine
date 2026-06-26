@@ -17,8 +17,12 @@ public:
     int reversedMapIndex3;
 
     XMFLOAT4 baseColor;
+    
     XMFLOAT3 specularColor;
     int XX;
+    
+    XMFLOAT3 fresnelF0;
+    int XX0;
     
     XMFLOAT4X4 transformation;
 };

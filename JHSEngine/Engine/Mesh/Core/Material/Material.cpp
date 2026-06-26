@@ -25,21 +25,21 @@ void CMaterial::SetMaterialIndex(int inMaterialIndex)
     SetDirty(true);
 }
 
-void CMaterial::SetBaseColor(fvector_4d inBaseColor)
+void CMaterial::SetBaseColor(const fvector_4d inBaseColor)
 {
     baseColor = inBaseColor;
     
     SetDirty(true);
 }
 
-void CMaterial::SetSpecularColor(fvector_3d& inSpecularColor)
+void CMaterial::SetSpecularColor(const fvector_3d& inSpecularColor)
 {
     specularColor = inSpecularColor;
     
     SetDirty(true);
 }
 
-void CMaterial::SetRoughness(float inRoughness)
+void CMaterial::SetRoughness(const float inRoughness)
 {
     roughness = inRoughness; 
     
@@ -53,28 +53,34 @@ void CMaterial::SetMaterialType(EMaterialType inMaterialType)
     SetDirty(true);
 }
 
-void CMaterial::SetBaseColorIndexKey(std::string inAssetFileName)
+void CMaterial::SetFresnelF0(const fvector_3d& inFresnelF0)
+{
+    fresenlF0 = inFresnelF0;
+    SetDirty(true);
+}
+
+void CMaterial::SetBaseColorIndexKey(const std::string inAssetFileName)
 {
     baseColorIndexKey = inAssetFileName;
     
     SetDirty(true);
 }
 
-void CMaterial::SetNormalMapIndexKey(std::string inAssetFileName)
+void CMaterial::SetNormalMapIndexKey(const std::string inAssetFileName)
 {
     normalMapIndexKey = inAssetFileName;
     
     SetDirty(true);
 }
 
-void CMaterial::SetSpecularMapIndexKey(std::string inAssetFileName)
+void CMaterial::SetSpecularMapIndexKey(const std::string inAssetFileName)
 {
     specularMapIndexKey = inAssetFileName;
     
     SetDirty(true);
 }
 
-void CMaterial::SetRoughnessMapIndexKey(std::string inAssetFileName)
+void CMaterial::SetRoughnessMapIndexKey(const std::string inAssetFileName)
 {
     roughnessMapIndexKey = inAssetFileName;
     

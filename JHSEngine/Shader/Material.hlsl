@@ -10,40 +10,40 @@ float3 FresnelSchlickMethod(float3 inF0, float3 inNormal, float3 inView, float i
     return inF0 + pow((1.f - saturate(dot(inNormal, inView))), inM);
 }
 
-void GetMaterialBaseColor(MaterialConstBuffer materialConst, float2 inTexcoord, inout FMaterial inoutMaterial)
+void GetMaterialBaseColor(MaterialConstBuffer inMaterialConst, float2 inTexcoord, inout FMaterial inoutMaterial)
 {
-    if(materialConst.BaseColorIndex >= 0)
+    if(inMaterialConst.BaseColorIndex >= 0)
     {
-        inoutMaterial.BaseColor = materialConst.BaseColor * Texture2DMap[materialConst.BaseColorIndex].Sample(Point_Sampler, inTexcoord);
+        inoutMaterial.BaseColor = inMaterialConst.BaseColor * Texture2DMap[inMaterialConst.BaseColorIndex].Sample(Point_Sampler, inTexcoord);
     }
     else
     {
-        inoutMaterial.BaseColor = materialConst.BaseColor;
+        inoutMaterial.BaseColor = inMaterialConst.BaseColor;
     }
 }
 
-void GetMaterialRoughness(MaterialConstBuffer materialConst, float2 inTexcoord, inout FMaterial inoutMaterial)
+void GetMaterialRoughness(MaterialConstBuffer inMaterialConst, float2 inTexcoord, inout FMaterial inoutMaterial)
 {
-    if(materialConst.RoughnessMapIndex >= 0)
+    if(inMaterialConst.RoughnessMapIndex >= 0)
     {
-        inoutMaterial.Roughness = Texture2DMap[materialConst.RoughnessMapIndex].Sample(Point_Sampler, inTexcoord).r;
+        inoutMaterial.Roughness = Texture2DMap[inMaterialConst.RoughnessMapIndex].Sample(Point_Sampler, inTexcoord).r;
     }
     else
     {
-        inoutMaterial.Roughness = materialConst.Roughness;
+        inoutMaterial.Roughness = inMaterialConst.Roughness;
     }
 }
 
 float3 GetMaterialNormal(
-    MaterialConstBuffer materialConst,
+    MaterialConstBuffer inMaterialConst,
     float2 inTexcoord,
     float3 inNormal,
     float3 inTangent)
 {
     float3 normal;
-    if(materialConst.NormalMapIndex >= 0)
+    if(inMaterialConst.NormalMapIndex >= 0)
     {
-        float3 sampleNormal = Texture2DMap[materialConst.NormalMapIndex].Sample(Anisotropic_Sampler, inTexcoord).rgb;
+        float3 sampleNormal = Texture2DMap[inMaterialConst.NormalMapIndex].Sample(Anisotropic_Sampler, inTexcoord).rgb;
         sampleNormal = sampleNormal * 2.0f - 1.0f;
         float3x3 TBN = GetTBNMatrix(inNormal, inTangent);
         normal = mul(sampleNormal, TBN);
@@ -56,16 +56,54 @@ float3 GetMaterialNormal(
 }
 
 float3 GetMaterialSpecularColor(
-    MaterialConstBuffer materialConst,
-    float2 inTexcoord)
+    MaterialConstBuffer inMaterialConst,
+    float2 inTexcoord
+)
 {
-    if(materialConst.SpecularMapIndex >= 0)
+    if(inMaterialConst.SpecularMapIndex >= 0)
     {
-        float4 specularColor = Texture2DMap[materialConst.SpecularMapIndex].Sample(Anisotropic_Sampler, inTexcoord);
+        float4 specularColor = Texture2DMap[inMaterialConst.SpecularMapIndex].Sample(Anisotropic_Sampler, inTexcoord);
         return specularColor.rgb;
     }
     else
     {
-        return materialConst.SpecularColor;
+        return inMaterialConst.SpecularColor;
     }
+}
+
+float3 GetReflectDir(float3 inUnitWorldNormal, float3 inViewDirection)
+{
+    return reflect(-inViewDirection, inUnitWorldNormal);
+}
+
+float3 GetReflectionSampleColor(float3 inUnitWorldNormal, float3 inDirection)
+{
+    return TextureCubeMap[0].Sample(Anisotropic_Sampler, inDirection).rgb;
+}
+
+float GetShininess(MaterialConstBuffer inMaterialConst)
+{
+    return 1.0 - inMaterialConst.Roughness;
+}
+
+float3 FresnelSchlickFactor(
+    MaterialConstBuffer inMaterialConst,
+    float3 inUnitWorldNormal,
+    float3 inReflect
+)
+{
+    return FresnelSchlickMethod(inMaterialConst.FresnelF0, inUnitWorldNormal, inReflect, 5);
+}
+
+float3 GetReflectionColor(
+    MaterialConstBuffer inMaterialConst,
+    float3 inUnitWorldNormal,
+    float3 inViewDirection
+)
+{
+    float3 reflectoinDir = GetReflectDir(inUnitWorldNormal, inViewDirection);
+    float3 sampleRelctionColor = GetReflectionSampleColor(inUnitWorldNormal, reflectoinDir);
+    float shininess = GetShininess(inMaterialConst);
+    float3 fresnelFactor = 1;//FresnelSchlickFactor(inMaterialConst, inUnitWorldNormal, reflectoinDir);
+    return sampleRelctionColor * shininess * fresnelFactor;
 }

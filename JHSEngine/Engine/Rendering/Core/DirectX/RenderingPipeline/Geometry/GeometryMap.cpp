@@ -169,6 +169,9 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                 materialConstantBuffer.specularColor = XMFLOAT3(specularColor.x, specularColor.y, specularColor.z);
 
                 materialConstantBuffer.roughness = inMaterial->GetRoughness();
+                
+                fvector_3d fresnelF0 = inMaterial->GetFresenlF0();
+                materialConstantBuffer.fresnelF0 = XMFLOAT3(fresnelF0.x, fresnelF0.y, fresnelF0.z);
 
                 materialConstantBuffer.materialType = inMaterial->GetMaterialType();
                         

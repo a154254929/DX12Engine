@@ -9,6 +9,7 @@ FMaterialConstantBuffer::FMaterialConstantBuffer()
     , roughnessMapIndex(-1)
     , reversedMapIndex2(-1)
     , reversedMapIndex3(-1)
+    , fresnelF0(0.04f, 0.04f, 0.04f)
     , transformation(EngineMath::IdentityMatrix4x4())
 {
 

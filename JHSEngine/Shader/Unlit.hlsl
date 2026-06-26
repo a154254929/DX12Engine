@@ -265,7 +265,21 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 		material.BaseColor
 		+ material.BaseColor * specularColor)
     + material.BaseColor * ambientLight;
+
+	//计算反射
+	switch(materialConst.MaterialType)
+	{
+		case 2:
+		case 3:
+		case 9:
+			float3 reflectionColor = GetReflectionColor(materialConst, worldNormal, view);
+			outColor.rgb += reflectionColor;
+		break;	
+	}
+
+	outColor.a = material.BaseColor.a;
     
+	//计算雾
     outColor = GetFogValue(outColor, input.worldPosition);
     
     return outColor;
