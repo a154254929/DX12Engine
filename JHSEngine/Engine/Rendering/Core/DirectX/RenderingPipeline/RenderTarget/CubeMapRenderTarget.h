@@ -15,7 +15,7 @@ public:
     void BuildRenderTagetMap();
     
 public:
-    FORCEINLINE ID3D12Resource* GetRenderTagetMap() const {return renderTagetMap.Get();};
+    FORCEINLINE ID3D12Resource* GetRenderTagetMap() const {return renderTargetMap.Get();};
     FORCEINLINE D3D12_VIEWPORT GetViewport() const {return viewport;};
     FORCEINLINE D3D12_RECT GetScissorRect() const {return scissorRect;};
     
@@ -27,5 +27,5 @@ private:
     D3D12_VIEWPORT viewport;
     D3D12_RECT scissorRect;
     
-    ComPtr<ID3D12Resource> renderTagetMap;
+    ComPtr<ID3D12Resource> renderTargetMap;
 };
