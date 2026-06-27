@@ -104,6 +104,6 @@ float3 GetReflectionColor(
     float3 reflectoinDir = GetReflectDir(inUnitWorldNormal, inViewDirection);
     float3 sampleRelctionColor = GetReflectionSampleColor(inUnitWorldNormal, reflectoinDir);
     float shininess = GetShininess(inMaterialConst);
-    float3 fresnelFactor = 1;//FresnelSchlickFactor(inMaterialConst, inUnitWorldNormal, reflectoinDir);
+    float3 fresnelFactor = FresnelSchlickFactor(inMaterialConst, inUnitWorldNormal, reflectoinDir);
     return sampleRelctionColor * shininess * fresnelFactor;
 }
