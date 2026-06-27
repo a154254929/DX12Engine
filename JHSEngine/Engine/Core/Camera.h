@@ -1,18 +1,16 @@
 ﻿#pragma once
-#include "Viewport/Viewport.h"
 #include "../Interface/DirectXDeviceInterface.h"
-#include "../Actor/Core/ActorObject.h"
+#include "Viewport/ClientViewport.h"
 
 struct FInputKey;
 class CTransformationComponent;
 class CInputComponent;
 enum ECameraType;
 class GCamera
-    : public GActorObject
-    , public FViewport
-    , public IDirectXDeviceInterface
+    : public GClientViewport,
+    public IDirectXDeviceInterface
 {
-
+    typedef GClientViewport Super;
     CVARIABLE()
     CInputComponent* inputComponent;
 public:
@@ -56,5 +54,5 @@ protected:
     float theta;
     float phi;
 
-    float speed = .1f;
+    float speed = .05f;
 };

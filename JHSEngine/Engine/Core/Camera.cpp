@@ -4,7 +4,7 @@
 #include "../Component/TransformationComponent.h"
 
 GCamera::GCamera()
-    :GActorObject()
+    : Super()
 {
     inputComponent = CreateObject<CInputComponent>(new CInputComponent());
 
@@ -28,7 +28,7 @@ void GCamera::BeginInit()
 
 void GCamera::Tick(float deltaTime)
 {
-    BuildViewMatrix(deltaTime);
+    Super::Tick(deltaTime);
 }
 
 void GCamera::ExecuteKeboard(const FInputKey& inputKey)
@@ -36,34 +36,50 @@ void GCamera::ExecuteKeboard(const FInputKey& inputKey)
     if (inputKey.keyName == "W")
     {
         MoveForward(speed);
+        
+        SetDirty(true);
     }
     else if (inputKey.keyName == "S")
     {
         MoveForward(-speed);
+        
+        SetDirty(true);
     }
     if (inputKey.keyName == "D")
     {
         MoveRight(speed);
+        
+        SetDirty(true);
     }
     else if (inputKey.keyName == "A")
     {
         MoveRight(-speed);
+        
+        SetDirty(true);
     }
     if (inputKey.keyName == "E")
     {
         MoveUp(speed);
+        
+        SetDirty(true);
     }
     else if (inputKey.keyName == "Q")
     {
         MoveUp(-speed);
+        
+        SetDirty(true);
     }
     if (inputKey.keyName == "T")
     {
         cameraType = ECameraType::CameraRoaming;
+        
+        SetDirty(true);
     }
     else if (inputKey.keyName == "Y")
     {
         cameraType = ECameraType::OvservationObject;
+        
+        SetDirty(true);
     }
 }
 
@@ -71,45 +87,29 @@ void GCamera::BuildViewMatrix(float deltaTime)
 {
     switch (cameraType)
     {
-    case ECameraType::CameraRoaming:
-    {
-        //计算和矫正
-        GetTransformationComponent()->CorrectionVector();
+        case ECameraType::CameraRoaming:
+        {
+            Super::BuildViewMatrix(deltaTime);
+            break;
+        }
+        case ECameraType::OvservationObject:
+        {
+            XMFLOAT3& cameraPos = GetTransformationComponent()->GetPosition();
 
-        //计算自身方向移动的意图
-        fvector_3d v3 = GetTransformationComponent()->GetCorrectionPosition();
+            cameraPos.x = radius * cosf(phi) * cosf(theta);
+            cameraPos.y = radius * sinf(theta);
+            cameraPos.z = radius * sinf(phi) * cosf(theta);
 
-        //构建ViewMatrix
-        XMFLOAT3 rightVector = GetTransformationComponent()->GetRightVector();
-        XMFLOAT3 upVector = GetTransformationComponent()->GetUpVector();
-        XMFLOAT3 forwardVector = GetTransformationComponent()->GetForwardVector();
+            XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+            XMVECTOR viewTarget = XMVectorZero();
+            XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
 
-        viewMatrix = {
-            rightVector.x,    upVector.x,        forwardVector.x,    0.f,
-            rightVector.y,    upVector.y,        forwardVector.y,    0.f,
-            rightVector.z,    upVector.z,        forwardVector.z,    0.f,
-            v3.x,            v3.y,            v3.z,                1.f
-        };
-        break;
-    }
-    case ECameraType::OvservationObject:
-    {
-        XMFLOAT3& cameraPos = GetTransformationComponent()->GetPosition();
-
-        cameraPos.x = radius * cosf(phi) * cosf(theta);
-        cameraPos.y = radius * sinf(theta);
-        cameraPos.z = radius * sinf(phi) * cosf(theta);
-
-        XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
-        XMVECTOR viewTarget = XMVectorZero();
-        XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
-
-        XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
-        XMStoreFloat4x4(&viewMatrix, viewLookAt);
-        break;
-    }
-    default:
-        break;
+            XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
+            XMStoreFloat4x4(&viewMatrix, viewLookAt);
+            break;
+        }
+        default:
+            break;
     }
 }
 
@@ -149,6 +149,8 @@ void GCamera::OnMouseMove(int x, int y)
             default:
                 break;
         }
+        
+        SetDirty(true);
     }
     lsatMousePosition.x = x;
     lsatMousePosition.y = y;
@@ -160,6 +162,8 @@ void GCamera::OnMouseWheel(int x, int y, float inDelta)
     {
         radius += inDelta * -0.01f;
         radius = math_libray::Clamp(radius, 7.f, 40.0f);
+        
+        SetDirty(true);
     }
 }
 
