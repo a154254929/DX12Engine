@@ -12,7 +12,11 @@ public:
     
     void ResetViewport(UINT inWidth, UINT inHeight);
     
+public:
     void BuildRenderTagetMap();
+    void BuildSRVAndRTVDescriptors();
+    void BuildSRVDescriptors();
+    void BuildRTVDescriptors();
     
 public:
     FORCEINLINE ID3D12Resource* GetRenderTagetMap() const {return renderTargetMap.Get();};
@@ -28,4 +32,7 @@ private:
     D3D12_RECT scissorRect;
     
     ComPtr<ID3D12Resource> renderTargetMap;
+    
+    CD3DX12_CPU_DESCRIPTOR_HANDLE cpuShaderResourceView;
+    CD3DX12_CPU_DESCRIPTOR_HANDLE cpuRenderTargetView[6];
 };

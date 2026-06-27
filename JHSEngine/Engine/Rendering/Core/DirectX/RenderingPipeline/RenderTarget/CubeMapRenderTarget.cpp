@@ -64,3 +64,48 @@ void FCubeMapRenderTarget::BuildRenderTagetMap()
         IID_PPV_ARGS(renderTargetMap.GetAddressOf())
     ));
 }
+
+void FCubeMapRenderTarget::BuildSRVAndRTVDescriptors()
+{
+    
+}
+
+void FCubeMapRenderTarget::BuildSRVDescriptors()
+{
+    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+    srvDesc.Format = format;
+    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+    
+    srvDesc.TextureCube.MostDetailedMip = 0;
+    srvDesc.TextureCube.MipLevels = 1;
+    srvDesc.TextureCube.ResourceMinLODClamp = 0;
+    
+    GetD3dDevice()->CreateShaderResourceView(
+        renderTargetMap.Get(),
+        &srvDesc,
+        cpuShaderResourceView
+    );
+}
+
+void FCubeMapRenderTarget::BuildRTVDescriptors()
+{
+    for (size_t i = 0; i < 6; ++i)
+    {
+        D3D12_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format = format;
+        rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2DARRAY;
+    
+        rtvDesc.Texture2DArray.MipSlice = 0;
+        rtvDesc.Texture2DArray.PlaneSlice = 0;
+        rtvDesc.Texture2DArray.FirstArraySlice = i;
+        rtvDesc.Texture2DArray.ArraySize = 1;
+        
+    
+        GetD3dDevice()->CreateRenderTargetView(
+            renderTargetMap.Get(),
+            &rtvDesc,
+            cpuRenderTargetView[i]
+        );
+    }
+}
