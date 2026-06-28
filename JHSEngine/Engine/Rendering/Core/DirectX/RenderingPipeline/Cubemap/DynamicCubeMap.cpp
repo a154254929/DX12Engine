@@ -1,4 +1,6 @@
 #include "DynamicCubeMap.h"
+
+#include "../../../../../Config/EngineRenderConfig.h"
 #include "../Geometry/GeometryMap.h"
 #include "../PipelineState/DirectXPipelineState.h"
 #include "../RenderTarget/CubeMapRenderTarget.h"
@@ -186,4 +188,43 @@ void FDynamicCubeMap::BuildDepthStencil()
         D3D12_RESOURCE_STATE_DEPTH_WRITE
     );
     GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrier);
+}
+
+void FDynamicCubeMap::BuildDepthStencilDescriptor()
+{
+    UINT descriptorHandleIncrementSize = GetDescriptorHandleIncrementSizeByDSV();
+    dsvDesc = CD3DX12_CPU_DESCRIPTOR_HANDLE(
+        GetDSVHeap()->GetCPUDescriptorHandleForHeapStart(),
+        1,
+        descriptorHandleIncrementSize
+    );
+}
+
+void FDynamicCubeMap::BuildRenderTargetDescriptor()
+{
+    BuildRenderTargetRTV();
+}
+
+void FDynamicCubeMap::BuildRenderTargetRTV()
+{
+    UINT rtvDescSize = GetDescriptorHandleIncrementSizeByRTV();
+    UINT cbvDescSize = GetDescriptorHandleIncrementSizeByCBV_SRV_UAV();
+    
+    //RTV起始地址
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvDesAddr = GetRTVHeap()->GetCPUDescriptorHandleForHeapStart();
+
+    //偏移的地址记录
+    for (int i = 0; i < 6; i++)
+    {
+        renderTarget->cpuRenderTargetView[i] = CD3DX12_CPU_DESCRIPTOR_HANDLE(
+            rtvDesAddr,
+            FEngineRenderConfig::GetRenderConfig()->SwapChainCount + i,
+            rtvDescSize
+        );
+    }
+    
+}
+
+void FDynamicCubeMap::BuildRenderTargetSRV()
+{
 }

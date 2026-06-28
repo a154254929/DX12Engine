@@ -26,9 +26,15 @@ public:
     
     virtual void Draw(float deltaTime);
     
-protected:
     virtual void BuildViewPort(const fvector_3d& inPosition);
     virtual void BuildDepthStencil();
+    
+    virtual void BuildDepthStencilDescriptor();
+    virtual void BuildRenderTargetDescriptor();
+    
+protected:
+    virtual void BuildRenderTargetRTV();
+    virtual void BuildRenderTargetSRV();
     
 protected:
     std::unique_ptr<FCubeMapRenderTarget> renderTarget;

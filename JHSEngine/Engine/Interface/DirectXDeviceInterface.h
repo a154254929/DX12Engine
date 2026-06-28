@@ -25,6 +25,10 @@ public:
     
     ID3D12DescriptorHeap* GetRTVHeap();
     ID3D12DescriptorHeap* GetDSVHeap();
+    
+    UINT GetDescriptorHandleIncrementSizeByDSV();
+    UINT GetDescriptorHandleIncrementSizeByRTV();
+    UINT GetDescriptorHandleIncrementSizeByCBV_SRV_UAV();
 
     UINT64 GetCurrentFenceIndex();
     HWND GetMainWindowsHandle();
@@ -53,6 +57,10 @@ public:
     
     ID3D12DescriptorHeap* GetRTVHeap();
     ID3D12DescriptorHeap* GetDSVHeap();
+    
+    UINT GetDescriptorHandleIncrementSizeByDSV();
+    UINT GetDescriptorHandleIncrementSizeByRTV();
+    UINT GetDescriptorHandleIncrementSizeByCBV_SRV_UAV();
 
     UINT64 GetCurrentFenceIndex();
     HWND GetMainWindowsHandle();
