@@ -203,6 +203,8 @@ void FDynamicCubeMap::BuildDepthStencilDescriptor()
 void FDynamicCubeMap::BuildRenderTargetDescriptor()
 {
     BuildRenderTargetRTV();
+    
+    BuildRenderTargetSRV();
 }
 
 void FDynamicCubeMap::BuildRenderTargetRTV()
@@ -227,4 +229,20 @@ void FDynamicCubeMap::BuildRenderTargetRTV()
 
 void FDynamicCubeMap::BuildRenderTargetSRV()
 {
+    D3D12_CPU_DESCRIPTOR_HANDLE cpuRTVDesAddr = geometryMap->GetHeap()->GetCPUDescriptorHandleForHeapStart();
+    D3D12_GPU_DESCRIPTOR_HANDLE gpuSRVDesAddr = geometryMap->GetHeap()->GetGPUDescriptorHandleForHeapStart();
+    
+    UINT cbvDescSize = GetDescriptorHandleIncrementSizeByCBV_SRV_UAV();
+    
+    renderTarget->cpuShaderResourceView = CD3DX12_CPU_DESCRIPTOR_HANDLE(
+        cpuRTVDesAddr,
+        geometryMap->GetDrawTexture2DResourcesNumber() + geometryMap->GetDrawTextureCubemapResourcesNumber(),
+        cbvDescSize
+    );
+    
+    renderTarget->gpuShaderResourceView = CD3DX12_GPU_DESCRIPTOR_HANDLE(
+        gpuSRVDesAddr,
+        geometryMap->GetDrawTexture2DResourcesNumber() + geometryMap->GetDrawTextureCubemapResourcesNumber(),
+        cbvDescSize
+    );
 }

@@ -89,14 +89,16 @@ void FRenderingPipeline::PreDraw(float deltaTime)
 {
     directXPipelineState.PreDraw(deltaTime);
     
+    rootSignature.PreDraw(deltaTime);
+    
+    geometryMap.PreDraw(deltaTime);
+    
     renderLayerManager.PreDraw(deltaTime);
+
 }
 
 void FRenderingPipeline::Draw(float deltaTime)
 {
-    rootSignature.PreDraw(deltaTime);
-    geometryMap.PreDraw(deltaTime);
-
     //主视口
     geometryMap.DrawViewport(deltaTime);
     //渲染灯光材质雾等

@@ -273,7 +273,11 @@ void FGeometryMap::Build()
 void FGeometryMap::BuildDescriptorHeap()
 {
     //+1是因为有摄像机
-    descriptorHeap.Build(GetDrawTexture2DResourcesNumber() + GetDrawTextureCubemapResourcesNumber());
+    descriptorHeap.Build(
+        GetDrawTexture2DResourcesNumber()           //Texture2D
+        + GetDrawTextureCubemapResourcesNumber()    //静态Cubemap
+        + 1                                         //动态Cubmap
+    );
 }
 
 void FGeometryMap::BuildMeshConstantBuffer()

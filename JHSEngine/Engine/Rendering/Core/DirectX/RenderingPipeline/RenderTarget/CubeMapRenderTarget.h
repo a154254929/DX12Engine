@@ -36,6 +36,10 @@ private:
     
     ComPtr<ID3D12Resource> renderTargetMap;
     
+    //SRV
     CD3DX12_CPU_DESCRIPTOR_HANDLE cpuShaderResourceView;
+    CD3DX12_GPU_DESCRIPTOR_HANDLE gpuShaderResourceView;
+    
+    //RTV
     CD3DX12_CPU_DESCRIPTOR_HANDLE cpuRenderTargetView[6];
 };
