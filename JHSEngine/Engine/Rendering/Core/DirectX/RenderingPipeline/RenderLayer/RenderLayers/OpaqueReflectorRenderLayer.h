@@ -11,7 +11,7 @@ public:
 
     virtual void BuildShader();
     
-    virtual int GetRenderLayerType() const {return 0;}
+    virtual int GetRenderLayerType() const {return 5;}
     
     virtual void BuildPSO();
 };

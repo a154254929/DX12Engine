@@ -4,7 +4,7 @@
 
 FOpaqueRenderLayer::FOpaqueRenderLayer()
 {
-    renderPriority = 2000;
+    renderPriority = 2100;
 }
 
 void FOpaqueRenderLayer::Draw(float deltaTime)

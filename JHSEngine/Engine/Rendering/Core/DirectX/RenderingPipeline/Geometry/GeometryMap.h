@@ -121,7 +121,8 @@ public:
     
     void DrawMaterial(float deltaTime);
     
-    void DrawTexture(float deltaTime);
+    void DrawTexture2D(float deltaTime);
+    void DrawTextureCubemap(float deltaTime);
     
     void LoadTexture();
     

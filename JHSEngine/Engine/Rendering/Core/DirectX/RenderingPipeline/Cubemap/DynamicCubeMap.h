@@ -26,6 +26,8 @@ public:
     
     virtual void PreDraw(float deltaTime);
     
+    virtual void Draw(float deltaTime);
+    
     virtual void BuildViewPort(const fvector_3d& inPosition);
     virtual void BuildDepthStencil();
     

@@ -51,7 +51,10 @@ void FGeometryMap::Draw(float deltaTime)
     DrawLight(deltaTime);
     
     //绘制贴图
-    DrawTexture(deltaTime);
+    DrawTexture2D(deltaTime);
+    
+    //绘制贴图
+    DrawTextureCubemap(deltaTime);
 
     //绘制材质
     DrawMaterial(deltaTime);
@@ -443,9 +446,9 @@ void FGeometryMap::DrawMaterial(float deltaTime)
     );
 }
 
-void FGeometryMap::DrawTexture(float deltaTime)
+void FGeometryMap::DrawTexture2D(float deltaTime)
 {
-    UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+    UINT descriptorOffset = GetDescriptorHandleIncrementSizeByCBV_SRV_UAV();
     {
         CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(GetHeap()->GetGPUDescriptorHandleForHeapStart());
 
@@ -455,7 +458,11 @@ void FGeometryMap::DrawTexture(float deltaTime)
         );
         GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(5, desHandle);
     }
-    
+}
+
+void FGeometryMap::DrawTextureCubemap(float deltaTime)
+{
+    UINT descriptorOffset = GetDescriptorHandleIncrementSizeByCBV_SRV_UAV();
     {
         CD3DX12_GPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(GetHeap()->GetGPUDescriptorHandleForHeapStart());
 

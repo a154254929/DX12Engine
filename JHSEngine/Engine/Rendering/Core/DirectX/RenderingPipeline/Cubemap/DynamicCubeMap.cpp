@@ -49,6 +49,8 @@ void FDynamicCubeMap::UpdateCalculations(float deltaTime, const FViewportInfo& i
 
 void FDynamicCubeMap::PreDraw(float deltaTime)
 {
+    //渲染灯光材质贴图等
+    geometryMap->Draw(deltaTime);
 
     //指向那个资源 转换状态
     CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = 
@@ -100,8 +102,6 @@ void FDynamicCubeMap::PreDraw(float deltaTime)
         gpuViewportAddress += (1 + i) * cbvSize;
         GetGraphicsCommandList()->SetGraphicsRootConstantBufferView(1, gpuViewportAddress);
         
-        //渲染灯光材质贴图等
-        geometryMap->Draw(deltaTime);
         //各类层级渲染
         renderLayerManager->Draw(RENDERLAYER_BACKGROUND, deltaTime);
         renderLayerManager->Draw(RENDERLAYER_OPAQUE, deltaTime);
@@ -117,6 +117,14 @@ void FDynamicCubeMap::PreDraw(float deltaTime)
     );
     
     GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresentRenderTarget);
+}
+
+void FDynamicCubeMap::Draw(float deltaTime)
+{
+    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(
+        6,
+        renderTarget->gpuShaderResourceView
+    );
 }
 
 void FDynamicCubeMap::BuildViewPort(const fvector_3d& inPosition)
