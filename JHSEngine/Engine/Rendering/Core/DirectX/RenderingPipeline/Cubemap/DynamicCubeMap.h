@@ -10,6 +10,23 @@ class FViewportInfo;
 
 class FDynamicCubeMap : public IDirectXDeviceInterface
 {
+    struct FTmpViewportCapture
+    {
+        FTmpViewportCapture();
+        FTmpViewportCapture(const fvector_3d& inPosition);
+        
+        fvector_3d targetPosition[6];
+        fvector_3d up[6] = {
+            fvector_3d(0, 1, 0),
+            fvector_3d(0, 1, 0),
+            fvector_3d(0, 0, -1),
+            fvector_3d(0, 0, 1),
+            fvector_3d(0, 1, 0),
+            fvector_3d(0, 1, 0),
+        };
+        
+        void BuildViewPortCapture(const fvector_3d& inPosition);
+    };
 public:
     FDynamicCubeMap();
     
@@ -27,6 +44,9 @@ public:
     virtual void PreDraw(float deltaTime);
     
     virtual void Draw(float deltaTime);
+    
+public:
+    void SetCubemapViewportPosition(const fvector_3d& inPosition);
     
     virtual void BuildViewPort(const fvector_3d& inPosition);
     virtual void BuildDepthStencil();

@@ -346,11 +346,15 @@ void FGeometryMap::BuildFogConstantBuffer()
     fogConstantBufferView.CreateConstant(sizeof(FFogConstantBuffer), 1);
 }
 
-void FGeometryMap::BuildViewportConstantBuffer()
+void FGeometryMap::BuildViewportConstantBuffer(UINT inViewportOffset)
 {
     //创建常量缓冲区
-    constexpr UINT ViewportConstantBufferCount = 1 + 6;
-    viewportConstantBufferView.CreateConstant(sizeof(FViewportTransformation), ViewportConstantBufferCount);
+    viewportConstantBufferView.CreateConstant(
+        sizeof(FViewportTransformation),
+        1
+        + GetDynamicReflectionMeshObjectNumber()
+        + inViewportOffset
+    );
 
     //CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(GetHeap()->GetCPUDescriptorHandleForHeapStart());
     //构建常量缓冲区
@@ -394,6 +398,11 @@ UINT FGeometryMap::GetDrawTexture2DResourcesNumber()
 UINT FGeometryMap::GetDrawTextureCubemapResourcesNumber()
 {
     return renderingTextureCubemapResourcesUpdate->Size();
+}
+
+UINT FGeometryMap::GetDynamicReflectionMeshObjectNumber()
+{
+    return dynamicReflectionMeshComponents.size() * 6;
 }
 
 std::unique_ptr<FRenderingTexture>* FGeometryMap::FindRenderingTextureByName(const std::string& inKey)
@@ -718,7 +727,6 @@ void FGeometry::Build()
 
 UINT FGeometry::GetDrawObjectNumber() const
 {
-    return meshCount;
     int objCount = 0;
     for (auto& tmpRenderLayer : FRenderLayerManager::renderLayers)
     {

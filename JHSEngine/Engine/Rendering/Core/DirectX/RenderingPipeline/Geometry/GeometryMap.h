@@ -85,7 +85,7 @@ public:
     void BuildMaterialShaderResourceView();
 
     //构建视口常量缓冲区
-    void BuildViewportConstantBuffer();
+    void BuildViewportConstantBuffer(UINT inViewportOffset = 0);
 
     //构建光源常量缓冲区
     void BuildLightConstantBuffer();
@@ -109,6 +109,9 @@ public:
     UINT GetDrawTexture2DResourcesNumber();
     
     UINT GetDrawTextureCubemapResourcesNumber();
+    
+    //动态Cubemap数量
+    UINT GetDynamicReflectionMeshObjectNumber();
     
 public:
     std::unique_ptr<FRenderingTexture> *FindRenderingTextureByName(const std::string &inKey);

@@ -1,5 +1,6 @@
 #include "DynamicCubeMap.h"
 
+#include "../../../../../Component/Mesh/Core/MeshComponent.h"
 #include "../../../../../Component/Mesh/Core/MeshComponentType.h"
 #include "../../../../../Config/EngineRenderConfig.h"
 #include "../Geometry/GeometryMap.h"
@@ -8,6 +9,25 @@
 #include "../../../../../Core/Viewport/ClientViewport.h"
 #include "../RenderLayer/RenderLayerManager.h"
 
+
+FDynamicCubeMap::FTmpViewportCapture::FTmpViewportCapture()
+{
+}
+
+FDynamicCubeMap::FTmpViewportCapture::FTmpViewportCapture(const fvector_3d& inPosition)
+{
+    BuildViewPortCapture(inPosition);
+}
+
+void FDynamicCubeMap::FTmpViewportCapture::BuildViewPortCapture(const fvector_3d& inPosition)
+{
+    targetPosition[0] = fvector_3d(inPosition.x + 1.0f, inPosition.y, inPosition.z);
+    targetPosition[1] = fvector_3d(inPosition.x - 1.0f, inPosition.y, inPosition.z);
+    targetPosition[2] = fvector_3d(inPosition.x, inPosition.y + 1.0f, inPosition.z);
+    targetPosition[3] = fvector_3d(inPosition.x, inPosition.y - 1.0f, inPosition.z);
+    targetPosition[4] = fvector_3d(inPosition.x, inPosition.y, inPosition.z + 1.0f);
+    targetPosition[5] = fvector_3d(inPosition.x, inPosition.y, inPosition.z - 1.0f);
+}
 
 FDynamicCubeMap::FDynamicCubeMap()
     : geometryMap(NULL)
@@ -34,15 +54,27 @@ void FDynamicCubeMap::UpdateCalculations(float deltaTime, const FViewportInfo& i
 {
     if (viewports.size() >= 6)
     {
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < geometryMap->GetDynamicReflectionMeshObjectNumber(); i++)
         {
-            FViewportInfo viewportInfo;
-            XMFLOAT3 viewportPosition = viewports[i]->GetPosition();
-            viewportInfo.viewWorldPosition = XMFLOAT4(viewportPosition.x, viewportPosition.y, viewportPosition.z, 1.f);
-            viewportInfo.viewMatrix = viewports[i]->viewMatrix;
-            viewportInfo.projectMatrix = viewports[i]->projectMatrix;
+            CMeshComponent* meshComponent = geometryMap->dynamicReflectionMeshComponents[i];
+            XMFLOAT3 position = meshComponent->GetPosition();
+            SetCubemapViewportPosition(fvector_3d(position.x, position.y, position.z));
+            
+            for (int viewportIndex = 0; viewportIndex < 6; viewportIndex++)
+            {
+                FViewportInfo viewportInfo;
+                XMFLOAT3 viewportPosition = viewports[viewportIndex]->GetPosition();
+                viewportInfo.viewWorldPosition = XMFLOAT4(viewportPosition.x, viewportPosition.y, viewportPosition.z, 1.f);
+                viewportInfo.viewMatrix = viewports[viewportIndex]->viewMatrix;
+                viewportInfo.projectMatrix = viewports[viewportIndex]->projectMatrix;
         
-            geometryMap->UpdateCalculationsViewport(deltaTime, viewportInfo, i + 1);
+                geometryMap->UpdateCalculationsViewport(
+                    deltaTime,
+                    viewportInfo,
+                    i * 6 + viewportIndex
+                    + 1
+                );
+            }
         }
     }
 }
@@ -127,29 +159,25 @@ void FDynamicCubeMap::Draw(float deltaTime)
     );
 }
 
-void FDynamicCubeMap::BuildViewPort(const fvector_3d& inPosition)
+void FDynamicCubeMap::SetCubemapViewportPosition(const fvector_3d& inPosition)
 {
-    struct FTmpViewportCapture
-    {
-        fvector_3d targetPosition[6];
-        fvector_3d up[6] = {
-            fvector_3d(0, 1, 0),
-            fvector_3d(0, 1, 0),
-            fvector_3d(0, 0, -1),
-            fvector_3d(0, 0, 1),
-            fvector_3d(0, 1, 0),
-            fvector_3d(0, 1, 0),
-        };
-    };
     
     FTmpViewportCapture tmpCapture;
     
-    tmpCapture.targetPosition[0] = fvector_3d(inPosition.x + 1.0f, inPosition.y, inPosition.z);
-    tmpCapture.targetPosition[1] = fvector_3d(inPosition.x - 1.0f, inPosition.y, inPosition.z);
-    tmpCapture.targetPosition[2] = fvector_3d(inPosition.x, inPosition.y + 1.0f, inPosition.z);
-    tmpCapture.targetPosition[3] = fvector_3d(inPosition.x, inPosition.y - 1.0f, inPosition.z);
-    tmpCapture.targetPosition[4] = fvector_3d(inPosition.x, inPosition.y, inPosition.z + 1.0f);
-    tmpCapture.targetPosition[5] = fvector_3d(inPosition.x, inPosition.y, inPosition.z - 1.0f);
+    for (int i = 0; i < 6; i++)
+    {
+        viewports[i]->SetPosition(XMFLOAT3(inPosition.x, inPosition.y, inPosition.z));
+        viewports[i]->LookAt(
+            inPosition,
+            tmpCapture.targetPosition[i],
+            tmpCapture.up[i]
+        );
+    }
+}
+
+void FDynamicCubeMap::BuildViewPort(const fvector_3d& inPosition)
+{
+    FTmpViewportCapture tmpCapture(inPosition);
     
     for (int i = 0; i < 6; i++)
     {
