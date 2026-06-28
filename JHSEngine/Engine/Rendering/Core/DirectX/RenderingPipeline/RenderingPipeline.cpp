@@ -130,15 +130,12 @@ void FRenderingPipeline::Draw(float deltaTime)
     //主视口
     geometryMap.DrawViewport(deltaTime);
     
-    //绘制动态Cubemap
-    dynamicCubeMap.Draw(deltaTime);
-    renderLayerManager.Draw(RENDERLAYER_OPAQUE_REFLECTOR, deltaTime);
-    
     //渲染灯光材质雾等
     geometryMap.DrawTextureCubemap(deltaTime);
     //各类层级
     renderLayerManager.Draw(RENDERLAYER_BACKGROUND, deltaTime);
     renderLayerManager.Draw(RENDERLAYER_OPAQUE, deltaTime);
+    renderLayerManager.Draw(RENDERLAYER_OPAQUE_REFLECTOR, deltaTime);
     renderLayerManager.Draw(RENDERLAYER_ALPHATEST, deltaTime);
     renderLayerManager.Draw(RENDERLAYER_TRANSPARENT, deltaTime);
     renderLayerManager.Draw(RENDERLAYER_POSTPROCESS, deltaTime);

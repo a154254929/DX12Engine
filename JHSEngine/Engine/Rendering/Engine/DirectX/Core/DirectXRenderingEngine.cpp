@@ -590,61 +590,16 @@ void CDirectXRenderingEngine::Tick(float deltaTime)
 {
     //重置录制相关的内存,为下一帧做准备
     ANALYSIS_HRESULT(commandAllocator->Reset());
+    
+    StartSetMainViewportRenderTarget();
 
     meshManager->PreDraw(deltaTime);
-
-    //指向那个资源 转换状态
-    CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = 
-        CD3DX12_RESOURCE_BARRIER::Transition(
-            GetCurrentSwapBuff(),
-            D3D12_RESOURCE_STATE_PRESENT,
-            D3D12_RESOURCE_STATE_RENDER_TARGET
-        );
-
-    graphicsCommandList->ResourceBarrier(1, &resourceBarrierPresent);
-
-    //需要每帧执行,绑定矩形框
-    graphicsCommandList->RSSetViewports(1, &viewportInfo);
-    graphicsCommandList->RSSetScissorRects(1, &viewportRect);
-    //清除画布
-    graphicsCommandList->ClearRenderTargetView(
-        GetCurrentSwapBufferView(),
-        DirectX::Colors::CadetBlue,
-        0,
-        nullptr
-    );
-
-    //清除深度模板缓存
-    graphicsCommandList->ClearDepthStencilView(
-        GetCurrentDepthStencilView(),
-        D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
-        1.f,
-        0,
-        0,
-        NULL
-    );
-
-    //输出的合并阶段
-    D3D12_CPU_DESCRIPTOR_HANDLE swapBufferView = GetCurrentSwapBufferView();
-    D3D12_CPU_DESCRIPTOR_HANDLE depthStencilView = GetCurrentDepthStencilView();
-    graphicsCommandList->OMSetRenderTargets(
-        1,
-        &swapBufferView,
-        true,
-        &depthStencilView
-    );
-
+    //ClearMainViewportSwapChainCanvas();
     //渲染其他内容
     meshManager->Draw(deltaTime);
     meshManager->PostDraw(deltaTime);
-
-    //指向那个资源 转换其状态
-    CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
-        GetCurrentSwapBuff(),
-        D3D12_RESOURCE_STATE_RENDER_TARGET,
-        D3D12_RESOURCE_STATE_PRESENT
-    );
-    graphicsCommandList->ResourceBarrier(1, &resourceBarrierPresentRenderTarget);
+    
+    EndSetMainViewportRenderTarget();
 
     //录入完成
     ANALYSIS_HRESULT(graphicsCommandList->Close());
@@ -678,6 +633,66 @@ int CDirectXRenderingEngine::PostExit()
     FEngineRenderConfig::Destroy();
     Engine_Log("Engine post exit complete.");
     return 0;
+}
+
+void CDirectXRenderingEngine::StartSetMainViewportRenderTarget()
+{
+
+    //指向那个资源 转换状态
+    CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = 
+        CD3DX12_RESOURCE_BARRIER::Transition(
+            GetCurrentSwapBuff(),
+            D3D12_RESOURCE_STATE_PRESENT,
+            D3D12_RESOURCE_STATE_RENDER_TARGET
+        );
+
+    graphicsCommandList->ResourceBarrier(1, &resourceBarrierPresent);
+
+    //需要每帧执行,绑定矩形框
+    graphicsCommandList->RSSetViewports(1, &viewportInfo);
+    graphicsCommandList->RSSetScissorRects(1, &viewportRect);
+
+    //输出的合并阶段
+    D3D12_CPU_DESCRIPTOR_HANDLE swapBufferView = GetCurrentSwapBufferView();
+    D3D12_CPU_DESCRIPTOR_HANDLE depthStencilView = GetCurrentDepthStencilView();
+    graphicsCommandList->OMSetRenderTargets(
+        1,
+        &swapBufferView,
+        true,
+        &depthStencilView
+    );
+}
+
+void CDirectXRenderingEngine::EndSetMainViewportRenderTarget()
+{
+    //指向那个资源 转换其状态
+    CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
+        GetCurrentSwapBuff(),
+        D3D12_RESOURCE_STATE_RENDER_TARGET,
+        D3D12_RESOURCE_STATE_PRESENT
+    );
+    graphicsCommandList->ResourceBarrier(1, &resourceBarrierPresentRenderTarget);
+}
+
+void CDirectXRenderingEngine::ClearMainViewportSwapChainCanvas()
+{
+    //清除画布
+    graphicsCommandList->ClearRenderTargetView(
+        GetCurrentSwapBufferView(),
+        DirectX::Colors::CadetBlue,
+        0,
+        nullptr
+    );
+
+    //清除深度模板缓存
+    graphicsCommandList->ClearDepthStencilView(
+        GetCurrentDepthStencilView(),
+        D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
+        1.f,
+        0,
+        0,
+        NULL
+    );
 }
 
 ID3D12Resource* CDirectXRenderingEngine::GetCurrentSwapBuff() const

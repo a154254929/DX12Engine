@@ -6,6 +6,18 @@
 #include "../Core/Engine.h"
 #endif
 
+void IDirectXDeviceInterface::StartSetMainViewportRenderTarget()
+{
+}
+
+void IDirectXDeviceInterface::EndSetMainViewportRenderTarget()
+{
+}
+
+void IDirectXDeviceInterface::ClearMainViewportSwapChainCanvas()
+{
+}
+
 ComPtr<ID3D12Fence> IDirectXDeviceInterface::GetFence()
 {
 #ifdef _WIN32

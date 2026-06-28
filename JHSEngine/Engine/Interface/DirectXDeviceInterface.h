@@ -13,6 +13,11 @@ class CWorld;
 class IDirectXDeviceInterface
 {
 public:
+    void StartSetMainViewportRenderTarget();
+    void EndSetMainViewportRenderTarget();
+    void ClearMainViewportSwapChainCanvas();
+    
+public:
     ComPtr<ID3D12Fence> GetFence();
     ComPtr<ID3D12Device> GetD3dDevice();
     CLightManager* GetLightManager();
