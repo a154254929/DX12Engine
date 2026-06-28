@@ -25,9 +25,10 @@ void FDirectXRootSignature::BuildRootSignature(UINT inTextureNum, UINT inTexture
 
     //TextureCubemap srv描述表
     CD3DX12_DESCRIPTOR_RANGE descriptorRangeTextureCubemapSRV;
+    UINT textureCubemapNum = inTextureCubemapNum > 0 ? inTextureCubemapNum : 1;
     descriptorRangeTextureCubemapSRV.Init(
         D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
-        inTextureCubemapNum,
+        textureCubemapNum,
         0
     );
 

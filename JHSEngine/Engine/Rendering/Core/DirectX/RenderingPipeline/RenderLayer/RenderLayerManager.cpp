@@ -70,6 +70,18 @@ void FRenderLayerManager::Draw(int inLayer, float deltaTime)
     }
 }
 
+void FRenderLayerManager::FindObjDraw(int inLayer, float deltaTime, const CMeshComponent* inMeshComponent)
+{
+    for (auto& tmpLayer : renderLayers)
+    {
+        if (tmpLayer->GetRenderLayerType() == inLayer)
+        {
+            tmpLayer->FindObjDraw(deltaTime, inMeshComponent);
+            return;
+        }
+    }
+}
+
 void FRenderLayerManager::BuildPSO()
 {
     for (auto& tmp : renderLayers)

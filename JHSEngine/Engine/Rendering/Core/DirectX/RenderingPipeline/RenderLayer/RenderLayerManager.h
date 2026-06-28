@@ -19,6 +19,8 @@ public:
     
     //需要单独渲染哪个层
     virtual void Draw(int inLayer, float deltaTime);
+    
+    virtual void FindObjDraw(int inLayer, float deltaTime, const CMeshComponent* inMeshComponent);
 
     virtual void BuildPSO();
 

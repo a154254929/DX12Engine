@@ -352,7 +352,7 @@ void FGeometryMap::BuildViewportConstantBuffer(UINT inViewportOffset)
     viewportConstantBufferView.CreateConstant(
         sizeof(FViewportTransformation),
         1
-        + GetDynamicReflectionMeshObjectNumber()
+        + GetDynamicReflectionMeshObjectNumber() * 6
         + inViewportOffset
     );
 
@@ -402,7 +402,7 @@ UINT FGeometryMap::GetDrawTextureCubemapResourcesNumber()
 
 UINT FGeometryMap::GetDynamicReflectionMeshObjectNumber()
 {
-    return dynamicReflectionMeshComponents.size() * 6;
+    return dynamicReflectionMeshComponents.size();
 }
 
 std::unique_ptr<FRenderingTexture>* FGeometryMap::FindRenderingTextureByName(const std::string& inKey)

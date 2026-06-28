@@ -8,14 +8,47 @@
 
 void IDirectXDeviceInterface::StartSetMainViewportRenderTarget()
 {
+#ifdef _WIN32
+    if (CWindowsEngine* inEngine = GetEngine())
+#else
+    if (CEngine* inEngine = GetEngine())
+#endif
+    {
+        if (inEngine->GetRenderingEngine())
+        {
+            inEngine->GetRenderingEngine()->StartSetMainViewportRenderTarget();
+        }
+    }
 }
 
 void IDirectXDeviceInterface::EndSetMainViewportRenderTarget()
 {
+#ifdef _WIN32
+    if (CWindowsEngine* inEngine = GetEngine())
+#else
+    if (CEngine* inEngine = GetEngine())
+#endif
+    {
+        if (inEngine->GetRenderingEngine())
+        {
+            inEngine->GetRenderingEngine()->EndSetMainViewportRenderTarget();
+        }
+    }
 }
 
 void IDirectXDeviceInterface::ClearMainViewportSwapChainCanvas()
 {
+#ifdef _WIN32
+    if (CWindowsEngine* inEngine = GetEngine())
+#else
+    if (CEngine* inEngine = GetEngine())
+#endif
+    {
+        if (inEngine->GetRenderingEngine())
+        {
+            inEngine->GetRenderingEngine()->ClearMainViewportSwapChainCanvas();
+        }
+    }
 }
 
 ComPtr<ID3D12Fence> IDirectXDeviceInterface::GetFence()

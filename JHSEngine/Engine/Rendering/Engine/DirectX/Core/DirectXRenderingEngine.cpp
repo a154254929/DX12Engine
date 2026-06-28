@@ -295,13 +295,16 @@ int CDirectXRenderingEngine::PostInit()
 
         if (GSphereMesh* sphereMeshBlinPhong = world->CreateActorObject<GSphereMesh>())
         {
+            sphereMeshBlinPhong->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPAQUE_REFLECTOR);
             sphereMeshBlinPhong->CreateMesh(1, 20, 20);
             sphereMeshBlinPhong->SetPosition(XMFLOAT3(4, 1, 0));
             {
                 if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
                 {
+                    material->SetDynamicReflection(true);
                     material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
-                    material->SetRoughness(.8f);
+                    material->SetRoughness(.1f);
+                    material->SetFresnelF0(fvector_3d(.1f));
                     material->SetMaterialType(EMaterialType::BlinnPhong);
                 }
             }
@@ -553,14 +556,15 @@ int CDirectXRenderingEngine::PostInit()
         ////////////////////////////////////////////////////////
         
         //反射球
-        if (GSphereMesh* sphereMeshRefelctionCubemap = world->CreateActorObject<GSphereMesh>())
+        if (GSphereMesh* sphereMeshReflectionCubemap = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshRefelctionCubemap->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPAQUE_REFLECTOR);
-            sphereMeshRefelctionCubemap->CreateMesh(1, 20, 20);
-            sphereMeshRefelctionCubemap->SetPosition(XMFLOAT3(4.5f, 13.5f, 0));
+            sphereMeshReflectionCubemap->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPAQUE_REFLECTOR);
+            sphereMeshReflectionCubemap->CreateMesh(1, 20, 20);
+            sphereMeshReflectionCubemap->SetPosition(XMFLOAT3(4.5f, 13.5f, 0));
             {
-                if (CMaterial* material = (*sphereMeshRefelctionCubemap->GetMaterials())[0])
+                if (CMaterial* material = (*sphereMeshReflectionCubemap->GetMaterials())[0])
                 {
+                    material->SetDynamicReflection(true);
                     material->SetBaseColor(fvector_4d(1.f));
                     material->SetMaterialType(EMaterialType::BlinnPhong);
                     material->SetRoughness(0.11);
@@ -591,9 +595,9 @@ void CDirectXRenderingEngine::Tick(float deltaTime)
     //重置录制相关的内存,为下一帧做准备
     ANALYSIS_HRESULT(commandAllocator->Reset());
     
-    StartSetMainViewportRenderTarget();
-
     meshManager->PreDraw(deltaTime);
+
+    StartSetMainViewportRenderTarget();
     //ClearMainViewportSwapChainCanvas();
     //渲染其他内容
     meshManager->Draw(deltaTime);

@@ -78,6 +78,8 @@ void FRenderingPipeline::BuildPipeline()
 
     //构建模型
     geometryMap.Build();
+    
+    geometryMap.BuildDynamicReflectionMesh();
 
     //构建常量描述堆
     geometryMap.BuildDescriptorHeap();
@@ -117,6 +119,9 @@ void FRenderingPipeline::PreDraw(float deltaTime)
     rootSignature.PreDraw(deltaTime);
     
     geometryMap.PreDraw(deltaTime);
+    
+    //渲染灯光材质贴图等
+    geometryMap.Draw(deltaTime);
     
     //动态Cubemap先渲染
     dynamicCubeMap.PreDraw(deltaTime);

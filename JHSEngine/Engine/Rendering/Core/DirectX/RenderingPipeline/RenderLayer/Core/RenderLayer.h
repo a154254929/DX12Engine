@@ -23,6 +23,9 @@ public:
     virtual void Draw(float deltaTime);
     virtual void PostDraw(float deltaTime);
     
+    virtual void DrawObject(float deltaTime, const FRenderingData& inRenderingData);
+    virtual void FindObjDraw(float deltaTime, const CMeshComponent* inMeshComponent);
+    
     virtual void BuildPSO();
 
     virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);

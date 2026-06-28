@@ -81,74 +81,94 @@ void FDynamicCubeMap::UpdateCalculations(float deltaTime, const FViewportInfo& i
 
 void FDynamicCubeMap::PreDraw(float deltaTime)
 {
-    //渲染灯光材质贴图等
-    geometryMap->Draw(deltaTime);
-
-    //指向那个资源 转换状态
-    CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = 
-        CD3DX12_RESOURCE_BARRIER::Transition(
-            renderTarget->GetRenderTaget(),
-            D3D12_RESOURCE_STATE_GENERIC_READ,
-            D3D12_RESOURCE_STATE_RENDER_TARGET
-        );
-
-    GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresent);
-
-    //需要每帧执行,绑定矩形框
-    D3D12_VIEWPORT rtViewPort = renderTarget->GetViewport();
-    D3D12_RECT rtScissorRectt = renderTarget->GetScissorRect();
-    GetGraphicsCommandList()->RSSetViewports(1, &rtViewPort);
-    GetGraphicsCommandList()->RSSetScissorRects(1, &rtScissorRectt);
+    //清理主视口
+    ClearMainViewportSwapChainCanvas();
     
-    UINT cbvSize = geometryMap->viewportConstantBufferView.GetConstantBufferByteSize();
-    
-    //清除画布
-    for (size_t i = 0; i < 6; i++)
+    for (int i = 0; i < geometryMap->GetDynamicReflectionMeshObjectNumber(); i++)
     {
-        GetGraphicsCommandList()->ClearRenderTargetView(
-            renderTarget->cpuRenderTargetView[i],
-            DirectX::Colors::CadetBlue,
-            0,
-            nullptr
+
+        //指向那个资源 转换状态
+        CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = 
+            CD3DX12_RESOURCE_BARRIER::Transition(
+                renderTarget->GetRenderTaget(),
+                D3D12_RESOURCE_STATE_GENERIC_READ,
+                D3D12_RESOURCE_STATE_RENDER_TARGET
             );
 
-        //清除深度模板缓存
-        GetGraphicsCommandList()->ClearDepthStencilView(
-            dsvDesc,
-            D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
-            1.f,
-            0,
-            0,
-            NULL
-        );
+        GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresent);
 
-        GetGraphicsCommandList()->OMSetRenderTargets(
-            1,
-            &renderTarget->cpuRenderTargetView[i],
-            true,
-            &dsvDesc
-        );
-        
-        //更新/绑定6个摄像机
-        D3D12_GPU_VIRTUAL_ADDRESS gpuViewportAddress = geometryMap->viewportConstantBufferView.GetBuffer()->GetGPUVirtualAddress();
-        gpuViewportAddress += (1 + i) * cbvSize;
-        GetGraphicsCommandList()->SetGraphicsRootConstantBufferView(1, gpuViewportAddress);
-        
-        //各类层级渲染
-        renderLayerManager->Draw(RENDERLAYER_BACKGROUND, deltaTime);
-        renderLayerManager->Draw(RENDERLAYER_OPAQUE, deltaTime);
-        renderLayerManager->Draw(RENDERLAYER_ALPHATEST, deltaTime);
-        renderLayerManager->Draw(RENDERLAYER_TRANSPARENT, deltaTime);
-    }
-
-    //指向那个资源 转换其状态
-    CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
-        renderTarget->GetRenderTaget(),
-        D3D12_RESOURCE_STATE_RENDER_TARGET,
-        D3D12_RESOURCE_STATE_GENERIC_READ
-    );
+        //需要每帧执行,绑定矩形框
+        D3D12_VIEWPORT rtViewPort = renderTarget->GetViewport();
+        D3D12_RECT rtScissorRectt = renderTarget->GetScissorRect();
+        GetGraphicsCommandList()->RSSetViewports(1, &rtViewPort);
+        GetGraphicsCommandList()->RSSetScissorRects(1, &rtScissorRectt);
     
-    GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresentRenderTarget);
+        UINT cbvSize = geometryMap->viewportConstantBufferView.GetConstantBufferByteSize();
+        
+        //清除画布
+        for (size_t viewportIndex = 0; viewportIndex < 6; viewportIndex++)
+        {
+            GetGraphicsCommandList()->ClearRenderTargetView(
+                renderTarget->cpuRenderTargetView[viewportIndex],
+                DirectX::Colors::CadetBlue,
+                0,
+                nullptr
+                );
+
+            //清除深度模板缓存
+            GetGraphicsCommandList()->ClearDepthStencilView(
+                dsvDesc,
+                D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
+                1.f,
+                0,
+                0,
+                NULL
+            );
+
+            GetGraphicsCommandList()->OMSetRenderTargets(
+                1,
+                &renderTarget->cpuRenderTargetView[viewportIndex],
+                true,
+                &dsvDesc
+            );
+        
+            //更新/绑定6个摄像机
+            D3D12_GPU_VIRTUAL_ADDRESS gpuViewportAddress = geometryMap->viewportConstantBufferView.GetBuffer()->GetGPUVirtualAddress();
+            gpuViewportAddress += (1 + i * 6 + viewportIndex) * cbvSize;
+            GetGraphicsCommandList()->SetGraphicsRootConstantBufferView(1, gpuViewportAddress);
+        
+            //各类层级渲染
+            renderLayerManager->Draw(RENDERLAYER_BACKGROUND, deltaTime);
+            renderLayerManager->Draw(RENDERLAYER_OPAQUE, deltaTime);
+            renderLayerManager->Draw(RENDERLAYER_ALPHATEST, deltaTime);
+            renderLayerManager->Draw(RENDERLAYER_TRANSPARENT, deltaTime);
+        }
+
+        //指向那个资源 转换其状态
+        CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
+            renderTarget->GetRenderTaget(),
+            D3D12_RESOURCE_STATE_RENDER_TARGET,
+            D3D12_RESOURCE_STATE_GENERIC_READ
+        );
+        GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresentRenderTarget);
+        
+        StartSetMainViewportRenderTarget();
+        
+        geometryMap->DrawViewport(deltaTime);
+        
+        Draw(deltaTime);
+        
+        renderLayerManager->FindObjDraw(
+            RENDERLAYER_OPAQUE_REFLECTOR,
+            deltaTime,
+            geometryMap->dynamicReflectionMeshComponents[i]
+        );
+        
+        //重置Cubemap
+        geometryMap->DrawTextureCubemap(deltaTime);
+        
+        EndSetMainViewportRenderTarget();
+    }
 }
 
 void FDynamicCubeMap::Draw(float deltaTime)
@@ -161,8 +181,7 @@ void FDynamicCubeMap::Draw(float deltaTime)
 
 void FDynamicCubeMap::SetCubemapViewportPosition(const fvector_3d& inPosition)
 {
-    
-    FTmpViewportCapture tmpCapture;
+    FTmpViewportCapture tmpCapture(inPosition);
     
     for (int i = 0; i < 6; i++)
     {
@@ -172,6 +191,7 @@ void FDynamicCubeMap::SetCubemapViewportPosition(const fvector_3d& inPosition)
             tmpCapture.targetPosition[i],
             tmpCapture.up[i]
         );
+        viewports[i]->BuildViewMatrix(0.016f);
     }
 }
 
