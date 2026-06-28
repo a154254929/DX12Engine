@@ -19,3 +19,12 @@ UINT CMeshComponent::GetMaterialNum() const
 {
     return materials.size();
 }
+
+bool CMeshComponent::IsDynamicReflection() const
+{
+    if (materials.size() > 0)
+    {
+        return materials[0]->IsDynamicReflection() && meshRenderLayerType == RENDERLAYER_OPAQUE_REFLECTOR;
+    }
+    return false;
+}

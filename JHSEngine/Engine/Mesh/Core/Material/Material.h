@@ -20,6 +20,7 @@ public:
     void SetNormalMapIndexKey(const std::string inAssetFileName);
     void SetSpecularMapIndexKey(const std::string inAssetFileName);
     void SetRoughnessMapIndexKey(const std::string inAssetFileName);
+    void SetDynamicReflection(bool inDynamicReflection);
 
     FORCEINLINE bool IsDirty() const { return true; }
     FORCEINLINE int GetMaterialIndex() const { return materialIndex; }
@@ -33,6 +34,14 @@ public:
     FORCEINLINE const string& GetNormalMapIndexKey() { return normalMapIndexKey; }
     FORCEINLINE const string& GetSpecularMapIndexKey() { return specularMapIndexKey; }
     FORCEINLINE const string& GetRoughnessMapIndexKey() { return roughnessMapIndexKey; }
+    FORCEINLINE bool IsDynamicReflection() { return bDynamicReflection 
+        && (
+            materialType == BlinnPhong
+            || materialType == Back
+            || materialType == PBR
+            || materialType == Phong
+        ); 
+    }
 private:
     bool bDirty;
     int materialIndex;
@@ -53,4 +62,6 @@ private:
     
     EMaterialDisplayStatusType materialDisplayStatusType;
     XMFLOAT4X4 materialTransform;
+    
+    bool bDynamicReflection ;
 };

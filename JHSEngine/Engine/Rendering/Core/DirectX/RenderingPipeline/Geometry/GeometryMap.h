@@ -66,6 +66,9 @@ public:
     virtual void UpdateMaterialShaderResourceView(float deltaTime, const FViewportInfo viewportInfo);
 
     void BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
+    
+    //收集需要动态反射的模型
+    void BuildDynamicReflectionMesh();
 
     void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData);
 
@@ -145,6 +148,7 @@ protected:
     shared_ptr<class FRenderingTextureResourcesUpdate> renderingTexture2DResourcesUpdate;
     shared_ptr<class FRenderingTextureResourcesUpdate> renderingTextureCubemapResourcesUpdate;
     std::vector<CMaterial*> materials;
+    std::vector<CMeshComponent*> dynamicReflectionMeshComponents;
     
     CFogComponent* fogComponent; 
 };

@@ -132,7 +132,7 @@ void FRenderingPipeline::Draw(float deltaTime)
     
     //绘制动态Cubemap
     dynamicCubeMap.Draw(deltaTime);
-    renderLayerManager.Draw(RENDERLAYER_OPAQUEREFLECTOR, deltaTime);
+    renderLayerManager.Draw(RENDERLAYER_OPAQUE_REFLECTOR, deltaTime);
     
     //渲染灯光材质雾等
     geometryMap.DrawTextureCubemap(deltaTime);

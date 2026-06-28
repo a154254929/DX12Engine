@@ -13,8 +13,8 @@ FDynamicCubeMap::FDynamicCubeMap()
     : geometryMap(NULL)
     , directXPipelineState(NULL)
     , renderLayerManager(NULL)
-    , width(512U)
-    , height(512U)
+    , width(256U)
+    , height(256U)
 {
     renderTarget = std::make_unique<FCubeMapRenderTarget>();
 }

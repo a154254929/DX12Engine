@@ -555,7 +555,7 @@ int CDirectXRenderingEngine::PostInit()
         //反射球
         if (GSphereMesh* sphereMeshRefelctionCubemap = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshRefelctionCubemap->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPAQUEREFLECTOR);
+            sphereMeshRefelctionCubemap->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPAQUE_REFLECTOR);
             sphereMeshRefelctionCubemap->CreateMesh(1, 20, 20);
             sphereMeshRefelctionCubemap->SetPosition(XMFLOAT3(4.5f, 13.5f, 0));
             {

@@ -10,6 +10,7 @@ CMaterial::CMaterial()
     , materialType(EMaterialType::Lambertain)
     , materialDisplayStatusType(EMaterialDisplayStatusType::TriangleDisplay)
     , materialTransform(EngineMath::IdentityMatrix4x4())
+    , bDynamicReflection(false)
 {
 }
 
@@ -85,4 +86,9 @@ void CMaterial::SetRoughnessMapIndexKey(const std::string inAssetFileName)
     roughnessMapIndexKey = inAssetFileName;
     
     SetDirty(true);
+}
+
+void CMaterial::SetDynamicReflection(bool inDynamicReflection)
+{
+    bDynamicReflection = inDynamicReflection;
 }

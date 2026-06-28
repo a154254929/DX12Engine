@@ -244,6 +244,20 @@ void FGeometryMap::BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComp
     }
 }
 
+void FGeometryMap::BuildDynamicReflectionMesh()
+{
+    for (auto& tmp : gObjects)
+    {
+        if (CMeshComponent* meshComp = dynamic_cast<CMeshComponent*>(tmp))
+        {
+            if (meshComp->IsDynamicReflection())
+            {
+                dynamicReflectionMeshComponents.push_back(meshComp);
+            }
+        }
+    }
+}
+
 void FGeometryMap::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData)
 {
     for (auto& tmp : geometrys)
