@@ -332,7 +332,8 @@ void FGeometryMap::BuildFogConstantBuffer()
 void FGeometryMap::BuildViewportConstantBuffer()
 {
     //创建常量缓冲区
-    viewportConstantBufferView.CreateConstant(sizeof(FViewportTransformation), 1);
+    constexpr UINT ViewportConstantBufferCount = 1 + 6;
+    viewportConstantBufferView.CreateConstant(sizeof(FViewportTransformation), ViewportConstantBufferCount);
 
     //CD3DX12_CPU_DESCRIPTOR_HANDLE desHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(GetHeap()->GetCPUDescriptorHandleForHeapStart());
     //构建常量缓冲区

@@ -7,6 +7,9 @@ FCubeMapRenderTarget::FCubeMapRenderTarget()
     , format(DXGI_FORMAT_R8G8B8A8_UNORM)
 {
     ResetViewport(width, height);
+    ResetScissorRect(width, height);
+    
+    cpuRenderTargetView.resize(6);
 }
 
 void FCubeMapRenderTarget::Init(UINT inWidth, UINT inHeight, DXGI_FORMAT inFormat)
@@ -15,10 +18,13 @@ void FCubeMapRenderTarget::Init(UINT inWidth, UINT inHeight, DXGI_FORMAT inForma
     height = inHeight;
     format = inFormat;
     
-    BuildRenderTagetMap();
-    
     ResetViewport(width, height);
     ResetScissorRect(width, height);
+    
+    BuildRenderTagetMap();
+    
+    BuildSRVDescriptors();
+    BuildRTVDescriptors();
 }
 
 void FCubeMapRenderTarget::ResetViewport(UINT inWidth, UINT inHeight)

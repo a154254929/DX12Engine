@@ -47,6 +47,7 @@ protected:
 class FGeometryMap : public IDirectXDeviceInterface
 {
     friend class FRenderLayer;
+    friend class FDynamicCubeMap;
 public:
     FGeometryMap();
     ~FGeometryMap();

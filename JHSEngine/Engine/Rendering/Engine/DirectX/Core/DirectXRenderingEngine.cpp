@@ -534,24 +534,6 @@ int CDirectXRenderingEngine::PostInit()
                 }
             }
         }
-
-        ////////////////////////////////////////////////////////
-        
-        //反射球
-        if (GSphereMesh* sphereMeshTransparent = world->CreateActorObject<GSphereMesh>())
-        {
-            sphereMeshTransparent->CreateMesh(1, 20, 20);
-            sphereMeshTransparent->SetPosition(XMFLOAT3(4.5f, 13.5f, 0));
-            {
-                if (CMaterial* material = (*sphereMeshTransparent->GetMaterials())[0])
-                {
-                    material->SetBaseColor(fvector_4d(1.f));
-                    material->SetMaterialType(EMaterialType::BlinnPhong);
-                    material->SetRoughness(0.11);
-                    material->SetFresnelF0(0.8f);
-                }
-            }
-        }
         
         if (GSphereMesh* sphereMeshTransparent = world->CreateActorObject<GSphereMesh>())
         {
@@ -564,6 +546,24 @@ int CDirectXRenderingEngine::PostInit()
                 {
                     material->SetBaseColorIndexKey("Noise_RGBA_1024.dds");
                     material->SetMaterialType(EMaterialType::BaseColor);
+                }
+            }
+        }
+
+        ////////////////////////////////////////////////////////
+        
+        //反射球
+        if (GSphereMesh* sphereMeshRefelctionCubemap = world->CreateActorObject<GSphereMesh>())
+        {
+            sphereMeshRefelctionCubemap->CreateMesh(1, 20, 20);
+            sphereMeshRefelctionCubemap->SetPosition(XMFLOAT3(4.5f, 13.5f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshRefelctionCubemap->GetMaterials())[0])
+                {
+                    material->SetBaseColor(fvector_4d(1.f));
+                    material->SetMaterialType(EMaterialType::BlinnPhong);
+                    material->SetRoughness(0.11);
+                    material->SetFresnelF0(0.8f);
                 }
             }
         }

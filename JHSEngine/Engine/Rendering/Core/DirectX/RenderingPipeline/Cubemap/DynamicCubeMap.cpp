@@ -5,27 +5,28 @@
 #include "../PipelineState/DirectXPipelineState.h"
 #include "../RenderTarget/CubeMapRenderTarget.h"
 #include "../../../../../Core/Viewport/ClientViewport.h"
-#include "../RenderLayer/Core/RenderLayer.h"
+#include "../RenderLayer/RenderLayerManager.h"
 
 
 FDynamicCubeMap::FDynamicCubeMap()
     : geometryMap(NULL)
     , directXPipelineState(NULL)
-    , renderLayer(NULL)
+    , renderLayerManager(NULL)
     , width(512U)
     , height(512U)
 {
+    renderTarget = std::make_unique<FCubeMapRenderTarget>();
 }
 
 void FDynamicCubeMap::Init(
     FGeometryMap* inGeometryMap,
     FDirectXPipelineState* inDirectXPipelineState,
-    FRenderLayer* inRenderLayer
-    )
+    FRenderLayerManager* inRenderLayerManager
+)
 {
     geometryMap = inGeometryMap;
     directXPipelineState = inDirectXPipelineState;
-    renderLayer = inRenderLayer;
+    renderLayerManager = inRenderLayerManager;
 }
 
 void FDynamicCubeMap::UpdateCalculations(float deltaTime, const FViewportInfo& inViewportInfo)
@@ -45,7 +46,7 @@ void FDynamicCubeMap::UpdateCalculations(float deltaTime, const FViewportInfo& i
     }
 }
 
-void FDynamicCubeMap::Draw(float deltaTime)
+void FDynamicCubeMap::PreDraw(float deltaTime)
 {
 
     //指向那个资源 转换状态
@@ -63,6 +64,9 @@ void FDynamicCubeMap::Draw(float deltaTime)
     D3D12_RECT rtScissorRectt = renderTarget->GetScissorRect();
     GetGraphicsCommandList()->RSSetViewports(1, &rtViewPort);
     GetGraphicsCommandList()->RSSetScissorRects(1, &rtScissorRectt);
+    
+    UINT cbvSize = geometryMap->viewportConstantBufferView.GetConstantBufferByteSize();
+    
     //清除画布
     for (size_t i = 0; i < 6; i++)
     {
@@ -89,11 +93,16 @@ void FDynamicCubeMap::Draw(float deltaTime)
             true,
             &dsvDesc
         );
-
+        
+        //更新/绑定6个摄像机
+        D3D12_GPU_VIRTUAL_ADDRESS gpuViewportAddress = geometryMap->viewportConstantBufferView.GetBuffer()->GetGPUVirtualAddress();
+        gpuViewportAddress += (1 + i) * cbvSize;
+        GetGraphicsCommandList()->SetGraphicsRootConstantBufferView(1, gpuViewportAddress);
+        
         //渲染灯光材质贴图等
         geometryMap->Draw(deltaTime);
         //各类层级渲染
-        renderLayer->Draw(deltaTime);
+        renderLayerManager->Draw(deltaTime);
     }
 
     //指向那个资源 转换其状态
@@ -116,6 +125,7 @@ void FDynamicCubeMap::BuildViewPort(const fvector_3d& inPosition)
             fvector_3d(0, 1, 0),
             fvector_3d(0, 0, -1),
             fvector_3d(0, 0, 1),
+            fvector_3d(0, 1, 0),
             fvector_3d(0, 1, 0),
         };
     };
@@ -205,6 +215,8 @@ void FDynamicCubeMap::BuildRenderTargetDescriptor()
     BuildRenderTargetRTV();
     
     BuildRenderTargetSRV();
+    
+    renderTarget->Init(width, height, DXGI_FORMAT_R8G8B8A8_UNORM);
 }
 
 void FDynamicCubeMap::BuildRenderTargetRTV()

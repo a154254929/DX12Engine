@@ -16,7 +16,7 @@ public:
     
     void ResetRenderTarget(UINT inWidth, UINT inHeight);
     
-public:
+private:
     void BuildRenderTagetMap();
     void BuildSRVDescriptors();
     void BuildRTVDescriptors();
@@ -41,5 +41,5 @@ private:
     CD3DX12_GPU_DESCRIPTOR_HANDLE gpuShaderResourceView;
     
     //RTV
-    CD3DX12_CPU_DESCRIPTOR_HANDLE cpuRenderTargetView[6];
+    std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> cpuRenderTargetView;
 };

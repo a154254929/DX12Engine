@@ -21,6 +21,8 @@ bool FRenderingPipeline::FindMeshRenderingData(const size_t& inHash, FRenderingD
 
 void FRenderingPipeline::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
 {
+    dynamicCubeMap.UpdateCalculations(deltaTime, viewportInfo);
+    
     geometryMap.UpdateCalculations(deltaTime, viewportInfo);
     
     renderLayerManager.UpdateCalculations(deltaTime, viewportInfo);
@@ -43,6 +45,24 @@ void FRenderingPipeline::BuildPipeline()
     
     //构建雾
     geometryMap.BuildFog();
+    
+    /**************************************/
+    //构建动态Cubemap
+    dynamicCubeMap.Init(
+        &geometryMap,
+        &directXPipelineState,
+        &renderLayerManager
+    );
+    
+    //构建动态Cubemap相机视口
+    dynamicCubeMap.BuildViewPort(fvector_3d(4.5f, 13.5f, 0.f));
+    
+    //构建动态Cubemap深度图描述
+    dynamicCubeMap.BuildDepthStencilDescriptor();
+    
+    //构建动态Cubemap深度图
+    dynamicCubeMap.BuildDepthStencil();
+    /**************************************/
 
     //构建根签名
     rootSignature.BuildRootSignature(
@@ -59,6 +79,9 @@ void FRenderingPipeline::BuildPipeline()
 
     //构建常量描述堆
     geometryMap.BuildDescriptorHeap();
+    
+    //构建动态Cubemap RT描述
+    dynamicCubeMap.BuildRenderTargetDescriptor();
 
     //构建模型常量缓冲区
     geometryMap.BuildMeshConstantBuffer();
@@ -92,6 +115,9 @@ void FRenderingPipeline::PreDraw(float deltaTime)
     rootSignature.PreDraw(deltaTime);
     
     geometryMap.PreDraw(deltaTime);
+    
+    //动态Cubemap先渲染
+    dynamicCubeMap.PreDraw(deltaTime);
     
     renderLayerManager.PreDraw(deltaTime);
 

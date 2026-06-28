@@ -1,11 +1,11 @@
 #pragma once
 #include "../../../../../Interface/DirectXDeviceInterface.h"
+#include "../RenderTarget/CubeMapRenderTarget.h"
 
-class FCubeMapRenderTarget;
 class GClientViewport;
 class FGeometryMap;
 struct FDirectXPipelineState;
-class FRenderLayer;
+class FRenderLayerManager;
 class FViewportInfo;
 
 class FDynamicCubeMap : public IDirectXDeviceInterface
@@ -16,7 +16,7 @@ public:
     virtual void Init(
         FGeometryMap* inGeometryMap,
         FDirectXPipelineState* inDirectXPipelineState,
-        FRenderLayer* inRenderLayer
+        FRenderLayerManager* inRenderLayerManager
     );
     
     virtual void UpdateCalculations(
@@ -24,7 +24,7 @@ public:
         const FViewportInfo& inViewportInfo
     ); 
     
-    virtual void Draw(float deltaTime);
+    virtual void PreDraw(float deltaTime);
     
     virtual void BuildViewPort(const fvector_3d& inPosition);
     virtual void BuildDepthStencil();
@@ -45,7 +45,7 @@ protected:
     FGeometryMap* geometryMap;                          //几何Map
     FDirectXPipelineState* directXPipelineState;        //管线对象，用于绑定
     
-    FRenderLayer* renderLayer;                          //渲染层级
+    FRenderLayerManager* renderLayerManager;                          //渲染层级
     
     ComPtr<ID3D12Resource> depthStencilBuffer;
     
