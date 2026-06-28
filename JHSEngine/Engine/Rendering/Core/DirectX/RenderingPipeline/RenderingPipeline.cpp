@@ -1,5 +1,7 @@
 ﻿#include "RenderingPipeline.h"
 
+#include "../../../../Component/Mesh/Core/MeshComponentType.h"
+
 FRenderingPipeline::FRenderingPipeline()
 {
 }
@@ -130,7 +132,12 @@ void FRenderingPipeline::Draw(float deltaTime)
     //渲染灯光材质雾等
     geometryMap.Draw(deltaTime);
     //各类层级
-    renderLayerManager.Draw(deltaTime);
+    renderLayerManager.Draw(RENDERLAYER_BACKGROUND, deltaTime);
+    renderLayerManager.Draw(RENDERLAYER_OPAQUE, deltaTime);
+    renderLayerManager.Draw(RENDERLAYER_ALPHATEST, deltaTime);
+    renderLayerManager.Draw(RENDERLAYER_TRANSPARENT, deltaTime);
+    renderLayerManager.Draw(RENDERLAYER_POSTPROCESS, deltaTime);
+    
     directXPipelineState.Draw(deltaTime);
 }
 

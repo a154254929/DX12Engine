@@ -1,5 +1,6 @@
 #include "DynamicCubeMap.h"
 
+#include "../../../../../Component/Mesh/Core/MeshComponentType.h"
 #include "../../../../../Config/EngineRenderConfig.h"
 #include "../Geometry/GeometryMap.h"
 #include "../PipelineState/DirectXPipelineState.h"
@@ -102,7 +103,10 @@ void FDynamicCubeMap::PreDraw(float deltaTime)
         //渲染灯光材质贴图等
         geometryMap->Draw(deltaTime);
         //各类层级渲染
-        renderLayerManager->Draw(deltaTime);
+        renderLayerManager->Draw(RENDERLAYER_BACKGROUND, deltaTime);
+        renderLayerManager->Draw(RENDERLAYER_OPAQUE, deltaTime);
+        renderLayerManager->Draw(RENDERLAYER_ALPHATEST, deltaTime);
+        renderLayerManager->Draw(RENDERLAYER_TRANSPARENT, deltaTime);
     }
 
     //指向那个资源 转换其状态

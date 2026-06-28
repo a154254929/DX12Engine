@@ -4,6 +4,7 @@
 #include "RenderLayers/PostProcessRenderLayer.h"
 #include "RenderLayers/TransparentRenderLayer.h"
 #include "RenderLayers/BackGroundRenderLayer.h"
+#include "RenderLayers/OpaqueReflectorRenderLayer.h"
 #include "../../../../../Core/Viewport/ViewportInfo.h"
 
 std::vector<shared_ptr<FRenderLayer>> FRenderLayerManager::renderLayers;
@@ -17,6 +18,7 @@ FRenderLayerManager::FRenderLayerManager()
     CreateRenderLayer<FPostProcessRenderLayer>();
     CreateRenderLayer<FTransparentRenderLayer>();
     CreateRenderLayer<FBackGroundRenderLayer>();
+    CreateRenderLayer<FOpaqueReflectorRenderLayer>();
 }
 
 FRenderLayerManager::~FRenderLayerManager()
@@ -53,6 +55,18 @@ void FRenderLayerManager::PostDraw(float deltaTime)
     for (auto& tmp : renderLayers)
     {
         tmp->PostDraw(deltaTime);
+    }
+}
+
+void FRenderLayerManager::Draw(int inLayer, float deltaTime)
+{
+    for (auto& tmpLayer : renderLayers)
+    {
+        if (tmpLayer->GetRenderLayerType() == inLayer)
+        {
+            tmpLayer->Draw(deltaTime);
+            return;
+        }
     }
 }
 

@@ -13,9 +13,12 @@ public:
     
     virtual void Init(FGeometryMap* inGeometryMap, FDirectXPipelineState* inDirectXPipelineState);
 
-    void PreDraw(float deltaTime);
-    void Draw(float deltaTime);
-    void PostDraw(float deltaTime);
+    virtual void PreDraw(float deltaTime);
+    virtual void Draw(float deltaTime);
+    virtual void PostDraw(float deltaTime);
+    
+    //需要单独渲染哪个层
+    virtual void Draw(int inLayer, float deltaTime);
 
     virtual void BuildPSO();
 
