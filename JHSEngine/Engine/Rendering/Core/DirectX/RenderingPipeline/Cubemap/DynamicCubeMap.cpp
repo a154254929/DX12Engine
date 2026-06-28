@@ -156,6 +156,7 @@ void FDynamicCubeMap::BuildViewPort(const fvector_3d& inPosition)
         GClientViewport* viewport = CreateObject<GClientViewport>(new GClientViewport());
         viewports.push_back(viewport);
         
+        viewport->SetPosition(XMFLOAT3(inPosition.x, inPosition.y, inPosition.z));
         viewport->LookAt(
             inPosition,
             tmpCapture.targetPosition[i],
