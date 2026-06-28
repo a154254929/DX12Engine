@@ -21,6 +21,8 @@ enum EMaterialType
     Normal,
     WorldNormal,
     
+    Refraction,
+    
     
     PBR = 20,
     Fresnel = 100,

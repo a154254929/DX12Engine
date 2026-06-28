@@ -40,6 +40,7 @@ public:
             || materialType == Back
             || materialType == PBR
             || materialType == Phong
+            || materialType == Refraction
         ); 
     }
 private:

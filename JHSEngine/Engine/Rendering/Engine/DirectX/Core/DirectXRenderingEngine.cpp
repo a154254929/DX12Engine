@@ -297,13 +297,11 @@ int CDirectXRenderingEngine::PostInit()
 
         if (GSphereMesh* sphereMeshBlinPhong = world->CreateActorObject<GSphereMesh>())
         {
-            sphereMeshBlinPhong->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPAQUE_REFLECTOR);
             sphereMeshBlinPhong->CreateMesh(1, 20, 20);
             sphereMeshBlinPhong->SetPosition(XMFLOAT3(4, 1, 0));
             {
                 if (CMaterial* material = (*sphereMeshBlinPhong->GetMaterials())[0])
                 {
-                    material->SetDynamicReflection(true);
                     material->SetBaseColor(fvector_4d(.8f, .5f, .5f, 1.f));
                     material->SetRoughness(.1f);
                     material->SetFresnelF0(fvector_3d(.1f));
@@ -569,6 +567,24 @@ int CDirectXRenderingEngine::PostInit()
                     material->SetDynamicReflection(true);
                     material->SetBaseColor(fvector_4d(1.f));
                     material->SetMaterialType(EMaterialType::BlinnPhong);
+                    material->SetRoughness(0.11);
+                    material->SetFresnelF0(0.8f);
+                }
+            }
+        }
+        
+        //反射球-折射
+        if (GSphereMesh* sphereMeshRefraction = world->CreateActorObject<GSphereMesh>())
+        {
+            sphereMeshRefraction->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPAQUE_REFLECTOR);
+            sphereMeshRefraction->CreateMesh(1, 20, 20);
+            sphereMeshRefraction->SetPosition(XMFLOAT3(1.5f, 13.5f, 0));
+            {
+                if (CMaterial* material = (*sphereMeshRefraction->GetMaterials())[0])
+                {
+                    material->SetDynamicReflection(true);
+                    material->SetBaseColor(fvector_4d(1.f));
+                    material->SetMaterialType(EMaterialType::Refraction);
                     material->SetRoughness(0.11);
                     material->SetFresnelF0(0.8f);
                 }

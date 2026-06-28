@@ -76,7 +76,7 @@ float3 GetReflectDir(float3 inUnitWorldNormal, float3 inViewDirection)
     return reflect(-inViewDirection, inUnitWorldNormal);
 }
 
-float3 GetReflectionSampleColor(float3 inUnitWorldNormal, float3 inDirection)
+float3 GetReflectionSampleColor(float3 inDirection)
 {
     return TextureCubeMap[0].Sample(Anisotropic_Sampler, inDirection).rgb;
 }
@@ -102,8 +102,18 @@ float3 GetReflectionColor(
 )
 {
     float3 reflectoinDir = GetReflectDir(inUnitWorldNormal, inViewDirection);
-    float3 sampleRelctionColor = GetReflectionSampleColor(inUnitWorldNormal, reflectoinDir);
+    float3 sampleRelctionColor = GetReflectionSampleColor(reflectoinDir);
     float shininess = GetShininess(inMaterialConst);
     float3 fresnelFactor = FresnelSchlickFactor(inMaterialConst, inUnitWorldNormal, reflectoinDir);
     return sampleRelctionColor * shininess * fresnelFactor;
+}
+
+float3 GetRefractionColor(
+    float3 inUnitWorldNormal,
+    float3 inViewDirection
+)
+{
+    float3 refractionDir = normalize(lerp(-inViewDirection, inUnitWorldNormal, 0.3));
+    float3 sampleRelctionColor = GetReflectionSampleColor(refractionDir);
+    return sampleRelctionColor;
 }

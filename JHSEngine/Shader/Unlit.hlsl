@@ -57,6 +57,9 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     float3 normal = normalize(input.normal.xyz);
 	normal = GetMaterialNormal(materialConst, input.uv, normal, input.utangent);
 	float3 worldNormal = normalize(mul(normal, (float3x3) WorldMatrix));
+	
+    float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
+    
     if (materialConst.MaterialType == 12) //BaseColor
     {
         return material.BaseColor;
@@ -69,8 +72,11 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
     {
         return float4(worldNormal, 1.0f);
     }
-	
-    float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
+    else if (materialConst.MaterialType == 15) //AnisotropyKajiyaKay
+    {
+        return float4(GetRefractionColor(worldNormal, view), 1.0f);
+    }
+    
     float4 lightStrengths = { 0.f,0.f,0.f,1.f };
     float4 specularColor = 0;
     //float4 specularColor = 1;
@@ -183,11 +189,10 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             float m = 100 * smoothness;
             specularColor.rgb += saturate(specular * pow(saturate(dot(view, reflectLight)), m));
             specularColor.a = 1;
-
         }
         else if (materialConst.MaterialType == 10) //AnisotropyKajiyaKay
         {
-            
+                
 
         }
         else if (materialConst.MaterialType == 11) //OrenNayar
