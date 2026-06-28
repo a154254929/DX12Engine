@@ -11,10 +11,12 @@ public:
     void Init(UINT inWidth, UINT inHeight, DXGI_FORMAT inFormat);
     
     void ResetViewport(UINT inWidth, UINT inHeight);
+    void ResetScissorRect(UINT inWidth, UINT inHeight);
+    
+    void ResetRenderTarget(UINT inWidth, UINT inHeight);
     
 public:
     void BuildRenderTagetMap();
-    void BuildSRVAndRTVDescriptors();
     void BuildSRVDescriptors();
     void BuildRTVDescriptors();
     

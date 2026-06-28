@@ -15,7 +15,10 @@ void FCubeMapRenderTarget::Init(UINT inWidth, UINT inHeight, DXGI_FORMAT inForma
     height = inHeight;
     format = inFormat;
     
+    BuildRenderTagetMap();
+    
     ResetViewport(width, height);
+    ResetScissorRect(width, height);
 }
 
 void FCubeMapRenderTarget::ResetViewport(UINT inWidth, UINT inHeight)
@@ -28,13 +31,32 @@ void FCubeMapRenderTarget::ResetViewport(UINT inWidth, UINT inHeight)
         0.0f,
         1.0f
     };
-    
+}
+
+void FCubeMapRenderTarget::ResetScissorRect(UINT inWidth, UINT inHeight)
+{
     scissorRect = {
         0,
         0,
         (LONG)width,
         (LONG)height
     };
+}
+
+void FCubeMapRenderTarget::ResetRenderTarget(UINT inWidth, UINT inHeight)
+{
+    if (inWidth != width || inHeight != height)
+    {
+        width = inWidth;
+        height = inHeight;
+        
+        ResetViewport(width, height);
+        ResetScissorRect(width, height);
+        
+        BuildRenderTagetMap();
+        BuildRTVDescriptors();
+        BuildSRVDescriptors();
+    }
 }
 
 void FCubeMapRenderTarget::BuildRenderTagetMap()
@@ -55,19 +77,14 @@ void FCubeMapRenderTarget::BuildRenderTagetMap()
     
     CD3DX12_HEAP_PROPERTIES heapBufferProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
     
-    ANALYSIS_HRESULT(GetD3dDevice()->CreateCommittedResource(
-        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+    GetD3dDevice()->CreateCommittedResource(
+        &heapBufferProperties,
         D3D12_HEAP_FLAG_NONE,
         &heapBufferDesc,
         D3D12_RESOURCE_STATE_COMMON,
         NULL,
         IID_PPV_ARGS(renderTargetMap.GetAddressOf())
-    ));
-}
-
-void FCubeMapRenderTarget::BuildSRVAndRTVDescriptors()
-{
-    
+    );
 }
 
 void FCubeMapRenderTarget::BuildSRVDescriptors()
