@@ -112,6 +112,30 @@ ComPtr<ID3D12GraphicsCommandList> IDirectXDeviceInterface::GetGraphicsCommandLis
     }
 }
 
+ID3D12DescriptorHeap* IDirectXDeviceInterface::GetRTVHeap()
+{
+    if (CWindowsEngine* inEngine = GetEngine())
+    {
+        if (inEngine->GetRenderingEngine())
+        {
+            return inEngine->GetRenderingEngine()->rtvHeap.Get();
+        }
+    }
+    return nullptr;
+}
+
+ID3D12DescriptorHeap* IDirectXDeviceInterface::GetDSVHeap()
+{
+    if (CWindowsEngine* inEngine = GetEngine())
+    {
+        if (inEngine->GetRenderingEngine())
+        {
+            return inEngine->GetRenderingEngine()->dsvHeap.Get();
+        }
+    }
+    return nullptr;
+}
+
 UINT64 IDirectXDeviceInterface::GetCurrentFenceIndex()
 {
 #ifdef _WIN32
@@ -188,6 +212,26 @@ ComPtr<ID3D12CommandAllocator> IDirectXDeviceInterface_Struct::GetCommandAllocat
 ComPtr<ID3D12GraphicsCommandList> IDirectXDeviceInterface_Struct::GetGraphicsCommandList()
 {
     return Interface.GetGraphicsCommandList();
+}
+
+ID3D12DescriptorHeap* IDirectXDeviceInterface_Struct::GetRTVHeap()
+{
+    return Interface.GetRTVHeap();
+}
+
+ID3D12DescriptorHeap* IDirectXDeviceInterface_Struct::GetDSVHeap()
+{
+    return Interface.GetDSVHeap();
+}
+
+UINT64 IDirectXDeviceInterface_Struct::GetCurrentFenceIndex()
+{
+    return Interface.GetCurrentFenceIndex();
+}
+
+HWND IDirectXDeviceInterface_Struct::GetMainWindowsHandle()
+{
+    return Interface.GetMainWindowsHandle();
 }
 
 #ifdef _WIN32

@@ -22,6 +22,9 @@ public:
     ComPtr<ID3D12CommandQueue> GetCommandQueue();
     ComPtr<ID3D12CommandAllocator> GetCommandAllocator();
     ComPtr<ID3D12GraphicsCommandList> GetGraphicsCommandList();
+    
+    ID3D12DescriptorHeap* GetRTVHeap();
+    ID3D12DescriptorHeap* GetDSVHeap();
 
     UINT64 GetCurrentFenceIndex();
     HWND GetMainWindowsHandle();
@@ -47,6 +50,9 @@ public:
     ComPtr<ID3D12CommandQueue> GetCommandQueue();
     ComPtr<ID3D12CommandAllocator> GetCommandAllocator();
     ComPtr<ID3D12GraphicsCommandList> GetGraphicsCommandList();
+    
+    ID3D12DescriptorHeap* GetRTVHeap();
+    ID3D12DescriptorHeap* GetDSVHeap();
 
     UINT64 GetCurrentFenceIndex();
     HWND GetMainWindowsHandle();
