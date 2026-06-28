@@ -45,7 +45,7 @@ void FGeometryMap::PreDraw(float deltaTime)
 void FGeometryMap::Draw(float deltaTime)
 {
     //渲染视口
-    DrawViewport(deltaTime);
+    //DrawViewport(deltaTime);
 
     //渲染光源
     DrawLight(deltaTime);

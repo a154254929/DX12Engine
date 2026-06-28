@@ -5,6 +5,7 @@ class FCubeMapRenderTarget
     : public IDirectXDeviceInterface
     , std::enable_shared_from_this<FCubeMapRenderTarget>
 {
+    friend class FDynamicCubeMap;
 public:
     FCubeMapRenderTarget();
     

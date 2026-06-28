@@ -593,11 +593,12 @@ void CDirectXRenderingEngine::Tick(float deltaTime)
     meshManager->PreDraw(deltaTime);
 
     //指向那个资源 转换状态
-    CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = CD3DX12_RESOURCE_BARRIER::Transition(
-        GetCurrentSwapBuff(),
-        D3D12_RESOURCE_STATE_PRESENT,
-        D3D12_RESOURCE_STATE_RENDER_TARGET
-    );
+    CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = 
+        CD3DX12_RESOURCE_BARRIER::Transition(
+            GetCurrentSwapBuff(),
+            D3D12_RESOURCE_STATE_PRESENT,
+            D3D12_RESOURCE_STATE_RENDER_TARGET
+        );
 
     graphicsCommandList->ResourceBarrier(1, &resourceBarrierPresent);
 

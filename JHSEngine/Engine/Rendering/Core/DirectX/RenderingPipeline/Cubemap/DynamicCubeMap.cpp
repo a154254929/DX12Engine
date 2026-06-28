@@ -3,20 +3,27 @@
 #include "../PipelineState/DirectXPipelineState.h"
 #include "../RenderTarget/CubeMapRenderTarget.h"
 #include "../../../../../Core/Viewport/ClientViewport.h"
+#include "../RenderLayer/Core/RenderLayer.h"
 
 
 FDynamicCubeMap::FDynamicCubeMap()
     : geometryMap(NULL)
     , directXPipelineState(NULL)
+    , renderLayer(NULL)
     , width(512U)
     , height(512U)
 {
 }
 
-void FDynamicCubeMap::Init(FGeometryMap* inGeometryMap, FDirectXPipelineState* inDirectXPipelineState)
+void FDynamicCubeMap::Init(
+    FGeometryMap* inGeometryMap,
+    FDirectXPipelineState* inDirectXPipelineState,
+    FRenderLayer* inRenderLayer
+    )
 {
     geometryMap = inGeometryMap;
     directXPipelineState = inDirectXPipelineState;
+    renderLayer = inRenderLayer;
 }
 
 void FDynamicCubeMap::BuildViewPort(const fvector_3d& inPosition)
@@ -101,4 +108,63 @@ void FDynamicCubeMap::BuildDepthStencil()
         D3D12_RESOURCE_STATE_DEPTH_WRITE
     );
     GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrier);
+}
+
+void FDynamicCubeMap::Draw(float deltaTime)
+{
+
+    //指向那个资源 转换状态
+    CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = 
+        CD3DX12_RESOURCE_BARRIER::Transition(
+            GetCurrentSwapBuff(),
+            D3D12_RESOURCE_STATE_GENERIC_READ,
+            D3D12_RESOURCE_STATE_RENDER_TARGET
+        );
+
+    GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresent);
+
+    //需要每帧执行,绑定矩形框
+    GetGraphicsCommandList()->RSSetViewports(1, &renderTarget->GetViewport());
+    GetGraphicsCommandList()->RSSetScissorRects(1, &renderTarget->GetScissorRect());
+    //清除画布
+    for (size_t i = 0; i < 6; i++)
+    {
+        GetGraphicsCommandList()->ClearRenderTargetView(
+            renderTarget->cpuRenderTargetView[i],
+            DirectX::Colors::CadetBlue,
+            0,
+            nullptr
+            );
+
+        //清除深度模板缓存
+        GetGraphicsCommandList()->ClearDepthStencilView(
+            dsvDesc,
+            D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
+            1.f,
+            0,
+            0,
+            NULL
+        );
+
+        GetGraphicsCommandList()->OMSetRenderTargets(
+            1,
+            &renderTarget->cpuRenderTargetView[i],
+            true,
+            &dsvDesc
+        );
+
+        //渲染灯光材质贴图等
+        geometryMap->Draw(deltaTime);
+        //各类层级渲染
+        renderLayer->Draw(deltaTime);
+    }
+
+    //指向那个资源 转换其状态
+    CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
+        GetCurrentSwapBuff(),
+        D3D12_RESOURCE_STATE_RENDER_TARGET,
+        D3D12_RESOURCE_STATE_GENERIC_READ
+    );
+    
+    GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresentRenderTarget);
 }
