@@ -224,11 +224,13 @@ int CDirectXRenderingEngine::PostInit()
 
         if (GSphereMesh* sphereMeshLambertain = world->CreateActorObject<GSphereMesh>())
         {
+            sphereMeshLambertain->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPAQUE_REFLECTOR);
             sphereMeshLambertain->CreateMesh(1, 20, 20);
             sphereMeshLambertain->SetPosition(XMFLOAT3(1.5, 1, 4));
             {
                 if (CMaterial* material = (*sphereMeshLambertain->GetMaterials())[0])
                 {
+                    material->SetDynamicReflection(true);
                     material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
                     material->SetBaseColorIndexKey("Texture'/Project/Texture/Texture1.Texture1.dds'");
                     material->SetMaterialType(EMaterialType::BlinnPhong);
@@ -598,7 +600,7 @@ void CDirectXRenderingEngine::Tick(float deltaTime)
     meshManager->PreDraw(deltaTime);
 
     StartSetMainViewportRenderTarget();
-    //ClearMainViewportSwapChainCanvas();
+
     //渲染其他内容
     meshManager->Draw(deltaTime);
     meshManager->PostDraw(deltaTime);

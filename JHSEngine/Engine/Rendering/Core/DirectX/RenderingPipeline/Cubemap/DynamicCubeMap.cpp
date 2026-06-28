@@ -81,9 +81,6 @@ void FDynamicCubeMap::UpdateCalculations(float deltaTime, const FViewportInfo& i
 
 void FDynamicCubeMap::PreDraw(float deltaTime)
 {
-    //清理主视口
-    ClearMainViewportSwapChainCanvas();
-    
     for (int i = 0; i < geometryMap->GetDynamicReflectionMeshObjectNumber(); i++)
     {
 
@@ -193,6 +190,11 @@ void FDynamicCubeMap::SetCubemapViewportPosition(const fvector_3d& inPosition)
         );
         viewports[i]->BuildViewMatrix(0.016f);
     }
+}
+
+bool FDynamicCubeMap::IsExistDynamicReflectionMesh()
+{
+    return geometryMap->GetDynamicReflectionMeshObjectNumber() > 0;
 }
 
 void FDynamicCubeMap::BuildViewPort(const fvector_3d& inPosition)

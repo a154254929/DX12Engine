@@ -122,9 +122,15 @@ void FRenderingPipeline::PreDraw(float deltaTime)
     
     //渲染灯光材质贴图等
     geometryMap.Draw(deltaTime);
+
+    //清理主视口
+    ClearMainViewportSwapChainCanvas();
     
-    //动态Cubemap先渲染
-    dynamicCubeMap.PreDraw(deltaTime);
+    if (dynamicCubeMap.IsExistDynamicReflectionMesh())
+    {
+        //动态Cubemap先渲染
+        dynamicCubeMap.PreDraw(deltaTime);
+    }
     
     renderLayerManager.PreDraw(deltaTime);
 

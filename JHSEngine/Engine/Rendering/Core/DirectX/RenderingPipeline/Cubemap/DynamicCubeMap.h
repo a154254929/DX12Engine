@@ -48,6 +48,8 @@ public:
 public:
     void SetCubemapViewportPosition(const fvector_3d& inPosition);
     
+    bool IsExistDynamicReflectionMesh();
+    
     virtual void BuildViewPort(const fvector_3d& inPosition);
     virtual void BuildDepthStencil();
     
