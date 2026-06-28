@@ -25,4 +25,9 @@ protected:
     
     FGeometryMap* geometryMap;                          //几何Map
     FDirectXPipelineState* directXPipelineState;        //管线对象，用于绑定
+    
+    ComPtr<ID3D12Resource> depthStencilBuffer;
+    
+    UINT width;
+    UINT height;
 };

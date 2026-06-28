@@ -909,18 +909,18 @@ void CDirectXRenderingEngine::PostInitDirect3D()
         heapHandle.Offset(1, rtvDescriptorSize);
     }
 
-    D3D12_RESOURCE_DESC resourceDesv;
-    resourceDesv.Width = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
-    resourceDesv.Height = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
-    resourceDesv.Alignment = 0;
-    resourceDesv.MipLevels = 1;
-    resourceDesv.DepthOrArraySize = 1;
-    resourceDesv.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-    resourceDesv.SampleDesc.Count = GetDXGISampleCount();
-    resourceDesv.SampleDesc.Quality = GetDXGISampleQuality();
-    resourceDesv.Format = DXGI_FORMAT_R24G8_TYPELESS;
-    resourceDesv.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-    resourceDesv.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+    D3D12_RESOURCE_DESC resourceDesc;
+    resourceDesc.Width = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
+    resourceDesc.Height = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
+    resourceDesc.Alignment = 0;
+    resourceDesc.MipLevels = 1;
+    resourceDesc.DepthOrArraySize = 1;
+    resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+    resourceDesc.SampleDesc.Count = GetDXGISampleCount();
+    resourceDesc.SampleDesc.Quality = GetDXGISampleQuality();
+    resourceDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+    resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+    resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 
     D3D12_CLEAR_VALUE clearValue;
     clearValue.DepthStencil.Depth = 1.f;
@@ -931,7 +931,7 @@ void CDirectXRenderingEngine::PostInitDirect3D()
     d3dDevice->CreateCommittedResource(
         &heapProperties,
         D3D12_HEAP_FLAG_NONE,
-        &resourceDesv,
+        &resourceDesc,
         D3D12_RESOURCE_STATE_COMMON,
         &clearValue,
         IID_PPV_ARGS(depthStencilBuffer.GetAddressOf())

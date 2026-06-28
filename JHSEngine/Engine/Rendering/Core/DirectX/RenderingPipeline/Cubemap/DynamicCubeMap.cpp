@@ -8,6 +8,8 @@
 FDynamicCubeMap::FDynamicCubeMap()
     : geometryMap(NULL)
     , directXPipelineState(NULL)
+    , width(512U)
+    , height(512U)
 {
 }
 
@@ -58,4 +60,45 @@ void FDynamicCubeMap::BuildViewPort(const fvector_3d& inPosition)
 
 void FDynamicCubeMap::BuildDepthStencil()
 {
+    D3D12_RESOURCE_DESC resourceDesc;
+    resourceDesc.Width = width;
+    resourceDesc.Height = height;
+    resourceDesc.Alignment = 0;
+    resourceDesc.MipLevels = 1;
+    resourceDesc.DepthOrArraySize = 1;
+    resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+    
+    resourceDesc.SampleDesc.Count = 1;
+    resourceDesc.SampleDesc.Quality = 0;
+    resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+    resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+
+    D3D12_CLEAR_VALUE clearValue;
+    clearValue.DepthStencil.Depth = 1.f;
+    clearValue.DepthStencil.Stencil = 0;
+    clearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+    CD3DX12_HEAP_PROPERTIES heapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+    GetD3dDevice()->CreateCommittedResource(
+        &heapProperties,
+        D3D12_HEAP_FLAG_NONE,
+        &resourceDesc,
+        D3D12_RESOURCE_STATE_COMMON,
+        &clearValue,
+        IID_PPV_ARGS(depthStencilBuffer.GetAddressOf())
+    );
+
+    GetD3dDevice()->CreateDepthStencilView(
+        depthStencilBuffer.Get(),
+        NULL,
+        dsvDesc
+    );
+
+    CD3DX12_RESOURCE_BARRIER resourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(
+        depthStencilBuffer.Get(),
+        D3D12_RESOURCE_STATE_COMMON,
+        D3D12_RESOURCE_STATE_DEPTH_WRITE
+    );
+    GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrier);
 }
