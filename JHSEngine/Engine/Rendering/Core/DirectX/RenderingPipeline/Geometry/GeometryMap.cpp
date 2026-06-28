@@ -128,15 +128,7 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
     lightConstantBufferView.Update(0, &lightConstantBuffer);
 
     //更新视口
-    XMMATRIX projectMatrix = XMLoadFloat4x4(&viewportInfo.projectMatrix);
-    XMMATRIX viewMatrix = XMLoadFloat4x4(&viewportInfo.viewMatrix);
-    XMMATRIX viewProjMatrix = XMMatrixMultiply(viewMatrix, projectMatrix);
-
-    FViewportTransformation viewportTransformation;
-    XMStoreFloat4x4(&viewportTransformation.viewProjectionMatrix, XMMatrixTranspose(viewProjMatrix));
-    //拿到视口位置
-    viewportTransformation.viewportWorldPosirion = viewportInfo.viewWorldPosition;
-    viewportConstantBufferView.Update(0, &viewportTransformation);
+    UpdateCalculationsViewport(deltaTime, viewportInfo, 0);
     
     //更新雾效
     if (fogComponent)
@@ -152,6 +144,23 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
         }
         fogConstantBufferView.Update(0, &fogConstantBuffer);
     }
+}
+
+void FGeometryMap::UpdateCalculationsViewport(
+    float deltaTime,
+    const FViewportInfo viewportInfo,
+    UINT inConstantBufferOffset
+)
+{
+    XMMATRIX projectMatrix = XMLoadFloat4x4(&viewportInfo.projectMatrix);
+    XMMATRIX viewMatrix = XMLoadFloat4x4(&viewportInfo.viewMatrix);
+    XMMATRIX viewProjMatrix = XMMatrixMultiply(viewMatrix, projectMatrix);
+
+    FViewportTransformation viewportTransformation;
+    XMStoreFloat4x4(&viewportTransformation.viewProjectionMatrix, XMMatrixTranspose(viewProjMatrix));
+    //拿到视口位置
+    viewportTransformation.viewportWorldPosirion = viewportInfo.viewWorldPosition;
+    viewportConstantBufferView.Update(inConstantBufferOffset, &viewportTransformation);
 }
 
 void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FViewportInfo viewportInfo)

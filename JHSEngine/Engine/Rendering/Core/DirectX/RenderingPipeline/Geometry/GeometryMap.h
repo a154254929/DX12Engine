@@ -56,6 +56,11 @@ public:
     void PostDraw(float deltaTime);
 
     virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
+    virtual void UpdateCalculationsViewport(
+        float deltaTime,
+        const FViewportInfo viewportInfo,
+        UINT inConstantBufferOffset
+    );
     
     virtual void UpdateMaterialShaderResourceView(float deltaTime, const FViewportInfo viewportInfo);
 

@@ -6,6 +6,7 @@ class GClientViewport;
 class FGeometryMap;
 struct FDirectXPipelineState;
 class FRenderLayer;
+class FViewportInfo;
 
 class FDynamicCubeMap : public IDirectXDeviceInterface
 {
@@ -18,11 +19,16 @@ public:
         FRenderLayer* inRenderLayer
     );
     
+    virtual void UpdateCalculations(
+        float deltaTime,
+        const FViewportInfo& inViewportInfo
+    ); 
+    
+    virtual void Draw(float deltaTime);
+    
 protected:
     virtual void BuildViewPort(const fvector_3d& inPosition);
     virtual void BuildDepthStencil();
-    
-    virtual void Draw(float deltaTime);
     
 protected:
     std::unique_ptr<FCubeMapRenderTarget> renderTarget;
