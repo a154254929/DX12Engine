@@ -301,6 +301,7 @@
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RenderLayer\RenderLayers\TransparentRenderLayer.cpp" />
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RenderTarget\Core\RenderTarget.cpp" />
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RenderTarget\CubeMapRenderTarget.cpp" />
+    <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RenderTarget\ShadowMapRenderTarget.cpp" />
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RootSignature\DirectXRootSignature.cpp" />
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\StaticSampler\StaticSampler.cpp" />
     <ClCompile Include="Engine\Rendering\Core\Rendering.cpp" />
@@ -457,6 +458,7 @@
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RenderLayer\RenderLayers\TransparentRenderLayer.h" />
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RenderTarget\Core\RenderTarget.h" />
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RenderTarget\CubeMapRenderTarget.h" />
+    <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RenderTarget\ShadowMapRenderTarget.h" />
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\RootSignature\DirectXRootSignature.h" />
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\StaticSampler\StaticSampler.h" />
     <ClInclude Include="Engine\Rendering\Core\Rendering.h" />
