@@ -96,7 +96,6 @@ int CDirectXRenderingEngine::PostInit()
             parallelLight2->SetPosition(XMFLOAT3(0.0f, 2.0f, -8.0f));
             parallelLight2->SetRotation(fvector_3d(45.f, -30.0f, .0f));
         }
-        */
         
         if (GPointLight* pointLight1 = world->CreateActorObject<GPointLight>())
         {
@@ -119,6 +118,7 @@ int CDirectXRenderingEngine::PostInit()
             spotLight1->SetConicalInnerCorner(45.f);
             spotLight1->SetConicalOuterCorner(60.f);
         }
+        */
         
         
         //构建Mesh

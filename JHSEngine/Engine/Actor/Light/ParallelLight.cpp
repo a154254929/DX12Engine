@@ -13,7 +13,7 @@ void GParallelLight::Tick(float deltaTime)
     
     //rotationV3.x += deltaTime * 15.0f;
     //rotationV3.y += deltaTime * 15.0f;
-    rotationV3.x += deltaTime * 5.0f;
+    rotationV3.x += deltaTime * 10.0f;
     
     SetRotation(rotationV3);
 }

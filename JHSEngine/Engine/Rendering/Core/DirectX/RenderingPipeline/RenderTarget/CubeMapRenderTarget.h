@@ -1,9 +1,7 @@
 #pragma once
-#include "../../../../../Interface/DirectXDeviceInterface.h"
+#include "Core/RenderTarget.h"
 
-class FCubeMapRenderTarget
-    : public IDirectXDeviceInterface
-    , std::enable_shared_from_this<FCubeMapRenderTarget>
+class FCubeMapRenderTarget : public FRenderTarget
 {
     friend class FDynamicCubeMap;
 public:

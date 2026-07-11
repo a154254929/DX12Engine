@@ -1,6 +1,6 @@
 #pragma once
-#include "../../../../../Interface/DirectXDeviceInterface.h"
-#include "../RenderTarget/CubeMapRenderTarget.h"
+#include "../Core/DynamicMap.h"
+#include "../../RenderTarget/CubeMapRenderTarget.h"
 
 class GClientViewport;
 class FGeometryMap;
@@ -8,7 +8,7 @@ struct FDirectXPipelineState;
 class FRenderLayerManager;
 class FViewportInfo;
 
-class FDynamicCubeMap : public IDirectXDeviceInterface
+class FDynamicCubeMap : public FDynamicMap
 {
     struct FTmpViewportCapture
     {
