@@ -1,15 +1,11 @@
 #pragma once
 #include "../Core/DynamicMap.h"
-#include "../../RenderTarget/CubeMapRenderTarget.h"
 
 class GClientViewport;
-class FGeometryMap;
-struct FDirectXPipelineState;
-class FRenderLayerManager;
-class FViewportInfo;
 
 class FDynamicCubeMap : public FDynamicMap
 {
+    typedef FDynamicMap Super;
     struct FTmpViewportCapture
     {
         FTmpViewportCapture();
@@ -61,18 +57,9 @@ protected:
     virtual void BuildRenderTargetSRV();
     
 protected:
-    std::unique_ptr<FCubeMapRenderTarget> renderTarget;
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvDesc;              //dsv描述
     
     vector<GClientViewport*> viewports;                 //6个视口
     
-    FGeometryMap* geometryMap;                          //几何Map
-    FDirectXPipelineState* directXPipelineState;        //管线对象，用于绑定
-    
-    FRenderLayerManager* renderLayerManager;                          //渲染层级
-    
     ComPtr<ID3D12Resource> depthStencilBuffer;
-    
-    UINT width;
-    UINT height;
 };
