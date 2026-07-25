@@ -55,6 +55,11 @@ void FRenderingPipeline::BuildPipeline()
         &directXPipelineState,
         &renderLayerManager
     );
+    geometryMap.dynamicShadowMap.Init(
+        &geometryMap,
+        &directXPipelineState,
+        &renderLayerManager
+    );
     
     //构建动态Cubemap相机视口
     dynamicCubeMap.BuildViewPort(fvector_3d(4.5f, 13.5f, 0.f));
@@ -64,6 +69,8 @@ void FRenderingPipeline::BuildPipeline()
     
     //构建动态Cubemap深度图
     dynamicCubeMap.BuildDepthStencil();
+    
+    geometryMap.BuildShadow();
     /**************************************/
 
     //构建根签名

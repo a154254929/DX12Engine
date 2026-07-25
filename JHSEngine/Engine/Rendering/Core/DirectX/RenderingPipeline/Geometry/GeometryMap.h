@@ -5,6 +5,7 @@
 #include "../DescriptorHeap/DirectXDescriptorHeap.h"
 #include "../ConstantBuffer/ConstantBufferView.h"
 #include "../../../../../Core/Viewport/ViewportInfo.h"
+#include "../DynamicMap/ShadowMap/DynamicShadowMap.h"
 
 
 class CFogComponent;
@@ -48,6 +49,8 @@ class FGeometryMap : public IDirectXDeviceInterface
 {
     friend class FRenderLayer;
     friend class FDynamicCubeMap;
+    friend class FDynamicShadowMap;
+    friend class FRenderingPipeline;
 public:
     FGeometryMap();
     ~FGeometryMap();
@@ -64,6 +67,10 @@ public:
     );
     
     virtual void UpdateMaterialShaderResourceView(float deltaTime, const FViewportInfo viewportInfo);
+    
+    virtual void UpdateLightShaderResourceView(float deltaTime, const FViewportInfo viewportInfo);
+    
+    virtual void UpdateFogShaderResourceView(float deltaTime, const FViewportInfo viewportInfo);
 
     void BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
     
@@ -121,6 +128,8 @@ public:
 public:
     void DrawViewport(float deltaTime);
 
+    void DrawShadow(float deltaTime);
+
     void DrawLight(float deltaTime);
 
     void DrawMesh(float deltaTime);
@@ -135,6 +144,8 @@ public:
     void LoadTexture();
     
     void BuildFog();
+    
+    void BuildShadow();
     
 public:
     bool IsFogOn();
@@ -156,4 +167,6 @@ protected:
     std::vector<CMeshComponent*> dynamicReflectionMeshComponents;
     
     CFogComponent* fogComponent; 
+    
+    FDynamicShadowMap dynamicShadowMap;
 };

@@ -90,63 +90,15 @@ void FGeometryMap::UpdateCalculations(float deltaTime, const FViewportInfo viewp
     
     UpdateMaterialShaderResourceView(deltaTime, viewportInfo);
     
-    //更新灯光
-    FLightConstantBuffer lightConstantBuffer;
-    lightConstantBuffer.lightInfo.x = GetLightManager()->lights.size();
-    for (int i = 0; i < GetLightManager()->lights.size(); ++i)
-    {
-        if (auto light = GetLightManager()->lights[i])
-        {
-            lightConstantBuffer.sceneLights[i].lightDirection = light->GetForwardVector();
-            fvector_3d lightIntensity = light->GetLightIntensity();
-            lightConstantBuffer.sceneLights[i].lightIntensity = XMFLOAT3(lightIntensity.x, lightIntensity.y, lightIntensity.z);
-            lightConstantBuffer.sceneLights[i].lightPosition = light->GetPosition();
-            ELightType lightType = light->GetLightType();
-            lightConstantBuffer.sceneLights[i].lightType = (int)lightType;
-            switch (lightType)
-            {
-                case ELightType::PointLight:
-                case ELightType::SpotLight:
-                    if (CRangeLightComponent* rangeLight = dynamic_cast<CRangeLightComponent*>(light))
-                    {
-                        lightConstantBuffer.sceneLights[i].startAttenuation = rangeLight->GetStartAttenuation();
-                        lightConstantBuffer.sceneLights[i].endAttenuation = rangeLight->GetEndAttenuation();
-                        if (lightType == ELightType::SpotLight)
-                        {
-                            if(CSpotLightComponent* spotLight = dynamic_cast<CSpotLightComponent*>(rangeLight))
-                            {
-                               lightConstantBuffer.sceneLights[i].startAttenuation = spotLight->GetStartAttenuation();
-                               lightConstantBuffer.sceneLights[i].endAttenuation = spotLight->GetEndAttenuation();
-                               float angle2Radian = acos(-1.0) / 180.f;
-                               lightConstantBuffer.sceneLights[i].conicalInnerCorner = math_utils::angle_to_radian(spotLight->GetConicalInnerCorner());
-                               lightConstantBuffer.sceneLights[i].conicalOuterCorner = spotLight->GetConicalOuterCorner() * angle2Radian;
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
-    }
-
-    lightConstantBufferView.Update(0, &lightConstantBuffer);
+    UpdateLightShaderResourceView(deltaTime, viewportInfo);
 
     //更新视口
     UpdateCalculationsViewport(deltaTime, viewportInfo, 0);
     
     //更新雾效
-    if (fogComponent)
-    {
-        FFogConstantBuffer fogConstantBuffer;
-        {
-            fvector_color fogColor = fogComponent->GetFogColor();
-            fogConstantBuffer.fogColor = XMFLOAT3(fogColor.r, fogColor.g, fogColor.b);
-            fogConstantBuffer.fogStart = fogComponent->GetFogStart();
-            fogConstantBuffer.fogRange = fogComponent->GetFogRange();
-            fogConstantBuffer.fogHeight = fogComponent->GetFogHeight();
-            fogConstantBuffer.fogTransparentCoefficient = fogComponent->GetFogTransparentCoefficient();
-        }
-        fogConstantBufferView.Update(0, &fogConstantBuffer);
-    }
+    UpdateFogShaderResourceView(deltaTime, viewportInfo);
+    
+    dynamicShadowMap.UpdateCalculations(deltaTime, viewportInfo);
 }
 
 void FGeometryMap::UpdateCalculationsViewport(
@@ -233,6 +185,66 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
             }
             materialConstantBufferView.Update(inMaterial->GetMaterialIndex(), &materialConstantBuffer);
         }
+    }
+}
+
+void FGeometryMap::UpdateLightShaderResourceView(float deltaTime, const FViewportInfo viewportInfo)
+{
+    //更新灯光
+    FLightConstantBuffer lightConstantBuffer;
+    lightConstantBuffer.lightInfo.x = GetLightManager()->lights.size();
+    for (int i = 0; i < GetLightManager()->lights.size(); ++i)
+    {
+        if (auto light = GetLightManager()->lights[i])
+        {
+            lightConstantBuffer.sceneLights[i].lightDirection = light->GetForwardVector();
+            fvector_3d lightIntensity = light->GetLightIntensity();
+            lightConstantBuffer.sceneLights[i].lightIntensity = XMFLOAT3(lightIntensity.x, lightIntensity.y, lightIntensity.z);
+            lightConstantBuffer.sceneLights[i].lightPosition = light->GetPosition();
+            ELightType lightType = light->GetLightType();
+            lightConstantBuffer.sceneLights[i].lightType = (int)lightType;
+            switch (lightType)
+            {
+                case ELightType::PointLight:
+                case ELightType::SpotLight:
+                    if (CRangeLightComponent* rangeLight = dynamic_cast<CRangeLightComponent*>(light))
+                    {
+                        lightConstantBuffer.sceneLights[i].startAttenuation = rangeLight->GetStartAttenuation();
+                        lightConstantBuffer.sceneLights[i].endAttenuation = rangeLight->GetEndAttenuation();
+                        if (lightType == ELightType::SpotLight)
+                        {
+                            if(CSpotLightComponent* spotLight = dynamic_cast<CSpotLightComponent*>(rangeLight))
+                            {
+                               lightConstantBuffer.sceneLights[i].startAttenuation = spotLight->GetStartAttenuation();
+                               lightConstantBuffer.sceneLights[i].endAttenuation = spotLight->GetEndAttenuation();
+                               float angle2Radian = acos(-1.0) / 180.f;
+                               lightConstantBuffer.sceneLights[i].conicalInnerCorner = math_utils::angle_to_radian(spotLight->GetConicalInnerCorner());
+                               lightConstantBuffer.sceneLights[i].conicalOuterCorner = spotLight->GetConicalOuterCorner() * angle2Radian;
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    lightConstantBufferView.Update(0, &lightConstantBuffer);
+}
+
+void FGeometryMap::UpdateFogShaderResourceView(float deltaTime, const FViewportInfo viewportInfo)
+{
+    if (fogComponent)
+    {
+        FFogConstantBuffer fogConstantBuffer;
+        {
+            fvector_color fogColor = fogComponent->GetFogColor();
+            fogConstantBuffer.fogColor = XMFLOAT3(fogColor.r, fogColor.g, fogColor.b);
+            fogConstantBuffer.fogStart = fogComponent->GetFogStart();
+            fogConstantBuffer.fogRange = fogComponent->GetFogRange();
+            fogConstantBuffer.fogHeight = fogComponent->GetFogHeight();
+            fogConstantBuffer.fogTransparentCoefficient = fogComponent->GetFogTransparentCoefficient();
+        }
+        fogConstantBufferView.Update(0, &fogConstantBuffer);
     }
 }
 
@@ -445,6 +457,11 @@ void FGeometryMap::DrawViewport(float deltaTime)
     );
 }
 
+void FGeometryMap::DrawShadow(float deltaTime)
+{
+    dynamicShadowMap.DrawShadowMapTexture(deltaTime);
+}
+
 void FGeometryMap::DrawLight(float deltaTime)
 {
     // UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
@@ -578,6 +595,15 @@ void FGeometryMap::BuildFog()
             break;
         }
     }
+}
+
+void FGeometryMap::BuildShadow()
+{
+    dynamicShadowMap.BuildViewPort(fvector_3d(0.f, 0.f, 0.f));
+    
+    dynamicShadowMap.BuildDepthStencilDescriptor();
+    
+    dynamicShadowMap.BuildRenderTargetDescriptor();
 }
 
 bool FGeometryMap::IsFogOn()
