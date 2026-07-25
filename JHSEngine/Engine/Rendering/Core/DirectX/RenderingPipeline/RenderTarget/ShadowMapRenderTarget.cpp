@@ -8,6 +8,8 @@ FShadowMapRenderTarget::FShadowMapRenderTarget()
 void FShadowMapRenderTarget::Init(UINT inWidth, UINT inHeight, DXGI_FORMAT inFormat)
 {
     Super::Init(inWidth, inHeight, inFormat);
+    
+    BuildDSVDescriptors();
 }
 
 void FShadowMapRenderTarget::BuildRenderTagetMap()
