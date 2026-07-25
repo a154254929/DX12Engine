@@ -10,6 +10,22 @@ class FDynamicShadowMap : public FDynamicMap
 public:
     FDynamicShadowMap();
     
+public:
+    virtual void Init(
+        FGeometryMap* inGeometryMap,
+        FDirectXPipelineState* inDirectXPipelineState,
+        FRenderLayerManager* inRenderLayerManager
+    );
+    
+    virtual void UpdateCalculations(
+        float deltaTime,
+        const FViewportInfo& inViewportInfo
+    ); 
+    
+    virtual void PreDraw(float deltaTime);
+    
+    virtual void Draw(float deltaTime);
+    
     
     
 };

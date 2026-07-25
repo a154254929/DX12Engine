@@ -12,4 +12,7 @@ protected:
     virtual void BuildRenderTagetMap();
     virtual void BuildSRVDescriptors();
     virtual void BuildDSVDescriptors();
+    
+protected:
+    CD3DX12_CPU_DESCRIPTOR_HANDLE dsvDescHandle;              //dsv描述
 };
