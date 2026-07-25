@@ -26,6 +26,7 @@ public:
     
     virtual void Draw(float deltaTime);
     
-    
+public:
+    virtual void BuildDepthStencilDescriptor();
     
 };

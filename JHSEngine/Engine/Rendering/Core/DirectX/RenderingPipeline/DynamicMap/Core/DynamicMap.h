@@ -33,7 +33,7 @@ public:
     void CreateRenderTarget();
 
 protected:
-    std::unique_ptr<FRenderTarget> renderTarget;
+    std::shared_ptr<FRenderTarget> renderTarget;
     
     FGeometryMap* geometryMap;                          //几何Map
     FDirectXPipelineState* directXPipelineState;        //管线对象，用于绑定
@@ -49,6 +49,6 @@ void FDynamicMap::CreateRenderTarget()
 {
     if (!renderTarget)
     {
-        renderTarget = std::make_unique<T>();
+        renderTarget = std::make_shared<T>();
     }
 }

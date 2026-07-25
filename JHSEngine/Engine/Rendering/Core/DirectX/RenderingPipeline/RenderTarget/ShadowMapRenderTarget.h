@@ -4,6 +4,8 @@
 class FShadowMapRenderTarget : public FRenderTarget
 {
     typedef FRenderTarget Super;
+    
+    friend class FDynamicShadowMap;
 public:
     FShadowMapRenderTarget();
 

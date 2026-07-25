@@ -907,7 +907,7 @@ bool CDirectXRenderingEngine::InitDirect3D()
     ANALYSIS_HRESULT(d3dDevice->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(rtvHeap.GetAddressOf())));
 
     D3D12_DESCRIPTOR_HEAP_DESC dsvDescriptorHeapDesc;
-    dsvDescriptorHeapDesc.NumDescriptors = 1 + 1; //主视口+实时cubmap
+    dsvDescriptorHeapDesc.NumDescriptors = 1 + 1 + 1; //主视口+实时cubmap+shadowMap
     dsvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
     dsvDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
     dsvDescriptorHeapDesc.NodeMask = 0;
