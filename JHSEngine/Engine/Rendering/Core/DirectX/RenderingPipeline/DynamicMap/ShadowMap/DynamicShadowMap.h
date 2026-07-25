@@ -27,11 +27,18 @@ public:
     
     virtual void Draw(float deltaTime);
     
+    void GetViewportViewMatrix(XMFLOAT4X4& outViewMatrix, XMFLOAT4X4& outProjMatrix);
+    
     virtual void DrawShadowMapTexture(float deltaTime);
 public:
     void SetViewportPosition(const fvector_3d& inPosition);
     void SetViewportROtation(const fvector_3d& inRotation);
     void BuildViewMaterix(float deltaTime);
+    void BuildParallelLightMaterix(
+        const fvector_3d& inRotation,
+        const fvector_3d& inTargetPosition,
+        float inRadius = 100.f
+    );
     
     virtual void BuildViewPort(const fvector_3d& inPosition);
     

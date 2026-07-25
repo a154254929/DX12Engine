@@ -100,6 +100,15 @@ void FDynamicShadowMap::Draw(float deltaTime)
     Super::Draw(deltaTime);
 }
 
+void FDynamicShadowMap::GetViewportViewMatrix(XMFLOAT4X4& outViewMatrix, XMFLOAT4X4& outProjMatrix)
+{
+    if (viewport)
+    {
+        outViewMatrix = viewport->viewMatrix;
+        outProjMatrix = viewport->projectMatrix;
+    }
+}
+
 void FDynamicShadowMap::DrawShadowMapTexture(float deltaTime)
 {
     GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(
@@ -124,6 +133,13 @@ void FDynamicShadowMap::SetViewportROtation(const fvector_3d& inRotation)
 void FDynamicShadowMap::BuildViewMaterix(float deltaTime)
 {
     viewport->BuildViewMatrix(deltaTime);
+}
+
+void FDynamicShadowMap::BuildParallelLightMaterix(
+    const fvector_3d& inRotation,
+    const fvector_3d& inTargetPosition,
+    float inRadius)
+{
 }
 
 void FDynamicShadowMap::BuildViewPort(const fvector_3d& inPosition)

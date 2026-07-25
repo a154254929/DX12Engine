@@ -13,6 +13,9 @@ struct Light
     float ConicalInnerCorner; //for spot light
     float ConicalOuterCorner; //for spot light
     float2 xx;
+    
+    //灯光视图投影矩阵
+    float4x4 LightViewProj;
 };
 
 float3 GetLightDirection(Light light, float3 inWorldPosition)

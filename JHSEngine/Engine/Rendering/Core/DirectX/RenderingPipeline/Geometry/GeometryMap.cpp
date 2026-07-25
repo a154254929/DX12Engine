@@ -205,6 +205,36 @@ void FGeometryMap::UpdateLightShaderResourceView(float deltaTime, const FViewpor
             lightConstantBuffer.sceneLights[i].lightType = (int)lightType;
             switch (lightType)
             {
+                case ELightType::ParallelLight:
+                    
+                    //正交矩阵
+                    dynamicShadowMap.BuildParallelLightMaterix(
+                        light->GetRotation(),
+                        fvector_3d(0.f, 0.f, 0.f),
+                        100.f
+                    );
+                
+                    XMFLOAT4X4 viewMatrix, projMatrix;
+                    dynamicShadowMap.GetViewportViewMatrix(viewMatrix, projMatrix);
+                    
+                    XMMATRIX shadowViewMatrix = XMLoadFloat4x4(&viewMatrix);
+                    XMMATRIX shadowProjMatrix = XMLoadFloat4x4(&projMatrix);
+                
+                    //NDC[-1, 1] -> UV[0, 1]
+                    XMMATRIX ndcToUvMatrix = XMMatrixSet(
+                        0.5f, 0.0f, 0.0f, 0.0f,
+                        0.0f, -0.5f, 0.0f, 0.0f,
+                        0.0f, 0.0f, 1.0f, 0.0f,
+                        0.5f, 0.5f, 0.0f, 1.0f
+                    );
+                
+                    XMMATRIX shadowViewProjMatrix = shadowViewMatrix * shadowProjMatrix * ndcToUvMatrix;
+                
+                    XMStoreFloat4x4(
+                        &lightConstantBuffer.sceneLights[i].lightViewProj,
+                        shadowViewProjMatrix
+                    );
+                    break;
                 case ELightType::PointLight:
                 case ELightType::SpotLight:
                     if (CRangeLightComponent* rangeLight = dynamic_cast<CRangeLightComponent*>(light))

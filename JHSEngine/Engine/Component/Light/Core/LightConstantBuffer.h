@@ -16,6 +16,8 @@ struct FLight
     float conicalInnerCorner; // Radian
     float conicalOuterCorner; // Radian
     XMFLOAT2 xx;
+    
+    XMFLOAT4X4 lightViewProj;
 };
 
 struct FLightConstantBuffer
