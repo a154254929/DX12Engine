@@ -1,19 +1,19 @@
-#include "TransparentRenderLayer.h"
-#include "../../PipelineState/DirectXPipelineState.h"
+#include "OpaqueShadowRenderLayer.h"
 #include "../../Geometry/GeometryMap.h"
+#include "../../PipelineState/DirectXPipelineState.h"
 
-FTransparentRenderLayer::FTransparentRenderLayer()
+FOpaqueShadowRenderLayer::FOpaqueShadowRenderLayer()
 {
-    renderPriority = 3000;
+    renderPriority = 1000;
 }
 
-void FTransparentRenderLayer::Draw(float deltaTime)
+void FOpaqueShadowRenderLayer::Draw(float deltaTime)
 {
     ResetPSO();
     Super::Draw(deltaTime);
 }
 
-void FTransparentRenderLayer::BuildShader()
+void FOpaqueShadowRenderLayer::BuildShader()
 {
     std::vector<ShaderType::FShaderMacro> shaderMacros;
     BuildShaderMacro(shaderMacros);
@@ -37,26 +37,14 @@ void FTransparentRenderLayer::BuildShader()
     directXPipelineState->BindInputLayout(inputElementDesc.data(), inputElementDesc.size());
 }
 
-void FTransparentRenderLayer::BuildPSO()
+void FOpaqueShadowRenderLayer::BuildPSO()
 {
     Super::BuildPSO();
-    D3D12_RENDER_TARGET_BLEND_DESC blendDesc = {
-        true,
-        false,
-        D3D12_BLEND_SRC_ALPHA, D3D12_BLEND_INV_SRC_ALPHA, D3D12_BLEND_OP_ADD,
-        D3D12_BLEND_ONE, D3D12_BLEND_ZERO, D3D12_BLEND_OP_ADD,
-        D3D12_LOGIC_OP_NOOP,
-        D3D12_COLOR_WRITE_ENABLE_ALL,
-    };
-    
-    directXPipelineState->SetRenderTarget(0, blendDesc);
-    
-    //构建管线
     directXPipelineState->SetFillMode(false);
-    directXPipelineState->Build(EPipelineState::Transparent);
+    directXPipelineState->Build(EPipelineState::Opaque);
 }
 
-void FTransparentRenderLayer::ResetPSO()
+void FOpaqueShadowRenderLayer::ResetPSO()
 {
-    directXPipelineState->Build(EPipelineState::Transparent);
+    directXPipelineState->ResetPSO(Shadow);
 }

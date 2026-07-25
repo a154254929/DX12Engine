@@ -1,19 +1,20 @@
 #pragma once
 #include "../Core/RenderLayer.h"
 
-class FOpaqueRenderLayer : public FRenderLayer
+class FOpaqueShadowRenderLayer : public FRenderLayer
 {
     typedef FRenderLayer Super;
 public:
-    FOpaqueRenderLayer();
+    FOpaqueShadowRenderLayer();
     
     virtual void Draw(float deltaTime);
 
     virtual void BuildShader();
     
-    virtual int GetRenderLayerType() const {return 0;}
+    virtual int GetRenderLayerType() const {return 8;}
     
     virtual void BuildPSO();
-    
+
     virtual void ResetPSO();
+public:  
 };

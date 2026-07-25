@@ -9,7 +9,7 @@ FOpaqueRenderLayer::FOpaqueRenderLayer()
 
 void FOpaqueRenderLayer::Draw(float deltaTime)
 {
-    directXPipelineState->ResetPSO();
+    ResetPSO();
     Super::Draw(deltaTime);
 }
 
@@ -48,4 +48,9 @@ void FOpaqueRenderLayer::BuildPSO()
     //构建管线
     directXPipelineState->SetFillMode(true);
     directXPipelineState->Build(EPipelineState::WireFrame);
+}
+
+void FOpaqueRenderLayer::ResetPSO()
+{
+    directXPipelineState->ResetPSO(Opaque);
 }

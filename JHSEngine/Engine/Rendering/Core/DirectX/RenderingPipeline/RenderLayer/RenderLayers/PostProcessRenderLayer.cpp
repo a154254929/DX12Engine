@@ -9,7 +9,7 @@ FPostProcessRenderLayer::FPostProcessRenderLayer()
 
 void FPostProcessRenderLayer::Draw(float deltaTime)
 {
-    directXPipelineState->ResetPSO(PostProcess);
+    ResetPSO();
     Super::Draw(deltaTime);
 }
 
@@ -43,4 +43,9 @@ void FPostProcessRenderLayer::BuildPSO()
     //构建管线
     directXPipelineState->SetFillMode(false);
     directXPipelineState->Build(EPipelineState::PostProcess);
+}
+
+void FPostProcessRenderLayer::ResetPSO()
+{
+    directXPipelineState->ResetPSO(PostProcess);
 }

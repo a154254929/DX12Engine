@@ -29,6 +29,11 @@ public:
     virtual void BuildPSO();
 
     virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
+
+    //单独设置PSO
+    virtual void ResetPSO();
+    //渲染 不包含PSO
+    virtual void DrawMesh(float deltaTime);
 public:  
     const UINT GetRenderLayerPriority() const {return renderPriority;}
     

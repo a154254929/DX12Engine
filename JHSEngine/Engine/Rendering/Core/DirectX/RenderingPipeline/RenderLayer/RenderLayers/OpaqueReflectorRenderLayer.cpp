@@ -9,7 +9,7 @@ FOpaqueReflectorRenderLayer::FOpaqueReflectorRenderLayer()
 
 void FOpaqueReflectorRenderLayer::Draw(float deltaTime)
 {
-    directXPipelineState->ResetPSO();
+    ResetPSO();
     Super::Draw(deltaTime);
 }
 
@@ -42,4 +42,9 @@ void FOpaqueReflectorRenderLayer::BuildPSO()
     Super::BuildPSO();
     directXPipelineState->SetFillMode(false);
     directXPipelineState->Build(EPipelineState::OpaqueReflector);
+}
+
+void FOpaqueReflectorRenderLayer::ResetPSO()
+{
+    directXPipelineState->ResetPSO(OpaqueReflector);
 }

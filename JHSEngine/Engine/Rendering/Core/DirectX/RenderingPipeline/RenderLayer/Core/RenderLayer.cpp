@@ -30,10 +30,7 @@ void FRenderLayer::Draw(float deltaTime)
 {
     //UINT descriptorOffset = GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
     
-    for (auto& renderingData : renderingDatas)
-    {
-        DrawObject(deltaTime, renderingData);
-    }
+    DrawMesh(deltaTime);
 }
 
 void FRenderLayer::PostDraw(float deltaTime)
@@ -141,6 +138,18 @@ void FRenderLayer::UpdateCalculations(float deltaTime, const FViewportInfo viewp
         
         geometryMap->meshConstantBufferView.Update(tmpRenderingData.meshObjectIndex, &objectTransformation);
         meshIndex++;
+    }
+}
+
+void FRenderLayer::ResetPSO()
+{
+}
+
+void FRenderLayer::DrawMesh(float deltaTime)
+{
+    for (auto& renderingData : renderingDatas)
+    {
+        DrawObject(deltaTime, renderingData);
     }
 }
 

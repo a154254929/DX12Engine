@@ -9,8 +9,7 @@ FBackGroundRenderLayer::FBackGroundRenderLayer()
 
 void FBackGroundRenderLayer::Draw(float deltaTime)
 {
-    directXPipelineState->ResetPSO(BackGround);
-    
+    ResetPSO();
     Super::Draw(deltaTime);
 }
 
@@ -50,4 +49,9 @@ void FBackGroundRenderLayer::BuildPSO()
     //构建管线
     directXPipelineState->SetFillMode(false);
     directXPipelineState->Build(EPipelineState::BackGround);
+}
+
+void FBackGroundRenderLayer::ResetPSO()
+{
+    directXPipelineState->ResetPSO(BackGround);
 }

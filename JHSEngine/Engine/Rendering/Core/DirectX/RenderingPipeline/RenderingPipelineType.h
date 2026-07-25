@@ -10,4 +10,5 @@ enum EPipelineState
     OpaqueReflector = 5,
     GrayModel = 6,
     WireFrame = 7,
+    Shadow = 8,
 };

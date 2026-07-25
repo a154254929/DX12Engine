@@ -5,6 +5,7 @@
 #include "RenderLayers/TransparentRenderLayer.h"
 #include "RenderLayers/BackGroundRenderLayer.h"
 #include "RenderLayers/OpaqueReflectorRenderLayer.h"
+#include "RenderLayers/OpaqueShadowRenderLayer.h"
 #include "../../../../../Core/Viewport/ViewportInfo.h"
 
 std::vector<shared_ptr<FRenderLayer>> FRenderLayerManager::renderLayers;
@@ -19,6 +20,7 @@ FRenderLayerManager::FRenderLayerManager()
     CreateRenderLayer<FTransparentRenderLayer>();
     CreateRenderLayer<FBackGroundRenderLayer>();
     CreateRenderLayer<FOpaqueReflectorRenderLayer>();
+    CreateRenderLayer<FOpaqueShadowRenderLayer>();
 }
 
 FRenderLayerManager::~FRenderLayerManager()
@@ -60,25 +62,18 @@ void FRenderLayerManager::PostDraw(float deltaTime)
 
 void FRenderLayerManager::Draw(int inLayer, float deltaTime)
 {
-    for (auto& tmpLayer : renderLayers)
+    
+    if (auto inRenderLayer = FindByRenderLayer(inLayer))
     {
-        if (tmpLayer->GetRenderLayerType() == inLayer)
-        {
-            tmpLayer->Draw(deltaTime);
-            return;
-        }
+        inRenderLayer->Draw(deltaTime);
     }
 }
 
 void FRenderLayerManager::FindObjDraw(int inLayer, float deltaTime, const CMeshComponent* inMeshComponent)
 {
-    for (auto& tmpLayer : renderLayers)
+    if (auto inRenderLayer = FindByRenderLayer(inLayer))
     {
-        if (tmpLayer->GetRenderLayerType() == inLayer)
-        {
-            tmpLayer->FindObjDraw(deltaTime, inMeshComponent);
-            return;
-        }
+        inRenderLayer->FindObjDraw(deltaTime, inMeshComponent);
     }
 }
 
@@ -115,12 +110,27 @@ void FRenderLayerManager::SortRenderLayer()
     std::sort(renderLayers.begin(), renderLayers.end(), compRenderLayer);
 }
 
+void FRenderLayerManager::ResetPSO(int inLayer)
+{
+    if (auto inRenderLayer = FindByRenderLayer(inLayer))
+    {
+        inRenderLayer->ResetPSO();
+    }
+}
+
+void FRenderLayerManager::DrawMesh(float deltaTime, int inLayer)
+{
+    if (auto inRenderLayer = FindByRenderLayer(inLayer))
+    {
+        inRenderLayer->DrawMesh(deltaTime);
+    }
+}
+
 std::shared_ptr<FRenderLayer> FRenderLayerManager::FindByRenderLayer(int inRenderLayerType)
 {
-    for (auto& tmp : renderLayers)
+    if (auto inRenderLayer = FindByRenderLayer(inRenderLayerType))
     {
-        if (tmp->GetRenderLayerType() == inRenderLayerType)
-            return tmp;
+        return inRenderLayer;
     }
     return NULL;
 }
