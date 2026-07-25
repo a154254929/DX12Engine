@@ -15,4 +15,9 @@ namespace EngineMath
     {
         return XMFLOAT3(inV3d.x, inV3d.y, inV3d.z);
     }
+
+    fvector_3d ToVector3d(const XMFLOAT3& inFloat3d)
+    {
+        return fvector_3d(inFloat3d.x, inFloat3d.y, inFloat3d.z);
+    }
 }

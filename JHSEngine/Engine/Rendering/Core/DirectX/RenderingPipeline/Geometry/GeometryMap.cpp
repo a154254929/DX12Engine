@@ -208,8 +208,9 @@ void FGeometryMap::UpdateLightShaderResourceView(float deltaTime, const FViewpor
                 case ELightType::ParallelLight:
                     
                     //正交矩阵
+                    XMFLOAT3 forwardVector = light->GetForwardVector();
                     dynamicShadowMap.BuildParallelLightMaterix(
-                        light->GetRotation(),
+                        EngineMath::ToVector3d(forwardVector),
                         fvector_3d(0.f, 0.f, 0.f),
                         100.f
                     );

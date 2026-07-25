@@ -136,10 +136,15 @@ void FDynamicShadowMap::BuildViewMaterix(float deltaTime)
 }
 
 void FDynamicShadowMap::BuildParallelLightMaterix(
-    const fvector_3d& inRotation,
+    const fvector_3d& inDirection,
     const fvector_3d& inTargetPosition,
     float inRadius)
 {
+    fvector_3d position = inDirection * -inRadius;
+    viewport->SetPosition(XMFLOAT3(position.x, position.y, position.z));
+    viewport->LookAt(position, inTargetPosition, fvector_3d(0.f, 1.f, 0.f));
+    BuildViewMaterix(0.3f);
+    viewport->BuildOrthographicOffCenterLHMatrix(inRadius, inTargetPosition);
 }
 
 void FDynamicShadowMap::BuildViewPort(const fvector_3d& inPosition)

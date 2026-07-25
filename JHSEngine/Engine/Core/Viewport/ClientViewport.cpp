@@ -79,3 +79,36 @@ void GClientViewport::BuildViewMatrix(float deltaTime)
         v3.x,            v3.y,            v3.z,                1.f
     };
 }
+
+void GClientViewport::BuildOrthographicOffCenterLHMatrix(float inRadius, const fvector_3d& inTargetPosition)
+{
+    XMFLOAT3 targetPosition = EngineMath::ToFloat3(inTargetPosition);
+    XMVECTOR targetPositionTOR = XMLoadFloat3(&targetPosition);
+    
+    XMMATRIX viewMatrixRTX = XMLoadFloat4x4(&viewMatrix);
+    
+    //将点
+    XMFLOAT3 viewCenter;
+    XMStoreFloat3(
+        &viewCenter,
+        XMVector3TransformCoord(targetPositionTOR, viewMatrixRTX)
+    );
+    
+    float viewLeft = viewCenter.x - inRadius;;
+    float viewRight = viewCenter.x + inRadius;
+    float viewBottom = viewCenter.y - inRadius;
+    float viewTop =viewCenter.y + inRadius;
+    float nearZ = viewCenter.z - inRadius;
+    float farZ = viewCenter.z + inRadius;
+    
+    XMMATRIX projectMatrixRTX =  XMMatrixOrthographicOffCenterLH(
+        viewLeft,
+        viewRight,
+        viewBottom,
+        viewTop,
+        nearZ,
+        farZ
+    );
+    
+    XMStoreFloat4x4(&projectMatrix, projectMatrixRTX);
+}

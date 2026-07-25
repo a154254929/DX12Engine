@@ -35,7 +35,7 @@ public:
     void SetViewportROtation(const fvector_3d& inRotation);
     void BuildViewMaterix(float deltaTime);
     void BuildParallelLightMaterix(
-        const fvector_3d& inRotation,
+        const fvector_3d& inDirection,
         const fvector_3d& inTargetPosition,
         float inRadius = 100.f
     );
