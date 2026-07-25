@@ -59,13 +59,19 @@ void FRenderingPipeline::BuildPipeline()
         &geometryMap,
         &directXPipelineState,
         &renderLayerManager
-    );
+        );
+
+    //构建常量描述堆
+    geometryMap.BuildDescriptorHeap();
     
     //构建动态Cubemap相机视口
     dynamicCubeMap.BuildViewPort(fvector_3d(4.5f, 13.5f, 0.f));
     
     //构建动态Cubemap深度图描述
     dynamicCubeMap.BuildDepthStencilDescriptor();
+    
+    //构建动态Cubemap RT描述
+    dynamicCubeMap.BuildRenderTargetDescriptor();
     
     //构建动态Cubemap深度图
     dynamicCubeMap.BuildDepthStencil();
@@ -87,12 +93,6 @@ void FRenderingPipeline::BuildPipeline()
     geometryMap.Build();
     
     geometryMap.BuildDynamicReflectionMesh();
-
-    //构建常量描述堆
-    geometryMap.BuildDescriptorHeap();
-    
-    //构建动态Cubemap RT描述
-    dynamicCubeMap.BuildRenderTargetDescriptor();
 
     //构建模型常量缓冲区
     geometryMap.BuildMeshConstantBuffer();
@@ -129,6 +129,8 @@ void FRenderingPipeline::PreDraw(float deltaTime)
     
     //渲染灯光材质贴图等
     geometryMap.Draw(deltaTime);
+    
+    geometryMap.DrawShadow(deltaTime);
 
     //清理主视口
     ClearMainViewportSwapChainCanvas();

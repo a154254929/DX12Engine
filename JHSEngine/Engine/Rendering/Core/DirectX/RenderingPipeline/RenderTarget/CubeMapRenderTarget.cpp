@@ -17,7 +17,7 @@ void FCubeMapRenderTarget::ResetRenderTarget(UINT inWidth, UINT inHeight)
     Super::ResetRenderTarget(inWidth, inHeight);
 }
 
-void FCubeMapRenderTarget::BuildRenderTagetMap()
+void FCubeMapRenderTarget::BuildRenderTargetMap()
 {
     CD3DX12_RESOURCE_DESC heapBufferDesc;
     memset(&heapBufferDesc, 0, sizeof(heapBufferDesc));

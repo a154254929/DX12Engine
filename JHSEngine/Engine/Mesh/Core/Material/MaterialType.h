@@ -26,6 +26,7 @@ enum EMaterialType
     
     PBR = 20,
     Fresnel = 100,
+    ShadowMap = 101,
     Max
 };
 

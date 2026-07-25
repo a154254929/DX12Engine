@@ -18,7 +18,7 @@ void FRenderTarget::Init(UINT inWidth, UINT inHeight, DXGI_FORMAT inFormat)
     ResetViewport(width, height);
     ResetScissorRect(width, height);
     
-    BuildRenderTagetMap();
+    BuildRenderTargetMap();
     
     BuildSRVDescriptors();
     BuildRTVDescriptors();
@@ -34,7 +34,7 @@ void FRenderTarget::ResetRenderTarget(UINT inWidth, UINT inHeight)
         ResetViewport(width, height);
         ResetScissorRect(width, height);
         
-        BuildRenderTagetMap();
+        BuildRenderTargetMap();
         
         BuildRTVDescriptors();
         BuildSRVDescriptors();

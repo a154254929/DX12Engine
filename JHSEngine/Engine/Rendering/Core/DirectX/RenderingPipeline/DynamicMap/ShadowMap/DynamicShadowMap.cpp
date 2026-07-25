@@ -22,6 +22,8 @@ FDynamicShadowMap::FDynamicShadowMap()
 
 void FDynamicShadowMap::Init(UINT inWidth, UINT inHeight)
 {
+    width = inWidth;
+    height = inHeight;
 }
 
 void FDynamicShadowMap::Init(FGeometryMap* inGeometryMap, FDirectXPipelineState* inDirectXPipelineState,
@@ -32,12 +34,38 @@ void FDynamicShadowMap::Init(FGeometryMap* inGeometryMap, FDirectXPipelineState*
 
 void FDynamicShadowMap::UpdateCalculations(float deltaTime, const FViewportInfo& inViewportInfo)
 {
+    Super::UpdateCalculations(deltaTime, inViewportInfo);
+    
+    //更新视口
 
+    if (viewport)
+    {
+        FViewportInfo lightViewportInfo;
+        GetViewportViewMatrix(lightViewportInfo.viewMatrix, lightViewportInfo.projectMatrix);
+        lightViewportInfo.viewWorldPosition = XMFLOAT4(
+            viewport->GetPosition().x,
+            viewport->GetPosition().y,
+            viewport->GetPosition().z,
+            1.f
+        );
+
+        geometryMap->UpdateCalculationsViewport(
+            deltaTime,
+            lightViewportInfo,
+            geometryMap->GetDynamicReflectionMeshObjectNumber()
+            + 1
+        );
+    }
 }
 
 void FDynamicShadowMap::PreDraw(float deltaTime)
 {
     Super::PreDraw(deltaTime);
+}
+
+void FDynamicShadowMap::Draw(float deltaTime)
+{
+    Super::Draw(deltaTime);
     
     if (FShadowMapRenderTarget* inRenderTarget = dynamic_cast<FShadowMapRenderTarget*>(renderTarget.get()))
     {
@@ -84,7 +112,9 @@ void FDynamicShadowMap::PreDraw(float deltaTime)
         
         renderLayerManager->ResetPSO(RENDERLAYER_OPAQUE_SHADOW);
         
-        renderLayerManager->DrawMesh(RENDERLAYER_OPAQUE, deltaTime);
+        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE);
+        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_TRANSPARENT);
+        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE_REFLECTOR);
         
         CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
             renderTarget->GetRenderTaget(),
@@ -93,11 +123,6 @@ void FDynamicShadowMap::PreDraw(float deltaTime)
         );
         GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresentRenderTarget);
     }
-}
-
-void FDynamicShadowMap::Draw(float deltaTime)
-{
-    Super::Draw(deltaTime);
 }
 
 void FDynamicShadowMap::GetViewportViewMatrix(XMFLOAT4X4& outViewMatrix, XMFLOAT4X4& outProjMatrix)
@@ -185,13 +210,13 @@ void FDynamicShadowMap::BuildRenderTargetSRV()
         D3D12_GPU_DESCRIPTOR_HANDLE gpuSRVDesAddr = geometryMap->GetHeap()->GetGPUDescriptorHandleForHeapStart();
         
         //后期要更新
-        UINT dsvDescSize = GetDescriptorHandleIncrementSizeByDSV();
+        UINT cbvSrvUavDescSize = GetDescriptorHandleIncrementSizeByCBV_SRV_UAV();
         shadowMapRT->cpuShaderResourceView = CD3DX12_CPU_DESCRIPTOR_HANDLE(
             cpuRTVDesAddr,
             geometryMap->GetDrawTexture2DResourcesNumber()
                 + geometryMap->GetDrawTextureCubemapResourcesNumber()
                 + 1, //Cubemap 
-            dsvDescSize
+            cbvSrvUavDescSize
         );
     
         shadowMapRT->gpuShaderResourceView = CD3DX12_GPU_DESCRIPTOR_HANDLE(
@@ -199,7 +224,7 @@ void FDynamicShadowMap::BuildRenderTargetSRV()
             geometryMap->GetDrawTexture2DResourcesNumber()
                 + geometryMap->GetDrawTextureCubemapResourcesNumber()
                 + 1, //Cubemap
-            dsvDescSize
+            cbvSrvUavDescSize
         );
     }
 }

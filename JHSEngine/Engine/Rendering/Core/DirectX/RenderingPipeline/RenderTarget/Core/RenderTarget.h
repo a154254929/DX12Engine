@@ -13,7 +13,7 @@ public:
     virtual void ResetRenderTarget(UINT inWidth, UINT inHeight);
     
 protected:
-    virtual void BuildRenderTagetMap() {};
+    virtual void BuildRenderTargetMap() {};
     virtual void BuildSRVDescriptors() {};
     virtual void BuildRTVDescriptors() {};
     virtual void BuildDSVDescriptors() {};

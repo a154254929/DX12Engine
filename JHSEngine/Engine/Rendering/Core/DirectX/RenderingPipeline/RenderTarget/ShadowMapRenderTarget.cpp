@@ -12,45 +12,7 @@ void FShadowMapRenderTarget::Init(UINT inWidth, UINT inHeight, DXGI_FORMAT inFor
     BuildDSVDescriptors();
 }
 
-void FShadowMapRenderTarget::BuildRenderTagetMap()
-{
-    
-}
-
-void FShadowMapRenderTarget::BuildSRVDescriptors()
-{
-    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc;
-    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-    srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-    
-    srvDesc.Texture2D.MostDetailedMip = 0;
-    srvDesc.Texture2D.MipLevels = 1;
-    srvDesc.Texture2D.ResourceMinLODClamp = 0.f;
-    srvDesc.Texture2D.PlaneSlice = 0.f;
-    
-    GetD3dDevice()->CreateShaderResourceView(
-        renderTargetMap.Get(),
-        &srvDesc,
-        cpuShaderResourceView
-    );
-}
-
-void FShadowMapRenderTarget::BuildDSVDescriptors()
-{
-    D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-    dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    dsvDesc.Texture2D.MipSlice = 0;
-    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-    dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
-    GetD3dDevice()->CreateDepthStencilView(
-        renderTargetMap.Get(),
-        &dsvDesc,
-        dsvDescHandle
-    );
-}
-
-void FShadowMapRenderTarget::BuildShadowConstantBuffer()
+void FShadowMapRenderTarget::BuildRenderTargetMap()
 {
     CD3DX12_RESOURCE_DESC heapBufferDesc;
     memset(&heapBufferDesc, 0, sizeof(heapBufferDesc));
@@ -59,7 +21,7 @@ void FShadowMapRenderTarget::BuildShadowConstantBuffer()
     heapBufferDesc.Width = width;
     heapBufferDesc.Height = height;
     heapBufferDesc.DepthOrArraySize = 1;
-    heapBufferDesc.Format = format;
+    heapBufferDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
     heapBufferDesc.MipLevels = 1;
     heapBufferDesc.SampleDesc.Count = 1;
     heapBufferDesc.SampleDesc.Quality = 0;
@@ -80,5 +42,43 @@ void FShadowMapRenderTarget::BuildShadowConstantBuffer()
         D3D12_RESOURCE_STATE_GENERIC_READ,
         &clearValue,
         IID_PPV_ARGS(renderTargetMap.GetAddressOf())
+    );
+}
+
+void FShadowMapRenderTarget::BuildSRVDescriptors()
+{
+    BuildShadowConstantBuffer();
+}
+
+void FShadowMapRenderTarget::BuildDSVDescriptors()
+{
+    D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+    dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    dsvDesc.Texture2D.MipSlice = 0;
+    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+    dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+    GetD3dDevice()->CreateDepthStencilView(
+        renderTargetMap.Get(),
+        &dsvDesc,
+        dsvDescHandle
+    );
+}
+
+void FShadowMapRenderTarget::BuildShadowConstantBuffer()
+{
+    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+    srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+
+    srvDesc.Texture2D.MostDetailedMip = 0;
+    srvDesc.Texture2D.MipLevels = 1;
+    srvDesc.Texture2D.ResourceMinLODClamp = 0.f;
+    srvDesc.Texture2D.PlaneSlice = 0;
+
+    GetD3dDevice()->CreateShaderResourceView(
+        renderTargetMap.Get(),
+        &srvDesc,
+        cpuShaderResourceView
     );
 }

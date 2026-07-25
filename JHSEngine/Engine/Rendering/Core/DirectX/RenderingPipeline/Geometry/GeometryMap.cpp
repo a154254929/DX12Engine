@@ -212,7 +212,7 @@ void FGeometryMap::UpdateLightShaderResourceView(float deltaTime, const FViewpor
                     dynamicShadowMap.BuildParallelLightMaterix(
                         EngineMath::ToVector3d(forwardVector),
                         fvector_3d(0.f, 0.f, 0.f),
-                        100.f
+                        30.f
                     );
                 
                     XMFLOAT4X4 viewMatrix, projMatrix;
@@ -490,7 +490,7 @@ void FGeometryMap::DrawViewport(float deltaTime)
 
 void FGeometryMap::DrawShadow(float deltaTime)
 {
-    dynamicShadowMap.DrawShadowMapTexture(deltaTime);
+	dynamicShadowMap.Draw(deltaTime);
 }
 
 void FGeometryMap::DrawLight(float deltaTime)
@@ -630,6 +630,8 @@ void FGeometryMap::BuildFog()
 
 void FGeometryMap::BuildShadow()
 {
+    dynamicShadowMap.Init(2048, 2048);
+    
     dynamicShadowMap.BuildViewPort(fvector_3d(0.f, 0.f, 0.f));
     
     dynamicShadowMap.BuildDepthStencilDescriptor();

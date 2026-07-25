@@ -47,6 +47,11 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 {
 
 	MaterialConstBuffer materialConst = Materials[MaterialIndex];
+    
+    if (materialConst.MaterialType == 101) //ShadowMap
+    {
+        return ShadowMap.Sample(Point_Sampler, input.uv).r;
+    }
 
     //BaseColor
     float4 ambientLight = { .15f, .15f, .25f, 1.0f };

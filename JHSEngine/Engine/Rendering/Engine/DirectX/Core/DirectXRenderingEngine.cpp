@@ -120,6 +120,19 @@ int CDirectXRenderingEngine::PostInit()
         }
         */
         
+        if (GPlaneMesh* shadowPlaneMesh = world->CreateActorObject<GPlaneMesh>())
+        {
+            shadowPlaneMesh->CreateMesh(2, 2, 10, 10);
+            
+            shadowPlaneMesh->SetPosition(XMFLOAT3(5.0f, 5.f, 5.0f));
+            shadowPlaneMesh->SetScale(fvector_3d(1.0f, 1.0f, 1.0f));
+            shadowPlaneMesh->SetRotation(fvector_3d(180.0f, 0.0f, 90.0f));
+            if (CMaterial* material = (*shadowPlaneMesh->GetMaterials())[0])
+            {
+                material->SetMaterialType(EMaterialType::ShadowMap);
+            }
+        }
+        
         
         //构建Mesh
         //CMesh* boxMesh = meshManager->CreateBoxMesh(3, 2, 4);

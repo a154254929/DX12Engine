@@ -11,7 +11,7 @@ public:
 
     virtual void Init(UINT inWidth, UINT inHeight, DXGI_FORMAT inFormat);
 protected:
-    virtual void BuildRenderTagetMap();
+    virtual void BuildRenderTargetMap();
     virtual void BuildSRVDescriptors();
     virtual void BuildDSVDescriptors();
     
