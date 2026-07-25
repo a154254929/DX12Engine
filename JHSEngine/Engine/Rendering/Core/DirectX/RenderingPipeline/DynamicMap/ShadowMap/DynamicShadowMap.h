@@ -26,6 +26,8 @@ public:
     virtual void PreDraw(float deltaTime);
     
     virtual void Draw(float deltaTime);
+    
+    virtual void DrawShadowMapTexture(float deltaTime);
 public:
     void SetViewportPosition(const fvector_3d& inPosition);
     void SetViewportROtation(const fvector_3d& inRotation);

@@ -37,12 +37,21 @@ void FDynamicShadowMap::UpdateCalculations(float deltaTime, const FViewportInfo&
 
 void FDynamicShadowMap::PreDraw(float deltaTime)
 {
-
+    Super::PreDraw(deltaTime);
 }
 
 void FDynamicShadowMap::Draw(float deltaTime)
 {
+    Super::Draw(deltaTime);
+}
 
+void FDynamicShadowMap::DrawShadowMapTexture(float deltaTime)
+{
+    GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(
+        7,
+        renderTarget->GetGPUOffset()
+    );
+    
 }
 
 void FDynamicShadowMap::SetViewportPosition(const fvector_3d& inPosition)
@@ -95,9 +104,11 @@ void FDynamicShadowMap::BuildRenderTargetSRV()
 {
     if (FShadowMapRenderTarget* shadowMapRT = dynamic_cast<FShadowMapRenderTarget*>(renderTarget.get()))
     {
+        //主要是创建Shadow常量缓冲区
         D3D12_CPU_DESCRIPTOR_HANDLE cpuRTVDesAddr = geometryMap->GetHeap()->GetCPUDescriptorHandleForHeapStart();
         D3D12_GPU_DESCRIPTOR_HANDLE gpuSRVDesAddr = geometryMap->GetHeap()->GetGPUDescriptorHandleForHeapStart();
         
+        //后期要更新
         UINT dsvDescSize = GetDescriptorHandleIncrementSizeByDSV();
         shadowMapRT->cpuShaderResourceView = CD3DX12_CPU_DESCRIPTOR_HANDLE(
             cpuRTVDesAddr,

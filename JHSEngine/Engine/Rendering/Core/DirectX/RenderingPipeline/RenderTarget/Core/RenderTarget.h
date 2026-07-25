@@ -26,6 +26,9 @@ public:
     FORCEINLINE D3D12_VIEWPORT GetViewport() const {return viewport;};
     FORCEINLINE D3D12_RECT GetScissorRect() const {return scissorRect;};
 
+    CD3DX12_GPU_DESCRIPTOR_HANDLE& GetGPUOffset() {return gpuShaderResourceView;};
+    CD3DX12_CPU_DESCRIPTOR_HANDLE& GetCPUOffset() {return cpuShaderResourceView;};
+    
 protected:
     UINT width;
     UINT height;

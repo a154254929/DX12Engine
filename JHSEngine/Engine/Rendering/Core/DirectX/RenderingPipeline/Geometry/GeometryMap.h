@@ -108,6 +108,8 @@ public:
     /*后面会有变化*/
     UINT GetDrawTexture2DResourcesNumber();
     
+    UINT GetDrawShadowMapResourcesNumber();
+    
     UINT GetDrawTextureCubemapResourcesNumber();
     
     //动态Cubemap数量

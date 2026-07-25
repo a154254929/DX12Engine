@@ -15,6 +15,8 @@ protected:
     virtual void BuildSRVDescriptors();
     virtual void BuildDSVDescriptors();
     
+    virtual void BuildShadowConstantBuffer();
+    
 protected:
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvDescHandle;              //dsv描述
 };

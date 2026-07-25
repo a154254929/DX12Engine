@@ -294,7 +294,7 @@ void FGeometryMap::BuildDescriptorHeap()
         GetDrawTexture2DResourcesNumber()           //Texture2D
         + GetDrawTextureCubemapResourcesNumber()    //静态Cubemap
         + 1                                         //动态Cubmap
-        + 1                                         //shadowmap
+        + GetDrawShadowMapResourcesNumber()         //shadowmap
     );
 }
 
@@ -375,6 +375,12 @@ void FGeometryMap::BuildTextureConstantBuffer()
         descriptorHeap.GetHeap(),
         GetDrawTexture2DResourcesNumber()
     );
+    //构建ShadowMap
+    renderingTextureCubemapResourcesUpdate->BuildTextureConstantBuffer(
+        descriptorHeap.GetHeap(),
+        GetDrawTexture2DResourcesNumber()
+            + GetDrawTextureCubemapResourcesNumber()
+    );
 }
 
 UINT FGeometryMap::GetDrawMeshObjectNumber()
@@ -395,6 +401,11 @@ UINT FGeometryMap::GetDrawLightObjectNumber()
 UINT FGeometryMap::GetDrawTexture2DResourcesNumber()
 {
     return renderingTexture2DResourcesUpdate->Size();
+}
+
+UINT FGeometryMap::GetDrawShadowMapResourcesNumber()
+{
+    return 1;
 }
 
 UINT FGeometryMap::GetDrawTextureCubemapResourcesNumber()
