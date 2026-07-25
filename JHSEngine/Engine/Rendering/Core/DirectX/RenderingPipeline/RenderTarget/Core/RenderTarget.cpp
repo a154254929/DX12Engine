@@ -35,8 +35,11 @@ void FRenderTarget::ResetRenderTarget(UINT inWidth, UINT inHeight)
         ResetScissorRect(width, height);
         
         BuildRenderTagetMap();
+        
         BuildRTVDescriptors();
         BuildSRVDescriptors();
+        
+        BuildDSVDescriptors();
     }
 }
 

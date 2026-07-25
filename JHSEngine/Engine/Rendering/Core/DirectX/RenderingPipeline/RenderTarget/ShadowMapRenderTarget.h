@@ -11,5 +11,5 @@ public:
 protected:
     virtual void BuildRenderTagetMap();
     virtual void BuildSRVDescriptors();
-    virtual void BuildRTVDescriptors();
+    virtual void BuildDSVDescriptors();
 };
