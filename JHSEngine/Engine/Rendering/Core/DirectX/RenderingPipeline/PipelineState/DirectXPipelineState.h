@@ -13,7 +13,11 @@ public:
     void PostDraw(float deltaTime);
 
     void ResetGPSDesc();
+    
+public:
+    FORCEINLINE D3D12_GRAPHICS_PIPELINE_STATE_DESC& GetGPSDesc() { return gpsDesc;} ;
 
+public:
     //绑定输入布局
     void BindInputLayout(const D3D12_INPUT_ELEMENT_DESC* inInputElementDescs, UINT inSize);
 

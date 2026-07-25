@@ -40,6 +40,16 @@ void FOpaqueShadowRenderLayer::BuildShader()
 void FOpaqueShadowRenderLayer::BuildPSO()
 {
     Super::BuildPSO();
+    
+    D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsDesc = directXPipelineState->GetGPSDesc();
+    gpsDesc.RasterizerState.DepthBias = 100000;
+    gpsDesc.RasterizerState.DepthBiasClamp = 0.0f;
+    gpsDesc.RasterizerState.SlopeScaledDepthBias = 1.0f;
+    
+    //关闭Render Target
+    gpsDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
+    gpsDesc.NumRenderTargets = 0;
+    
     directXPipelineState->SetFillMode(false);
     directXPipelineState->Build(EPipelineState::Opaque);
 }

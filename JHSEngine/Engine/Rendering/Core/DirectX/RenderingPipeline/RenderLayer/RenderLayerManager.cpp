@@ -128,9 +128,10 @@ void FRenderLayerManager::DrawMesh(float deltaTime, int inLayer)
 
 std::shared_ptr<FRenderLayer> FRenderLayerManager::FindByRenderLayer(int inRenderLayerType)
 {
-    if (auto inRenderLayer = FindByRenderLayer(inRenderLayerType))
+    for (auto& tmp : renderLayers)
     {
-        return inRenderLayer;
+        if (tmp->GetRenderLayerType() == inRenderLayerType)
+            return tmp;
     }
     return NULL;
 }
