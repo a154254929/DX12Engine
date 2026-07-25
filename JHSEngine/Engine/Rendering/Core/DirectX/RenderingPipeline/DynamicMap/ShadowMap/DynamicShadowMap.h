@@ -26,6 +26,12 @@ public:
     virtual void PreDraw(float deltaTime);
     
     virtual void Draw(float deltaTime);
+public:
+    void SetViewportPosition(const fvector_3d& inPosition);
+    void SetViewportROtation(const fvector_3d& inRotation);
+    void BuildViewMaterix(float deltaTime);
+    
+    virtual void BuildViewPort(const fvector_3d& inPosition);
     
 public:
     virtual void BuildRenderTargetDescriptor();
@@ -33,5 +39,8 @@ public:
     
 protected:
     virtual void BuildRenderTargetSRV();
+    
+protected:
+    GClientViewport* viewport;
     
 };

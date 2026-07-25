@@ -52,7 +52,7 @@ void FDynamicCubeMap::UpdateCalculations(float deltaTime, const FViewportInfo& i
         {
             CMeshComponent* meshComponent = geometryMap->dynamicReflectionMeshComponents[i];
             XMFLOAT3 position = meshComponent->GetPosition();
-            SetCubemapViewportPosition(fvector_3d(position.x, position.y, position.z));
+            SetViewportPosition(fvector_3d(position.x, position.y, position.z));
             
             for (int viewportIndex = 0; viewportIndex < 6; viewportIndex++)
             {
@@ -176,7 +176,7 @@ void FDynamicCubeMap::Draw(float deltaTime)
     
 }
 
-void FDynamicCubeMap::SetCubemapViewportPosition(const fvector_3d& inPosition)
+void FDynamicCubeMap::SetViewportPosition(const fvector_3d& inPosition)
 {
     FTmpViewportCapture tmpCapture(inPosition);
     

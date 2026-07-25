@@ -352,8 +352,9 @@ void FGeometryMap::BuildViewportConstantBuffer(UINT inViewportOffset)
     //创建常量缓冲区
     viewportConstantBufferView.CreateConstant(
         sizeof(FViewportTransformation),
-        1
-        + GetDynamicReflectionMeshObjectNumber() * 6
+        1                                     //主视口
+        + GetDynamicReflectionMeshObjectNumber() * 6    //cubeMap
+        + 1                                             //shadowMap
         + inViewportOffset
     );
 

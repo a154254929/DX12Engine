@@ -42,7 +42,7 @@ public:
     virtual void Draw(float deltaTime);
     
 public:
-    void SetCubemapViewportPosition(const fvector_3d& inPosition);
+    void SetViewportPosition(const fvector_3d& inPosition);
     
     bool IsExistDynamicReflectionMesh();
     

@@ -4,6 +4,15 @@
 #include "../../Geometry/GeometryMap.h"
 #include "../../RenderLayer/RenderLayerManager.h"
 #include "../../../../../../Config/EngineRenderConfig.h"
+#include "../../../../../../Core/Viewport/ClientViewport.h"
+#include "../../../../../../Component/Mesh/Core/MeshComponent.h"
+#include "../../../../../../Component/Mesh/Core/MeshComponentType.h"
+#include "../../../../../../Component/Light/Core/LightComponent.h"
+#include "../../../../../../Component/Light/Core/LightConstantBuffer.h"
+#include "../../../../../../Component/Light/SpotLightComponent.h"
+#include "../../../../../../Component/Light/ParallelLightComponent.h"
+#include "../../../../../../Component/Light/PointLightComponent.h"
+#include "../../../../../../Manager/LightManager.h"
 
 FDynamicShadowMap::FDynamicShadowMap()
     : Super()
@@ -34,6 +43,32 @@ void FDynamicShadowMap::PreDraw(float deltaTime)
 void FDynamicShadowMap::Draw(float deltaTime)
 {
 
+}
+
+void FDynamicShadowMap::SetViewportPosition(const fvector_3d& inPosition)
+{
+    viewport->SetPosition(XMFLOAT3(inPosition.x, inPosition.y, inPosition.z));
+    BuildViewMaterix(0.3f);
+}
+
+void FDynamicShadowMap::SetViewportROtation(const fvector_3d& inRotation)
+{
+    viewport->SetRotation(inRotation);
+    BuildViewMaterix(0.3f);
+}
+
+void FDynamicShadowMap::BuildViewMaterix(float deltaTime)
+{
+    viewport->BuildViewMatrix(deltaTime);
+}
+
+void FDynamicShadowMap::BuildViewPort(const fvector_3d& inPosition)
+{
+    viewport = CreateObject<GClientViewport>(new GClientViewport());
+    viewport->SetPosition(XMFLOAT3(inPosition.x, inPosition.y, inPosition.z));
+    viewport->LookAt(inPosition, fvector_3d(10.f), fvector_3d(0.f, 1.f, 0.f));
+    viewport->SetFrustum(.05 * XM_PI, 1.0f, 0.1f, 10000.f);
+    BuildViewMaterix(0.3f);
 }
 
 void FDynamicShadowMap::BuildRenderTargetDescriptor()
