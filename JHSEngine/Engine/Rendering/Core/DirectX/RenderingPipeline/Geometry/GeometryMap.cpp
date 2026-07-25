@@ -294,6 +294,7 @@ void FGeometryMap::BuildDescriptorHeap()
         GetDrawTexture2DResourcesNumber()           //Texture2D
         + GetDrawTextureCubemapResourcesNumber()    //静态Cubemap
         + 1                                         //动态Cubmap
+        + 1                                         //shadowmap
     );
 }
 

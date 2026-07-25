@@ -11,6 +11,7 @@ public:
     FDynamicShadowMap();
     
 public:
+    virtual void Init(UINT inWidth, UINT inHeight);
     virtual void Init(
         FGeometryMap* inGeometryMap,
         FDirectXPipelineState* inDirectXPipelineState,
@@ -27,6 +28,10 @@ public:
     virtual void Draw(float deltaTime);
     
 public:
+    virtual void BuildRenderTargetDescriptor();
     virtual void BuildDepthStencilDescriptor();
+    
+protected:
+    virtual void BuildRenderTargetSRV();
     
 };
