@@ -418,12 +418,6 @@ void FGeometryMap::BuildTextureConstantBuffer()
         descriptorHeap.GetHeap(),
         GetDrawTexture2DResourcesNumber()
     );
-    //构建ShadowMap
-    renderingTextureCubemapResourcesUpdate->BuildTextureConstantBuffer(
-        descriptorHeap.GetHeap(),
-        GetDrawTexture2DResourcesNumber()
-            + GetDrawTextureCubemapResourcesNumber()
-    );
 }
 
 UINT FGeometryMap::GetDrawMeshObjectNumber()

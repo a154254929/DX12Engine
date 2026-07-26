@@ -1,6 +1,8 @@
-
+#ifndef SHADER_COMMON_HLSL
+#define SHADER_COMMON_HLSL
 SamplerState Point_Sampler : register(s0);
 SamplerState Anisotropic_Sampler : register(s1);
+SamplerComparisonState Shadow_Sampler : register(s2);
 
 Texture2D ShadowMap : register(t1);
 Texture2D Texture2DMap[Texture2DMap_Count] : register(t2);
@@ -62,3 +64,5 @@ struct MaterialConstBuffer
 };
 
 StructuredBuffer<MaterialConstBuffer> Materials : register(t0, Space1);
+
+#endif

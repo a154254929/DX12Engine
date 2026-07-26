@@ -243,7 +243,7 @@ int CDirectXRenderingEngine::PostInit()
             {
                 if (CMaterial* material = (*sphereMeshLambertain->GetMaterials())[0])
                 {
-                    material->SetDynamicReflection(true);
+                    //material->SetDynamicReflection(true);
                     material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
                     material->SetBaseColorIndexKey("Texture'/Project/Texture/Texture1.Texture1.dds'");
                     material->SetMaterialType(EMaterialType::BlinnPhong);
@@ -577,7 +577,7 @@ int CDirectXRenderingEngine::PostInit()
             {
                 if (CMaterial* material = (*sphereMeshReflectionCubemap->GetMaterials())[0])
                 {
-                    material->SetDynamicReflection(true);
+                    //material->SetDynamicReflection(true);
                     material->SetBaseColor(fvector_4d(1.f));
                     material->SetMaterialType(EMaterialType::BlinnPhong);
                     material->SetRoughness(0.11);

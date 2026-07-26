@@ -214,16 +214,16 @@ void FDynamicShadowMap::BuildRenderTargetSRV()
         shadowMapRT->cpuShaderResourceView = CD3DX12_CPU_DESCRIPTOR_HANDLE(
             cpuRTVDesAddr,
             geometryMap->GetDrawTexture2DResourcesNumber()
-                + geometryMap->GetDrawTextureCubemapResourcesNumber()
-                + 1, //Cubemap 
+                + geometryMap->GetDrawTextureCubemapResourcesNumber()//Cubemap 
+                + 1,
             cbvSrvUavDescSize
         );
     
         shadowMapRT->gpuShaderResourceView = CD3DX12_GPU_DESCRIPTOR_HANDLE(
             gpuSRVDesAddr,
             geometryMap->GetDrawTexture2DResourcesNumber()
-                + geometryMap->GetDrawTextureCubemapResourcesNumber()
-                + 1, //Cubemap
+                + geometryMap->GetDrawTextureCubemapResourcesNumber()//Cubemap
+                + 1,
             cbvSrvUavDescSize
         );
     }

@@ -4,6 +4,7 @@
 #include "Material.hlsl"
 #include "BRDF.hlsl"
 #include "SkyFunction.hlsl"
+#include "ShadowFunction.hlsl"
 
 
 struct Varying
@@ -263,8 +264,13 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             specularColor.rgb = saturate(specular * FresnelSchlickMethod(f0, worldNormal, view, 3).rgb);
             break;
         }
+
+		float inShadow = GetShadowFactor(input.worldPosition, SceneLights[i].LightViewProj);
         
-        lightStrengths += lightStrength * diffuse * float4(SceneLights[i].LightIntensity,1.f);
+        lightStrengths += lightStrength
+						* diffuse
+						* float4(SceneLights[i].LightIntensity,1.f)
+						* inShadow;
     }
 
 	lightStrengths = saturate(lightStrengths);
