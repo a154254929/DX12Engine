@@ -3,14 +3,12 @@
 
 #include "ShaderCommon.hlsl"
 
-
 float GetShadowFactor(float4 inWorldPosition, float4x4 inShadowMatrix)
 {
     float4 shadowTexUV = mul(inShadowMatrix, inWorldPosition);
     
     return ShadowMap.SampleCmpLevelZero(Shadow_Sampler, shadowTexUV.xy, shadowTexUV.z).r;
 }
-
 
 float GetShadowFactor_Direct(float4 inWorldPosition, float4x4 inShadowMatrix)
 {
@@ -23,8 +21,7 @@ float GetShadowFactor_Direct(float4 inWorldPosition, float4x4 inShadowMatrix)
     //return ShadowMap.SampleCmpLevelZero(Shadow_Sampler, shadowTexUV.xy, shadowTexUV.z);
 }
 
-
-float GetShadowFactor_PCF(float4 inWorldPosition, float4x4 inShadowMatrix)
+float GetShadowFactor_PCF_Sample4(float4 inWorldPosition, float4x4 inShadowMatrix)
 {
     float w = 2048.f;
     float sampleBiasSize = 1.f / w;
@@ -50,8 +47,36 @@ float GetShadowFactor_PCF(float4 inWorldPosition, float4x4 inShadowMatrix)
         lerp(result2, result3, uv.x), 
         uv.y
     ); 
+}
+
+float GetShadowFactor_PCF_Sample9(float4 inWorldPosition, float4x4 inShadowMatrix)
+{
+    uint width = 0;
+    uint height = 0;
+    uint numMips = 0;
     
-    //return 
+    ShadowMap.GetDimensions(0, width, height, numMips);
+    float2 sampleBiasSize = (1.f / width, 1.f / height);
+    
+    const float2 constShadowSampleBias[9] = {
+        float2(-sampleBiasSize.x, -sampleBiasSize.y),   float2(0, -sampleBiasSize.y),   float2(sampleBiasSize.x, -sampleBiasSize.y),
+        float2(-sampleBiasSize.x, 0),                   float2(0, 0),                   float2(sampleBiasSize.x, 0),
+        float2(-sampleBiasSize.x, sampleBiasSize.y),    float2(0, sampleBiasSize.y),    float2(sampleBiasSize.x, sampleBiasSize.y)
+    };
+    
+    float4 shadowTexUV = mul(inShadowMatrix, inWorldPosition);
+    float result = 0.f;
+    
+    for (int i = 0; i < 9; i++)
+    {
+        result += ShadowMap.SampleCmpLevelZero(
+            Shadow_Sampler,
+            shadowTexUV.xy + constShadowSampleBias[i],
+            shadowTexUV.z
+        );
+    }
+    
+    return result / 9.0f; 
 }
 
 
