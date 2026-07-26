@@ -265,7 +265,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             break;
         }
 
-		float inShadow = GetShadowFactor(input.worldPosition, SceneLights[i].LightViewProj);
+		float inShadow = GetShadowFactor_PCF(input.worldPosition, SceneLights[i].LightViewProj);
         
         lightStrengths += lightStrength
 						* diffuse
