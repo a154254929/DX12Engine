@@ -7,6 +7,9 @@ CCustomMeshComponent::CCustomMeshComponent()
 
 void CCustomMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, string& inPath)
 {
+    char tmpBuff[1024] = { 0 };
+    get_path_clean_filename(tmpBuff, inPath.c_str());
+    if (find_string(tmpBuff, ".obj", 0) != -1)
     {
         //拿到文件大小
         unsigned int fileSize = get_file_size_by_filename(inPath.c_str());
@@ -23,6 +26,10 @@ void CCustomMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, str
         }
 
         delete buff;
+    }
+    else if (find_string(tmpBuff, ".fbx", 0) != -1)
+    {
+        LoadFbxFromBuff(nullptr, 0, &meshRenderingData);
     }
 }
 
@@ -111,5 +118,10 @@ bool CCustomMeshComponent::LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshR
             }
         }
     }
+    return false;
+}
+
+bool CCustomMeshComponent::LoadFbxFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshData)
+{
     return false;
 }
