@@ -203,7 +203,7 @@ int CDirectXRenderingEngine::PostInit()
             if (CMaterial* material = (*fbxMesh->GetMaterials())[0])
             {
                 material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
-                material->SetMaterialType(EMaterialType::BaseColor);
+                material->SetMaterialType(EMaterialType::HalfLambertain);
                 material->SetFresnelF0(fvector_3d(1.f));
             }
         }

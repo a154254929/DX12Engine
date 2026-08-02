@@ -95,8 +95,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
             {
                 FbxDouble3 scale = inMesh->GetNode()->LclScaling;
                 newVertex.position.x = controlPoint.mData[0] * scale[0];
-                newVertex.position.y = controlPoint.mData[1] * scale[1];
-                newVertex.position.z = -controlPoint.mData[2] * scale[2];
+                newVertex.position.y = controlPoint.mData[2] * scale[2];
+                newVertex.position.z = -controlPoint.mData[1] * scale[1];
             }
             
             //UV
@@ -165,8 +165,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                         {
                             FbxVector4 normal = meshNormal->GetDirectArray().GetAt(vertexId);
                             newVertex.normal.x = normal.mData[0];
-                            newVertex.normal.y = normal.mData[1];
-                            newVertex.normal.z = normal.mData[2];
+                            newVertex.normal.y = normal.mData[2];
+                            newVertex.normal.z = normal.mData[1];
                             break;
                         }
                         case FbxLayerElement::eIndex:
@@ -175,8 +175,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                             int id = meshNormal->GetIndexArray().GetAt(vertexId);
                             FbxVector4 normal = meshNormal->GetDirectArray().GetAt(id);
                             newVertex.normal.x = normal.mData[0];
-                            newVertex.normal.y = normal.mData[1];
-                            newVertex.normal.z = normal.mData[2];
+                            newVertex.normal.y = normal.mData[2];
+                            newVertex.normal.z = normal.mData[1];
                             break;
                         }
                         default:
@@ -192,8 +192,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                         {
                             FbxVector4 normal = meshNormal->GetDirectArray().GetAt(controlPointIndex);
                             newVertex.normal.x = normal.mData[0];
-                            newVertex.normal.y = normal.mData[1];
-                            newVertex.normal.z = normal.mData[2];
+                            newVertex.normal.y = normal.mData[2];
+                            newVertex.normal.z = normal.mData[1];
                             break;
                         }
                         case FbxLayerElement::eIndex:
@@ -202,8 +202,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                             int id = meshNormal->GetIndexArray().GetAt(controlPointIndex);
                             FbxVector4 normal = meshNormal->GetDirectArray().GetAt(id);
                             newVertex.normal.x = normal.mData[0];
-                            newVertex.normal.y = normal.mData[1];
-                            newVertex.normal.z = normal.mData[2];
+                            newVertex.normal.y = normal.mData[2];
+                            newVertex.normal.z = normal.mData[1];
                             break;
                         }
                         default:
@@ -226,8 +226,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                         {
                             FbxVector4 tangent = meshTangent->GetDirectArray().GetAt(vertexId);
                             newVertex.tangent.x = tangent.mData[0];
-                            newVertex.tangent.y = tangent.mData[1];
-                            newVertex.tangent.z = tangent.mData[2];
+                            newVertex.tangent.y = tangent.mData[2];
+                            newVertex.tangent.z = tangent.mData[1];
                             break;
                         }
                         case FbxLayerElement::eIndex:
@@ -236,8 +236,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                             int id = meshTangent->GetIndexArray().GetAt(vertexId);
                             FbxVector4 tangent = meshTangent->GetDirectArray().GetAt(id);
                             newVertex.tangent.x = tangent.mData[0];
-                            newVertex.tangent.y = tangent.mData[1];
-                            newVertex.tangent.z = tangent.mData[2];
+                            newVertex.tangent.y = tangent.mData[2];
+                            newVertex.tangent.z = tangent.mData[1];
                             break;
                         }
                         default:
@@ -253,8 +253,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                         {
                             FbxVector4 tangent = meshTangent->GetDirectArray().GetAt(controlPointIndex);
                             newVertex.tangent.x = tangent.mData[0];
-                            newVertex.tangent.y = tangent.mData[1];
-                            newVertex.tangent.z = tangent.mData[2];
+                            newVertex.tangent.y = tangent.mData[2];
+                            newVertex.tangent.z = tangent.mData[1];
                             break;
                         }
                         case FbxLayerElement::eIndex:
@@ -263,8 +263,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                             int id = meshTangent->GetIndexArray().GetAt(controlPointIndex);
                             FbxVector4 tangent = meshTangent->GetDirectArray().GetAt(id);
                             newVertex.tangent.x = tangent.mData[0];
-                            newVertex.tangent.y = tangent.mData[1];
-                            newVertex.tangent.z = tangent.mData[2];
+                            newVertex.tangent.y = tangent.mData[2];
+                            newVertex.tangent.z = tangent.mData[1];
                             break;
                         }
                         default:
@@ -286,8 +286,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                         {
                             FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(vertexId);
                             newVertex.binormal.x = binormal.mData[0];
-                            newVertex.binormal.y = binormal.mData[1];
-                            newVertex.binormal.z = binormal.mData[2];
+                            newVertex.binormal.y = binormal.mData[2];
+                            newVertex.binormal.z = binormal.mData[1];
                             break;
                         }
                         case FbxLayerElement::eIndex:
@@ -296,8 +296,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                             int id = meshBinormal->GetIndexArray().GetAt(vertexId);
                             FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(id);
                             newVertex.binormal.x = binormal.mData[0];
-                            newVertex.binormal.y = binormal.mData[1];
-                            newVertex.binormal.z = binormal.mData[2];
+                            newVertex.binormal.y = binormal.mData[2];
+                            newVertex.binormal.z = binormal.mData[1];
                             break;
                         }
                         default:
@@ -313,8 +313,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                         {
                             FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(controlPointIndex);
                             newVertex.binormal.x = binormal.mData[0];
-                            newVertex.binormal.y = binormal.mData[1];
-                            newVertex.binormal.z = binormal.mData[2];
+                            newVertex.binormal.y = binormal.mData[2];
+                            newVertex.binormal.z = binormal.mData[1];
                             break;
                         }
                         case FbxLayerElement::eIndex:
@@ -323,8 +323,8 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                             int id = meshBinormal->GetIndexArray().GetAt(controlPointIndex);
                             FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(id);
                             newVertex.binormal.x = binormal.mData[0];
-                            newVertex.binormal.y = binormal.mData[1];
-                            newVertex.binormal.z = binormal.mData[2];
+                            newVertex.binormal.y = binormal.mData[2];
+                            newVertex.binormal.z = binormal.mData[1];
                             break;
                         }
                         default:
