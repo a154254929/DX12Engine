@@ -10,6 +10,13 @@ struct FFBXRenderData
         //纹理坐标
 };
 
+struct FFBXVersion
+{
+    int major;
+    int minor;
+    int revision;
+};
+
 struct FFBXAssetImport
 {
    void  LoadMeshData(const std::string& inPath, FFBXRenderData& outRenderData);

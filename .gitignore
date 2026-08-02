@@ -13,3 +13,5 @@
 # Logs
 log/
 *.log
+
+/JHSEngine/SDK/FBX/FBXSDK/x64/*
