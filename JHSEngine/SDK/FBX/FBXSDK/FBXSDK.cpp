@@ -60,7 +60,7 @@ bool LoadScene(FbxManager*& inManager, FbxScene*& inScene, const char* inFilenam
     return true;
 }
 
-void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
+void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
 {
     if (inMesh == NULL)
     {
@@ -74,11 +74,19 @@ void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
     
     for (int i = 0; i < polygonCount; ++i)
     {
+        FFBXTriangle newTriangle = FFBXTriangle();
+        outFBXMesh.vertexData.push_back(newTriangle);
         int polygonSize = inMesh->GetPolygonSize(i);
         for (int j = 0; j < polygonSize; ++j)
         {
+            newTriangle.vertex[j] = FFBXVertex();
+            FFBXVertex& newVertex = newTriangle.vertex[j];
+            
             int controlPointIndex = inMesh->GetPolygonVertex(i, j);
             FbxVector4 controlPoint = inMesh->GetControlPointAt(controlPointIndex);
+            newVertex.position.x = controlPoint.mData[0];
+            newVertex.position.y = controlPoint.mData[1];
+            newVertex.position.z = controlPoint.mData[2];
             
             //UV
             for (int l = 0; l < inMesh->GetElementUVCount(); ++l)
@@ -96,10 +104,14 @@ void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
                     {
                         int index = textureUV->GetIndexArray().GetAt(textureUVIndex);
                         FbxVector2 uv = textureUV->GetDirectArray().GetAt(index);
+                        newVertex.texcoord.x = uv[0];
+                        newVertex.texcoord.y = uv[1];
                     }
                     else if (referenceMode == FbxLayerElement::eDirect)
                     {
                         FbxVector2 uv = textureUV->GetDirectArray().GetAt(textureUVIndex);
+                        newVertex.texcoord.x = uv[0];
+                        newVertex.texcoord.y = uv[1];
                     }
                 }
             }
@@ -196,11 +208,17 @@ void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
     }
 }
 
-void GetMesh(FbxNode*& inNode, FFBXRenderData& outRenderData)
+void GetMaterial();
+
+void GetMesh(FbxNode*& inNode, FFBXModel& outFBXModel)
 {
     FbxMesh* nodeMesh = (FbxMesh*)inNode->GetNodeAttribute();
     
-    GetPolygons(nodeMesh, outRenderData);
+    outFBXModel.meshData.push_back(FFBXMesh());
+    FFBXMesh& newMesh = outFBXModel.meshData[outFBXModel.meshData.size() - 1];
+    GetPolygons(nodeMesh, newMesh);
+    
+    GetMaterial();
 }
 
 void RecursiveLoadMesh(FbxNode*& inNode, FFBXRenderData& outRenderData)
@@ -214,7 +232,9 @@ void RecursiveLoadMesh(FbxNode*& inNode, FFBXRenderData& outRenderData)
         FbxNodeAttribute::EType attributeType = inNode->GetNodeAttribute()->GetAttributeType();
         if (attributeType == FbxNodeAttribute::eMesh)
         {
-            GetMesh(inNode, outRenderData);
+            outRenderData.modelData.push_back(FFBXModel());
+            FFBXModel& newModel = outRenderData.modelData[outRenderData.modelData.size() - 1];
+            GetMesh(inNode, newModel);
         }
         else if (attributeType == FbxNodeAttribute::eSkeleton)
         {
@@ -224,13 +244,24 @@ void RecursiveLoadMesh(FbxNode*& inNode, FFBXRenderData& outRenderData)
     
 }
 
+void DestroyFbxObjects(FbxManager*& inManager)
+{
+    if (inManager)
+    {
+        inManager->Destroy();
+    }
+}
+
 void FFBXAssetImport::LoadMeshData(const std::string& inPath, FFBXRenderData& outRenderData)
 {
+    //创建基础管理和场景
     FbxManager* manager = NULL;
     FbxScene* scene = NULL;
     
+    //初始化场景对象
     InitializeSdkObjects(manager, scene);
     
+    //读取fbx模型
     FbxString fbxPath(inPath.c_str());
     bool result = LoadScene(manager, scene, fbxPath.Buffer());
     
@@ -243,6 +274,8 @@ void FFBXAssetImport::LoadMeshData(const std::string& inPath, FFBXRenderData& ou
             RecursiveLoadMesh(child, outRenderData);
         }
     }
+    
+    DestroyFbxObjects(manager);
 }
 
 int main()
