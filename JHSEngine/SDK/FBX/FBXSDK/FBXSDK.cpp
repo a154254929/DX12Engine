@@ -31,9 +31,9 @@ bool LoadScene(FbxManager*& inManager, FbxScene*& inScene, const char* inFilenam
     
     FFBXVersion filerVersion;
     fbxImporterPtr->GetFileVersion(
-        sdkVersion.major,
-        sdkVersion.minor,
-        sdkVersion.revision
+        filerVersion.major,
+        filerVersion.minor,
+        filerVersion.revision
     );
     
     if (!bReturn)
@@ -90,7 +90,14 @@ void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
                     int textureUVIndex = inMesh->GetTextureUVIndex(i, j);
                     auto referenceMode = textureUV->GetReferenceMode();
                     
-                    if (referenceMode == FbxLayerElement::eIndex)
+                    if (referenceMode == FbxLayerElement::eIndex
+                        || referenceMode == FbxLayerElement::eIndexToDirect
+                    )
+                    {
+                        int index = textureUV->GetIndexArray().GetAt(textureUVIndex);
+                        FbxVector2 uv = textureUV->GetDirectArray().GetAt(index);
+                    }
+                    else if (referenceMode == FbxLayerElement::eDirect)
                     {
                         FbxVector2 uv = textureUV->GetDirectArray().GetAt(textureUVIndex);
                     }
@@ -98,7 +105,7 @@ void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
             }
             
             //法线
-            for (int l = 0; l < inMesh->GetElementUVCount(); ++l)
+            for (int l = 0; l < inMesh->GetElementNormalCount(); ++l)
             {
                 FbxGeometryElementNormal* meshNormal = inMesh->GetElementNormal(l);
                 auto mappingMode = meshNormal->GetMappingMode();
@@ -114,6 +121,7 @@ void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
                             break;
                         }
                         case FbxLayerElement::eIndex:
+                        case FbxLayerElement::eIndexToDirect:
                         {
                             int id = meshNormal->GetIndexArray().GetAt(vertexId);
                             FbxVector4 tangent = meshNormal->GetDirectArray().GetAt(id);
@@ -127,7 +135,7 @@ void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
             }
             
             //切线
-            for (int l = 0; l < inMesh->GetElementUVCount(); ++l)
+            for (int l = 0; l < inMesh->GetElementTangentCount(); ++l)
             {
                 FbxGeometryElementTangent* meshTangent = inMesh->GetElementTangent(l);
                 auto mappingMode = meshTangent->GetMappingMode();
@@ -143,6 +151,7 @@ void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
                             break;
                         }
                         case FbxLayerElement::eIndex:
+                        case FbxLayerElement::eIndexToDirect:
                         {
                             int id = meshTangent->GetIndexArray().GetAt(vertexId);
                             FbxVector4 tangent = meshTangent->GetDirectArray().GetAt(id);
@@ -154,7 +163,7 @@ void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
                     }
                 }
             }
-            for (int l = 0; l < inMesh->GetElementUVCount(); ++l)
+            for (int l = 0; l < inMesh->GetElementBinormalCount(); ++l)
             {
                 FbxGeometryElementBinormal* meshBinormal = inMesh->GetElementBinormal(l);
                 auto mappingMode = meshBinormal->GetMappingMode();
@@ -170,6 +179,7 @@ void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
                             break;
                         }
                         case FbxLayerElement::eIndex:
+                        case FbxLayerElement::eIndexToDirect:
                         {
                             int id = meshBinormal->GetIndexArray().GetAt(vertexId);
                             FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(id);
@@ -237,7 +247,10 @@ void FFBXAssetImport::LoadMeshData(const std::string& inPath, FFBXRenderData& ou
 
 int main()
 {
-    FbxManager* manager = FbxManager::Create();
+    std::string fbxPath = "D:/JHSEngine/JHSEngine/JHSEngine/SDK/FBX/FBXSDK/Pet_Huqiu.FBX";
+    FFBXRenderData outRenderData;
+    FFBXAssetImport fbxImporter = FFBXAssetImport(); 
+    fbxImporter.LoadMeshData(fbxPath, outRenderData);
     
     return 0;
 }
