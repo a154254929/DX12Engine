@@ -1,4 +1,6 @@
 ﻿#include "CustomMeshComponent.h"
+
+#include "../../../SDK/FBX/FBXSDK/FBXSDK.h"
 #include "../../Mesh/Core/MeshType.h"
 
 CCustomMeshComponent::CCustomMeshComponent()
@@ -29,7 +31,7 @@ void CCustomMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, str
     }
     else if (find_string(tmpBuff, ".fbx", 0) != -1)
     {
-        LoadFbxFromBuff(nullptr, 0, &meshRenderingData);
+        LoadFbxFromBuff(inPath, meshRenderingData);
     }
 }
 
@@ -121,7 +123,34 @@ bool CCustomMeshComponent::LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshR
     return false;
 }
 
-bool CCustomMeshComponent::LoadFbxFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshData)
+bool CCustomMeshComponent::LoadFbxFromBuff(const string& inPath, FMeshRenderingData& meshData)
 {
+    FFBXRenderData renderData;
+    FFBXAssetImport().LoadMeshData(inPath, renderData);
+    
+    for ( auto &tmpModel : renderData.modelData)
+    {
+        for (auto &tmpMesh : tmpModel.meshData)
+        {
+            for (auto &tmpTriangle : tmpMesh.vertexData)
+            {
+                for (int i = 0; i < 3; ++i)
+                {
+                    FVertex newVertex(
+                        XMFLOAT3(tmpTriangle.vertex[i].position.x, tmpTriangle.vertex[i].position.y, tmpTriangle.vertex[i].position.z),
+                        XMFLOAT4(Colors::White),
+                        XMFLOAT3(tmpTriangle.vertex[i].normal.x, tmpTriangle.vertex[i].normal.y, tmpTriangle.vertex[i].normal.z),
+                        XMFLOAT2(tmpTriangle.vertex[i].texcoord.x, tmpTriangle.vertex[i].texcoord.y)
+                    );
+                    meshData.vertexData.push_back(newVertex);
+                    meshData.indexData.push_back(meshData.vertexData.size() - 1);
+                }
+            }
+        }
+        for (auto &tmpMesh : tmpModel.materialMap)
+        {
+            
+        }
+    }
     return false;
 }

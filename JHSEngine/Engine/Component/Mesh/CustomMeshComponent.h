@@ -19,5 +19,5 @@ public:
 
     static bool LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshData);
     
-    static bool LoadFbxFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshData);
+    static bool LoadFbxFromBuff(const string& inPath, FMeshRenderingData& meshData);
 };

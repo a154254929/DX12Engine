@@ -93,25 +93,51 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
             {
                 FbxGeometryElementUV* textureUV = inMesh->GetElementUV(l);
                 auto mappingMode = textureUV->GetMappingMode();
-                if (mappingMode == FbxLayerElement::eByPolygonVertex)
+                    auto referenceMode = textureUV->GetReferenceMode();
+                if (mappingMode == FbxLayerElement::eByControlPoint)
                 {
                     int textureUVIndex = inMesh->GetTextureUVIndex(i, j);
-                    auto referenceMode = textureUV->GetReferenceMode();
                     
                     if (referenceMode == FbxLayerElement::eIndex
                         || referenceMode == FbxLayerElement::eIndexToDirect
                     )
                     {
-                        int index = textureUV->GetIndexArray().GetAt(textureUVIndex);
+                        int index = textureUV->GetIndexArray().GetAt(controlPointIndex);
                         FbxVector2 uv = textureUV->GetDirectArray().GetAt(index);
-                        newVertex.texcoord.x = uv[0];
-                        newVertex.texcoord.y = uv[1];
+                        newVertex.texcoord.x = uv.mData[0];
+                        newVertex.texcoord.y = 1.0 - uv.mData[1];
                     }
                     else if (referenceMode == FbxLayerElement::eDirect)
                     {
-                        FbxVector2 uv = textureUV->GetDirectArray().GetAt(textureUVIndex);
-                        newVertex.texcoord.x = uv[0];
-                        newVertex.texcoord.y = uv[1];
+                        FbxVector2 uv = textureUV->GetDirectArray().GetAt(controlPointIndex);
+                        newVertex.texcoord.x = uv.mData[0];
+                        newVertex.texcoord.y = 1.0 - uv.mData[1];
+                    }
+                }
+                else if (mappingMode == FbxLayerElement::eByPolygonVertex)
+                {
+                    int textureUVIndex = inMesh->GetTextureUVIndex(i, j);
+                    
+                    switch (referenceMode)
+                    {
+                        case FbxLayerElement::eDirect:
+                        {
+                            FbxVector2 uv = textureUV->GetDirectArray().GetAt(textureUVIndex);
+                            newVertex.texcoord.x = uv.mData[0];
+                            newVertex.texcoord.y = 1.0 - uv.mData[1];
+                        }
+                        case FbxLayerElement::eIndex:
+                        case FbxLayerElement::eIndexToDirect:
+                        {
+                            int index = textureUV->GetIndexArray().GetAt(textureUVIndex);
+                            FbxVector2 uv = textureUV->GetDirectArray().GetAt(index);
+                            newVertex.texcoord.x = uv.mData[0];
+                            newVertex.texcoord.y = 1.0 - uv.mData[1];
+                            break;
+                        }
+                    default:
+                        break;
+                        
                     }
                 }
             }
@@ -121,27 +147,58 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
             {
                 FbxGeometryElementNormal* meshNormal = inMesh->GetElementNormal(l);
                 auto mappingMode = meshNormal->GetMappingMode();
+                auto referenceMode = meshNormal->GetReferenceMode();
                 if (mappingMode == FbxLayerElement::eByPolygonVertex)
                 {
-                    auto referenceMode = meshNormal->GetReferenceMode();
-                    
                     switch (referenceMode)
                     {
                         case FbxLayerElement::eDirect:
                         {
                             FbxVector4 normal = meshNormal->GetDirectArray().GetAt(vertexId);
+                            newVertex.normal.x = normal.mData[0];
+                            newVertex.normal.y = normal.mData[1];
+                            newVertex.normal.z = normal.mData[2];
                             break;
                         }
                         case FbxLayerElement::eIndex:
                         case FbxLayerElement::eIndexToDirect:
                         {
                             int id = meshNormal->GetIndexArray().GetAt(vertexId);
-                            FbxVector4 tangent = meshNormal->GetDirectArray().GetAt(id);
+                            FbxVector4 normal = meshNormal->GetDirectArray().GetAt(id);
+                            newVertex.normal.x = normal.mData[0];
+                            newVertex.normal.y = normal.mData[1];
+                            newVertex.normal.z = normal.mData[2];
                             break;
                         }
                         default:
                             break;
                         
+                    }
+                }
+                else if (mappingMode == FbxLayerElement::eByControlPoint)
+                {
+                    switch (referenceMode)
+                    {
+                        case FbxLayerElement::eDirect:
+                        {
+                            FbxVector4 normal = meshNormal->GetDirectArray().GetAt(controlPointIndex);
+                            newVertex.normal.x = normal.mData[0];
+                            newVertex.normal.y = normal.mData[1];
+                            newVertex.normal.z = normal.mData[2];
+                            break;
+                        }
+                        case FbxLayerElement::eIndex:
+                        case FbxLayerElement::eIndexToDirect:
+                        {
+                            int id = meshNormal->GetIndexArray().GetAt(controlPointIndex);
+                            FbxVector4 normal = meshNormal->GetDirectArray().GetAt(id);
+                            newVertex.normal.x = normal.mData[0];
+                            newVertex.normal.y = normal.mData[1];
+                            newVertex.normal.z = normal.mData[2];
+                            break;
+                        }
+                        default:
+                            break;
                     }
                 }
             }
@@ -151,15 +208,17 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
             {
                 FbxGeometryElementTangent* meshTangent = inMesh->GetElementTangent(l);
                 auto mappingMode = meshTangent->GetMappingMode();
+                auto referenceMode = meshTangent->GetReferenceMode();
                 if (mappingMode == FbxLayerElement::eByPolygonVertex)
                 {
-                    auto referenceMode = meshTangent->GetReferenceMode();
-                    
                     switch (referenceMode)
                     {
                         case FbxLayerElement::eDirect:
                         {
-                            FbxVector4 normal = meshTangent->GetDirectArray().GetAt(vertexId);
+                            FbxVector4 tangent = meshTangent->GetDirectArray().GetAt(vertexId);
+                            newVertex.tangent.x = tangent.mData[0];
+                            newVertex.tangent.y = tangent.mData[1];
+                            newVertex.tangent.z = tangent.mData[2];
                             break;
                         }
                         case FbxLayerElement::eIndex:
@@ -167,6 +226,9 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                         {
                             int id = meshTangent->GetIndexArray().GetAt(vertexId);
                             FbxVector4 tangent = meshTangent->GetDirectArray().GetAt(id);
+                            newVertex.tangent.x = tangent.mData[0];
+                            newVertex.tangent.y = tangent.mData[1];
+                            newVertex.tangent.z = tangent.mData[2];
                             break;
                         }
                         default:
@@ -174,20 +236,49 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                         
                     }
                 }
+                else if (mappingMode == FbxLayerElement::eByControlPoint)
+                {
+                    switch (referenceMode)
+                    {
+                        case FbxLayerElement::eDirect:
+                        {
+                            FbxVector4 tangent = meshTangent->GetDirectArray().GetAt(controlPointIndex);
+                            newVertex.tangent.x = tangent.mData[0];
+                            newVertex.tangent.y = tangent.mData[1];
+                            newVertex.tangent.z = tangent.mData[2];
+                            break;
+                        }
+                        case FbxLayerElement::eIndex:
+                        case FbxLayerElement::eIndexToDirect:
+                        {
+                            int id = meshTangent->GetIndexArray().GetAt(controlPointIndex);
+                            FbxVector4 tangent = meshTangent->GetDirectArray().GetAt(id);
+                            newVertex.tangent.x = tangent.mData[0];
+                            newVertex.tangent.y = tangent.mData[1];
+                            newVertex.tangent.z = tangent.mData[2];
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
             }
+            
             for (int l = 0; l < inMesh->GetElementBinormalCount(); ++l)
             {
                 FbxGeometryElementBinormal* meshBinormal = inMesh->GetElementBinormal(l);
                 auto mappingMode = meshBinormal->GetMappingMode();
+                auto referenceMode = meshBinormal->GetReferenceMode();
                 if (mappingMode == FbxLayerElement::eByPolygonVertex)
                 {
-                    auto referenceMode = meshBinormal->GetReferenceMode();
-                    
                     switch (referenceMode)
                     {
                         case FbxLayerElement::eDirect:
                         {
                             FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(vertexId);
+                            newVertex.binormal.x = binormal.mData[0];
+                            newVertex.binormal.y = binormal.mData[1];
+                            newVertex.binormal.z = binormal.mData[2];
                             break;
                         }
                         case FbxLayerElement::eIndex:
@@ -195,11 +286,100 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                         {
                             int id = meshBinormal->GetIndexArray().GetAt(vertexId);
                             FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(id);
+                            newVertex.binormal.x = binormal.mData[0];
+                            newVertex.binormal.y = binormal.mData[1];
+                            newVertex.binormal.z = binormal.mData[2];
                             break;
                         }
                         default:
                             break;
                         
+                    }
+                }
+                else if (mappingMode == FbxLayerElement::eByControlPoint)
+                {
+                    switch (referenceMode)
+                    {
+                        case FbxLayerElement::eDirect:
+                        {
+                            FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(controlPointIndex);
+                            newVertex.binormal.x = binormal.mData[0];
+                            newVertex.binormal.y = binormal.mData[1];
+                            newVertex.binormal.z = binormal.mData[2];
+                            break;
+                        }
+                        case FbxLayerElement::eIndex:
+                        case FbxLayerElement::eIndexToDirect:
+                        {
+                            int id = meshBinormal->GetIndexArray().GetAt(controlPointIndex);
+                            FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(id);
+                            newVertex.binormal.x = binormal.mData[0];
+                            newVertex.binormal.y = binormal.mData[1];
+                            newVertex.binormal.z = binormal.mData[2];
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+            }
+            
+            for (int l = 0; l < inMesh->GetElementVertexColorCount(); ++l)
+            {
+                FbxGeometryElementVertexColor* meshColor = inMesh->GetElementVertexColor(l);
+                auto mappingMode = meshColor->GetMappingMode();
+                auto referenceMode = meshColor->GetReferenceMode();
+                if (mappingMode == FbxLayerElement::eByPolygonVertex)
+                {
+                    switch (referenceMode)
+                    {
+                        case FbxLayerElement::eDirect:
+                        {
+                            FbxColor color = meshColor->GetDirectArray().GetAt(vertexId);
+                            newVertex.color.x = color.mRed;
+                            newVertex.color.y = color.mGreen;
+                            newVertex.color.z = color.mBlue;
+                            break;
+                        }
+                        case FbxLayerElement::eIndex:
+                        case FbxLayerElement::eIndexToDirect:
+                        {
+                            int id = meshColor->GetIndexArray().GetAt(vertexId);
+                            FbxColor color = meshColor->GetDirectArray().GetAt(id);
+                            newVertex.color.x = color.mRed;
+                            newVertex.color.y = color.mGreen;
+                            newVertex.color.z = color.mBlue;
+                            break;
+                        }
+                        default:
+                            break;
+                        
+                    }
+                }
+                else if (mappingMode == FbxLayerElement::eByControlPoint)
+                {
+                    switch (referenceMode)
+                    {
+                        case FbxLayerElement::eDirect:
+                        {
+                            FbxColor color = meshColor->GetDirectArray().GetAt(controlPointIndex);
+                            newVertex.color.x = color.mRed;
+                            newVertex.color.y = color.mGreen;
+                            newVertex.color.z = color.mBlue;
+                            break;
+                        }
+                        case FbxLayerElement::eIndex:
+                        case FbxLayerElement::eIndexToDirect:
+                        {
+                            int id = meshColor->GetIndexArray().GetAt(controlPointIndex);
+                            FbxColor color = meshColor->GetDirectArray().GetAt(id);
+                            newVertex.color.x = color.mRed;
+                            newVertex.color.y = color.mGreen;
+                            newVertex.color.z = color.mBlue;
+                            break;
+                        }
+                        default:
+                            break;
                     }
                 }
             }
@@ -218,7 +398,7 @@ void GetMesh(FbxNode*& inNode, FFBXModel& outFBXModel)
     FFBXMesh& newMesh = outFBXModel.meshData[outFBXModel.meshData.size() - 1];
     GetPolygons(nodeMesh, newMesh);
     
-    GetMaterial();
+    //GetMaterial();
 }
 
 void RecursiveLoadMesh(FbxNode*& inNode, FFBXRenderData& outRenderData)
