@@ -60,8 +60,157 @@ bool LoadScene(FbxManager*& inManager, FbxScene*& inScene, const char* inFilenam
     return true;
 }
 
-void RecursiveLoadMesh(FbxNode* inNode, FFBXRenderData& outRenderData)
+void GetPolygons(FbxMesh*& inMesh, FFBXRenderData& outRenderData)
 {
+    if (inMesh == NULL)
+    {
+        return;
+    }
+    
+    int polygonCount = inMesh->GetPolygonCount();
+    FbxVector4* controlPoints = inMesh->GetControlPoints();
+    
+    int vertexId = 0;
+    
+    for (int i = 0; i < polygonCount; ++i)
+    {
+        int polygonSize = inMesh->GetPolygonSize(i);
+        for (int j = 0; j < polygonSize; ++j)
+        {
+            int controlPointIndex = inMesh->GetPolygonVertex(i, j);
+            FbxVector4 controlPoint = inMesh->GetControlPointAt(controlPointIndex);
+            
+            //UV
+            for (int l = 0; l < inMesh->GetElementUVCount(); ++l)
+            {
+                FbxGeometryElementUV* textureUV = inMesh->GetElementUV(l);
+                auto mappingMode = textureUV->GetMappingMode();
+                if (mappingMode == FbxLayerElement::eByPolygonVertex)
+                {
+                    int textureUVIndex = inMesh->GetTextureUVIndex(i, j);
+                    auto referenceMode = textureUV->GetReferenceMode();
+                    
+                    if (referenceMode == FbxLayerElement::eIndex)
+                    {
+                        FbxVector2 uv = textureUV->GetDirectArray().GetAt(textureUVIndex);
+                    }
+                }
+            }
+            
+            //法线
+            for (int l = 0; l < inMesh->GetElementUVCount(); ++l)
+            {
+                FbxGeometryElementNormal* meshNormal = inMesh->GetElementNormal(l);
+                auto mappingMode = meshNormal->GetMappingMode();
+                if (mappingMode == FbxLayerElement::eByPolygonVertex)
+                {
+                    auto referenceMode = meshNormal->GetReferenceMode();
+                    
+                    switch (referenceMode)
+                    {
+                        case FbxLayerElement::eDirect:
+                        {
+                            FbxVector4 normal = meshNormal->GetDirectArray().GetAt(vertexId);
+                            break;
+                        }
+                        case FbxLayerElement::eIndex:
+                        {
+                            int id = meshNormal->GetIndexArray().GetAt(vertexId);
+                            FbxVector4 tangent = meshNormal->GetDirectArray().GetAt(id);
+                            break;
+                        }
+                        default:
+                            break;
+                        
+                    }
+                }
+            }
+            
+            //切线
+            for (int l = 0; l < inMesh->GetElementUVCount(); ++l)
+            {
+                FbxGeometryElementTangent* meshTangent = inMesh->GetElementTangent(l);
+                auto mappingMode = meshTangent->GetMappingMode();
+                if (mappingMode == FbxLayerElement::eByPolygonVertex)
+                {
+                    auto referenceMode = meshTangent->GetReferenceMode();
+                    
+                    switch (referenceMode)
+                    {
+                        case FbxLayerElement::eDirect:
+                        {
+                            FbxVector4 normal = meshTangent->GetDirectArray().GetAt(vertexId);
+                            break;
+                        }
+                        case FbxLayerElement::eIndex:
+                        {
+                            int id = meshTangent->GetIndexArray().GetAt(vertexId);
+                            FbxVector4 tangent = meshTangent->GetDirectArray().GetAt(id);
+                            break;
+                        }
+                        default:
+                            break;
+                        
+                    }
+                }
+            }
+            for (int l = 0; l < inMesh->GetElementUVCount(); ++l)
+            {
+                FbxGeometryElementBinormal* meshBinormal = inMesh->GetElementBinormal(l);
+                auto mappingMode = meshBinormal->GetMappingMode();
+                if (mappingMode == FbxLayerElement::eByPolygonVertex)
+                {
+                    auto referenceMode = meshBinormal->GetReferenceMode();
+                    
+                    switch (referenceMode)
+                    {
+                        case FbxLayerElement::eDirect:
+                        {
+                            FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(vertexId);
+                            break;
+                        }
+                        case FbxLayerElement::eIndex:
+                        {
+                            int id = meshBinormal->GetIndexArray().GetAt(vertexId);
+                            FbxVector4 binormal = meshBinormal->GetDirectArray().GetAt(id);
+                            break;
+                        }
+                        default:
+                            break;
+                        
+                    }
+                }
+            }
+            vertexId++;
+        }
+    }
+}
+
+void GetMesh(FbxNode*& inNode, FFBXRenderData& outRenderData)
+{
+    FbxMesh* nodeMesh = (FbxMesh*)inNode->GetNodeAttribute();
+    
+    GetPolygons(nodeMesh, outRenderData);
+}
+
+void RecursiveLoadMesh(FbxNode*& inNode, FFBXRenderData& outRenderData)
+{
+    if (inNode->GetNodeAttribute() == NULL)
+    {
+        //NULL Node
+    }
+    else
+    {
+        FbxNodeAttribute::EType attributeType = inNode->GetNodeAttribute()->GetAttributeType();
+        if (attributeType == FbxNodeAttribute::eMesh)
+        {
+            GetMesh(inNode, outRenderData);
+        }
+        else if (attributeType == FbxNodeAttribute::eSkeleton)
+        {
+            
+        }
+    }
     
 }
 
@@ -80,7 +229,8 @@ void FFBXAssetImport::LoadMeshData(const std::string& inPath, FFBXRenderData& ou
     {
         for (int i = 0; i < rootNode->GetChildCount(); i++)
         {
-            RecursiveLoadMesh(rootNode->GetChild(i), outRenderData);
+            FbxNode* child = rootNode->GetChild(i);
+            RecursiveLoadMesh(child, outRenderData);
         }
     }
 }
