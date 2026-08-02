@@ -74,6 +74,11 @@
 
   <PropertyGroup Label="UserMacros" />
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\JHSEngine\JHSEngine\JHSEngine\SDK\FBX\FBXSDK\include;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);D:\JHSEngine\JHSEngine\JHSEngine\SDK\FBX\FBXSDK\lib\vs2019\x64\debug;</LibraryPath>
+  </PropertyGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -128,6 +133,7 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
+    <ClInclude Include="FBXSDK.h" />
     <ClInclude Include="include\fbxsdk.h" />
     <ClInclude Include="include\fbxsdk\core\arch\fbxalloc.h" />
     <ClInclude Include="include\fbxsdk\core\arch\fbxarch.h" />
@@ -411,6 +417,61 @@
     <ClInclude Include="include\libxml2\libxml\xpath.h" />
     <ClInclude Include="include\libxml2\libxml\xpathInternals.h" />
     <ClInclude Include="include\libxml2\libxml\xpointer.h" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="lib\vs2019\arm64\debug\libfbxsdk-md.lib" />
+    <Content Include="lib\vs2019\arm64\debug\libfbxsdk-mt.lib" />
+    <Content Include="lib\vs2019\arm64\debug\libfbxsdk.dll" />
+    <Content Include="lib\vs2019\arm64\debug\libfbxsdk.lib" />
+    <Content Include="lib\vs2019\arm64\debug\libxml2-md.lib" />
+    <Content Include="lib\vs2019\arm64\debug\libxml2-mt.lib" />
+    <Content Include="lib\vs2019\arm64\debug\zlib-md.lib" />
+    <Content Include="lib\vs2019\arm64\debug\zlib-mt.lib" />
+    <Content Include="lib\vs2019\arm64\release\libfbxsdk-md.lib" />
+    <Content Include="lib\vs2019\arm64\release\libfbxsdk-mt.lib" />
+    <Content Include="lib\vs2019\arm64\release\libfbxsdk.dll" />
+    <Content Include="lib\vs2019\arm64\release\libfbxsdk.lib" />
+    <Content Include="lib\vs2019\arm64\release\libxml2-md.lib" />
+    <Content Include="lib\vs2019\arm64\release\libxml2-mt.lib" />
+    <Content Include="lib\vs2019\arm64\release\zlib-md.lib" />
+    <Content Include="lib\vs2019\arm64\release\zlib-mt.lib" />
+    <Content Include="lib\vs2019\x64\debug\libfbxsdk-md.lib" />
+    <Content Include="lib\vs2019\x64\debug\libfbxsdk-mt.lib" />
+    <Content Include="lib\vs2019\x64\debug\libfbxsdk.dll" />
+    <Content Include="lib\vs2019\x64\debug\libfbxsdk.lib" />
+    <Content Include="lib\vs2019\x64\debug\libxml2-md.lib" />
+    <Content Include="lib\vs2019\x64\debug\libxml2-mt.lib" />
+    <Content Include="lib\vs2019\x64\debug\zlib-md.lib" />
+    <Content Include="lib\vs2019\x64\debug\zlib-mt.lib" />
+    <Content Include="lib\vs2019\x64\release\libfbxsdk-md.lib" />
+    <Content Include="lib\vs2019\x64\release\libfbxsdk-mt.lib" />
+    <Content Include="lib\vs2019\x64\release\libfbxsdk.dll" />
+    <Content Include="lib\vs2019\x64\release\libfbxsdk.lib" />
+    <Content Include="lib\vs2019\x64\release\libxml2-md.lib" />
+    <Content Include="lib\vs2019\x64\release\libxml2-mt.lib" />
+    <Content Include="lib\vs2019\x64\release\zlib-md.lib" />
+    <Content Include="lib\vs2019\x64\release\zlib-mt.lib" />
+    <Content Include="lib\vs2019\x86\debug\libfbxsdk-md.lib" />
+    <Content Include="lib\vs2019\x86\debug\libfbxsdk-mt.lib" />
+    <Content Include="lib\vs2019\x86\debug\libfbxsdk.dll" />
+    <Content Include="lib\vs2019\x86\debug\libfbxsdk.lib" />
+    <Content Include="lib\vs2019\x86\debug\libxml2-md.lib" />
+    <Content Include="lib\vs2019\x86\debug\libxml2-mt.lib" />
+    <Content Include="lib\vs2019\x86\debug\zlib-md.lib" />
+    <Content Include="lib\vs2019\x86\debug\zlib-mt.lib" />
+    <Content Include="lib\vs2019\x86\release\libfbxsdk-md.lib" />
+    <Content Include="lib\vs2019\x86\release\libfbxsdk-mt.lib" />
+    <Content Include="lib\vs2019\x86\release\libfbxsdk.dll" />
+    <Content Include="lib\vs2019\x86\release\libfbxsdk.lib" />
+    <Content Include="lib\vs2019\x86\release\libxml2-md.lib" />
+    <Content Include="lib\vs2019\x86\release\libxml2-mt.lib" />
+    <Content Include="lib\vs2019\x86\release\zlib-md.lib" />
+    <Content Include="lib\vs2019\x86\release\zlib-mt.lib" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="FBXSDK.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
