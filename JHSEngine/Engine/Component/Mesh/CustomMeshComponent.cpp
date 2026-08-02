@@ -2,12 +2,13 @@
 
 #include "../../../SDK/FBX/FBXSDK/FBXSDK.h"
 #include "../../Mesh/Core/MeshType.h"
+#include <limits>
 
 CCustomMeshComponent::CCustomMeshComponent()
 {
 }
 
-void CCustomMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, string& inPath)
+void CCustomMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, const string& inPath)
 {
     char tmpBuff[1024] = { 0 };
     get_path_clean_filename(tmpBuff, inPath.c_str());
@@ -35,7 +36,7 @@ void CCustomMeshComponent::CreateMesh(FMeshRenderingData& meshRenderingData, str
     }
 }
 
-void CCustomMeshComponent::BuildKey(size_t& meshHashKey, string& inPath)
+void CCustomMeshComponent::BuildKey(size_t& meshHashKey, const string& inPath)
 {
     std::hash<string> stringHash;
     
@@ -132,18 +133,27 @@ bool CCustomMeshComponent::LoadFbxFromBuff(const string& inPath, FMeshRenderingD
     {
         for (auto &tmpMesh : tmpModel.meshData)
         {
+            const size_t vertexOffset = meshData.vertexData.size();
             for (auto &tmpTriangle : tmpMesh.vertexData)
             {
                 for (int i = 0; i < 3; ++i)
                 {
                     FVertex newVertex(
                         XMFLOAT3(tmpTriangle.vertex[i].position.x, tmpTriangle.vertex[i].position.y, tmpTriangle.vertex[i].position.z),
-                        XMFLOAT4(Colors::White),
+                        XMFLOAT4(tmpTriangle.vertex[i].color.x, tmpTriangle.vertex[i].color.y, tmpTriangle.vertex[i].color.z, 1.f),
                         XMFLOAT3(tmpTriangle.vertex[i].normal.x, tmpTriangle.vertex[i].normal.y, tmpTriangle.vertex[i].normal.z),
                         XMFLOAT2(tmpTriangle.vertex[i].texcoord.x, tmpTriangle.vertex[i].texcoord.y)
                     );
                     meshData.vertexData.push_back(newVertex);
-                    meshData.indexData.push_back(meshData.vertexData.size() - 1);
+                }
+            }
+
+            for (uint16_t index : tmpMesh.indexData)
+            {
+                const size_t remappedIndex = vertexOffset + index;
+                if (remappedIndex <= (std::numeric_limits<uint16_t>::max)())
+                {
+                    meshData.indexData.push_back(static_cast<uint16_t>(remappedIndex));
                 }
             }
         }

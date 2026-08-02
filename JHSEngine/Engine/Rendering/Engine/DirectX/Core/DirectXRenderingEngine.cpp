@@ -191,6 +191,25 @@ int CDirectXRenderingEngine::PostInit()
         }
         */
         
+        
+        string fbxPath = "../JHSEngine/Asset/Pet_Huqiu.fbx";
+        if (GCustomMesh* fbxMesh = world->CreateActorObject<GCustomMesh>())
+        {
+            fbxMesh->CreateMesh(fbxPath);
+            
+            fbxMesh->SetPosition(XMFLOAT3(5, 3.5, 4));
+            //fbxMesh->SetRotation(fvector_3d(90.f, 0.f, 0.f));
+            fbxMesh->SetScale(fvector_3d(.01f, .01f, .01f));
+            if (CMaterial* material = (*fbxMesh->GetMaterials())[0])
+            {
+                material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
+                material->SetMaterialType(EMaterialType::BaseColor);
+                material->SetFresnelF0(fvector_3d(1.f));
+            }
+        }
+        //GMesh* aesmaMesh = meshManager->CreateAesmaMesh(3, 1, 10, 20, 3);
+        //GMesh* donutMesh = meshManager->CreateDonutMesh(3, .5f, 10, 10);
+        
         if (GBoxMesh* boxMesh = world->CreateActorObject<GBoxMesh>())
         {
             boxMesh->CreateMesh(1, 1, 1);
@@ -460,7 +479,8 @@ int CDirectXRenderingEngine::PostInit()
         if (GMesh* coneMesh = meshManager->CreateConeMesh(1, 5, 20, 5))
         {
             coneMesh->SetScale(fvector_3d(0.1f, 1.f, 1.f));
-        }*/
+        }
+        */
         /*
         string objPath = "../JHSEngine/Rock.obj";
         string objPath = "../JHSEngine/ball.obj";

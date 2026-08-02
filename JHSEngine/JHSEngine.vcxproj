@@ -534,6 +534,11 @@
     <ClInclude Include="simple_library\third_party_library\tinyxml\tinystr.h" />
     <ClInclude Include="simple_library\third_party_library\tinyxml\tinyxml.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="SDK\FBX\FBXSDK\FBXSDK.vcxproj">
+      <Project>{6a6bb150-f0aa-409c-8aed-a6fc5157faa6}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

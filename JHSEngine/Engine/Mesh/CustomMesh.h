@@ -11,5 +11,5 @@ public:
 
     virtual void Draw(float deltaTime);
 
-    void CreateMesh(string &inPath);
+    void CreateMesh(const string &inPath);
 };

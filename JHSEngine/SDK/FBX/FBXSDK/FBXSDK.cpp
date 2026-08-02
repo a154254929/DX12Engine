@@ -1,5 +1,7 @@
 #include "FBXSDK.h"
 #include "include/fbxsdk.h"
+#include <limits>
+#include <utility>
 #pragma comment(lib, "libfbxsdk.lib")
 #pragma comment(lib, "libfbxsdk-md.lib")
 #pragma comment(lib, "libfbxsdk-mt.lib")
@@ -38,6 +40,7 @@ bool LoadScene(FbxManager*& inManager, FbxScene*& inScene, const char* inFilenam
     
     if (!bReturn)
     {
+        fbxImporterPtr->Destroy();
         return false;
     }
     
@@ -57,7 +60,7 @@ bool LoadScene(FbxManager*& inManager, FbxScene*& inScene, const char* inFilenam
     
     fbxImporterPtr->Destroy();
     
-    return true;
+    return bReturn;
 }
 
 void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
@@ -74,19 +77,27 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
     
     for (int i = 0; i < polygonCount; ++i)
     {
-        FFBXTriangle newTriangle = FFBXTriangle();
-        outFBXMesh.vertexData.push_back(newTriangle);
         int polygonSize = inMesh->GetPolygonSize(i);
+        if (polygonSize != 3)
+        {
+            vertexId += polygonSize;
+            continue;
+        }
+
+        FFBXTriangle newTriangle;
         for (int j = 0; j < polygonSize; ++j)
         {
-            newTriangle.vertex[j] = FFBXVertex();
             FFBXVertex& newVertex = newTriangle.vertex[j];
             
             int controlPointIndex = inMesh->GetPolygonVertex(i, j);
             FbxVector4 controlPoint = inMesh->GetControlPointAt(controlPointIndex);
-            newVertex.position.x = controlPoint.mData[0];
-            newVertex.position.y = controlPoint.mData[1];
-            newVertex.position.z = controlPoint.mData[2];
+            
+            {
+                FbxDouble3 scale = inMesh->GetNode()->LclScaling;
+                newVertex.position.x = controlPoint.mData[0] * scale[0];
+                newVertex.position.y = controlPoint.mData[1] * scale[1];
+                newVertex.position.z = -controlPoint.mData[2] * scale[2];
+            }
             
             //UV
             for (int l = 0; l < inMesh->GetElementUVCount(); ++l)
@@ -96,48 +107,46 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
                     auto referenceMode = textureUV->GetReferenceMode();
                 if (mappingMode == FbxLayerElement::eByControlPoint)
                 {
-                    int textureUVIndex = inMesh->GetTextureUVIndex(i, j);
-                    
+                    int directUVIndex = controlPointIndex;
                     if (referenceMode == FbxLayerElement::eIndex
                         || referenceMode == FbxLayerElement::eIndexToDirect
                     )
                     {
-                        int index = textureUV->GetIndexArray().GetAt(controlPointIndex);
-                        FbxVector2 uv = textureUV->GetDirectArray().GetAt(index);
-                        newVertex.texcoord.x = uv.mData[0];
-                        newVertex.texcoord.y = 1.0 - uv.mData[1];
+                        if (controlPointIndex < 0
+                            || controlPointIndex >= textureUV->GetIndexArray().GetCount())
+                        {
+                            continue;
+                        }
+                        directUVIndex = textureUV->GetIndexArray().GetAt(controlPointIndex);
                     }
-                    else if (referenceMode == FbxLayerElement::eDirect)
+
+                    if (directUVIndex >= 0
+                        && directUVIndex < textureUV->GetDirectArray().GetCount())
                     {
-                        FbxVector2 uv = textureUV->GetDirectArray().GetAt(controlPointIndex);
+                        FbxVector2 uv = textureUV->GetDirectArray().GetAt(directUVIndex);
                         newVertex.texcoord.x = uv.mData[0];
                         newVertex.texcoord.y = 1.0 - uv.mData[1];
                     }
                 }
                 else if (mappingMode == FbxLayerElement::eByPolygonVertex)
                 {
-                    int textureUVIndex = inMesh->GetTextureUVIndex(i, j);
-                    
-                    switch (referenceMode)
+                    int directUVIndex = -1;
+                    if (referenceMode == FbxLayerElement::eDirect)
                     {
-                        case FbxLayerElement::eDirect:
-                        {
-                            FbxVector2 uv = textureUV->GetDirectArray().GetAt(textureUVIndex);
-                            newVertex.texcoord.x = uv.mData[0];
-                            newVertex.texcoord.y = 1.0 - uv.mData[1];
-                        }
-                        case FbxLayerElement::eIndex:
-                        case FbxLayerElement::eIndexToDirect:
-                        {
-                            int index = textureUV->GetIndexArray().GetAt(textureUVIndex);
-                            FbxVector2 uv = textureUV->GetDirectArray().GetAt(index);
-                            newVertex.texcoord.x = uv.mData[0];
-                            newVertex.texcoord.y = 1.0 - uv.mData[1];
-                            break;
-                        }
-                    default:
-                        break;
-                        
+                        directUVIndex = vertexId;
+                    }
+                    else if (referenceMode == FbxLayerElement::eIndex
+                        || referenceMode == FbxLayerElement::eIndexToDirect)
+                    {
+                        directUVIndex = inMesh->GetTextureUVIndex(i, j);
+                    }
+
+                    if (directUVIndex >= 0
+                        && directUVIndex < textureUV->GetDirectArray().GetCount())
+                    {
+                        FbxVector2 uv = textureUV->GetDirectArray().GetAt(directUVIndex);
+                        newVertex.texcoord.x = uv.mData[0];
+                        newVertex.texcoord.y = 1.0 - uv.mData[1];
                     }
                 }
             }
@@ -385,10 +394,30 @@ void GetPolygons(FbxMesh*& inMesh, FFBXMesh& outFBXMesh)
             }
             vertexId++;
         }
+        outFBXMesh.vertexData.push_back(std::move(newTriangle));
     }
 }
 
-void GetMaterial();
+void GetMaterial()
+{
+    
+}
+
+void GetIndex(FFBXMesh& inmesh)
+{
+    const size_t vertexCount = inmesh.vertexData.size() * 3;
+    if (vertexCount > static_cast<size_t>((std::numeric_limits<uint16_t>::max)()) + 1)
+    {
+        inmesh.indexData.clear();
+        return;
+    }
+
+    inmesh.indexData.resize(vertexCount);
+    for (size_t i = 0; i < vertexCount; ++i)
+    {
+        inmesh.indexData[i] = static_cast<uint16_t>(i);
+    }
+}
 
 void GetMesh(FbxNode*& inNode, FFBXModel& outFBXModel)
 {
@@ -397,6 +426,8 @@ void GetMesh(FbxNode*& inNode, FFBXModel& outFBXModel)
     outFBXModel.meshData.push_back(FFBXMesh());
     FFBXMesh& newMesh = outFBXModel.meshData[outFBXModel.meshData.size() - 1];
     GetPolygons(nodeMesh, newMesh);
+    
+    GetIndex(newMesh);
     
     //GetMaterial();
 }
@@ -444,6 +475,14 @@ void FFBXAssetImport::LoadMeshData(const std::string& inPath, FFBXRenderData& ou
     //读取fbx模型
     FbxString fbxPath(inPath.c_str());
     bool result = LoadScene(manager, scene, fbxPath.Buffer());
+    if (!result)
+    {
+        DestroyFbxObjects(manager);
+        return;
+    }
+
+    FbxGeometryConverter geometryConverter(manager);
+    geometryConverter.Triangulate(scene, true);
     
     //类似XML
     if (FbxNode* rootNode = scene->GetRootNode())
@@ -458,12 +497,3 @@ void FFBXAssetImport::LoadMeshData(const std::string& inPath, FFBXRenderData& ou
     DestroyFbxObjects(manager);
 }
 
-int main()
-{
-    std::string fbxPath = "D:/JHSEngine/JHSEngine/JHSEngine/SDK/FBX/FBXSDK/Pet_Huqiu.FBX";
-    FFBXRenderData outRenderData;
-    FFBXAssetImport fbxImporter = FFBXAssetImport(); 
-    fbxImporter.LoadMeshData(fbxPath, outRenderData);
-    
-    return 0;
-}

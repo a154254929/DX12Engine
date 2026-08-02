@@ -13,9 +13,9 @@ class CCustomMeshComponent : public CShellMeshComponent
 public:
     CCustomMeshComponent();
 
-    void CreateMesh(FMeshRenderingData& meshRenderingData, string &inPath);
+    void CreateMesh(FMeshRenderingData& meshRenderingData, const string& inPath);
     
-    void BuildKey(size_t& meshHashKey, string &inPath);
+    void BuildKey(size_t& meshHashKey, const string& inPath);
 
     static bool LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshRenderingData* meshData);
     

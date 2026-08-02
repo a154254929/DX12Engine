@@ -6,7 +6,7 @@
 #ifdef FBXSDK_EXPORTS
 #define FBXASSERTIMPORT_API __declspec(dllexport)
 #else
-#define FBXASSERTIMPORT_API __declspec(dllexport)
+#define FBXASSERTIMPORT_API __declspec(dllimport)
 #endif
 
 //2D向量
@@ -107,7 +107,7 @@ struct FBXASSERTIMPORT_API FFBXVersion
     int revision;
 };
 
-struct FFBXAssetImport
+struct FBXASSERTIMPORT_API FFBXAssetImport
 {
    void  LoadMeshData(const std::string& inPath, FFBXRenderData& outRenderData);
 };
