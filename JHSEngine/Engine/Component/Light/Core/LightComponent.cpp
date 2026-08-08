@@ -52,4 +52,5 @@ void CLightComponent::SetUpVector(const XMFLOAT3& inUpVector)
 void CLightComponent::SetLightMesh(CMeshComponent* inLightMesh)
 {
     lightMesh = inLightMesh;
+    lightMesh->SetCastShadow(false);
 }

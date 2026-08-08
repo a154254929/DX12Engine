@@ -85,12 +85,12 @@ int CDirectXRenderingEngine::PostInit()
     {
         
         //构建灯光
+        /*
         if (GParallelLight* parallelLight1 = world->CreateActorObject<GParallelLight>())
         {
             parallelLight1->SetPosition(XMFLOAT3(0.0f, .0f, -8.0f));
             parallelLight1->SetRotation(fvector_3d(30.f, 45.0f, .0f));
         }
-        /*
         if (GParallelLight* parallelLight2 = world->CreateActorObject<GParallelLight>())
         {
             parallelLight2->SetPosition(XMFLOAT3(0.0f, 2.0f, -8.0f));
@@ -106,11 +106,12 @@ int CDirectXRenderingEngine::PostInit()
             //spotLight1->SetStartAttenuation(1.f);
             pointLight1->SetEndAttenuation(10.f);
         }
+        */
         
         if (GSpotLight* spotLight1 = world->CreateActorObject<GSpotLight>())
         {
             spotLight1->SetPosition(XMFLOAT3(0.0f, .0f, -6.0f));
-            spotLight1->SetRotation(fvector_3d(0.f, 0.0f, .0f));
+            spotLight1->SetRotation(fvector_3d(195.f, 0.0f, .0f));
             
             spotLight1->SetLightIntensity(fvector_3d(1.3f, 1.3f, 1.3f));
             //spotLight1->SetStartAttenuation(1.f);
@@ -118,7 +119,6 @@ int CDirectXRenderingEngine::PostInit()
             spotLight1->SetConicalInnerCorner(45.f);
             spotLight1->SetConicalOuterCorner(60.f);
         }
-        */
         
         if (GPlaneMesh* shadowPlaneMesh = world->CreateActorObject<GPlaneMesh>())
         {

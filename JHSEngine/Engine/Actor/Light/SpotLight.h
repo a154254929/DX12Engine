@@ -13,4 +13,7 @@ public:
     void SetConicalOuterCorner(const float inConicalOuterCorner);
     float GetConicalInnerCorner() const;
     float GetConicalOuterCorner() const;
+    
+private:
+    float indexTest;
 };

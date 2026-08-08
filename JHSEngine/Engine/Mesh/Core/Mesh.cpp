@@ -53,7 +53,7 @@ void GMesh::SetCastShadows(bool inCastShadows)
 {
     if (meshComponent)
     {
-        meshComponent->SetCastShadows(inCastShadows);
+        meshComponent->SetCastShadow(inCastShadows);
     }
 }
 

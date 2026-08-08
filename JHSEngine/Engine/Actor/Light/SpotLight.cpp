@@ -3,12 +3,16 @@
 
 GSpotLight::GSpotLight()
     : Super()
+    , indexTest(0.f)
 {
     SetLightComponent(CreateObject<CSpotLightComponent>(new CSpotLightComponent()));
 }
 
 void GSpotLight::Tick(float deltaTime)
 {
+    
+    indexTest += deltaTime;
+    /*
     fvector_3d rotationV3 = GetRotation();
     
     rotationV3.x += deltaTime * 15.0f;
@@ -16,6 +20,13 @@ void GSpotLight::Tick(float deltaTime)
     //rotationV3.x += deltaTime * 15.0f;
     
     SetRotation(rotationV3);
+    */
+    XMFLOAT3 position3 = GetPosition();
+    
+    position3.y = 5.f + sin(indexTest * 3.1415926 * .5f) * 5.f;
+    
+    SetPosition(position3);
+    
 }
 
 void GSpotLight::SetConicalInnerCorner(float inConicalInnerCorner)

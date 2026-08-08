@@ -76,7 +76,7 @@ float GetShadowFactor_PCF_Sample9(float4 inWorldPosition, float4x4 inShadowMatri
         );
     }
     
-    return result / 9.0f; 
+    return max(result / 9.0f, 0.1f); 
 }
 
 
