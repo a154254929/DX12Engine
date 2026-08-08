@@ -27,3 +27,5 @@ using namespace DirectX;
 using namespace DirectX::PackedVector;
 
 extern class CEngine* engine;
+
+#define THIRD_PARTY_LIBRARY 1

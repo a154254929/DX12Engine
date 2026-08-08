@@ -3,6 +3,7 @@
 #include "../../../../../../Shader/Core/Shader.h"
 #include "../../Geometry/RenderingData.h"
 #include "../../../../../../Shader/Core/ShaderType.h"
+#include "../../RenderingPipelineType.h"
 
 class FGeometryMap;
 struct FDirectXPipelineState;
@@ -23,7 +24,7 @@ public:
     virtual void Draw(float deltaTime);
     virtual void PostDraw(float deltaTime);
     
-    virtual void DrawObject(float deltaTime, const FRenderingData& inRenderingData);
+    virtual void DrawObject(float deltaTime, const FRenderingData& inRenderingData, ERenderingConditions inRenderingConditions = ERenderingConditions::RC_None);
     virtual void FindObjDraw(float deltaTime, const CMeshComponent* inMeshComponent);
     
     virtual void BuildPSO();
@@ -33,7 +34,7 @@ public:
     //单独设置PSO
     virtual void ResetPSO();
     //渲染 不包含PSO
-    virtual void DrawMesh(float deltaTime);
+    virtual void DrawMesh(float deltaTime, ERenderingConditions inRenderingConditions = ERenderingConditions::RC_None);
 public:  
     const UINT GetRenderLayerPriority() const {return renderPriority;}
     

@@ -5,6 +5,8 @@ CMeshComponent::CMeshComponent()
 {
     materials.push_back(CreateObject<CMaterial>(new CMaterial()));
     meshRenderLayerType = RENDERLAYER_OPAQUE;
+    
+    bCastShadow = true;
 }
 
 void CMeshComponent::Init()

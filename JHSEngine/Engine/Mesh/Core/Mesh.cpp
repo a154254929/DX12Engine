@@ -49,6 +49,23 @@ void GMesh::SetRenderLayerType(EMeshRenderLayerType inMeshRenderLayerType)
     meshComponent->SetRenderLayerType(inMeshRenderLayerType);
 }
 
+void GMesh::SetCastShadows(bool inCastShadows)
+{
+    if (meshComponent)
+    {
+        meshComponent->SetCastShadows(inCastShadows);
+    }
+}
+
+bool GMesh::IsCastShadow() const
+{
+    if (meshComponent)
+    {
+        return meshComponent->IsCastShadow();
+    }
+    return false;
+}
+
 void GMesh::SetPosition(const XMFLOAT3& inPosition)
 {
     GActorObject::SetPosition(inPosition);

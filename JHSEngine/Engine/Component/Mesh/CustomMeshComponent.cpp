@@ -1,7 +1,13 @@
 ﻿#include "CustomMeshComponent.h"
 
-#include "../../../SDK/FBX/FBXSDK/FBXSDK.h"
 #include "../../Mesh/Core/MeshType.h"
+#if THIRD_PARTY_LIBRARY
+
+#include "../../../SDK/FBX/FBXSDK/FBXSDK.h"
+
+//#pragma comment(lib, "FBXSDK.lib")
+
+#endif
 #include <limits>
 
 CCustomMeshComponent::CCustomMeshComponent()
@@ -126,6 +132,7 @@ bool CCustomMeshComponent::LoadObjFromBuff(char* buff, uint32_t buffSize, FMeshR
 
 bool CCustomMeshComponent::LoadFbxFromBuff(const string& inPath, FMeshRenderingData& meshData)
 {
+#if THIRD_PARTY_LIBRARY
     FFBXRenderData renderData;
     FFBXAssetImport().LoadMeshData(inPath, renderData);
     
@@ -162,5 +169,6 @@ bool CCustomMeshComponent::LoadFbxFromBuff(const string& inPath, FMeshRenderingD
             
         }
     }
+#endif
     return false;
 }

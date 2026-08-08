@@ -200,6 +200,7 @@ int CDirectXRenderingEngine::PostInit()
             fbxMesh->SetPosition(XMFLOAT3(5, 3.5, 4));
             //fbxMesh->SetRotation(fvector_3d(90.f, 0.f, 0.f));
             fbxMesh->SetScale(fvector_3d(.01f, .01f, .01f));
+            fbxMesh->SetCastShadows(false);
             if (CMaterial* material = (*fbxMesh->GetMaterials())[0])
             {
                 material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));

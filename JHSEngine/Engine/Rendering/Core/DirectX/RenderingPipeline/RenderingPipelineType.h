@@ -12,3 +12,10 @@ enum EPipelineState
     WireFrame = 7,
     Shadow = 8,
 };
+
+enum ERenderingConditions
+{
+    RC_None = 0,
+    RC_Shadow,
+    
+};

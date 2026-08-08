@@ -28,4 +28,10 @@ public:
     
 public:
     bool IsDynamicReflection() const;
+    
+    void SetCastShadows(bool inCastShadows) {bCastShadow = inCastShadows;}
+    bool IsCastShadow() const {return bCastShadow;}
+    
+protected:
+    bool bCastShadow;
 };

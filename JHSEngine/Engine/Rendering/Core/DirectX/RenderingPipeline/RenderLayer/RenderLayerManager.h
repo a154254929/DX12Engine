@@ -33,7 +33,7 @@ public:
     //单独设置PSO
     virtual void ResetPSO(int inLayer);
     //渲染 不包含PSO
-    virtual void DrawMesh(float deltaTime, int inLayer);
+    virtual void DrawMesh(float deltaTime, int inLayer, ERenderingConditions inRenderingConditions = ERenderingConditions::RC_None);
     
     static std::shared_ptr<FRenderLayer> FindByRenderLayer(int inRenderLayerType);
 protected:

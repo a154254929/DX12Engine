@@ -118,11 +118,11 @@ void FRenderLayerManager::ResetPSO(int inLayer)
     }
 }
 
-void FRenderLayerManager::DrawMesh(float deltaTime, int inLayer)
+void FRenderLayerManager::DrawMesh(float deltaTime, int inLayer, ERenderingConditions inRenderingConditions)
 {
     if (auto inRenderLayer = FindByRenderLayer(inLayer))
     {
-        inRenderLayer->DrawMesh(deltaTime);
+        inRenderLayer->DrawMesh(deltaTime, inRenderingConditions);
     }
 }
 

@@ -4,9 +4,9 @@
 #include <vector>
 
 #ifdef FBXSDK_EXPORTS
-#define FBXASSERTIMPORT_API __declspec(dllexport)
+#define FBXASSETIMPORT_API __declspec(dllexport)
 #else
-#define FBXASSERTIMPORT_API __declspec(dllimport)
+#define FBXASSETIMPORT_API __declspec(dllimport)
 #endif
 
 //2D向量
@@ -32,7 +32,7 @@ struct FFBXVector3 : public FFBXVector2
 };
 
 //顶点数据
-struct FBXASSERTIMPORT_API FFBXVertex
+struct FBXASSETIMPORT_API FFBXVertex
 {
     FFBXVertex()
         : position()
@@ -53,7 +53,7 @@ struct FBXASSERTIMPORT_API FFBXVertex
     
 };
 
-struct FBXASSERTIMPORT_API FFBXTriangle
+struct FBXASSETIMPORT_API FFBXTriangle
 {
     FFBXTriangle()
         : materialId(0)
@@ -65,7 +65,7 @@ struct FBXASSERTIMPORT_API FFBXTriangle
 };
 
 //模型数据
-struct FBXASSERTIMPORT_API FFBXMesh
+struct FBXASSETIMPORT_API FFBXMesh
 {
     FFBXMesh()
         : materialId(0)
@@ -80,7 +80,7 @@ struct FBXASSERTIMPORT_API FFBXMesh
 };
 
 //材质名称
-struct FBXASSERTIMPORT_API FFBXMaterial
+struct FBXASSETIMPORT_API FFBXMaterial
 {
     std::string diffuseTextureFileName;
     std::string specularTextureFileName;
@@ -88,26 +88,26 @@ struct FBXASSERTIMPORT_API FFBXMaterial
     std::string bumpTextureFileName;
 };
 
-struct FBXASSERTIMPORT_API FFBXModel
+struct FBXASSETIMPORT_API FFBXModel
 {
     std::vector<FFBXMesh> meshData;
     std::map<int, FFBXMaterial> materialMap;
 };
 
 //渲染数据
-struct FBXASSERTIMPORT_API FFBXRenderData
+struct FBXASSETIMPORT_API FFBXRenderData
 {
     std::vector<FFBXModel> modelData;
 };
 
-struct FBXASSERTIMPORT_API FFBXVersion
+struct FBXASSETIMPORT_API FFBXVersion
 {
     int major;
     int minor;
     int revision;
 };
 
-struct FBXASSERTIMPORT_API FFBXAssetImport
+struct FBXASSETIMPORT_API FFBXAssetImport
 {
    void  LoadMeshData(const std::string& inPath, FFBXRenderData& outRenderData);
 };

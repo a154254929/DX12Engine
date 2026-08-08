@@ -1,5 +1,6 @@
 #include "DynamicShadowMap.h"
 
+#include "../../RenderingPipelineType.h"
 #include "../../RenderTarget/ShadowMapRenderTarget.h"
 #include "../../Geometry/GeometryMap.h"
 #include "../../RenderLayer/RenderLayerManager.h"
@@ -112,9 +113,9 @@ void FDynamicShadowMap::Draw(float deltaTime)
         
         renderLayerManager->ResetPSO(RENDERLAYER_OPAQUE_SHADOW);
         
-        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE);
-        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_TRANSPARENT);
-        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE_REFLECTOR);
+        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE, ERenderingConditions::RC_Shadow);
+        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_TRANSPARENT, ERenderingConditions::RC_Shadow);
+        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE_REFLECTOR, ERenderingConditions::RC_Shadow);
         
         CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
             renderTarget->GetRenderTaget(),
