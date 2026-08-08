@@ -38,7 +38,7 @@ void FOpaqueShadowRenderLayer::BuildPSO()
     Super::BuildPSO();
     
     D3D12_GRAPHICS_PIPELINE_STATE_DESC& gpsDesc = directXPipelineState->GetGPSDesc();
-    gpsDesc.RasterizerState.DepthBias = 10;
+    gpsDesc.RasterizerState.DepthBias = 100000;
     gpsDesc.RasterizerState.DepthBiasClamp = 0.0f;
     gpsDesc.RasterizerState.SlopeScaledDepthBias = 1.0f;
     
@@ -47,10 +47,18 @@ void FOpaqueShadowRenderLayer::BuildPSO()
     gpsDesc.NumRenderTargets = 0;
     
     directXPipelineState->SetFillMode(false);
-    directXPipelineState->Build(EPipelineState::Shadow);
+    directXPipelineState->Build(EPipelineState::OrthogonalShadowShadow);
+    
+    gpsDesc.RasterizerState.DepthBias = 100;
+    directXPipelineState->Build(EPipelineState::PerspectiveShadowShadow);
 }
 
 void FOpaqueShadowRenderLayer::ResetPSO()
 {
-    directXPipelineState->ResetPSO(Shadow);
+    directXPipelineState->ResetPSO(OrthogonalShadowShadow);
+}
+
+void FOpaqueShadowRenderLayer::ResetPSO(EPipelineState inPipelineState)
+{
+    directXPipelineState->ResetPSO(inPipelineState);
 }

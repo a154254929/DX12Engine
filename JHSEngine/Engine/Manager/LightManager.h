@@ -9,6 +9,8 @@ class CLightManager : public CCoreMinimalObject
 public:
     void AddLight(CLightComponent* inLightInstance);
     void RemoveLight(CLightComponent* inLightInstance);
+    
+    const vector<CLightComponent*>& GetLights() {return lights;}
 protected:
     vector<CLightComponent*> lights;
 };

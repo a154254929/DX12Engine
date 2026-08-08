@@ -32,6 +32,7 @@ public:
     
     //单独设置PSO
     virtual void ResetPSO(int inLayer);
+    virtual void ResetPSO(int inLayer, EPipelineState inPipelineState);
     //渲染 不包含PSO
     virtual void DrawMesh(float deltaTime, int inLayer, ERenderingConditions inRenderingConditions = ERenderingConditions::RC_None);
     

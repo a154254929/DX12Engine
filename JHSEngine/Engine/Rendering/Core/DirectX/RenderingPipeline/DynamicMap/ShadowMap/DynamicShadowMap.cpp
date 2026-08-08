@@ -41,21 +41,27 @@ void FDynamicShadowMap::UpdateCalculations(float deltaTime, const FViewportInfo&
 
     if (viewport)
     {
-        FViewportInfo lightViewportInfo;
-        GetViewportViewMatrix(lightViewportInfo.viewMatrix, lightViewportInfo.projectMatrix);
-        lightViewportInfo.viewWorldPosition = XMFLOAT4(
-            viewport->GetPosition().x,
-            viewport->GetPosition().y,
-            viewport->GetPosition().z,
-            1.f
-        );
+        for (int i = 0; i < GetLightManager()->GetLights().size(); ++i)
+        {
+            if (auto light = GetLightManager()->GetLights()[i])
+            {
+                FViewportInfo lightViewportInfo;
+                GetViewportViewMatrix(lightViewportInfo.viewMatrix, lightViewportInfo.projectMatrix);
+                lightViewportInfo.viewWorldPosition = XMFLOAT4(
+                    viewport->GetPosition().x,
+                    viewport->GetPosition().y,
+                    viewport->GetPosition().z,
+                    1.f
+                );
 
-        geometryMap->UpdateCalculationsViewport(
-            deltaTime,
-            lightViewportInfo,
-            geometryMap->GetDynamicReflectionMeshObjectNumber() * 6
-            + 1
-        );
+                geometryMap->UpdateCalculationsViewport(
+                    deltaTime,
+                    lightViewportInfo,
+                    geometryMap->GetDynamicReflectionMeshObjectNumber() * 6
+                    + 1
+                );
+            }
+        }
     }
 }
 
@@ -68,61 +74,79 @@ void FDynamicShadowMap::Draw(float deltaTime)
 {
     Super::Draw(deltaTime);
     
-    if (FShadowMapRenderTarget* inRenderTarget = dynamic_cast<FShadowMapRenderTarget*>(renderTarget.get()))
+    for (int i = 0; i < GetLightManager()->GetLights().size(); ++i)
     {
-        CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = 
-            CD3DX12_RESOURCE_BARRIER::Transition(
-                renderTarget->GetRenderTaget(),
-                D3D12_RESOURCE_STATE_GENERIC_READ,
-                D3D12_RESOURCE_STATE_DEPTH_WRITE
-            );
+        if (auto light = GetLightManager()->GetLights()[i])
+        {
+            if (FShadowMapRenderTarget* inRenderTarget = dynamic_cast<FShadowMapRenderTarget*>(renderTarget.get()))
+            {
+                CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = 
+                    CD3DX12_RESOURCE_BARRIER::Transition(
+                        renderTarget->GetRenderTaget(),
+                        D3D12_RESOURCE_STATE_GENERIC_READ,
+                        D3D12_RESOURCE_STATE_DEPTH_WRITE
+                    );
         
-        GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresent);
+                GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresent);
         
-        //需要每帧执行,绑定矩形框
-        D3D12_VIEWPORT rtViewPort = renderTarget->GetViewport();
-        D3D12_RECT rtScissorRectt = renderTarget->GetScissorRect();
-        GetGraphicsCommandList()->RSSetViewports(1, &rtViewPort);
-        GetGraphicsCommandList()->RSSetScissorRects(1, &rtScissorRectt);
+                //需要每帧执行,绑定矩形框
+                D3D12_VIEWPORT rtViewPort = renderTarget->GetViewport();
+                D3D12_RECT rtScissorRectt = renderTarget->GetScissorRect();
+                GetGraphicsCommandList()->RSSetViewports(1, &rtViewPort);
+                GetGraphicsCommandList()->RSSetScissorRects(1, &rtScissorRectt);
     
-        UINT cbvSize = geometryMap->viewportConstantBufferView.GetConstantBufferByteSize();
+                UINT cbvSize = geometryMap->viewportConstantBufferView.GetConstantBufferByteSize();
         
-        //清除深度模板缓冲区
-        GetGraphicsCommandList()->ClearDepthStencilView(
-            inRenderTarget->dsvDescHandle,
-            D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
-            1.0f , 0, 0, NULL
-        );
+                //清除深度模板缓冲区
+                GetGraphicsCommandList()->ClearDepthStencilView(
+                    inRenderTarget->dsvDescHandle,
+                    D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
+                    1.0f , 0, 0, NULL
+                );
         
-        //输出的合并阶段
-        GetGraphicsCommandList()->OMSetRenderTargets(0,
-            nullptr,
-            false,
-            &inRenderTarget->dsvDescHandle
-        );
+                //输出的合并阶段
+                GetGraphicsCommandList()->OMSetRenderTargets(0,
+                    nullptr,
+                    false,
+                    &inRenderTarget->dsvDescHandle
+                );
         
-        //更新/绑定摄像机
-        D3D12_GPU_VIRTUAL_ADDRESS gpuViewportAddress = geometryMap->viewportConstantBufferView.GetBuffer()->GetGPUVirtualAddress();
-        gpuViewportAddress += (
-            1
-            + geometryMap->GetDynamicReflectionMeshObjectNumber() * 6
-        ) * cbvSize;
-        GetGraphicsCommandList()->SetGraphicsRootConstantBufferView(1, gpuViewportAddress);
+                //更新/绑定摄像机
+                D3D12_GPU_VIRTUAL_ADDRESS gpuViewportAddress = geometryMap->viewportConstantBufferView.GetBuffer()->GetGPUVirtualAddress();
+                gpuViewportAddress += (
+                    1
+                    + geometryMap->GetDynamicReflectionMeshObjectNumber() * 6
+                ) * cbvSize;
+                GetGraphicsCommandList()->SetGraphicsRootConstantBufferView(1, gpuViewportAddress);
         
-        DrawShadowMapTexture(deltaTime);
+                DrawShadowMapTexture(deltaTime);
         
-        renderLayerManager->ResetPSO(RENDERLAYER_OPAQUE_SHADOW);
+                switch (light->GetLightType())
+                {
+                case ELightType::ParallelLight:
+                    renderLayerManager->ResetPSO(RENDERLAYER_OPAQUE_SHADOW, OrthogonalShadowShadow);
+                    break;
+                case ELightType::SpotLight:
+                    renderLayerManager->ResetPSO(RENDERLAYER_OPAQUE_SHADOW, PerspectiveShadowShadow);
+                    break;
+                case ELightType::PointLight:
+                    renderLayerManager->ResetPSO(RENDERLAYER_OPAQUE_SHADOW, PerspectiveShadowShadow);
+                    break;
+
+                }
         
-        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE, ERenderingConditions::RC_Shadow);
-        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_TRANSPARENT, ERenderingConditions::RC_Shadow);
-        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE_REFLECTOR, ERenderingConditions::RC_Shadow);
+                renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE, ERenderingConditions::RC_Shadow);
+                renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_TRANSPARENT, ERenderingConditions::RC_Shadow);
+                renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE_REFLECTOR, ERenderingConditions::RC_Shadow);
         
-        CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
-            renderTarget->GetRenderTaget(),
-            D3D12_RESOURCE_STATE_DEPTH_WRITE,
-            D3D12_RESOURCE_STATE_GENERIC_READ
-        );
-        GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresentRenderTarget);
+                CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
+                    renderTarget->GetRenderTaget(),
+                    D3D12_RESOURCE_STATE_DEPTH_WRITE,
+                    D3D12_RESOURCE_STATE_GENERIC_READ
+                );
+                GetGraphicsCommandList()->ResourceBarrier(1, &resourceBarrierPresentRenderTarget);
+            }
+        }
     }
 }
 

@@ -10,7 +10,8 @@ enum EPipelineState
     OpaqueReflector = 5,
     GrayModel = 6,
     WireFrame = 7,
-    Shadow = 8,
+    OrthogonalShadowShadow = 8,
+    PerspectiveShadowShadow = 9,
 };
 
 enum ERenderingConditions

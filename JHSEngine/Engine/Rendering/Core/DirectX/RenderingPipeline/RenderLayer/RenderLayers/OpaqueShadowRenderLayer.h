@@ -16,5 +16,6 @@ public:
     virtual void BuildPSO();
 
     virtual void ResetPSO();
+    virtual void ResetPSO(EPipelineState inPipelineState);
 public:  
 };
