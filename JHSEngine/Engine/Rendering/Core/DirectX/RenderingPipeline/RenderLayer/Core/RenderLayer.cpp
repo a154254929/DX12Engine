@@ -132,10 +132,10 @@ void FRenderLayer::UpdateCalculations(float deltaTime, const FViewportInfo viewp
             XMFLOAT3 forwardVector = tmpRenderingData.meshComp->GetForwardVector();
 
             tmpRenderingData.worldMatrix = {
-                rightVector.x * scale.x,    upVector.x,                forwardVector.x ,            0.f,
-                rightVector.y,                upVector.y * scale.y,    forwardVector.y,            0.f,
-                rightVector.z,                upVector.z ,            forwardVector.z * scale.z,    0.f,
-                position.x,                    position.y,                position.z,                    1.f
+                rightVector.x * scale.x,      rightVector.y * scale.x,      rightVector.z * scale.x,      0.f,
+                upVector.x * scale.y,         upVector.y * scale.y,         upVector.z * scale.y,         0.f,
+                forwardVector.x * scale.z,    forwardVector.y * scale.z,    forwardVector.z * scale.z,    0.f,
+                position.x,                   position.y,                   position.z,                   1.f
             };
         }
         //更新模型位置

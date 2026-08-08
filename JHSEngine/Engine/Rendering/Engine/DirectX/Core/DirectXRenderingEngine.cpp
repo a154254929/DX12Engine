@@ -90,13 +90,13 @@ int CDirectXRenderingEngine::PostInit()
         {
             parallelLight1->SetPosition(XMFLOAT3(0.0f, .0f, -8.0f));
             parallelLight1->SetRotation(fvector_3d(30.f, 45.0f, .0f));
+            //parallelLight1->SetRotation(fvector_3d(00.f, 0.0f, .0f));
         }
         if (GParallelLight* parallelLight2 = world->CreateActorObject<GParallelLight>())
         {
             parallelLight2->SetPosition(XMFLOAT3(0.0f, 2.0f, -8.0f));
             parallelLight2->SetRotation(fvector_3d(45.f, -30.0f, .0f));
         }
-        
         if (GPointLight* pointLight1 = world->CreateActorObject<GPointLight>())
         {
             pointLight1->SetPosition(XMFLOAT3(0.0f, .0f, 6.0f));
@@ -107,11 +107,10 @@ int CDirectXRenderingEngine::PostInit()
             pointLight1->SetEndAttenuation(10.f);
         }
         */
-        
         if (GSpotLight* spotLight1 = world->CreateActorObject<GSpotLight>())
         {
-            spotLight1->SetPosition(XMFLOAT3(0.0f, .0f, -6.0f));
-            spotLight1->SetRotation(fvector_3d(195.f, 0.0f, .0f));
+            spotLight1->SetPosition(XMFLOAT3(0.0f, 5.0f, -6.0f));
+            spotLight1->SetRotation(fvector_3d(-15.f, 180.0f, .0f));
             
             spotLight1->SetLightIntensity(fvector_3d(1.3f, 1.3f, 1.3f));
             //spotLight1->SetStartAttenuation(1.f);
@@ -200,7 +199,7 @@ int CDirectXRenderingEngine::PostInit()
             fbxMesh->SetPosition(XMFLOAT3(5, 3.5, 4));
             //fbxMesh->SetRotation(fvector_3d(90.f, 0.f, 0.f));
             fbxMesh->SetScale(fvector_3d(.01f, .01f, .01f));
-            fbxMesh->SetCastShadows(false);
+            //fbxMesh->SetCastShadows(false);
             if (CMaterial* material = (*fbxMesh->GetMaterials())[0])
             {
                 material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));

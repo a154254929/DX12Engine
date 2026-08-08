@@ -56,7 +56,7 @@ float GetShadowFactor_PCF_Sample9(float4 inWorldPosition, float4x4 inShadowMatri
     uint numMips = 0;
     
     ShadowMap.GetDimensions(0, width, height, numMips);
-    float2 sampleBiasSize = (1.f / width, 1.f / height);
+    float2 sampleBiasSize = float2(1.f / width, 1.f / height);
     
     const float2 constShadowSampleBias[9] = {
         float2(-sampleBiasSize.x, -sampleBiasSize.y),   float2(0, -sampleBiasSize.y),   float2(sampleBiasSize.x, -sampleBiasSize.y),
@@ -65,6 +65,7 @@ float GetShadowFactor_PCF_Sample9(float4 inWorldPosition, float4x4 inShadowMatri
     };
     
     float4 shadowTexUV = mul(inShadowMatrix, inWorldPosition);
+    shadowTexUV.xyz /= shadowTexUV.w;
     float result = 0.f;
     
     for (int i = 0; i < 9; i++)

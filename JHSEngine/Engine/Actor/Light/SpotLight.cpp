@@ -23,7 +23,8 @@ void GSpotLight::Tick(float deltaTime)
     */
     XMFLOAT3 position3 = GetPosition();
     
-    position3.y = 5.f + sin(indexTest * 3.1415926 * .5f) * 5.f;
+    //position3.y = 5.f + sin(indexTest * 3.1415926 * .5f) * 5.f;
+    position3.z = -5.f + sin(indexTest * 3.1415926 * .5f) * 5.f;
     
     SetPosition(position3);
     

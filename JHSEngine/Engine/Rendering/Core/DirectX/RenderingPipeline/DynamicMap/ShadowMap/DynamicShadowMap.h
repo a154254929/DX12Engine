@@ -32,11 +32,17 @@ public:
     virtual void DrawShadowMapTexture(float deltaTime);
 public:
     void SetViewportPosition(const fvector_3d& inPosition);
-    void SetViewportROtation(const fvector_3d& inRotation);
-    void BuildViewMaterix(float deltaTime);
-    void BuildParallelLightMaterix(
+    void SetViewportRotation(const fvector_3d& inRotation);
+    void BuildViewMatrix(float deltaTime);
+    void BuildParallelLightMatrix(
         const fvector_3d& inDirection,
         const fvector_3d& inTargetPosition,
+        float inRadius = 100.f
+    );
+    
+    void BuildSpotLightMatrix(
+        const fvector_3d& inDirection,
+        const fvector_3d& inPosition,
         float inRadius = 100.f
     );
     

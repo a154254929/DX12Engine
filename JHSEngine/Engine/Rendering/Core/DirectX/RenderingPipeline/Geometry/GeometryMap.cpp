@@ -209,7 +209,7 @@ void FGeometryMap::UpdateLightShaderResourceView(float deltaTime, const FViewpor
                     
                     //正交矩阵
                     XMFLOAT3 forwardVector = light->GetForwardVector();
-                    dynamicShadowMap.BuildParallelLightMaterix(
+                    dynamicShadowMap.BuildParallelLightMatrix(
                         EngineMath::ToVector3d(forwardVector),
                         fvector_3d(0.f, 0.f, 0.f),
                         30.f
@@ -237,23 +237,54 @@ void FGeometryMap::UpdateLightShaderResourceView(float deltaTime, const FViewpor
                     );
                     break;
                 case ELightType::PointLight:
+                    if (CRangeLightComponent* rangeLight = dynamic_cast<CRangeLightComponent*>(light))
+                    {
+                        lightConstantBuffer.sceneLights[i].startAttenuation = rangeLight->GetStartAttenuation();
+                        lightConstantBuffer.sceneLights[i].endAttenuation = rangeLight->GetEndAttenuation();
+                    }
+                    break;
                 case ELightType::SpotLight:
                     if (CRangeLightComponent* rangeLight = dynamic_cast<CRangeLightComponent*>(light))
                     {
                         lightConstantBuffer.sceneLights[i].startAttenuation = rangeLight->GetStartAttenuation();
                         lightConstantBuffer.sceneLights[i].endAttenuation = rangeLight->GetEndAttenuation();
-                        if (lightType == ELightType::SpotLight)
+                        if(CSpotLightComponent* spotLight = dynamic_cast<CSpotLightComponent*>(rangeLight))
                         {
-                            if(CSpotLightComponent* spotLight = dynamic_cast<CSpotLightComponent*>(rangeLight))
-                            {
-                               lightConstantBuffer.sceneLights[i].startAttenuation = spotLight->GetStartAttenuation();
-                               lightConstantBuffer.sceneLights[i].endAttenuation = spotLight->GetEndAttenuation();
-                               float angle2Radian = acos(-1.0) / 180.f;
-                               lightConstantBuffer.sceneLights[i].conicalInnerCorner = math_utils::angle_to_radian(spotLight->GetConicalInnerCorner());
-                               lightConstantBuffer.sceneLights[i].conicalOuterCorner = spotLight->GetConicalOuterCorner() * angle2Radian;
-                            }
+                           lightConstantBuffer.sceneLights[i].startAttenuation = spotLight->GetStartAttenuation();
+                           lightConstantBuffer.sceneLights[i].endAttenuation = spotLight->GetEndAttenuation();
+                           float angle2Radian = acos(-1.0) / 180.f;
+                           lightConstantBuffer.sceneLights[i].conicalInnerCorner = math_utils::angle_to_radian(spotLight->GetConicalInnerCorner());
+                           lightConstantBuffer.sceneLights[i].conicalOuterCorner = spotLight->GetConicalOuterCorner() * angle2Radian;
                         }
                     }
+                    XMFLOAT3 spotLightForwardVector = light->GetForwardVector();
+                    XMFLOAT3 spotLightPosition = light->GetPosition();
+                    dynamicShadowMap.BuildSpotLightMatrix(
+                        EngineMath::ToVector3d(spotLightForwardVector),
+                        EngineMath::ToVector3d(spotLightPosition),
+                        170.f
+                    );
+                    
+                    XMFLOAT4X4 spotLightViewMatrix, spotLightProjMatrix;
+                    dynamicShadowMap.GetViewportViewMatrix(spotLightViewMatrix, spotLightProjMatrix);
+                        
+                    XMMATRIX spotLightShadowViewMatrix = XMLoadFloat4x4(&spotLightViewMatrix);
+                    XMMATRIX spotLightShadowProjMatrix = XMLoadFloat4x4(&spotLightProjMatrix);
+                    
+                    //NDC[-1, 1] -> UV[0, 1]
+                    XMMATRIX spotLightNDCToUvMatrix = XMMatrixSet(
+                        0.5f, 0.0f, 0.0f, 0.0f,
+                        0.0f, -0.5f, 0.0f, 0.0f,
+                        0.0f, 0.0f, 1.0f, 0.0f,
+                        0.5f, 0.5f, 0.0f, 1.0f
+                    );
+                    
+                    XMMATRIX spotLightShadowViewProjMatrix = spotLightShadowViewMatrix * spotLightShadowProjMatrix * spotLightNDCToUvMatrix;
+                    
+                    XMStoreFloat4x4(
+                        &lightConstantBuffer.sceneLights[i].lightViewProj,
+                        spotLightShadowViewProjMatrix
+                    );
                     break;
             }
         }

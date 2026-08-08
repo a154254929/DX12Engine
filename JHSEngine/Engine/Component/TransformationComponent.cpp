@@ -17,15 +17,17 @@ void CTransformationComponent::SetPosition(const XMFLOAT3& inPosition)
 
 void CTransformationComponent::SetRotation(const fvector_3d& inRotation)
 {
+    rotation = XMFLOAT3(inRotation.x, inRotation.y, inRotation.z);
+
     float rollRadians = XMConvertToRadians(inRotation.z);
     float pitchRadians = XMConvertToRadians(inRotation.x);
     float yawRadians = XMConvertToRadians(inRotation.y);
 
     XMMATRIX rotationPitchYawRoll = XMMatrixRotationRollPitchYaw(pitchRadians, yawRadians, rollRadians);
 
-    XMVECTOR right = XMLoadFloat3(&rightVector);
-    XMVECTOR up = XMLoadFloat3(&upVector);
-    XMVECTOR forward = XMLoadFloat3(&forwardVector);
+    XMVECTOR right = XMVectorSet(1.f, 0.f, 0.f, 0.f);
+    XMVECTOR up = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+    XMVECTOR forward = XMVectorSet(0.f, 0.f, 1.f, 0.f);
 
     XMStoreFloat3(&rightVector, XMVector3TransformNormal(right, rotationPitchYawRoll));
     XMStoreFloat3(&upVector, XMVector3TransformNormal(up, rotationPitchYawRoll));

@@ -53,7 +53,7 @@ void FDynamicShadowMap::UpdateCalculations(float deltaTime, const FViewportInfo&
         geometryMap->UpdateCalculationsViewport(
             deltaTime,
             lightViewportInfo,
-            geometryMap->GetDynamicReflectionMeshObjectNumber()
+            geometryMap->GetDynamicReflectionMeshObjectNumber() * 6
             + 1
         );
     }
@@ -105,7 +105,7 @@ void FDynamicShadowMap::Draw(float deltaTime)
         D3D12_GPU_VIRTUAL_ADDRESS gpuViewportAddress = geometryMap->viewportConstantBufferView.GetBuffer()->GetGPUVirtualAddress();
         gpuViewportAddress += (
             1
-            + geometryMap->GetDynamicReflectionMeshObjectNumber()
+            + geometryMap->GetDynamicReflectionMeshObjectNumber() * 6
         ) * cbvSize;
         GetGraphicsCommandList()->SetGraphicsRootConstantBufferView(1, gpuViewportAddress);
         
@@ -147,21 +147,21 @@ void FDynamicShadowMap::DrawShadowMapTexture(float deltaTime)
 void FDynamicShadowMap::SetViewportPosition(const fvector_3d& inPosition)
 {
     viewport->SetPosition(XMFLOAT3(inPosition.x, inPosition.y, inPosition.z));
-    BuildViewMaterix(0.3f);
+    BuildViewMatrix(0.3f);
 }
 
-void FDynamicShadowMap::SetViewportROtation(const fvector_3d& inRotation)
+void FDynamicShadowMap::SetViewportRotation(const fvector_3d& inRotation)
 {
     viewport->SetRotation(inRotation);
-    BuildViewMaterix(0.3f);
+    BuildViewMatrix(0.3f);
 }
 
-void FDynamicShadowMap::BuildViewMaterix(float deltaTime)
+void FDynamicShadowMap::BuildViewMatrix(float deltaTime)
 {
     viewport->BuildViewMatrix(deltaTime);
 }
 
-void FDynamicShadowMap::BuildParallelLightMaterix(
+void FDynamicShadowMap::BuildParallelLightMatrix(
     const fvector_3d& inDirection,
     const fvector_3d& inTargetPosition,
     float inRadius)
@@ -169,8 +169,18 @@ void FDynamicShadowMap::BuildParallelLightMaterix(
     fvector_3d position = inDirection * -inRadius;
     viewport->SetPosition(XMFLOAT3(position.x, position.y, position.z));
     viewport->LookAt(position, inTargetPosition, fvector_3d(0.f, 1.f, 0.f));
-    BuildViewMaterix(0.3f);
+    BuildViewMatrix(0.3f);
     viewport->BuildOrthographicOffCenterLHMatrix(inRadius, inTargetPosition);
+}
+
+void FDynamicShadowMap::BuildSpotLightMatrix(const fvector_3d& inDirection, const fvector_3d& inPosition,
+    float inRadius)
+{
+    fvector_3d viewPosition = inPosition - inDirection * inRadius;
+    viewport->SetPosition(XMFLOAT3(inPosition.x, inPosition.y, inPosition.z));
+    viewport->LookAt(inPosition, viewPosition, fvector_3d(0.f, 1.f, 0.f));
+    viewport->SetFrustum(162.0f, 1.0f, 0.1f, 10000.f);
+    BuildViewMatrix(0.3f);
 }
 
 void FDynamicShadowMap::BuildViewPort(const fvector_3d& inPosition)
@@ -178,8 +188,8 @@ void FDynamicShadowMap::BuildViewPort(const fvector_3d& inPosition)
     viewport = CreateObject<GClientViewport>(new GClientViewport());
     viewport->SetPosition(XMFLOAT3(inPosition.x, inPosition.y, inPosition.z));
     viewport->LookAt(inPosition, fvector_3d(10.f), fvector_3d(0.f, 1.f, 0.f));
-    viewport->SetFrustum(.05 * XM_PI, 1.0f, 0.1f, 10000.f);
-    BuildViewMaterix(0.3f);
+    viewport->SetFrustum(45.f, 1.0f, 0.1f, 10000.f);
+    BuildViewMatrix(0.3f);
 }
 
 void FDynamicShadowMap::BuildRenderTargetDescriptor()
