@@ -49,10 +49,13 @@ void FDynamicShadowCubeMap::UpdateCalculations(float deltaTime, const FViewportI
 {
     if (viewports.size() >= 6)
     {
+        int pointLightCount = 0;
         for (int i = 0; i < GetLightManager()->GetLights().size(); i++)
         {
-            CMeshComponent* meshComponent = geometryMap->dynamicReflectionMeshComponents[i];
-            XMFLOAT3 position = meshComponent->GetPosition();
+            CLightComponent* lightComp = GetLightManager()->GetLights()[i];
+            if (lightComp->GetLightType() != ELightType::PointLight)
+                continue;
+            XMFLOAT3 position = lightComp->GetPosition();
             SetViewportPosition(fvector_3d(position.x, position.y, position.z));
             
             for (int viewportIndex = 0; viewportIndex < 6; viewportIndex++)
@@ -66,10 +69,11 @@ void FDynamicShadowCubeMap::UpdateCalculations(float deltaTime, const FViewportI
                 geometryMap->UpdateCalculationsViewport(
                     deltaTime,
                     viewportInfo,
-                    i * 6 + viewportIndex
+                    pointLightCount * 6 + viewportIndex
                     + 1
                 );
             }
+            pointLightCount++;
         }
     }
 }
