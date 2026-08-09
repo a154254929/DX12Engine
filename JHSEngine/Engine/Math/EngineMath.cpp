@@ -20,4 +20,13 @@ namespace EngineMath
     {
         return fvector_3d(inFloat3d.x, inFloat3d.y, inFloat3d.z);
     }
+
+    fvector_3d GetPointSphericalCoordinates(const fvector_3d& inV3d)
+    {
+        float radius = fvector_3d::dot(inV3d, inV3d);
+        radius = sqrt(radius);
+        float theta = acos(inV3d.z / radius);
+        float phi = atan2f(inV3d.y, inV3d.x);
+        return fvector_3d(radius, theta, phi);
+    }
 }
