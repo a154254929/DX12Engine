@@ -927,7 +927,8 @@ bool CDirectXRenderingEngine::InitDirect3D()
     D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc;
     rtvDescriptorHeapDesc.NumDescriptors =
         FEngineRenderConfig::GetRenderConfig()->SwapChainCount //交换链
-        + 6;                                                    //实时cubemap
+        + 6                                                    //实时cubemap
+        + 6;                                                   //ShadowCubemap
     /*
         D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV  CBV常量缓冲区视图 SRV着色器资源视图 UAV无需访问视图
         D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER      采样器视图
@@ -940,7 +941,7 @@ bool CDirectXRenderingEngine::InitDirect3D()
     ANALYSIS_HRESULT(d3dDevice->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(rtvHeap.GetAddressOf())));
 
     D3D12_DESCRIPTOR_HEAP_DESC dsvDescriptorHeapDesc;
-    dsvDescriptorHeapDesc.NumDescriptors = 1 + 1 + 1; //主视口+实时cubmap+shadowMap
+    dsvDescriptorHeapDesc.NumDescriptors = 1 + 1 + 1 + 1; //主视口+实时cubmap+shadowMap+ShadowCubemap
     dsvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
     dsvDescriptorHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
     dsvDescriptorHeapDesc.NodeMask = 0;

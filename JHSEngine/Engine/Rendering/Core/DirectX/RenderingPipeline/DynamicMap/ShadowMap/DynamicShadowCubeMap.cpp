@@ -162,7 +162,7 @@ void FDynamicShadowCubeMap::BuildDepthStencilDescriptor()
     UINT descriptorHandleIncrementSize = GetDescriptorHandleIncrementSizeByDSV();
     dsvDesc = CD3DX12_CPU_DESCRIPTOR_HANDLE(
         GetDSVHeap()->GetCPUDescriptorHandleForHeapStart(),
-        1,
+        3,
         descriptorHandleIncrementSize
     );
 }
@@ -182,7 +182,9 @@ void FDynamicShadowCubeMap::BuildRenderTargetRTV()
         {
             cubemapRT->GetCPURenderTargetView(i) = CD3DX12_CPU_DESCRIPTOR_HANDLE(
                 rtvDesAddr,
-                FEngineRenderConfig::GetRenderConfig()->SwapChainCount + i,
+                FEngineRenderConfig::GetRenderConfig()->SwapChainCount
+                + 6     //Cubemap
+                + i,
                 rtvDescSize
             );
         }
