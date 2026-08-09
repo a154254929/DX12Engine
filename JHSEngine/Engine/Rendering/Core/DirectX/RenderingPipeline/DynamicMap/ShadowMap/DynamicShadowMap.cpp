@@ -129,15 +129,8 @@ void FDynamicShadowMap::Draw(float deltaTime)
                 case ELightType::SpotLight:
                     renderLayerManager->ResetPSO(RENDERLAYER_OPAQUE_SHADOW, PerspectiveShadowShadow);
                     break;
-                case ELightType::PointLight:
-                    renderLayerManager->ResetPSO(RENDERLAYER_OPAQUE_SHADOW, PerspectiveShadowShadow);
-                    break;
 
                 }
-        
-                renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE, ERenderingConditions::RC_Shadow);
-                renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_TRANSPARENT, ERenderingConditions::RC_Shadow);
-                renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE_REFLECTOR, ERenderingConditions::RC_Shadow);
         
                 CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
                     renderTarget->GetRenderTaget(),
@@ -163,7 +156,7 @@ void FDynamicShadowMap::DrawShadowMapTexture(float deltaTime)
 {
     GetGraphicsCommandList()->SetGraphicsRootDescriptorTable(
         7,
-        renderTarget->GetGPUOffset()
+        renderTarget->GetGPUSRVOffset()
     );
     
 }

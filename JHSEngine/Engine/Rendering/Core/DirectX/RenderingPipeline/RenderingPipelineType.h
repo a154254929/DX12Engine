@@ -12,6 +12,7 @@ enum EPipelineState
     WireFrame = 7,
     OrthogonalShadowShadow = 8,
     PerspectiveShadowShadow = 9,
+    VientianeShadowShadow,
 };
 
 enum ERenderingConditions

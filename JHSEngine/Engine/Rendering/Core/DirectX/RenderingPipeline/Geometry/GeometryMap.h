@@ -148,6 +148,10 @@ public:
     void BuildShadow();
     
 public:
+    UINT GetViewportConstantBufferByteSize();
+    
+    D3D12_GPU_VIRTUAL_ADDRESS GetViewportConstantBufferViewGPUVirtualAddress();
+public:
     bool IsFogOn();
 public:
     ID3D12DescriptorHeap* GetHeap() const { return descriptorHeap.GetHeap(); }

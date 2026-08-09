@@ -17,6 +17,11 @@ void FCubeMapRenderTarget::ResetRenderTarget(UINT inWidth, UINT inHeight)
     Super::ResetRenderTarget(inWidth, inHeight);
 }
 
+CD3DX12_CPU_DESCRIPTOR_HANDLE& FCubeMapRenderTarget::GetCPURenderTargetView(int index)
+{
+    return cpuRenderTargetView[index];
+}
+
 void FCubeMapRenderTarget::BuildRenderTargetMap()
 {
     CD3DX12_RESOURCE_DESC heapBufferDesc;

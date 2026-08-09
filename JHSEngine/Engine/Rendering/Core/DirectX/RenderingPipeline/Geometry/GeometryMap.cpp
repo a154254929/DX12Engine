@@ -664,6 +664,16 @@ void FGeometryMap::BuildShadow()
     dynamicShadowMap.BuildRenderTargetDescriptor();
 }
 
+UINT FGeometryMap::GetViewportConstantBufferByteSize()
+{
+    return viewportConstantBufferView.GetConstantBufferByteSize();
+}
+
+D3D12_GPU_VIRTUAL_ADDRESS FGeometryMap::GetViewportConstantBufferViewGPUVirtualAddress()
+{
+    return viewportConstantBufferView.GetBuffer()->GetGPUVirtualAddress();
+}
+
 bool FGeometryMap::IsFogOn()
 {
     return fogComponent != NULL;

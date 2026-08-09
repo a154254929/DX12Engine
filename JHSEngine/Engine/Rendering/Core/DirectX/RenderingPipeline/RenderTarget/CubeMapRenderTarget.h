@@ -12,6 +12,9 @@ public:
     
     virtual void ResetRenderTarget(UINT inWidth, UINT inHeight);
     
+public:
+    CD3DX12_CPU_DESCRIPTOR_HANDLE& GetCPURenderTargetView(int index);
+    
 private:
     virtual void BuildRenderTargetMap();
     virtual void BuildSRVDescriptors();
