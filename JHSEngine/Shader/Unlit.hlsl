@@ -268,7 +268,8 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         float inShadow = 1;
         if (SceneLights[i].LightType == 2)
         {
-            inShadow = ProcessingImnidirectionalSampleCubeMapShadow(input.worldPosition,  SceneLights[i].LightPosition);
+            //inShadow = ProcessingImnidirectionalSampleCubeMapShadow(input.worldPosition,  SceneLights[i].LightPosition);
+            inShadow = ProcessingImnidirectionalSampleCmpLevelZeroShadow(input.worldPosition,  SceneLights[i].LightPosition);
         }
          else
          {

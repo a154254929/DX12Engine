@@ -88,4 +88,13 @@ float ProcessingImnidirectionalSampleCubeMapShadow(float4 inWorldPosition, float
     
     return cubemapDepth;
 }
+
+float ProcessingImnidirectionalSampleCmpLevelZeroShadow(float4 inWorldPosition, float3 inLightPosition)
+{
+    float3 lightView = inWorldPosition.xyz - inLightPosition;
+    
+    float cubemapDepth = ShadowCubeMap[0].SampleCmpLevelZero(Shadow_Sampler, float4(lightView, 1.f), 0.f).r;
+    
+    return cubemapDepth;
+}
 #endif
