@@ -40,8 +40,10 @@ void FDynamicShadowCubeMap::UpdateCalculations(float deltaTime, const FViewportI
                 geometryMap->UpdateCalculationsViewport(
                     deltaTime,
                     viewportInfo,
-                    pointLightCount * 6 + viewportIndex
+                    1
+                    + geometryMap->GetDynamicReflectionMeshObjectNumber() * 6
                     + 1
+                    + pointLightCount * 6 + viewportIndex
                 );
             }
             pointLightCount++;
@@ -62,6 +64,7 @@ void FDynamicShadowCubeMap::PreDraw(float deltaTime)
 {
     if (FCubeMapRenderTarget* cubemapRT = dynamic_cast<FCubeMapRenderTarget*>(renderTarget.get()))
     {
+        int pointLightCount = 0;
         for (int i = 0; i < GetLightManager()->GetLights().size(); i++)
         {
             CLightComponent* lightComp = GetLightManager()->GetLights()[i];
@@ -117,7 +120,12 @@ void FDynamicShadowCubeMap::PreDraw(float deltaTime)
             
                 //更新/绑定6个摄像机
                 D3D12_GPU_VIRTUAL_ADDRESS gpuViewportAddress = geometryMap->GetViewportConstantBufferViewGPUVirtualAddress();
-                gpuViewportAddress += (1 + i * 6 + viewportIndex) * cbvSize;
+                gpuViewportAddress += (
+                    1
+                    + geometryMap->GetDynamicReflectionMeshObjectNumber() * 6
+                    + 1
+                    + pointLightCount * 6 + viewportIndex
+                ) * cbvSize;
                 GetGraphicsCommandList()->SetGraphicsRootConstantBufferView(1, gpuViewportAddress);
                 
                 renderLayerManager->ResetPSO(RENDERLAYER_OPAQUE_SHADOW, EPipelineState::VientianeShadowShadow);
@@ -147,6 +155,7 @@ void FDynamicShadowCubeMap::PreDraw(float deltaTime)
                 8,
                 cubemapRT->GetGPUSRVOffset()
             );
+            pointLightCount ++;
         }
             
     }
@@ -201,15 +210,20 @@ void FDynamicShadowCubeMap::BuildRenderTargetSRV()
         D3D12_GPU_DESCRIPTOR_HANDLE gpuSRVDesAddr = geometryMap->GetHeap()->GetGPUDescriptorHandleForHeapStart();
         
         UINT cbvDescSize = GetDescriptorHandleIncrementSizeByCBV_SRV_UAV();
+        int offset = geometryMap->GetDrawTexture2DResourcesNumber()
+            + geometryMap->GetDrawTextureCubemapResourcesNumber()
+            + 1  //Cubemap
+            + 1; //ShadowMap
+        
         cubemapRT->GetCPUSRVOffset() = CD3DX12_CPU_DESCRIPTOR_HANDLE(
             cpuRTVDesAddr,
-            geometryMap->GetDrawTexture2DResourcesNumber() + geometryMap->GetDrawTextureCubemapResourcesNumber(),
+            offset,
             cbvDescSize
         );
     
         cubemapRT->GetGPUSRVOffset() = CD3DX12_GPU_DESCRIPTOR_HANDLE(
             gpuSRVDesAddr,
-            geometryMap->GetDrawTexture2DResourcesNumber() + geometryMap->GetDrawTextureCubemapResourcesNumber(),
+            offset,
             cbvDescSize
         );
     }

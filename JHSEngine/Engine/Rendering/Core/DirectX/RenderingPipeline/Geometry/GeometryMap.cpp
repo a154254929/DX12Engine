@@ -429,6 +429,7 @@ void FGeometryMap::BuildViewportConstantBuffer(UINT inViewportOffset)
         1                                     //主视口
         + GetDynamicReflectionMeshObjectNumber() * 6    //cubeMap
         + 1                                             //shadowMap
+        + 6                                             //ShadowCubeMap
         + inViewportOffset
     );
 
