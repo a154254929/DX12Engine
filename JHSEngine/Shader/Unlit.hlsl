@@ -270,6 +270,10 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
         {
             //inShadow = ProcessingImnidirectionalSampleCubeMapShadow(input.worldPosition,  SceneLights[i].LightPosition);
             inShadow = ProcessingImnidirectionalSampleCmpLevelZeroShadow(input.worldPosition,  SceneLights[i].LightPosition);
+            
+            int indexR = GetSampleCubemapIndex(input.worldPosition - SceneLights[i].LightPosition);
+            return DebugCubeMapViewPort(indexR, inShadow);
+            
         }
          else
          {

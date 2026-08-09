@@ -5,12 +5,12 @@ namespace EngineMath
 {
     enum ECubeMapFace
     {
-        PositiveX  = 0, 
-        NegativeX = 1,
-        PositiveY = 2,
-        NegativeY = 3,
-        PositiveZ = 4,
-        NegativeZ = 5,
+        POSITIVE_X  = 0, 
+        NEGATIVE_X = 1,
+        POSITIVE_Y = 2,
+        NEGATIVE_Y = 3,
+        POSITIVE_Z = 4,
+        NEGATIVE_Z = 5,
         Invalid = 6
     };
     
@@ -19,6 +19,19 @@ namespace EngineMath
     XMFLOAT3 ToFloat3(const fvector_3d& inV3d);
     
     fvector_3d ToVector3d(const XMFLOAT3& inV3d);
+    
+    bool IsAngleRange(float inAngle, float x, float y);
+    
+    bool IsAngleAxisRange(float inAngle, float x, float y, float inCriticalValue, bool bCompMin);
+    
+    bool IsPointInCubeMapViewport(
+        float inPointTheta
+        , float inPointPhi
+        , fvector_4d inCompareValue
+        , int bAxisRange
+        , float inCriticalValue = 0.f
+        , bool bCompMin = false
+    );
     
     fvector_3d GetPointSphericalCoordinates(const fvector_3d& inV3d);
     
