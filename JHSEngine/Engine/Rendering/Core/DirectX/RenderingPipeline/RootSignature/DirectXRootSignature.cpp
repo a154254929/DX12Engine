@@ -21,7 +21,7 @@ void FDirectXRootSignature::BuildRootSignature(UINT inTextureNum, UINT inTexture
 {
 
     //构建根签名
-    CD3DX12_ROOT_PARAMETER rootParam[8];
+    CD3DX12_ROOT_PARAMETER rootParam[9];
 
 
     //TextureCubemap srv描述表
@@ -40,14 +40,22 @@ void FDirectXRootSignature::BuildRootSignature(UINT inTextureNum, UINT inTexture
         1,
         1
     );
+    
+    //shadowCubeMap srv描述表
+    CD3DX12_DESCRIPTOR_RANGE descriptorRangeShadowCubeMapSRV;
+    descriptorRangeShadowCubeMapSRV.Init(
+        D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
+        1,
+        2
+    );
 
     //Texture2D srv描述表
     CD3DX12_DESCRIPTOR_RANGE descriptorRangeTexture2DSRV;
     descriptorRangeTexture2DSRV.Init(
         D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
         inTextureNum,
-        2
-        );
+        3
+    );
 
     rootParam[0].InitAsConstantBufferView(0);   //对象
     rootParam[1].InitAsConstantBufferView(1);   //视口
@@ -57,18 +65,21 @@ void FDirectXRootSignature::BuildRootSignature(UINT inTextureNum, UINT inTexture
     //t
     rootParam[4].InitAsShaderResourceView(0, 1);    //材质
     
+    /***********************贴图************************/
     //2D贴图
-    rootParam[5].InitAsDescriptorTable(1, &descriptorRangeTexture2DSRV, D3D12_SHADER_VISIBILITY_ALL);//贴图
+    rootParam[5].InitAsDescriptorTable(1, &descriptorRangeTexture2DSRV, D3D12_SHADER_VISIBILITY_ALL);
     //Cubemap贴图
-    rootParam[6].InitAsDescriptorTable(1, &descriptorRangeTextureCubemapSRV, D3D12_SHADER_VISIBILITY_ALL);//贴图
+    rootParam[6].InitAsDescriptorTable(1, &descriptorRangeTextureCubemapSRV, D3D12_SHADER_VISIBILITY_ALL);
     //shadowMap
-    rootParam[7].InitAsDescriptorTable(1, &descriptorRangeShadowMapSRV, D3D12_SHADER_VISIBILITY_ALL);//贴图
+    rootParam[7].InitAsDescriptorTable(1, &descriptorRangeShadowMapSRV, D3D12_SHADER_VISIBILITY_ALL);
+    //shadowCubeMap
+    rootParam[8].InitAsDescriptorTable(1, &descriptorRangeShadowCubeMapSRV, D3D12_SHADER_VISIBILITY_ALL);
     
     //构建静态采样
     staticSamplerObject.BuildStaticSample();
 
     CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc(
-        8,
+        9,
         rootParam,
         staticSamplerObject.GetSize(),    //数量
         staticSamplerObject.GetData(),    //实际指针

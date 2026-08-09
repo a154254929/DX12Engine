@@ -1,11 +1,12 @@
 #pragma once
-#include "../Core/DynamicMap.h"
+#include "DynamicMap.h"
 
 class GClientViewport;
 
 class FDynamicCubeMap : public FDynamicMap
 {
-    typedef FDynamicMap Super;
+typedef FDynamicMap Super;
+protected:
     struct FTmpViewportCapture
     {
         FTmpViewportCapture();
@@ -32,29 +33,17 @@ public:
         FRenderLayerManager* inRenderLayerManager
     );
     
-    virtual void UpdateCalculations(
-        float deltaTime,
-        const FViewportInfo& inViewportInfo
-    ); 
-    
-    virtual void PreDraw(float deltaTime);
-    
-    virtual void Draw(float deltaTime);
-    
 public:
-    void SetViewportPosition(const fvector_3d& inPosition);
-    
-    bool IsExistDynamicReflectionMesh();
-    
     virtual void BuildViewPort(const fvector_3d& inPosition);
     virtual void BuildDepthStencil();
     
-    virtual void BuildDepthStencilDescriptor();
+    void SetViewportPosition(const fvector_3d& inPosition);
+    
     virtual void BuildRenderTargetDescriptor();
     
 protected:
-    virtual void BuildRenderTargetRTV();
-    virtual void BuildRenderTargetSRV();
+    virtual void BuildRenderTargetRTV(){};
+    virtual void BuildRenderTargetSRV(){};
     
 protected:
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvDesc;              //dsv描述
@@ -62,4 +51,5 @@ protected:
     vector<GClientViewport*> viewports;                 //6个视口
     
     ComPtr<ID3D12Resource> depthStencilBuffer;
+    
 };

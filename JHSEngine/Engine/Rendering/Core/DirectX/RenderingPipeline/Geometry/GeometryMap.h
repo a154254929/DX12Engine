@@ -48,7 +48,6 @@ protected:
 class FGeometryMap : public IDirectXDeviceInterface
 {
     friend class FRenderLayer;
-    friend class FDynamicCubeMap;
     friend class FDynamicShadowMap;
     friend class FRenderingPipeline;
 public:
@@ -121,6 +120,8 @@ public:
     
     //动态Cubemap数量
     UINT GetDynamicReflectionMeshObjectNumber();
+    
+    CMeshComponent* GetDynamicReflectionComponent(int index);
     
 public:
     std::unique_ptr<FRenderingTexture> *FindRenderingTextureByName(const std::string &inKey);

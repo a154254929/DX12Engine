@@ -1,13 +1,11 @@
 #pragma once
 #include "../Core/DynamicCubeMap.h"
 
-class GClientViewport;
-
-class FDynamicShadowCubeMap : public FDynamicCubeMap
+class FDynamicReflectionCubeMap : public FDynamicCubeMap
 {
     typedef FDynamicCubeMap Super;
 public:
-    FDynamicShadowCubeMap();
+    FDynamicReflectionCubeMap();
     
     virtual void UpdateCalculations(
         float deltaTime,
@@ -26,7 +24,10 @@ public:
     
 public:
     
+    bool IsExistDynamicReflectionMesh();
+    
     virtual void BuildDepthStencilDescriptor();
+    virtual void BuildRenderTargetDescriptor();
     
 protected:
     virtual void BuildRenderTargetRTV();

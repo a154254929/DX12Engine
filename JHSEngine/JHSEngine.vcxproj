@@ -284,8 +284,9 @@
     <ClCompile Include="Engine\Rendering\Core\Buffer\ConstructBuffer.cpp" />
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\ConstantBuffer\ConstantBufferView.cpp" />
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DescriptorHeap\DirectXDescriptorHeap.cpp" />
+    <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\Core\DynamicCubeMap.cpp" />
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\Core\DynamicMap.cpp" />
-    <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\Cubemap\DynamicCubeMap.cpp" />
+    <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\Cubemap\DynamicReflectionCubeMap.cpp" />
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\ShadowMap\DynamicShadowCubeMap.cpp" />
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\ShadowMap\DynamicShadowMap.cpp" />
     <ClCompile Include="Engine\Rendering\Core\DirectX\RenderingPipeline\Geometry\GeometryMap.cpp" />
@@ -442,8 +443,9 @@
     <ClInclude Include="Engine\Rendering\Core\Buffer\ConstructBuffer.h" />
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\ConstantBuffer\ConstantBufferView.h" />
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DescriptorHeap\DirectXDescriptorHeap.h" />
+    <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\Core\DynamicCubeMap.h" />
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\Core\DynamicMap.h" />
-    <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\Cubemap\DynamicCubeMap.h" />
+    <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\Cubemap\DynamicReflectionCubeMap.h" />
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\ShadowMap\DynamicShadowMap.h" />
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\Geometry\GeometryMap.h" />
     <ClInclude Include="Engine\Rendering\Core\DirectX\RenderingPipeline\Geometry\RenderingData.h" />

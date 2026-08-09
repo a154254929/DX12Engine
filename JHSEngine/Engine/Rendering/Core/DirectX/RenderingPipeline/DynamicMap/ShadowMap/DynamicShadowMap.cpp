@@ -131,6 +131,11 @@ void FDynamicShadowMap::Draw(float deltaTime)
                     break;
 
                 }
+            
+                //各类层级渲染
+                renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE, ERenderingConditions::RC_Shadow);
+                renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_TRANSPARENT, ERenderingConditions::RC_Shadow);
+                renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE_REFLECTOR, ERenderingConditions::RC_Shadow);
         
                 CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
                     renderTarget->GetRenderTaget(),

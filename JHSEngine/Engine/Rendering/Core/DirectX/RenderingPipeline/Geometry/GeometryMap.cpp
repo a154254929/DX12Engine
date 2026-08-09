@@ -486,6 +486,15 @@ UINT FGeometryMap::GetDynamicReflectionMeshObjectNumber()
     return dynamicReflectionMeshComponents.size();
 }
 
+CMeshComponent* FGeometryMap::GetDynamicReflectionComponent(int index)
+{
+    if (index >= 0 && index < dynamicReflectionMeshComponents.size())
+    {
+        return dynamicReflectionMeshComponents[index];
+    }
+    return nullptr;
+}
+
 std::unique_ptr<FRenderingTexture>* FGeometryMap::FindRenderingTextureByName(const std::string& inKey)
 {
     if (auto texture2DPtr = renderingTexture2DResourcesUpdate->FindRenderingTextureByName(inKey))

@@ -4,7 +4,7 @@
 class FCubeMapRenderTarget : public FRenderTarget
 {
     typedef FRenderTarget Super;
-    friend class FDynamicCubeMap;
+    friend class FDynamicReflectionCubeMap;
 public:
     FCubeMapRenderTarget();
     
