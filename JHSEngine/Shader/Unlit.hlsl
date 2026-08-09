@@ -264,8 +264,16 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
             specularColor.rgb = saturate(specular * FresnelSchlickMethod(f0, worldNormal, view, 3).rgb);
             break;
         }
-
-		float inShadow = GetShadowFactor_PCF_Sample9(input.worldPosition, SceneLights[i].LightViewProj);
+        
+        float inShadow = 1;
+        if (SceneLights[i].LightType == 2)
+        {
+            inShadow = ProcessingImnidirectionalSampleCubeMapShadow(input.worldPosition,  SceneLights[i].LightPosition);
+        }
+         else
+         {
+            inShadow = GetShadowFactor_PCF_Sample9(input.worldPosition, SceneLights[i].LightViewProj);
+         }
         
         lightStrengths += lightStrength
 						* diffuse

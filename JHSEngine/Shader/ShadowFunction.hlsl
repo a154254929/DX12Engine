@@ -80,5 +80,12 @@ float GetShadowFactor_PCF_Sample9(float4 inWorldPosition, float4x4 inShadowMatri
     return max(result / 9.0f, 0.1f); 
 }
 
-
+float ProcessingImnidirectionalSampleCubeMapShadow(float4 inWorldPosition, float3 inLightPosition)
+{
+    float3 lightView = inWorldPosition.xyz - inLightPosition;
+    
+    float cubemapDepth = ShadowCubeMap[0].Sample(Point_Sampler, lightView).r;
+    
+    return cubemapDepth;
+}
 #endif

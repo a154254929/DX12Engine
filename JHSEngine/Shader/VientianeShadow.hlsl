@@ -30,6 +30,8 @@ Attribute ShadowVertexShader(Varying input)
 float4 ShadowPixelShader(Attribute input) : SV_TARGET
 {
     float depth = input.position.z / input.position.w;
+    
+    depth = 1.f - depth;
 
     return float4(depth, depth, depth, 1.0f);
 }
