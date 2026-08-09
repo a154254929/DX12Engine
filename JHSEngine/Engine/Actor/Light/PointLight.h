@@ -8,4 +8,7 @@ public:
     GPointLight();
 
     virtual void Tick(float deltaTime);
+    
+private:
+    float time = 0.f;
 };

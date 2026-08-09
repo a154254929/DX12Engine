@@ -23,6 +23,9 @@ bool FRenderingPipeline::FindMeshRenderingData(const size_t& inHash, FRenderingD
 
 void FRenderingPipeline::UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo)
 {
+    
+    geometryMap.dynamicShadowCubeMap.UpdateCalculations(deltaTime, viewportInfo);
+    
     dynamicCubeMap.UpdateCalculations(deltaTime, viewportInfo);
     
     geometryMap.UpdateCalculations(deltaTime, viewportInfo);
@@ -55,11 +58,18 @@ void FRenderingPipeline::BuildPipeline()
         &directXPipelineState,
         &renderLayerManager
     );
+    
     geometryMap.dynamicShadowMap.Init(
         &geometryMap,
         &directXPipelineState,
         &renderLayerManager
-        );
+    );
+    
+    geometryMap.dynamicShadowCubeMap.Init(
+        &geometryMap,
+        &directXPipelineState,
+        &renderLayerManager
+    );
 
     //构建常量描述堆
     geometryMap.BuildDescriptorHeap();
@@ -131,15 +141,17 @@ void FRenderingPipeline::PreDraw(float deltaTime)
     geometryMap.Draw(deltaTime);
     
     geometryMap.DrawShadow(deltaTime);
+    
+    geometryMap.dynamicShadowCubeMap.PreDraw(deltaTime);
 
     //清理主视口
     ClearMainViewportSwapChainCanvas();
     
-    if (dynamicCubeMap.IsExistDynamicReflectionMesh())
-    {
-        //动态Cubemap先渲染
-        dynamicCubeMap.PreDraw(deltaTime);
-    }
+    // if (dynamicCubeMap.IsExistDynamicReflectionMesh())
+    // {
+    //     //动态Cubemap先渲染
+    //     dynamicCubeMap.PreDraw(deltaTime);
+    // }
     
     renderLayerManager.PreDraw(deltaTime);
 
@@ -151,7 +163,7 @@ void FRenderingPipeline::Draw(float deltaTime)
     geometryMap.DrawViewport(deltaTime);
     
     //渲染灯光材质雾等
-    geometryMap.DrawTextureCubemap(deltaTime);
+    //geometryMap.DrawTextureCubemap(deltaTime);
     //各类层级
     renderLayerManager.Draw(RENDERLAYER_BACKGROUND, deltaTime);
     renderLayerManager.Draw(RENDERLAYER_OPAQUE, deltaTime);

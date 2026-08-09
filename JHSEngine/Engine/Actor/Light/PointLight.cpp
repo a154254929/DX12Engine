@@ -9,11 +9,12 @@ GPointLight::GPointLight()
 
 void GPointLight::Tick(float deltaTime)
 {
-    fvector_3d rotationV3 = GetRotation();
+    time += deltaTime;
+    XMFLOAT3 POSItion = GetPosition();
     
-    //rotationV3.x += deltaTime * 15.0f;
-    //rotationV3.y += deltaTime * 25.0f;
-    //rotationV3.x += deltaTime * 15.0f;
+    POSItion.x = sin(time) * 3.0f;
+    POSItion.y = 1.0f;
+    POSItion.z = cos(time) * 3.0f;
     
-    SetRotation(rotationV3);
+    SetPosition(POSItion);
 }

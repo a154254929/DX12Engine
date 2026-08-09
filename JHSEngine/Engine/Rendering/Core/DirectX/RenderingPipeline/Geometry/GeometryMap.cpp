@@ -369,6 +369,7 @@ void FGeometryMap::BuildDescriptorHeap()
         + GetDrawTextureCubemapResourcesNumber()    //静态Cubemap
         + 1                                         //动态Cubmap
         + GetDrawShadowMapResourcesNumber()         //shadowmap
+        + 1                                         //shadowCubeMap
     );
 }
 
@@ -666,12 +667,14 @@ void FGeometryMap::BuildFog()
 void FGeometryMap::BuildShadow()
 {
     dynamicShadowMap.Init(2048, 2048);
-    
     dynamicShadowMap.BuildViewPort(fvector_3d(0.f, 0.f, 0.f));
-    
     dynamicShadowMap.BuildDepthStencilDescriptor();
-    
     dynamicShadowMap.BuildRenderTargetDescriptor();
+    
+    dynamicShadowCubeMap.BuildViewPort(fvector_3d(0.f, 0.f, 0.f));
+    dynamicShadowCubeMap.BuildDepthStencilDescriptor();
+    dynamicShadowCubeMap.BuildRenderTargetDescriptor();
+    dynamicShadowCubeMap.BuildDepthStencil();
 }
 
 UINT FGeometryMap::GetViewportConstantBufferByteSize()

@@ -15,7 +15,7 @@ struct Attribute
     float2 uv : TEXCOORD;
 };
 
-Attribute VertexShaderUnlit(Varying input)
+Attribute ShadowVertexShader(Varying input)
 {
     Attribute output;
     float4 worldPosition = mul(float4(input.position, 1), WorldMatrix);
@@ -27,7 +27,7 @@ Attribute VertexShaderUnlit(Varying input)
     return output;
 }
 
-float4 PixelShaderUnlit(Attribute input) : SV_TARGET
+float4 ShadowPixelShader(Attribute input) : SV_TARGET
 {
     float depth = input.position.z / input.position.w;
 

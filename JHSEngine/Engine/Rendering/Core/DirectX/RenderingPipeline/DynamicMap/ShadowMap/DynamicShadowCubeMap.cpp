@@ -96,7 +96,7 @@ void FDynamicShadowCubeMap::PreDraw(float deltaTime)
             {
                 GetGraphicsCommandList()->ClearRenderTargetView(
                     cubemapRT->GetCPURenderTargetView(viewportIndex),
-                    DirectX::Colors::CadetBlue,
+                    DirectX::Colors::White,
                     0,
                     nullptr
                     );

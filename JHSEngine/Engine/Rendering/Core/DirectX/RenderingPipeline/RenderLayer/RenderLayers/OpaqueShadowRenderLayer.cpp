@@ -21,8 +21,8 @@ void FOpaqueShadowRenderLayer::BuildShader()
     std::vector<D3D_SHADER_MACRO> d3DShaderMacro;
     ShaderType::ToD3DShaderMacro(shaderMacros, d3DShaderMacro);
     
-    vertexShader.BuildShaders(L"../JHSEngine/Shader/Shadow.hlsl", "VertexShaderUnlit", "vs_5_1", d3DShaderMacro.data());
-    pixelShader.BuildShaders(L"../JHSEngine/Shader/Shadow.hlsl", "PixelShaderUnlit", "ps_5_1", d3DShaderMacro.data());
+    vertexShader.BuildShaders(L"../JHSEngine/Shader/VientianeShadow.hlsl", "ShadowVertexShader", "vs_5_1", d3DShaderMacro.data());
+    pixelShader.BuildShaders(L"../JHSEngine/Shader/VientianeShadow.hlsl", "ShadowPixelShader", "ps_5_1", d3DShaderMacro.data());
     directXPipelineState->BindShader(vertexShader, pixelShader);
 
     //输入布局
@@ -51,6 +51,7 @@ void FOpaqueShadowRenderLayer::BuildPSO()
     
     gpsDesc.RasterizerState.DepthBias = 100;
     directXPipelineState->Build(EPipelineState::PerspectiveShadowShadow);
+    directXPipelineState->Build(EPipelineState::VientianeShadowShadow);
 }
 
 void FOpaqueShadowRenderLayer::ResetPSO()

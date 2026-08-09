@@ -6,6 +6,7 @@
 #include "../ConstantBuffer/ConstantBufferView.h"
 #include "../../../../../Core/Viewport/ViewportInfo.h"
 #include "../DynamicMap/ShadowMap/DynamicShadowMap.h"
+#include "../DynamicMap/ShadowMap/DynamicShadowCubeMap.h"
 
 
 class CFogComponent;
@@ -174,4 +175,6 @@ protected:
     CFogComponent* fogComponent; 
     
     FDynamicShadowMap dynamicShadowMap;
+    
+    FDynamicShadowCubeMap dynamicShadowCubeMap;
 };
