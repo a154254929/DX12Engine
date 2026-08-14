@@ -64,5 +64,9 @@ void FIMGUIPipeline::Exit()
 void FIMGUIPipeline::Tick(float deltaTime)
 {
     bool show_demo_window = true;
-    ImGui::ShowDemoWindow(&show_demo_window);
+    //ImGui::ShowDemoWindow(&show_demo_window);
+    
+    ImGui::Begin("Log System");
+    ImGui::Text("Hello from log system");
+    ImGui::End();
 }

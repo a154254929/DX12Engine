@@ -16,3 +16,5 @@ log/
 
 /JHSEngine/SDK/FBX/FBXSDK/x64/*
 /JHSEngine/SDK/FBX/FBXSDK/FBXSDK/x64/*
+
+imgui.ini
