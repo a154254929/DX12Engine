@@ -370,6 +370,7 @@ void FGeometryMap::BuildDescriptorHeap()
         + 1                                         //动态Cubmap
         + GetDrawShadowMapResourcesNumber()         //shadowmap
         + 1                                         //shadowCubeMap
+        + 1                                         //UI
     );
 }
 

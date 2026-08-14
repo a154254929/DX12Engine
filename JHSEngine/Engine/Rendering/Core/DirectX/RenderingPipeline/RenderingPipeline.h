@@ -7,6 +7,7 @@
 #include "../../../../Core/Viewport/ViewportInfo.h"
 #include "DynamicMap/Cubemap/DynamicReflectionCubeMap.h"
 #include "RenderLayer/RenderLayerManager.h"
+#include "UI/IMGUIPipeline.h"
 
 class CMeshComponent;
 class FRenderingPipeline: public IDirectXDeviceInterface
@@ -36,4 +37,5 @@ protected:
     FDirectXRootSignature rootSignature;
     
     FDynamicReflectionCubeMap dynamicCubeMap;
+    FIMGUIPipeline uiPipeline;
 };

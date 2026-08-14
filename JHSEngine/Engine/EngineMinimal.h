@@ -6,9 +6,15 @@
 #include<vector>
 #include<sstream>
 
-#pragma commit(lib, "d3dcompiler.lib")
-#pragma commit(lib, "D3D12.lib")
-#pragma commit(lib, "dxgi.lib")
+#include "../imgui/imgui.h"
+#include "../imgui/backends/imgui_impl_win32.h"
+#include "../imgui/backends/imgui_impl_dx12.h"
+#include <d3d12.h>
+#include <tchar.h>
+
+#pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib, "D3D12.lib")
+#pragma comment(lib, "dxgi.lib")
 
 #include <wrl.h>
 #include <dxgi1_4.h>
@@ -28,4 +34,4 @@ using namespace DirectX::PackedVector;
 
 extern class CEngine* engine;
 
-#define THIRD_PARTY_LIBRARY 1
+#define THIRD_PARTY_LIBRARY 0
