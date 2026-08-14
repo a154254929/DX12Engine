@@ -68,5 +68,20 @@ void FIMGUIPipeline::Tick(float deltaTime)
     
     ImGui::Begin("Log System");
     ImGui::Text("Hello from log system");
+    
+    ImGui::SetWindowPos(ImVec2(10, 10), ImGuiCond_Once);
+    ImGui::SetWindowSize(ImVec2(400, 400), ImGuiCond_Once);
+    //ImGui::SetWindowSize(ImGui::GetIO().DisplaySize, ImGuiCond_Once);
+    
+    ImGui::Checkbox("Tap me", &bClicked);
+    if (bClicked)
+    {
+        ImGui::Text("Oh you tapped me!");
+    }
+    
+    ImGui::SliderFloat("Slider", &sliderValue, 0.0f, 1.0f);
+    
+    ImGui::ColorEdit3("Color", (float*)&imguiColor);
+    
     ImGui::End();
 }

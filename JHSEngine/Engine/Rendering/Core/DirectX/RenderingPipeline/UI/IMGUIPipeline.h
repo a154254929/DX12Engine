@@ -14,4 +14,11 @@ public:
     
 protected:
     void Tick(float deltaTime);
+    
+private:
+    bool bClicked = false;
+    
+    float sliderValue = 0.0f;
+    
+    ImVec4 imguiColor = ImVec4(1.f, 1.f, 1.f, 1.00f);
 };
