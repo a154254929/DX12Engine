@@ -11,4 +11,7 @@ public:
     void Draw(float deltaTime);
     
     void Exit();
+    
+protected:
+    void Tick(float deltaTime);
 };
