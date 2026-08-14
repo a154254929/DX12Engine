@@ -41,6 +41,8 @@ void FIMGUIPipeline::Draw(float deltaTime)
 {
     ImGui_ImplDX12_NewFrame();;
     ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+    
     
     //绘制
     Tick(deltaTime);
@@ -55,8 +57,12 @@ void FIMGUIPipeline::Draw(float deltaTime)
 
 void FIMGUIPipeline::Exit()
 {
+    ImGui_ImplDX12_Shutdown();
+    ImGui_ImplWin32_Shutdown();
 }
 
 void FIMGUIPipeline::Tick(float deltaTime)
 {
+    bool show_demo_window = true;
+    ImGui::ShowDemoWindow(&show_demo_window);
 }
