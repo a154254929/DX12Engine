@@ -55,8 +55,10 @@ void CEditorEngine::BuildEditor()
 
 void CEditorEngine::DrawEditor(float deltaTime)
 {
+    /*
     bool show_demo_window = true;
     ImGui::ShowDemoWindow(&show_demo_window);
+    */
     
     toolbarEditor->DrawEditor(deltaTime);
     logEditor->DrawEditor(deltaTime);
