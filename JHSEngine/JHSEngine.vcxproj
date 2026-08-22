@@ -144,6 +144,7 @@
     <ClCompile Include="EditorEngine\Core\EditorBase.cpp" />
     <ClCompile Include="EditorEngine\EditorEngine.cpp" />
     <ClCompile Include="EditorEngine\LogEditor\LogEditor.cpp" />
+    <ClCompile Include="EditorEngine\LogEditor\LogObject\EditorLogSystem.cpp" />
     <ClCompile Include="EditorEngine\ToolbarEditor\ToolbarEditor.cpp" />
     <ClCompile Include="Engine\Actor\Core\ActorObject.cpp" />
     <ClCompile Include="Engine\Actor\Light\Core\Light.cpp" />
@@ -386,6 +387,7 @@
     <ClInclude Include="EditorEngine\Core\EditorBase.h" />
     <ClInclude Include="EditorEngine\EditorEngine.h" />
     <ClInclude Include="EditorEngine\LogEditor\LogEditor.h" />
+    <ClInclude Include="EditorEngine\LogEditor\LogObject\EditorLogSystem.h" />
     <ClInclude Include="EditorEngine\ToolbarEditor\ToolbarEditor.h" />
     <ClInclude Include="Engine\Actor\Core\ActorObject.h" />
     <ClInclude Include="Engine\Actor\Light\Core\Light.h" />
