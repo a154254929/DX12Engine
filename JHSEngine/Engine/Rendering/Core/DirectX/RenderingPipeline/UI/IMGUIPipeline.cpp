@@ -1,5 +1,9 @@
 #include "IMGUIPipeline.h"
 
+#if EDITOR_ENGINE
+#include "../../../../../../EditorEngine/EditorEngine.h"
+#endif
+
 FIMGUIPipeline::FIMGUIPipeline()
 {
     
@@ -35,17 +39,26 @@ void FIMGUIPipeline::Init(ID3D12DescriptorHeap* inHeap, UINT inOffset)
         cpuDescriptor,
         gpuDescriptor
     );
+    
+#if EDITOR_ENGINE
+    GetEditorEngine()->BuildEditor( );
+#endif
 }
 
 void FIMGUIPipeline::Draw(float deltaTime)
 {
     ImGui_ImplDX12_NewFrame();;
     ImGui_ImplWin32_NewFrame();
+    
     ImGui::NewFrame();
     
     
     //绘制
     Tick(deltaTime);
+    
+#if EDITOR_ENGINE
+    GetEditorEngine()->DrawEditor(deltaTime);
+#endif
     
     ImGui::Render();
     
@@ -57,12 +70,17 @@ void FIMGUIPipeline::Draw(float deltaTime)
 
 void FIMGUIPipeline::Exit()
 {
+#if EDITOR_ENGINE
+    GetEditorEngine()->ExitEditor( );
+#endif
+    
     ImGui_ImplDX12_Shutdown();
     ImGui_ImplWin32_Shutdown();
 }
 
 void FIMGUIPipeline::Tick(float deltaTime)
 {
+    /*
     bool show_demo_window = true;
     //ImGui::ShowDemoWindow(&show_demo_window);
     
@@ -84,4 +102,5 @@ void FIMGUIPipeline::Tick(float deltaTime)
     ImGui::ColorEdit3("Color", (float*)&imguiColor);
     
     ImGui::End();
+    */
 }

@@ -6,6 +6,10 @@
 #include "../../Core/Camera.h"
 #include "../../Rendering/Engine/DirectX/DirectX12RenderingEngine.h"
 
+#if EDITOR_ENGINE
+#include "../../../EditorEngine/EditorEngine.h"
+#endif
+
 #if defined(_WIN32)
 #include "WindowsMessageProcessing.h"
 
@@ -19,6 +23,9 @@
 
 CWindowsEngine::CWindowsEngine()
     : renderingEngine(new CDirectX12RenderingEngine())
+#if EDITOR_ENGINE
+    , editorEngine(new CEditorEngine())
+#endif
 {
 }
 

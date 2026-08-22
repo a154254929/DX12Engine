@@ -209,6 +209,7 @@ UINT64 IDirectXDeviceInterface::GetCurrentFenceIndex()
             return inEngine->GetRenderingEngine()->currentFenceIndex;
         }
     }
+    return 0;
 }
 
 HWND IDirectXDeviceInterface::GetMainWindowsHandle()
@@ -236,6 +237,22 @@ CWindowsEngine* IDirectXDeviceInterface::GetEngine()
 CEngine* IDirectXDeviceInterface::GetEngine()
 {
     return engine;
+}
+#endif
+
+#if EDITOR_ENGINE
+#include "../../EditorEngine/EditorEngine.h"
+CEditorEngine* IDirectXDeviceInterface::GetEditorEngine()
+{
+#ifdef _WIN32
+    if (CWindowsEngine* inEngine = GetEngine())
+#else
+    if (CEngine* inEngine = GetEngine())
+#endif
+    {
+        return inEngine->editorEngine;
+    }
+    return nullptr;
 }
 #endif
 
@@ -318,5 +335,12 @@ CWindowsEngine* IDirectXDeviceInterface_Struct::GetEngine()
 CEngine* IDirectXDeviceInterface_Struct::GetEngine()
 {
     return Interface.GetEngine();
+}
+#endif
+
+#if EDITOR_ENGINE
+CEditorEngine* IDirectXDeviceInterface_Struct::GetEditorEngine()
+{
+    return Interface.GetEditorEngine();
 }
 #endif

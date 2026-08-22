@@ -7,6 +7,9 @@
 class CDirectXRenderingEngine;
 class CWorld;
 class CMeshManager;
+#if EDITOR_ENGINE
+class CEditorEngine;
+#endif
 class CWindowsEngine : public CEngine
 {
     friend class IDirectXDeviceInterface;
@@ -37,6 +40,9 @@ protected:
 
 protected:
     CDirectXRenderingEngine* renderingEngine;
+#if EDITOR_ENGINE
+    CEditorEngine* editorEngine;
+#endif
     CWorld* world;
 };
 #endif

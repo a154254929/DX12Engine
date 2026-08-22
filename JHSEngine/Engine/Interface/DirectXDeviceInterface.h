@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "../Core/Engine.h"
 
-#ifdef _WIN32
+#ifdef _WIN32;
 class CWindowsEngine;
 #else
 class CEngine;
@@ -10,6 +10,7 @@ class CEngine;
 class CLightManager;
 class CMeshManager;
 class CWorld;
+
 class IDirectXDeviceInterface
 {
 public:
@@ -43,6 +44,11 @@ public:
 #else
     CEngine* GetEngine();
 #endif
+
+#if EDITOR_ENGINE
+    class CEditorEngine* GetEditorEngine();
+#endif
+    
 private:
 
 };
@@ -76,6 +82,10 @@ public:
     CEngine* GetEngine();
 #endif
 
+#if EDITOR_ENGINE
+    class CEditorEngine* GetEditorEngine();
+#endif
+    
 private:
     IDirectXDeviceInterface Interface;
 };
