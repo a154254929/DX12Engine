@@ -29,6 +29,10 @@ public:
     virtual void DrawEditor(float deltaTime);
     virtual void ExitEditor();
     
+public:
+    void DrawLayer(float deltaTime);
+    
+protected:
     class FToolbarEditor* toolbarEditor;
     class FLogEditor* logEditor;
 };
