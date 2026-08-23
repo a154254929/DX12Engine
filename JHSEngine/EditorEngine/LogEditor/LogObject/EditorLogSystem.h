@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../Engine/Core/Engine.h"
+#include "../../../imgui/imgui.h"
 
 class FEditorLogSystem
 {
@@ -18,7 +18,7 @@ public:
     void AddSuccess(const char* fmt, ...);
     
 protected:
-    void Draw(const char* title, bool* p_open = NULL);
+    void Draw(const char* title, bool* p_open = nullptr);
     
 protected:
     ImGuiTextBuffer textBuffer;

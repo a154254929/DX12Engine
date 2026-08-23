@@ -1,6 +1,5 @@
 #include "LogEditor.h"
 
-#include "imgui_internal.h"
 #include "LogObject/EditorLogSystem.h"
 
 void FLogEditor::BuildEditor()

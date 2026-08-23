@@ -1,5 +1,4 @@
 #pragma once
-#include "../../Engine/Core/Engine.h"
 #include "../Core/EditorBase.h"
 
 class FToolbarEditor : public FEditorBase

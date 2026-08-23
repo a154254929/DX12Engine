@@ -33,6 +33,4 @@ using namespace DirectX;
 using namespace DirectX::PackedVector;
 
 extern class CEngine* engine;
-
-#define THIRD_PARTY_LIBRARY 0
-#define EDITOR_ENGINE 1
+#include "EngineMacro.h"
