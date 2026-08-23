@@ -18,7 +18,7 @@ public:
     void AddSuccess(const char* fmt, ...);
     
 protected:
-    void Draw(const char* title, bool* p_open = nullptr);
+    void Draw(float deltaTime);
     
 protected:
     ImGuiTextBuffer textBuffer;

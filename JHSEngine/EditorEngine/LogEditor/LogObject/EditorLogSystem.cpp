@@ -98,8 +98,39 @@ void FEditorLogSystem::AddSuccess(const char* fmt, ...)
     }
 }
 
-void FEditorLogSystem::Draw(const char* title, bool* p_open)
+void FEditorLogSystem::Draw(float deltaTime)
 {
+    ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
+    if (!ImGui::Begin("Log", nullptr))
+    {
+        ImGui::End();
+        return;
+    }
+    
+    ImGui::BeginChild("LogScrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+    
+    const char* textBufferStat = textBuffer.begin();
+    const char* textBufferEnd = textBuffer.end();
+    
+    {
+        ImGuiListClipper clipper;
+        clipper.Begin(lineOffsets.Size);
+        
+        while (clipper.Step())
+        {
+            for (int lineIndex = clipper.DisplayStart; lineIndex < clipper.DisplayEnd; lineIndex++)
+            {
+                const char* lineStart = textBufferStat + lineOffsets[lineIndex];
+                const char* lineEnd = (lineIndex + 1 < lineOffsets.Size) ? (textBufferStat + lineOffsets[lineIndex + 1] - 1) : textBufferEnd;
+                ImGui::TextUnformatted(lineStart, lineEnd);
+            }
+        }
+        
+        clipper.End();
+    }
+    
+    ImGui::EndChild();
+    ImGui::End();
 }
 
 FEditorLogSystem* FEditorLogSystem::GetInstance()

@@ -19,7 +19,7 @@ void FLogEditor::DrawEditor(float deltaTime)
     ImGui::End();
     
     //绘制字体
-    FEditorLogSystem::GetInstance()->Draw("Log");
+    FEditorLogSystem::GetInstance()->Draw(deltaTime);
 }
 
 void FLogEditor::ExitEditor()
