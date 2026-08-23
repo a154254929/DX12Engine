@@ -107,12 +107,29 @@ void FEditorLogSystem::Draw(float deltaTime)
         return;
     }
     
+    if (ImGui::Button("Clear"))
+    {
+        Clear();
+    }
+    
+    ImGui::SameLine();
+    if (ImGui::Button("CopyAll"))
+    {
+        ImGui::LogToClipboard();
+    }
+    
+    ImGui::SameLine();
+    ImGui::Checkbox("AutoScroll", &bAutoScroll);
+    
+    ImGui::SameLine();
+    textFilter.Draw("LogFilter", 180);
+    
+    ImGui::Separator();
+    
     ImGui::BeginChild("LogScrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
     
     const char* textBufferStat = textBuffer.begin();
     const char* textBufferEnd = textBuffer.end();
-    
-    textFilter.Draw("LogFilter", 180);
     
     if (textFilter.IsActive())
     {
@@ -143,6 +160,11 @@ void FEditorLogSystem::Draw(float deltaTime)
         }
         
         clipper.End();
+    }
+    
+    if (bAutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+    {
+        ImGui::SetScrollHereY(1.0f);
     }
     
     ImGui::EndChild();
