@@ -112,6 +112,22 @@ void FEditorLogSystem::Draw(float deltaTime)
     const char* textBufferStat = textBuffer.begin();
     const char* textBufferEnd = textBuffer.end();
     
+    textFilter.Draw("LogFilter", 180);
+    
+    if (textFilter.IsActive())
+    {
+        for (int lineIndex = 0; lineIndex < lineOffsets.Size; lineIndex++)
+        {
+            const char* lineStart = textBufferStat + lineOffsets[lineIndex];
+            const char* lineEnd = (lineIndex + 1 < lineOffsets.Size) ? (textBufferStat + lineOffsets[lineIndex + 1] - 1) : textBufferEnd;
+            
+            if (textFilter.PassFilter(lineStart, lineEnd))
+            {
+                ImGui::TextUnformatted(lineStart, lineEnd);
+            }
+        }
+    }
+    else
     {
         ImGuiListClipper clipper;
         clipper.Begin(lineOffsets.Size);
