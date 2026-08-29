@@ -13,11 +13,18 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
     {
         std::shared_ptr<FRenderingData> renderingData = FGeometry::renderingDataArray[i];
         
+        XMMATRIX worldMatrix = XMLoadFloat4x4(&renderingData->worldMatrix);
+        XMVECTOR worldMatrixDeterminant = XMMatrixDeterminant(worldMatrix);
+        XMMATRIX worldToObjectMatrix = XMMatrixInverse(&worldMatrixDeterminant, worldMatrix);
         
+       XMMATRIX viewToObjectMatrix = XMMatrixMultiply(viewInvMatrix, worldToObjectMatrix);
+        
+        XMVECTOR worldOriginPoint = XMVector3Transform(originPoint, viewToObjectMatrix);
+        XMVECTOR worldDirection = XMVector3TransformNormal(direction, viewToObjectMatrix);
         
         float time = 0.f;
         
-        if (renderingData->boundingBox.Intersects(originPoint, direction, time))
+        if (renderingData->boundingBox.Intersects(worldOriginPoint, worldDirection, time))
         {
             outResult.collisionTime = time;
             return true;
