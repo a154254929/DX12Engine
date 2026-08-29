@@ -19,13 +19,37 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
         
        XMMATRIX viewToObjectMatrix = XMMatrixMultiply(viewInvMatrix, worldToObjectMatrix);
         
-        XMVECTOR worldOriginPoint = XMVector3Transform(originPoint, viewToObjectMatrix);
-        XMVECTOR worldDirection = XMVector3TransformNormal(direction, viewToObjectMatrix);
+        XMVECTOR objectOriginPoint = XMVector3Transform(originPoint, viewToObjectMatrix);
+        XMVECTOR objectDirection = XMVector3TransformNormal(direction, viewToObjectMatrix);
         
         float time = 0.f;
         
-        if (renderingData->boundingBox.Intersects(worldOriginPoint, worldDirection, time))
+        if (renderingData->boundingBox.Intersects(objectOriginPoint, objectDirection, time))
         {
+            if (renderingData->meshRenderingData)
+            {
+                UINT triangleCount =  renderingData->vertexSize / 3;
+                for (UINT j = 0; j < triangleCount; ++j)
+                {
+                    fvector_3d indices;
+                    indices.x = renderingData->meshRenderingData->indexData[renderingData->indexOffsetPosition + j * 3 + 0];
+                    indices.y = renderingData->meshRenderingData->indexData[renderingData->indexOffsetPosition + j * 3 + 1];
+                    indices.z = renderingData->meshRenderingData->indexData[renderingData->indexOffsetPosition + j * 3 + 2];
+                    
+                    float triangleTestTime = 0.f;
+                    
+                    XMVECTOR vertexes[3];
+                    vertexes[0] = XMLoadFloat3(&renderingData->meshRenderingData->vertexData[renderingData->vertexOffsetPosition + indices.x].position);
+                    vertexes[1] = XMLoadFloat3(&renderingData->meshRenderingData->vertexData[renderingData->vertexOffsetPosition + indices.y].position);
+                    vertexes[2] = XMLoadFloat3(&renderingData->meshRenderingData->vertexData[renderingData->vertexOffsetPosition + indices.z].position);
+                
+                    if (TriangleTests::Intersects(objectOriginPoint, objectDirection, vertexes[0], vertexes[1], vertexes[2], triangleTestTime))
+                    {
+                        
+                    }
+                
+                }
+            }
             outResult.collisionTime = time;
             return true;
         }
