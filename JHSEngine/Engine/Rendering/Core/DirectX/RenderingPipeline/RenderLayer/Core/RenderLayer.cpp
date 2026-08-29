@@ -211,6 +211,32 @@ void FRenderLayer::DrawMesh(float deltaTime, ERenderingConditions inRenderingCon
     }
 }
 
+void FRenderLayer::Add(std::weak_ptr<FRenderingData> inWeakRenderingData)
+{
+    renderingDatas.push_back(inWeakRenderingData);
+}
+
+void FRenderLayer::Remove(std::weak_ptr<FRenderingData> inWeakRenderingData)
+{
+    for (auto iter = renderingDatas.begin(); iter != renderingDatas.end(); ++iter)
+    {
+        if (iter->expired())
+        {
+            continue;
+        }
+        if (iter->lock() == inWeakRenderingData.lock())
+        {
+            renderingDatas.erase(iter);
+            break;
+        }
+    }
+}
+
+void FRenderLayer::Clear()
+{
+    renderingDatas.clear();
+}
+
 void FRenderLayer::BuildShaderMacro(std::vector<ShaderType::FShaderMacro>& intShaderMacro)
 {
     {

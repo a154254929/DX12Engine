@@ -28,6 +28,8 @@ public:
     virtual void PreDraw(float deltaTime);
     virtual void Draw(float deltaTime);
     virtual void PostDraw(float deltaTime);
+public:
+    FRenderLayerManager* GetRenderingLayerManager() const {return const_cast<FRenderLayerManager*>(&renderLayerManager);};
 protected:
     FGeometryMap geometryMap;
     

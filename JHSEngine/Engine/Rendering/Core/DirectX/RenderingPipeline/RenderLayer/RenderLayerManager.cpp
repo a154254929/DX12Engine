@@ -7,6 +7,7 @@
 #include "RenderLayers/OpaqueReflectorRenderLayer.h"
 #include "RenderLayers/OpaqueShadowRenderLayer.h"
 #include "../../../../../Core/Viewport/ViewportInfo.h"
+#include "RenderLayers/SelectRenderLayer.h"
 
 std::vector<shared_ptr<FRenderLayer>> FRenderLayerManager::renderLayers;
 
@@ -21,6 +22,7 @@ FRenderLayerManager::FRenderLayerManager()
     CreateRenderLayer<FBackGroundRenderLayer>();
     CreateRenderLayer<FOpaqueReflectorRenderLayer>();
     CreateRenderLayer<FOpaqueShadowRenderLayer>();
+    CreateRenderLayer<FSelectRenderLayer>();
 }
 
 FRenderLayerManager::~FRenderLayerManager()
@@ -142,4 +144,28 @@ std::shared_ptr<FRenderLayer> FRenderLayerManager::FindByRenderLayer(int inRende
             return tmp;
     }
     return NULL;
+}
+
+void FRenderLayerManager::Add(int inLayer, std::weak_ptr<FRenderingData> inWeakRenderingData)
+{
+    if (auto inRenderLayer = FindByRenderLayer(inLayer))
+    {
+        inRenderLayer->Add(inWeakRenderingData);
+    }
+}
+
+void FRenderLayerManager::Remove(int inLayer, std::weak_ptr<FRenderingData> inWeakRenderingData)
+{
+    if (auto inRenderLayer = FindByRenderLayer(inLayer))
+    {
+        inRenderLayer->Remove(inWeakRenderingData);
+    }
+}
+
+void FRenderLayerManager::Clear(int inLayer)
+{
+    if (auto inRenderLayer = FindByRenderLayer(inLayer))
+    {
+        inRenderLayer->Clear();
+    }
 }

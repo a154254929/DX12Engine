@@ -1,0 +1,47 @@
+#include "SelectRenderLayer.h"
+#include "../../PipelineState/DirectXPipelineState.h"
+#include "../../Geometry/GeometryMap.h"
+
+FSelectRenderLayer::FSelectRenderLayer()
+{
+    renderPriority = 4500;
+}
+
+void FSelectRenderLayer::Draw(float deltaTime)
+{
+    ResetPSO();
+    Super::Draw(deltaTime);
+}
+
+void FSelectRenderLayer::BuildShader()
+{
+    std::vector<ShaderType::FShaderMacro> shaderMacros;
+    BuildShaderMacro(shaderMacros);
+    
+    std::vector<D3D_SHADER_MACRO> d3DShaderMacro;
+    ShaderType::ToD3DShaderMacro(shaderMacros, d3DShaderMacro);
+    
+    vertexShader.BuildShaders(L"../JHSEngine/Shader/SelectOutline.hlsl", "SelectOutlineVertexShader", "vs_5_1", d3DShaderMacro.data());
+    pixelShader.BuildShaders(L"../JHSEngine/Shader/SelectOutline.hlsl", "SelectOutlinePixelShader", "ps_5_1", d3DShaderMacro.data());
+    directXPipelineState->BindShader(vertexShader, pixelShader);
+
+    //输入布局
+    inputElementDesc = {
+        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+        {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
+    };
+    directXPipelineState->BindInputLayout(inputElementDesc.data(), inputElementDesc.size());
+}
+
+void FSelectRenderLayer::BuildPSO()
+{
+    Super::BuildPSO();
+    //构建管线
+    directXPipelineState->SetFillMode(false);
+    directXPipelineState->Build(EPipelineState::Select);
+}
+
+void FSelectRenderLayer::ResetPSO()
+{
+    directXPipelineState->ResetPSO(EPipelineState::Select);
+}

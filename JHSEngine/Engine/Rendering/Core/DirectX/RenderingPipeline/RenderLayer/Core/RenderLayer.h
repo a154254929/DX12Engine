@@ -39,6 +39,9 @@ public:
 public:  
     const UINT GetRenderLayerPriority() const {return renderPriority;}
     
+    void Add(std::weak_ptr<FRenderingData> inWeakRenderingData);
+    void Remove(std::weak_ptr<FRenderingData> inWeakRenderingData);
+    void Clear();
 public:
     virtual void BuildShader(){};
     

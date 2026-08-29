@@ -1,5 +1,6 @@
 #include "DirectXDeviceInterface.h"
 #include "../Rendering/Engine/DirectX/Core/DirectXRenderingEngine.h"
+#include "../Engine/Mesh/Core/MeshManager.h"
 #ifdef _WIN32
 #include "../Platform/Windows/WindowsEngine.h"
 #else
@@ -51,7 +52,7 @@ void IDirectXDeviceInterface::ClearMainViewportSwapChainCanvas()
     }
 }
 
-ComPtr<ID3D12Fence> IDirectXDeviceInterface::GetFence()
+ComPtr<ID3D12Fence> IDirectXDeviceInterface::GetFence() const
 {
 #ifdef _WIN32
     if (CWindowsEngine* inEngine = GetEngine())
@@ -66,7 +67,7 @@ ComPtr<ID3D12Fence> IDirectXDeviceInterface::GetFence()
     }
 }
 
-ComPtr<ID3D12Device> IDirectXDeviceInterface::GetD3dDevice()
+ComPtr<ID3D12Device> IDirectXDeviceInterface::GetD3dDevice() const
 {
 #ifdef _WIN32
     if (CWindowsEngine* inEngine = GetEngine())
@@ -81,7 +82,7 @@ ComPtr<ID3D12Device> IDirectXDeviceInterface::GetD3dDevice()
     }
 }
 
-CLightManager* IDirectXDeviceInterface::GetLightManager()
+CLightManager* IDirectXDeviceInterface::GetLightManager() const
 {
 #ifdef _WIN32
     if (CWindowsEngine* inEngine = GetEngine())
@@ -97,12 +98,12 @@ CLightManager* IDirectXDeviceInterface::GetLightManager()
     return NULL;
 }
 
-CMeshManager* IDirectXDeviceInterface::GetMeshManager()
+CMeshManager* IDirectXDeviceInterface::GetMeshManager() const
 {
     return GetEngine()->GetMeshManager();
 }
 
-CWorld* IDirectXDeviceInterface::GetWorld()
+CWorld* IDirectXDeviceInterface::GetWorld() const
 {
     if (CWindowsEngine* inEngine = GetEngine())
     {
@@ -112,7 +113,7 @@ CWorld* IDirectXDeviceInterface::GetWorld()
     return NULL;
 }
 
-ComPtr<ID3D12CommandQueue> IDirectXDeviceInterface::GetCommandQueue()
+ComPtr<ID3D12CommandQueue> IDirectXDeviceInterface::GetCommandQueue() const
 {
 #ifdef _WIN32
     if (CWindowsEngine* inEngine = GetEngine())
@@ -127,7 +128,7 @@ ComPtr<ID3D12CommandQueue> IDirectXDeviceInterface::GetCommandQueue()
     }
 }
 
-ComPtr<ID3D12CommandAllocator> IDirectXDeviceInterface::GetCommandAllocator()
+ComPtr<ID3D12CommandAllocator> IDirectXDeviceInterface::GetCommandAllocator() const
 {
 #ifdef _WIN32
     if (CWindowsEngine* inEngine = GetEngine())
@@ -142,7 +143,7 @@ ComPtr<ID3D12CommandAllocator> IDirectXDeviceInterface::GetCommandAllocator()
     }
 }
 
-ComPtr<ID3D12GraphicsCommandList> IDirectXDeviceInterface::GetGraphicsCommandList()
+ComPtr<ID3D12GraphicsCommandList> IDirectXDeviceInterface::GetGraphicsCommandList() const
 {
 #ifdef _WIN32
     if (CWindowsEngine* inEngine = GetEngine())
@@ -157,7 +158,7 @@ ComPtr<ID3D12GraphicsCommandList> IDirectXDeviceInterface::GetGraphicsCommandLis
     }
 }
 
-ID3D12DescriptorHeap* IDirectXDeviceInterface::GetRTVHeap()
+ID3D12DescriptorHeap* IDirectXDeviceInterface::GetRTVHeap() const
 {
     if (CWindowsEngine* inEngine = GetEngine())
     {
@@ -169,7 +170,7 @@ ID3D12DescriptorHeap* IDirectXDeviceInterface::GetRTVHeap()
     return nullptr;
 }
 
-ID3D12DescriptorHeap* IDirectXDeviceInterface::GetDSVHeap()
+ID3D12DescriptorHeap* IDirectXDeviceInterface::GetDSVHeap() const
 {
     if (CWindowsEngine* inEngine = GetEngine())
     {
@@ -181,22 +182,22 @@ ID3D12DescriptorHeap* IDirectXDeviceInterface::GetDSVHeap()
     return nullptr;
 }
 
-UINT IDirectXDeviceInterface::GetDescriptorHandleIncrementSizeByDSV()
+UINT IDirectXDeviceInterface::GetDescriptorHandleIncrementSizeByDSV() const
 {
     return GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 }
 
-UINT IDirectXDeviceInterface::GetDescriptorHandleIncrementSizeByRTV()
+UINT IDirectXDeviceInterface::GetDescriptorHandleIncrementSizeByRTV() const
 {
     return GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 }
 
-UINT IDirectXDeviceInterface::GetDescriptorHandleIncrementSizeByCBV_SRV_UAV()
+UINT IDirectXDeviceInterface::GetDescriptorHandleIncrementSizeByCBV_SRV_UAV() const
 {
     return GetD3dDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
-UINT64 IDirectXDeviceInterface::GetCurrentFenceIndex()
+UINT64 IDirectXDeviceInterface::GetCurrentFenceIndex() const
 {
 #ifdef _WIN32
     if (CWindowsEngine* inEngine = GetEngine())
@@ -212,7 +213,7 @@ UINT64 IDirectXDeviceInterface::GetCurrentFenceIndex()
     return 0;
 }
 
-HWND IDirectXDeviceInterface::GetMainWindowsHandle()
+HWND IDirectXDeviceInterface::GetMainWindowsHandle() const
 {
 #ifdef _WIN32
     if (CWindowsEngine* inEngine = GetEngine())
@@ -228,13 +229,31 @@ HWND IDirectXDeviceInterface::GetMainWindowsHandle()
     return HWND();
 }
 
+FRenderingPipeline* IDirectXDeviceInterface::GetRenderingPipeline() const
+{   
+    if (CMeshManager* meshManager = GetMeshManager())
+    {
+        return meshManager->GetRenderingPipeline();
+    }
+    return NULL;
+}
+
+FRenderLayerManager* IDirectXDeviceInterface::GetRenderingLayerManager() const
+{
+    if (FRenderingPipeline* renderingPipeline = GetRenderingPipeline())
+    {
+        return renderingPipeline->GetRenderingLayerManager();
+    }
+    return NULL;
+}
+
 #ifdef _WIN32
-CWindowsEngine* IDirectXDeviceInterface::GetEngine()
+CWindowsEngine* IDirectXDeviceInterface::GetEngine() const
 {
     return dynamic_cast<CWindowsEngine*>(engine);
 }
 #else
-CEngine* IDirectXDeviceInterface::GetEngine()
+CEngine* IDirectXDeviceInterface::GetEngine() const
 {
     return engine;
 }
@@ -242,7 +261,7 @@ CEngine* IDirectXDeviceInterface::GetEngine()
 
 #if EDITOR_ENGINE
 #include "../../EditorEngine/EditorEngine.h"
-CEditorEngine* IDirectXDeviceInterface::GetEditorEngine()
+CEditorEngine* IDirectXDeviceInterface::GetEditorEngine() const
 {
 #ifdef _WIN32
     if (CWindowsEngine* inEngine = GetEngine())
@@ -256,90 +275,100 @@ CEditorEngine* IDirectXDeviceInterface::GetEditorEngine()
 }
 #endif
 
-ComPtr<ID3D12Fence> IDirectXDeviceInterface_Struct::GetFence()
+ComPtr<ID3D12Fence> IDirectXDeviceInterface_Struct::GetFence() const
 {
     return Interface.GetFence();
 }
 
-ComPtr<ID3D12Device> IDirectXDeviceInterface_Struct::GetD3dDevice()
+ComPtr<ID3D12Device> IDirectXDeviceInterface_Struct::GetD3dDevice() const
 {
     return Interface.GetD3dDevice();
 }
 
-CMeshManager* IDirectXDeviceInterface_Struct::GetMeshManager()
+CMeshManager* IDirectXDeviceInterface_Struct::GetMeshManager() const
 {
     return Interface.GetMeshManager();
 }
 
-CWorld* IDirectXDeviceInterface_Struct::GetWorld()
+CWorld* IDirectXDeviceInterface_Struct::GetWorld() const
 {
     return Interface.GetWorld();
 }
 
-ComPtr<ID3D12CommandQueue> IDirectXDeviceInterface_Struct::GetCommandQueue()
+ComPtr<ID3D12CommandQueue> IDirectXDeviceInterface_Struct::GetCommandQueue() const
 {
     return Interface.GetCommandQueue();
 }
 
-ComPtr<ID3D12CommandAllocator> IDirectXDeviceInterface_Struct::GetCommandAllocator()
+ComPtr<ID3D12CommandAllocator> IDirectXDeviceInterface_Struct::GetCommandAllocator() const
 {
     return Interface.GetCommandAllocator();
 }
 
-ComPtr<ID3D12GraphicsCommandList> IDirectXDeviceInterface_Struct::GetGraphicsCommandList()
+ComPtr<ID3D12GraphicsCommandList> IDirectXDeviceInterface_Struct::GetGraphicsCommandList() const
 {
     return Interface.GetGraphicsCommandList();
 }
 
-ID3D12DescriptorHeap* IDirectXDeviceInterface_Struct::GetRTVHeap()
+ID3D12DescriptorHeap* IDirectXDeviceInterface_Struct::GetRTVHeap() const
 {
     return Interface.GetRTVHeap();
 }
 
-ID3D12DescriptorHeap* IDirectXDeviceInterface_Struct::GetDSVHeap()
+ID3D12DescriptorHeap* IDirectXDeviceInterface_Struct::GetDSVHeap() const
 {
     return Interface.GetDSVHeap();
 }
 
-UINT IDirectXDeviceInterface_Struct::GetDescriptorHandleIncrementSizeByDSV()
+UINT IDirectXDeviceInterface_Struct::GetDescriptorHandleIncrementSizeByDSV() const
 {
     return Interface.GetDescriptorHandleIncrementSizeByDSV();
 }
 
-UINT IDirectXDeviceInterface_Struct::GetDescriptorHandleIncrementSizeByRTV()
+UINT IDirectXDeviceInterface_Struct::GetDescriptorHandleIncrementSizeByRTV() const
 {
     return Interface.GetDescriptorHandleIncrementSizeByRTV();
 }
 
-UINT IDirectXDeviceInterface_Struct::GetDescriptorHandleIncrementSizeByCBV_SRV_UAV()
+UINT IDirectXDeviceInterface_Struct::GetDescriptorHandleIncrementSizeByCBV_SRV_UAV() const
 {
     return Interface.GetDescriptorHandleIncrementSizeByCBV_SRV_UAV();
 }
 
-UINT64 IDirectXDeviceInterface_Struct::GetCurrentFenceIndex()
+UINT64 IDirectXDeviceInterface_Struct::GetCurrentFenceIndex() const
 {
     return Interface.GetCurrentFenceIndex();
 }
 
-HWND IDirectXDeviceInterface_Struct::GetMainWindowsHandle()
+HWND IDirectXDeviceInterface_Struct::GetMainWindowsHandle() const
 {
     return Interface.GetMainWindowsHandle();
 }
 
+FRenderingPipeline* IDirectXDeviceInterface_Struct::GetRenderingPipeline() const
+{
+    return Interface.GetRenderingPipeline();
+}
+
+FRenderLayerManager* IDirectXDeviceInterface_Struct::GetRenderingLayerManager() const
+{
+    return Interface.GetRenderingLayerManager();
+}
+
 #ifdef _WIN32
-CWindowsEngine* IDirectXDeviceInterface_Struct::GetEngine()
+CWindowsEngine* IDirectXDeviceInterface_Struct::GetEngine() const
 {
     return Interface.GetEngine();
 }
 #else
-CEngine* IDirectXDeviceInterface_Struct::GetEngine()
+CEngine* IDirectXDeviceInterface_Struct::GetEngine() const
 {
     return Interface.GetEngine();
 }
 #endif
 
 #if EDITOR_ENGINE
-CEditorEngine* IDirectXDeviceInterface_Struct::GetEditorEngine()
+CEditorEngine* IDirectXDeviceInterface_Struct::GetEditorEngine() const
 {
     return Interface.GetEditorEngine();
 }

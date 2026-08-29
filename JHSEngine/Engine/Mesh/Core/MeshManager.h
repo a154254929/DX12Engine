@@ -41,13 +41,13 @@ public:
 
     CMeshComponent* CreateMeshComponent(const FCreateObjectParam& inOwnerParam, string& InPath);
     
-    FRenderingPipeline& GetRenderingPipeline() {return renderingPipeline;};
+    FRenderingPipeline* GetRenderingPipeline() const {return const_cast<FRenderingPipeline*>(&renderingPipeline);};
 
 protected:
     template<class T, typename ...ParamTypes>
     T* CreateMeshComponent(ParamTypes &&...Params);
-protected:
 
+protected:
     FRenderingPipeline renderingPipeline;
     shared_ptr<FRenderingResourcesUpdate> viewportConstants;
 };

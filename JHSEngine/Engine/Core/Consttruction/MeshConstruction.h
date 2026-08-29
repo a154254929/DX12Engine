@@ -12,9 +12,9 @@ namespace MeshConstruction
             size_t meshHashKey = 0;
             inMeshComp->BuildKey(meshHashKey, forward<ParamTypes>(params)...);
             std::shared_ptr<FRenderingData> renderingData;
-            if (inMeshMananger->GetRenderingPipeline().FindMeshRenderingData(meshHashKey, renderingData, (int)inMeshComp->GetRenderLayerType()))
+            if (inMeshMananger->GetRenderingPipeline()->FindMeshRenderingData(meshHashKey, renderingData, (int)inMeshComp->GetRenderLayerType()))
             {
-                inMeshMananger->GetRenderingPipeline().DuplicateMesh(inMeshComp, renderingData);
+                inMeshMananger->GetRenderingPipeline()->DuplicateMesh(inMeshComp, renderingData);
             }
             else
             {
@@ -22,7 +22,7 @@ namespace MeshConstruction
                 FMeshRenderingData meshRenderingData;
                 inMeshComp->CreateMesh(meshRenderingData, forward<ParamTypes>(params)...);
 
-                inMeshMananger->GetRenderingPipeline().BuildMesh(meshHashKey, inMeshComp, meshRenderingData);
+                inMeshMananger->GetRenderingPipeline()->BuildMesh(meshHashKey, inMeshComp, meshRenderingData);
 
                 inMeshComp->Init();
             }

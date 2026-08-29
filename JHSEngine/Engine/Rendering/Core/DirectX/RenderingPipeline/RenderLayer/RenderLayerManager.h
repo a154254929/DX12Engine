@@ -37,6 +37,12 @@ public:
     virtual void DrawMesh(float deltaTime, int inLayer, ERenderingConditions inRenderingConditions = ERenderingConditions::RC_None);
     
     static std::shared_ptr<FRenderLayer> FindByRenderLayer(int inRenderLayerType);
+    
+public:
+    void Add(int inLayer, std::weak_ptr<FRenderingData> inWeakRenderingData);
+    void Remove(int inLayer, std::weak_ptr<FRenderingData> inWeakRenderingData);
+    void Clear(int inLayer);
+    
 protected:
     static std::vector<shared_ptr<FRenderLayer>> renderLayers;
 };
