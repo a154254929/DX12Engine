@@ -2,6 +2,7 @@
 #include "CameraType.h"
 #include "../Component/InputComponent.h"
 #include "../Component/TransformationComponent.h"
+#include "../Library/RaycastSystemLibrary.h"
 
 GCamera::GCamera()
     : Super()
@@ -116,6 +117,9 @@ void GCamera::BuildViewMatrix(float deltaTime)
 void GCamera::OnMouseButtonDown(int x, int y)
 {
     bLeftMosueDown = true;
+    
+    OnClickedScreen(x, y);
+    
     SetCapture(GetMainWindowsHandle());
 }
 
@@ -210,6 +214,14 @@ void GCamera::MoveUp(float inValue)
         XMStoreFloat3(&f3Position, position);
         GetTransformationComponent()->SetPosition(f3Position);
     }
+}
+
+void GCamera::OnClickedScreen(int x, int y)
+{
+    
+    FCollisionResult hitResult;
+    FRaycastSystemLibrary::HitResultByScreen(GetWorld(), x, y, hitResult);
+    
 }
 
 void GCamera::RotateAroundYAxis(float inRotateDegrees)

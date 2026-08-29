@@ -1,5 +1,6 @@
 #pragma once
 #include "CoreObject/CoreMinimalObject.h"
+#include "../EngineType.h"
 
 struct FInputKey;
 class CTransformationComponent;
@@ -21,6 +22,9 @@ public:
 
         return InArray;
     }
+    
+public:
+bool LineTraceBySingle(FCollisionResult& outHitResult, fvector_3d inStart, fvector_3d inEnd);
 
 protected:
     CVARIABLE()
