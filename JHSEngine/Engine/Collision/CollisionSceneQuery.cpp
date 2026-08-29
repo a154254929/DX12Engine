@@ -3,11 +3,12 @@
 #include "../Core/Camera.h"
 #include "../Config/EngineRenderConfig.h"
 #include "../Core/World.h"
+#include "../Component/Mesh/Core/MeshComponent.h"
 
 bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR& direction,
     const XMMATRIX& viewInvMatrix, FCollisionResult& outResult)
 {
-    
+    float finalTime = FLT_MAX;
         
     for (int i = 0; i < FGeometry::renderingDataArray.size(); ++i)
     {
@@ -26,6 +27,12 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
         
         if (renderingData->boundingBox.Intersects(objectOriginPoint, objectDirection, time))
         {
+            
+            if (finalTime < time)
+            {
+                continue;
+            }
+            
             if (renderingData->meshRenderingData)
             {
                 UINT triangleCount =  renderingData->vertexSize / 3;
@@ -45,6 +52,15 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
                 
                     if (TriangleTests::Intersects(objectOriginPoint, objectDirection, vertexes[0], vertexes[1], vertexes[2], triangleTestTime))
                     {
+                        if (finalTime > triangleTestTime)
+                        {
+                            finalTime = triangleTestTime;
+                            outResult.bIsCollided = true;
+                            outResult.collisionTime = finalTime;
+                            //outResult.collisionDistance = finalTime;
+                            outResult.collisionComponent = renderingData->meshComp;
+                            //outResult.collisionPoint = ;
+                        }
                         
                     }
                 
