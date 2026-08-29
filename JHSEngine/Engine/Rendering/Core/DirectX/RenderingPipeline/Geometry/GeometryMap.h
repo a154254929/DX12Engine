@@ -21,9 +21,9 @@ public:
     
     void BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData, int inGeometryKey);
 
-    void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData, int inGeometryKey);
+    void DuplicateMesh(CMeshComponent* inMeshComponent, std::shared_ptr<FRenderingData>& inRenderingData, int inGeometryKey);
 
-    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType = -1);
+    bool FindMeshRenderingData(const size_t& inHash, std::shared_ptr<FRenderingData>& meshData, int inRenderLayerType = -1);
 
     //构建模型
     void Build();
@@ -44,6 +44,12 @@ protected:
     ComPtr<ID3D12Resource> indexBufferTmpPtr;
 
     FMeshRenderingData meshRenderingData;
+    
+    //渲染池
+    static map<size_t, std::shared_ptr<FRenderingData>> uniqueRenderingData;
+  
+public:  
+    static vector<std::shared_ptr<FRenderingData>> renderingDataArray;
 };
 
 class FGeometryMap : public IDirectXDeviceInterface
@@ -77,9 +83,9 @@ public:
     //收集需要动态反射的模型
     void BuildDynamicReflectionMesh();
 
-    void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData);
+    void DuplicateMesh(CMeshComponent* inMeshComponent, std::shared_ptr<FRenderingData>& meshRenderingData);
 
-    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType = -1);
+    bool FindMeshRenderingData(const size_t& inHash, std::shared_ptr<FRenderingData>& meshData, int inRenderLayerType = -1);
 
     void Build();
     //描述堆

@@ -20,6 +20,10 @@
 
 UINT meshCount = 0;
 
+map<size_t, std::shared_ptr<FRenderingData>> FGeometry::uniqueRenderingData;
+    
+vector<std::shared_ptr<FRenderingData>> FGeometry::renderingDataArray;
+
 FGeometryMap::FGeometryMap()
 {
     geometrys.insert(pair<int, FGeometry>(0, FGeometry()));
@@ -332,7 +336,7 @@ void FGeometryMap::BuildDynamicReflectionMesh()
     }
 }
 
-void FGeometryMap::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData)
+void FGeometryMap::DuplicateMesh(CMeshComponent* inMeshComponent, std::shared_ptr<FRenderingData>& meshRenderingData)
 {
     for (auto& tmp : geometrys)
     {
@@ -340,7 +344,7 @@ void FGeometryMap::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderi
     }
 }
 
-bool FGeometryMap::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType)
+bool FGeometryMap::FindMeshRenderingData(const size_t& inHash, std::shared_ptr<FRenderingData>& meshData, int inRenderLayerType)
 {
     for (auto &tmp : geometrys)
     {
@@ -392,7 +396,11 @@ void FGeometryMap::BuildMaterialShaderResourceView()
     {
         for (auto& renderingData : renderLayer->renderingDatas)
         {
-            if (auto meshCompMaterials = renderingData.meshComp->GetMaterials())
+            if (renderingData.expired())
+            {
+                continue;
+            }
+            if (auto meshCompMaterials = renderingData.lock()->meshComp->GetMaterials())
             {
                 for (int j = 0; j < meshCompMaterials->size(); ++j)
                 {
@@ -699,7 +707,7 @@ bool FGeometry::IsRenderingDataExistence(CMeshComponent* inKey)
     {
         for (auto& tmp : renderLayer->renderingDatas)
         {
-            if (tmp.meshComp == inKey)
+            if (!tmp.expired() && tmp.lock()->meshComp == inKey)
                 return true;
         }
     }
@@ -718,19 +726,35 @@ void FGeometry::BuildMesh(
         //找到对于层级
         if (auto renderLayer = FRenderLayerManager::FindByRenderLayer((int)inMeshComponent->GetRenderLayerType()))
         {
-            renderLayer->renderingDatas.push_back(FRenderingData());
-            FRenderingData& inRenderingData = renderLayer->renderingDatas[renderLayer->renderingDatas.size() - 1];
+            
+            uniqueRenderingData.insert(std::make_pair(inMeshHash, std::make_shared<FRenderingData>()));
+            renderingDataArray.push_back(std::make_shared<FRenderingData>());
+            std::shared_ptr<FRenderingData> inRenderingDataPtr = renderingDataArray[renderingDataArray.size() - 1];
+            
+            renderLayer->renderingDatas.push_back(inRenderingDataPtr);
 
             //基础信息记录
-            inRenderingData.meshComp = inMeshComponent;
-            inRenderingData.meshHash = inMeshHash;
-            inRenderingData.meshObjectIndex = meshCount++;
-            inRenderingData.geometryKey = inGeometryKey;
-            inRenderingData.indexSize = inMeshData.indexData.size();
-            inRenderingData.vertexSize = inMeshData.vertexData.size();
+            inRenderingDataPtr->meshComp = inMeshComponent;
+            inRenderingDataPtr->meshHash = inMeshHash;
+            inRenderingDataPtr->meshObjectIndex = meshCount++;
+            inRenderingDataPtr->geometryKey = inGeometryKey;
+            inRenderingDataPtr->indexSize = inMeshData.indexData.size();
+            inRenderingDataPtr->vertexSize = inMeshData.vertexData.size();
+            inRenderingDataPtr->meshRenderingData = &meshRenderingData;
 
-            inRenderingData.indexOffsetPosition = meshRenderingData.indexData.size();
-            inRenderingData.vertexOffsetPosition = meshRenderingData.vertexData.size();
+            inRenderingDataPtr->indexOffsetPosition = meshRenderingData.indexData.size();
+            inRenderingDataPtr->vertexOffsetPosition = meshRenderingData.vertexData.size();
+            
+            uniqueRenderingData[inMeshHash]->meshComp = inRenderingDataPtr->meshComp;
+            uniqueRenderingData[inMeshHash]->meshHash = inRenderingDataPtr->meshHash;
+            uniqueRenderingData[inMeshHash]->meshObjectIndex = inRenderingDataPtr->meshObjectIndex;
+            uniqueRenderingData[inMeshHash]->geometryKey = inRenderingDataPtr->geometryKey;
+            uniqueRenderingData[inMeshHash]->indexSize = inRenderingDataPtr->indexSize;
+            uniqueRenderingData[inMeshHash]->vertexSize = inRenderingDataPtr->vertexSize;
+            uniqueRenderingData[inMeshHash]->meshRenderingData = inRenderingDataPtr->meshRenderingData;
+
+            uniqueRenderingData[inMeshHash]->indexOffsetPosition = inRenderingDataPtr->indexOffsetPosition;
+            uniqueRenderingData[inMeshHash]->vertexOffsetPosition = inRenderingDataPtr->vertexOffsetPosition;
 
             //索引的合并
             meshRenderingData.indexData.insert(
@@ -750,60 +774,75 @@ void FGeometry::BuildMesh(
 
 void FGeometry::DuplicateMesh(
     CMeshComponent* inMeshComponent,
-    const FRenderingData& meshRenderingData,
+    std::shared_ptr<FRenderingData>& inRenderingData,
     int inGeometryKey
 )
 {
-    if (!IsRenderingDataExistence(inMeshComponent))
+    if (auto renderLayer = FRenderLayerManager::FindByRenderLayer((int)inMeshComponent->GetRenderLayerType()))
     {
-        if (auto renderLayer = FRenderLayerManager::FindByRenderLayer((int)inMeshComponent->GetRenderLayerType()))
-        {
-            renderLayer->renderingDatas.push_back(meshRenderingData);
-            FRenderingData& inRenderingData = renderLayer->renderingDatas[renderLayer->renderingDatas.size() - 1];
+        renderingDataArray.push_back(make_shared<FRenderingData>(FRenderingData()));
+        std::shared_ptr<FRenderingData>& newRenderingData = renderingDataArray[renderingDataArray.size() - 1];
+        
+        renderLayer->renderingDatas.push_back(newRenderingData);
 
-            //基础信息记录
-            inRenderingData.meshComp = inMeshComponent;
-            inRenderingData.meshObjectIndex = meshCount++;
-            inRenderingData.geometryKey = inGeometryKey;
-        }
+        //基础信息记录
+        newRenderingData->meshComp = inMeshComponent;
+        newRenderingData->meshObjectIndex = meshCount++;
+        newRenderingData->geometryKey = inGeometryKey;
+        
+        newRenderingData->meshHash = inRenderingData->meshHash;
+        newRenderingData->indexSize = inRenderingData->indexSize;
+        newRenderingData->vertexSize = inRenderingData->vertexSize;
+        newRenderingData->meshRenderingData = &meshRenderingData;
+
+        newRenderingData->indexOffsetPosition = inRenderingData->indexOffsetPosition;
+        newRenderingData->vertexOffsetPosition = inRenderingData->vertexOffsetPosition;
     }
 }
 
-bool FGeometry::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType)
+bool FGeometry::FindMeshRenderingData(const size_t& inHash, std::shared_ptr<FRenderingData>& meshData, int inRenderLayerType)
 {
-    //寻找RenderingData
-    auto FindMeshRenderDataByHash = [&](std::shared_ptr<FRenderLayer> inRenderingLayer ) -> FRenderingData*
+    // //寻找RenderingData
+    // auto FindMeshRenderDataByHash = [&](std::shared_ptr<FRenderLayer> inRenderingLayer ) -> FRenderingData*
+    // {
+    //     for (auto& tmp : inRenderingLayer->renderingDatas)
+    //     {
+    //         if (!tmp.expired() && tmp.lock()->meshHash == inHash)
+    //         {
+    //             return &tmp;
+    //         }
+    //     }
+    //     return NULL;
+    // };
+    // //暴力寻找
+    // if (inRenderLayerType == -1)
+    // {
+    //     for (auto& tmpRenderLayer : FRenderLayerManager::renderLayers)
+    //     {
+    //         if (FRenderingData* outRenderingData = FindMeshRenderDataByHash(tmpRenderLayer))
+    //         {
+    //             meshData = *outRenderingData;
+    //             return true;
+    //         }
+    //     }
+    // }
+    // //精准寻找
+    // else if (auto renderLayer = FRenderLayerManager::FindByRenderLayer(inRenderLayerType))
+    // {
+    //     if (FRenderingData* outRenderingData = FindMeshRenderDataByHash(renderLayer))
+    //     {
+    //         meshData = *outRenderingData;
+    //         return true;
+    //     }
+    // }
+    
+    auto findElement = uniqueRenderingData.find(inHash);
+    if (findElement != uniqueRenderingData.end())
     {
-        for (auto& tmp : inRenderingLayer->renderingDatas)
-        {
-            if (tmp.meshHash == inHash)
-            {
-                return &tmp;
-            }
-        }
-        return NULL;
-    };
-    //暴力寻找
-    if (inRenderLayerType == -1)
-    {
-        for (auto& tmpRenderLayer : FRenderLayerManager::renderLayers)
-        {
-            if (FRenderingData* outRenderingData = FindMeshRenderDataByHash(tmpRenderLayer))
-            {
-                meshData = *outRenderingData;
-                return true;
-            }
-        }
+        meshData = findElement->second;
+        return true;
     }
-    //精准寻找
-    else if (auto renderLayer = FRenderLayerManager::FindByRenderLayer(inRenderLayerType))
-    {
-        if (FRenderingData* outRenderingData = FindMeshRenderDataByHash(renderLayer))
-        {
-            meshData = *outRenderingData;
-            return true;
-        }
-    }
+    
     return false;
 }
 

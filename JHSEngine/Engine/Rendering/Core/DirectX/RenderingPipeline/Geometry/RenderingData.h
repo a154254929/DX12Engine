@@ -2,8 +2,11 @@
 #include "../../../../../Interface/DirectXDeviceInterface.h"
 #include "../../../RenderingResourcesUpdate.h"
 
+struct FMeshRenderingData;
 class CMeshComponent;
-struct FRenderingData : public IDirectXDeviceInterface_Struct
+struct FRenderingData
+    : public IDirectXDeviceInterface_Struct
+    , public std::enable_shared_from_this<FRenderingData>
 {
 public:
     FRenderingData();
@@ -32,4 +35,6 @@ public:
     XMFLOAT4X4 textureTransform;
     CMeshComponent* meshComp;
     shared_ptr<FRenderingResourcesUpdate> objectConstants;
+    
+    FMeshRenderingData* meshRenderingData;
 };

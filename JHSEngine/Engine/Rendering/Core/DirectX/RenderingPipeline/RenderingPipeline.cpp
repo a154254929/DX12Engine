@@ -11,12 +11,12 @@ void FRenderingPipeline::BuildMesh(const size_t inMeshHash, CMeshComponent* inMe
     geometryMap.BuildMesh(inMeshHash, inMeshComponent, inMeshData);
 }
 
-void FRenderingPipeline::DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData)
+void FRenderingPipeline::DuplicateMesh(CMeshComponent* inMeshComponent, std::shared_ptr<FRenderingData>& meshRenderingData)
 {
     geometryMap.DuplicateMesh(inMeshComponent, meshRenderingData);
 }
 
-bool FRenderingPipeline::FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType)
+bool FRenderingPipeline::FindMeshRenderingData(const size_t& inHash, std::shared_ptr<FRenderingData>& meshData, int inRenderLayerType)
 {
     return geometryMap.FindMeshRenderingData(inHash, meshData, inRenderLayerType);
 }

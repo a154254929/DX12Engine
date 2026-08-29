@@ -17,9 +17,9 @@ public:
 
     void BuildMesh(const size_t inMeshHash, CMeshComponent* inMeshComponent, const FMeshRenderingData& inMeshData);
 
-    void DuplicateMesh(CMeshComponent* inMeshComponent, const FRenderingData& meshRenderingData);
+    void DuplicateMesh(CMeshComponent* inMeshComponent, std::shared_ptr<FRenderingData>& meshRenderingData);
 
-    bool FindMeshRenderingData(const size_t& inHash, FRenderingData& meshData, int inRenderLayerType = -1);
+    bool FindMeshRenderingData(const size_t& inHash, std::shared_ptr<FRenderingData>& meshData, int inRenderLayerType = -1);
 
     virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
 
