@@ -1,5 +1,6 @@
 #pragma once
 #include "EngineMinimal.h"
+#include "Rendering/Core/DirectX/RenderingPipeline/Geometry/RenderingData.h"
 
 class CComponent;
 class GActorObject;
@@ -16,4 +17,7 @@ struct FCollisionResult
     
     CComponent* collisionComponent;
     GActorObject* collisionActor;
+    
+public:
+    std::weak_ptr<FRenderingData> renderingData;
 };

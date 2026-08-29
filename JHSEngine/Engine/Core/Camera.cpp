@@ -3,6 +3,8 @@
 #include "../Component/InputComponent.h"
 #include "../Component/TransformationComponent.h"
 #include "../Library/RaycastSystemLibrary.h"
+#include "../Rendering/Core/DirectX/RenderingPipeline/RenderLayer/RenderLayerManager.h"
+#include "../Component/Mesh/Core/MeshComponentType.h"
 
 GCamera::GCamera()
     : Super()
@@ -223,6 +225,25 @@ void GCamera::OnClickedScreen(int x, int y)
     
     FCollisionResult hitResult;
     FRaycastSystemLibrary::HitResultByScreen(GetWorld(), x, y, hitResult);
+    
+    if (hitResult.bIsCollided)
+    {
+        if (FRenderLayerManager* layerManager = GetRenderingLayerManager())
+        {
+            layerManager->Clear(EMeshRenderLayerType::RENDERLAYER_OPAQUE_SELECT);
+            layerManager->Add(EMeshRenderLayerType::RENDERLAYER_OPAQUE_SELECT, hitResult.renderingData);
+        }
+       
+        Engine_Log("Hit Actor");
+    }
+    else
+    {
+        if (FRenderLayerManager* layerManager = GetRenderingLayerManager())
+        {
+            layerManager->Clear(EMeshRenderLayerType::RENDERLAYER_OPAQUE_SELECT);
+        }
+        Engine_Log("No Hit");
+    }
     
 }
 
