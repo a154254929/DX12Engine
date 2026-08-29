@@ -6,7 +6,9 @@
 GMesh::GMesh()
     :GActorObject()
 {
-    meshComponent = CreateObject<CShellMeshComponent>(new CShellMeshComponent());
+    FCreateObjectParam param;
+    param.owner = this;
+    meshComponent = CreateObject<CShellMeshComponent>(param, new CShellMeshComponent());
 }
 
 void GMesh::Init()

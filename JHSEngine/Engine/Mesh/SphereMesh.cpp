@@ -6,7 +6,9 @@
 
 GSphereMesh::GSphereMesh()
 {
-    SetMeshComponent(ConstructionObject<CSphereMeshComponent>());
+    FCreateObjectParam param;
+    param.owner = this;
+    SetMeshComponent(ConstructionObject<CSphereMeshComponent>(param));
 }
 
 void GSphereMesh::Init()

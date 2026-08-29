@@ -3,7 +3,9 @@
 
 CMeshComponent::CMeshComponent()
 {
-    materials.push_back(CreateObject<CMaterial>(new CMaterial()));
+    FCreateObjectParam param;
+    param.owner = this;
+    materials.push_back(CreateObject<CMaterial>(param, new CMaterial()));
     meshRenderLayerType = RENDERLAYER_OPAQUE;
     
     bCastShadow = true;

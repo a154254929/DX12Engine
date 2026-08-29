@@ -6,7 +6,9 @@
 
 GCustomMesh::GCustomMesh()
 {
-    SetMeshComponent(ConstructionObject<CCustomMeshComponent>());
+    FCreateObjectParam param;
+    param.owner = this;
+    SetMeshComponent(ConstructionObject<CCustomMeshComponent>(param));
 }
 
 void GCustomMesh::Init()

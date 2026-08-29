@@ -17,10 +17,11 @@ public:
     template<class T>
     T *CreateActorObject()
     {
-        T *InArray = new T();
-        ActorObjects.push_back(InArray);
+        T *inArray = new T();
+        inArray->SetOwner(this);
+        ActorObjects.push_back(inArray);
 
-        return InArray;
+        return inArray;
     }
     
 public:

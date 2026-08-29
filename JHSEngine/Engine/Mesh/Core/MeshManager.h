@@ -25,21 +25,21 @@ public:
     virtual void Draw(float deltaTime);
     virtual void PostDraw(float deltaTime);
 public:
-    CMeshComponent* CreateBoxMeshComponent(float inHeight, float inWidth, float inDepth);
+    CMeshComponent* CreateBoxMeshComponent(const FCreateObjectParam& inOwnerParam, float inHeight, float inWidth, float inDepth);
 
-    CMeshComponent* CreateConeMeshComponent(float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
+    CMeshComponent* CreateConeMeshComponent(const FCreateObjectParam& inOwnerParam, float inRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
 
-    CMeshComponent* CreateCylinderMeshComponent(float InTopRadius, float InBottomRadius, float InHeight, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision);
+    CMeshComponent* CreateCylinderMeshComponent(const FCreateObjectParam& inOwnerParam, float InTopRadius, float InBottomRadius, float InHeight, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision);
 
-    CMeshComponent* CreatePlaneMeshComponent(float InHeight, float InWidth, uint32_t InHeightSubdivide, uint32_t InWidthSubdivide);
+    CMeshComponent* CreatePlaneMeshComponent(const FCreateObjectParam& inOwnerParam, float InHeight, float InWidth, uint32_t InHeightSubdivide, uint32_t InWidthSubdivide);
 
-    CMeshComponent* CreateAesmaMeshComponent(float inOuterRadius, float inInnerRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
+    CMeshComponent* CreateAesmaMeshComponent(const FCreateObjectParam& inOwnerParam, float inOuterRadius, float inInnerRadius, float inHeight, uint32_t inAxialSubdivision, uint32_t inHeightSubdivision);
 
-    CMeshComponent* CreateDonutMeshComponent(float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision);
+    CMeshComponent* CreateDonutMeshComponent(const FCreateObjectParam& inOwnerParam, float inDonutRadius, float inThicknessRadius, uint32_t inDonutAxialSubdivision, uint32_t inThicknessAxialSubdivision);
 
-    CMeshComponent* CreateSphereMeshComponent(float InRadius, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision, bool bReverse = false);
+    CMeshComponent* CreateSphereMeshComponent(const FCreateObjectParam& inOwnerParam, float InRadius, uint32_t InAxialSubdivision, uint32_t InHeightSubdivision, bool bReverse = false);
 
-    CMeshComponent* CreateMeshComponent(string& InPath);
+    CMeshComponent* CreateMeshComponent(const FCreateObjectParam& inOwnerParam, string& InPath);
     
     FRenderingPipeline& GetRenderingPipeline() {return renderingPipeline;};
 

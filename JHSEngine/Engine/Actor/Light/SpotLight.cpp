@@ -5,7 +5,9 @@ GSpotLight::GSpotLight()
     : Super()
     , indexTest(0.f)
 {
-    SetLightComponent(CreateObject<CSpotLightComponent>(new CSpotLightComponent()));
+    FCreateObjectParam param;
+    param.owner = this;
+    SetLightComponent(CreateObject<CSpotLightComponent>(param, new CSpotLightComponent()));
 }
 
 void GSpotLight::Tick(float deltaTime)

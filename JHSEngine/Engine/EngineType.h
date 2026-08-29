@@ -2,7 +2,7 @@
 #include "EngineMinimal.h"
 
 class CComponent;
-class GActor;
+class GActorObject;
 
 struct FCollisionResult
 {
@@ -15,5 +15,5 @@ struct FCollisionResult
     fvector_3d collisionNormal;
     
     CComponent* collisionComponent;
-    GActor* collisionActor;
+    GActorObject* collisionActor;
 };

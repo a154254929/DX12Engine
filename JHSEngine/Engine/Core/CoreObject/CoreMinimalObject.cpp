@@ -3,6 +3,7 @@
 vector<CCoreMinimalObject*> gObjects;
 
 CCoreMinimalObject::CCoreMinimalObject()
+    : owner(nullptr)
 {
     bTick = true;
     gObjects.push_back(this);

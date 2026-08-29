@@ -4,6 +4,7 @@
 #include "../Config/EngineRenderConfig.h"
 #include "../Core/World.h"
 #include "../Component/Mesh/Core/MeshComponent.h"
+#include "../Actor/Core/ActorObject.h"
 
 bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR& direction,
     const XMMATRIX& viewInvMatrix, FCollisionResult& outResult)
@@ -21,7 +22,7 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
        XMMATRIX viewToObjectMatrix = XMMatrixMultiply(viewInvMatrix, worldToObjectMatrix);
         
         XMVECTOR objectOriginPoint = XMVector3Transform(originPoint, viewToObjectMatrix);
-        XMVECTOR objectDirection = XMVector3TransformNormal(direction, viewToObjectMatrix);
+        XMVECTOR objectDirection = XMVector3Normalize(XMVector3TransformNormal(direction, viewToObjectMatrix));
         
         float time = 0.f;
         
@@ -60,6 +61,7 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
                             //outResult.collisionDistance = finalTime;
                             outResult.collisionComponent = renderingData->meshComp;
                             //outResult.collisionPoint = ;
+                            outResult.collisionActor = dynamic_cast<GActorObject*>(renderingData->meshComp->GetOwner());
                         }
                         
                     }

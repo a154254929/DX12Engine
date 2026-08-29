@@ -32,11 +32,11 @@ namespace MeshConstruction
     }
     
     template<class T, typename ...ParamTypes>
-    T* CreateMeshComponent(CMeshManager* inMananger, ParamTypes &&...params)
+    T* CreateMeshComponent(const FCreateObjectParam& inOwnerParam, CMeshManager* inMananger, ParamTypes &&...params)
     {
         if (inMananger)
         {
-            T* myMeshComp = CreateObject<T>(new T());
+            T* myMeshComp = CreateObject<T>(inOwnerParam, new T());
             
             return CreateMeshComponent<T>(inMananger, myMeshComp, params...);
         }

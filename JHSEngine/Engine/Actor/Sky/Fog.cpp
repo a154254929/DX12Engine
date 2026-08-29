@@ -4,7 +4,9 @@
 
 GFog::GFog()
 {
-    fogComponent = CreateObject<CFogComponent>(new CFogComponent());
+    FCreateObjectParam param;
+    param.owner = this;
+    fogComponent = CreateObject<CFogComponent>(param, new CFogComponent());
 }
 
 void GFog::SetFogColor(const fvector_color& inColor)

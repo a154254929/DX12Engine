@@ -4,7 +4,9 @@
 GParallelLight::GParallelLight()
     : Super()
 {
-    SetLightComponent(CreateObject<CParallelLightComponent>(new CParallelLightComponent()));
+    FCreateObjectParam param;
+    param.owner = this;
+    SetLightComponent(CreateObject<CParallelLightComponent>(param, new CParallelLightComponent()));
 }
 
 void GParallelLight::Tick(float deltaTime)

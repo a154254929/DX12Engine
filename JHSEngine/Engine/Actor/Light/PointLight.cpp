@@ -4,7 +4,9 @@
 GPointLight::GPointLight()
     : Super()
 {
-    SetLightComponent(CreateObject<CPointLightComponent>(new CPointLightComponent()));
+    FCreateObjectParam param;
+    param.owner = this;
+    SetLightComponent(CreateObject<CPointLightComponent>(param, new CPointLightComponent()));
 }
 
 void GPointLight::Tick(float deltaTime)

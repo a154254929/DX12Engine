@@ -7,7 +7,9 @@
 
 GDonutMesh::GDonutMesh()
 {
-    SetMeshComponent(ConstructionObject<CDonutMeshComponent>());
+    FCreateObjectParam param;
+    param.owner = this;
+    SetMeshComponent(ConstructionObject<CDonutMeshComponent>(param));
 }
 
 void GDonutMesh::Init()

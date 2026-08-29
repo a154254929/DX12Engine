@@ -18,13 +18,20 @@ public:
     virtual void Tick(float deltaTime) {};
 
     template<class ObjectType>
-    static ObjectType* CreateObject(CCoreMinimalObject* newObject)
+    static ObjectType* CreateObject(const FCreateObjectParam inOwner, CCoreMinimalObject* newObject)
     {
-        return dynamic_cast<ObjectType*>(newObject);
+        ObjectType* outObj = dynamic_cast<ObjectType*>(newObject);
+        outObj->SetOwner(inOwner.owner);
+        return outObj;
     }
     bool IsTick()const { return bTick; }
+    
+    FORCEINLINE CCoreMinimalObject* GetOwner() const { return owner; }
+    void SetOwner(CCoreMinimalObject* newOwner) { owner = newOwner; }
 protected:
     bool bTick;
+    
+    CCoreMinimalObject* owner;
 };
 
 extern vector<CCoreMinimalObject*> gObjects;

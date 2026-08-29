@@ -7,7 +7,9 @@ CParallelLightComponent::CParallelLightComponent()
 {
     //读取模型资源
     static string meshPath = "../JHSEngine/Asset/SunMesh.obj";
-    SetLightMesh(GetMeshManager()->CreateMeshComponent(meshPath));
+    FCreateObjectParam param;
+    param.owner = this;
+    SetLightMesh(GetMeshManager()->CreateMeshComponent(param, meshPath));
     
     //设置现况模式
     if (GetLightMesh())

@@ -59,7 +59,9 @@ int CWindowsEngine::Init(FWinMainCommandParameters inParameters)
 
     renderingEngine->Init(inParameters);
 
-    world = CreateObject<CWorld>(new CWorld());
+    FCreateObjectParam param;
+    param.owner = this;
+    world = CreateObject<CWorld>(param, new CWorld());
     renderingEngine->world = world;
 
     Engine_Log("Engine initialization complete.");

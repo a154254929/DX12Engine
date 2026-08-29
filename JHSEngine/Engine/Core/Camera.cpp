@@ -7,7 +7,9 @@
 GCamera::GCamera()
     : Super()
 {
-    inputComponent = CreateObject<CInputComponent>(new CInputComponent());
+    FCreateObjectParam param;
+    param.owner = this;
+    inputComponent = CreateObject<CInputComponent>(param, new CInputComponent());
 
     mounseSensitivity = .5f;
     cameraType = ECameraType::CameraRoaming;

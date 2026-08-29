@@ -51,8 +51,10 @@ CDirectXRenderingEngine::CDirectXRenderingEngine()
     }
     bTick = false;
 
-    meshManager = CreateObject<CMeshManager>(new CMeshManager());
-    lightManager = CreateObject<CLightManager>(new CLightManager());
+    FCreateObjectParam param;
+    param.owner = this;
+    meshManager = CreateObject<CMeshManager>(param, new CMeshManager());
+    lightManager = CreateObject<CLightManager>(param, new CLightManager());
 }
 
 CDirectXRenderingEngine::~CDirectXRenderingEngine()
@@ -190,7 +192,7 @@ int CDirectXRenderingEngine::PostInit()
         }
         */
         
-        
+        /*
         string fbxPath = "../JHSEngine/Asset/Pet_Huqiu.fbx";
         if (GCustomMesh* fbxMesh = world->CreateActorObject<GCustomMesh>())
         {
@@ -207,6 +209,7 @@ int CDirectXRenderingEngine::PostInit()
                 material->SetFresnelF0(fvector_3d(1.f));
             }
         }
+        */
         //GMesh* aesmaMesh = meshManager->CreateAesmaMesh(3, 1, 10, 20, 3);
         //GMesh* donutMesh = meshManager->CreateDonutMesh(3, .5f, 10, 10);
         

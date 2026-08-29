@@ -1,6 +1,7 @@
 #include "DynamicCubeMap.h"
 #include "../../RenderTarget/CubeMapRenderTarget.h"
 #include "../../../../../../Core/Viewport/ClientViewport.h"
+#include "../../../../../../Core/CoreObject/CoreMinimalObject.h"
 
 
 FDynamicCubeMap::FTmpViewportCapture::FTmpViewportCapture()
@@ -43,7 +44,7 @@ void FDynamicCubeMap::BuildViewPort(const fvector_3d& inPosition)
     
     for (int i = 0; i < 6; i++)
     {
-        GClientViewport* viewport = CreateObject<GClientViewport>(new GClientViewport());
+        GClientViewport* viewport = CreateObject<GClientViewport>(FCreateObjectParam(), new GClientViewport());
         viewports.push_back(viewport);
         
         viewport->SetPosition(XMFLOAT3(inPosition.x, inPosition.y, inPosition.z));

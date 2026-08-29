@@ -6,7 +6,9 @@
 
 GAesmaMesh::GAesmaMesh()
 {
-    SetMeshComponent(ConstructionObject<CAesmaMeshComponent>());
+    FCreateObjectParam param;
+    param.owner = this;
+    SetMeshComponent(ConstructionObject<CAesmaMeshComponent>(param));
 }
 
 void GAesmaMesh::Init()

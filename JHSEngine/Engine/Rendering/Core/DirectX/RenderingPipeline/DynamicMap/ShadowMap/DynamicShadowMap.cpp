@@ -207,7 +207,7 @@ void FDynamicShadowMap::BuildSpotLightMatrix(const fvector_3d& inDirection, cons
 
 void FDynamicShadowMap::BuildViewPort(const fvector_3d& inPosition)
 {
-    viewport = CreateObject<GClientViewport>(new GClientViewport());
+    viewport = CreateObject<GClientViewport>(FCreateObjectParam(), new GClientViewport());
     viewport->SetPosition(XMFLOAT3(inPosition.x, inPosition.y, inPosition.z));
     viewport->LookAt(inPosition, fvector_3d(10.f), fvector_3d(0.f, 1.f, 0.f));
     viewport->SetFrustum(45.f, 1.0f, 0.1f, 10000.f);
