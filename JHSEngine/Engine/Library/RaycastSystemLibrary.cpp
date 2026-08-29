@@ -2,7 +2,6 @@
 #include "../Core/Camera.h"
 #include "../Config/EngineRenderConfig.h"
 #include "../Core/World.h"
-#include "../Rendering/Core/DirectX/RenderingPipeline/Geometry/GeometryMap.h"
 
 bool FRaycastSystemLibrary::HitResultByScreen(CWorld* world, int screenX, int screenY, FCollisionResult)
 {
@@ -22,11 +21,6 @@ bool FRaycastSystemLibrary::HitResultByScreen(CWorld* world, int screenX, int sc
         XMMATRIX viewMatrix = XMLoadFloat4x4(&camera->viewMatrix);
         XMVECTOR viewMatrixDeterminant = XMMatrixDeterminant(viewMatrix);
         XMMATRIX viewInvMatrix = XMMatrixInverse(&viewMatrixDeterminant, viewMatrix);
-        
-        for (int i = 0; i < FGeometry::renderingDataArray.size(); ++i)
-        {
-            std::shared_ptr<FRenderingData> renderingData = FGeometry::renderingDataArray[i];
-        }
     }
     return false;
 }

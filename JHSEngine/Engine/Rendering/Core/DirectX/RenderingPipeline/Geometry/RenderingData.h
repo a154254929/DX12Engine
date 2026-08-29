@@ -21,6 +21,8 @@ public:
     UINT vertexTypeSize;
 
 public:
+    BoundingBox boundingBox;
+    
     size_t meshHash;
     int geometryKey;
     int meshObjectIndex;

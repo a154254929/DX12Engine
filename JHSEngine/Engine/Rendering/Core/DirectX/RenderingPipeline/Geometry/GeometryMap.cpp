@@ -732,6 +732,27 @@ void FGeometry::BuildMesh(
             std::shared_ptr<FRenderingData> inRenderingDataPtr = renderingDataArray[renderingDataArray.size() - 1];
             
             renderLayer->renderingDatas.push_back(inRenderingDataPtr);
+            
+            //求AABB
+            fvector_3d boxMax = fvector_3d(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+            fvector_3d boxMin = fvector_3d(FLT_MAX, FLT_MAX, FLT_MAX);
+            XMVECTOR xmvMaxPoint, xmvMinPoint;
+            for (const auto& vertex : inMeshData.vertexData)
+            {
+                boxMax.x = max(boxMax.x, vertex.position.x);
+                boxMax.y = max(boxMax.y, vertex.position.y);
+                boxMax.z = max(boxMax.z, vertex.position.z);
+
+                boxMin.x = min(boxMin.x, vertex.position.x);
+                boxMin.y = min(boxMin.y, vertex.position.y);
+                boxMin.z = min(boxMin.z, vertex.position.z);
+            
+                XMFLOAT3 xmFMaxPoint = EngineMath::ToFloat3(boxMax);
+                XMFLOAT3 xmFMinPoint = EngineMath::ToFloat3(boxMin);
+                
+                xmvMaxPoint = XMLoadFloat3(&xmFMaxPoint);
+                xmvMinPoint = XMLoadFloat3(&xmFMinPoint);
+            }
 
             //基础信息记录
             inRenderingDataPtr->meshComp = inMeshComponent;
@@ -745,6 +766,9 @@ void FGeometry::BuildMesh(
             inRenderingDataPtr->indexOffsetPosition = meshRenderingData.indexData.size();
             inRenderingDataPtr->vertexOffsetPosition = meshRenderingData.vertexData.size();
             
+            XMStoreFloat3(&inRenderingDataPtr->boundingBox.Center, XMVectorScale(XMVectorAdd(xmvMaxPoint, xmvMinPoint), 0.5f));
+            XMStoreFloat3(&inRenderingDataPtr->boundingBox.Extents, XMVectorScale(XMVectorSubtract(xmvMaxPoint, xmvMinPoint), 0.5f));
+            
             uniqueRenderingData[inMeshHash]->meshComp = inRenderingDataPtr->meshComp;
             uniqueRenderingData[inMeshHash]->meshHash = inRenderingDataPtr->meshHash;
             uniqueRenderingData[inMeshHash]->meshObjectIndex = inRenderingDataPtr->meshObjectIndex;
@@ -755,6 +779,8 @@ void FGeometry::BuildMesh(
 
             uniqueRenderingData[inMeshHash]->indexOffsetPosition = inRenderingDataPtr->indexOffsetPosition;
             uniqueRenderingData[inMeshHash]->vertexOffsetPosition = inRenderingDataPtr->vertexOffsetPosition;
+            
+            uniqueRenderingData[inMeshHash]->boundingBox = inRenderingDataPtr->boundingBox;
 
             //索引的合并
             meshRenderingData.indexData.insert(
@@ -797,6 +823,9 @@ void FGeometry::DuplicateMesh(
 
         newRenderingData->indexOffsetPosition = inRenderingData->indexOffsetPosition;
         newRenderingData->vertexOffsetPosition = inRenderingData->vertexOffsetPosition;
+            
+        newRenderingData->boundingBox = inRenderingData->boundingBox;
+
     }
 }
 
