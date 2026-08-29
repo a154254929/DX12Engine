@@ -9,6 +9,7 @@ CMeshComponent::CMeshComponent()
     meshRenderLayerType = RENDERLAYER_OPAQUE;
     
     bCastShadow = true;
+    bPickup = true;
 }
 
 void CMeshComponent::Init()

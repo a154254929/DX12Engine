@@ -18,6 +18,8 @@ public:
     void SetPosition(const XMFLOAT3& inPosition);
     void SetRotation(const fvector_3d& inRotation);
     void SetScale(const fvector_3d& inScale);
+    
+    virtual void SetPickup(bool inPickup);
 
     XMFLOAT3& GetPosition();
     fvector_3d GetRotation() const;

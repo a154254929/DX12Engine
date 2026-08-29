@@ -25,8 +25,13 @@ void GCamera::BeginInit()
 {
     ViewportInit();
     inputComponent->captureKeyboardInforDelegate.Bind(this, &GCamera::ExecuteKeboard);
-    inputComponent->OnMouseButtonDownDelegate.Bind(this, &GCamera::OnMouseButtonDown);
-    inputComponent->OnMouseButtonUpDelegate.Bind(this, &GCamera::OnMouseButtonUp);
+    
+    inputComponent->OnLeftMouseButtonDownDelegate.Bind(this, &GCamera::OnLeftMouseButtonDown);
+    inputComponent->OnLeftMouseButtonUpDelegate.Bind(this, &GCamera::OnLeftMouseButtonUp);
+    
+    inputComponent->OnRightMouseButtonDownDelegate.Bind(this, &GCamera::OnRightMouseButtonDown);
+    inputComponent->OnRightMouseButtonUpDelegate.Bind(this, &GCamera::OnRightMouseButtonUp);
+    
     inputComponent->OnMouseMoveDelegate.Bind(this, &GCamera::OnMouseMove);
     inputComponent->OnMouseWheelDelegate.Bind(this, &GCamera::OnMouseWheel);
 }
@@ -118,16 +123,29 @@ void GCamera::BuildViewMatrix(float deltaTime)
     }
 }
 
-void GCamera::OnMouseButtonDown(int x, int y)
+void GCamera::OnLeftMouseButtonDown(int x, int y)
 {
-    bRightMosueDown = true;
+    bLeftMosueDown = true;
     
     OnClickedScreen(x, y);
     
     SetCapture(GetMainWindowsHandle());
 }
 
-void GCamera::OnMouseButtonUp(int x, int y)
+void GCamera::OnLeftMouseButtonUp(int x, int y)
+{
+    bLeftMosueDown = false;
+    ReleaseCapture();
+}
+
+void GCamera::OnRightMouseButtonDown(int x, int y)
+{
+    bRightMosueDown = true;
+    
+    SetCapture(GetMainWindowsHandle());
+}
+
+void GCamera::OnRightMouseButtonUp(int x, int y)
 {
     bRightMosueDown = false;
     ReleaseCapture();
@@ -234,7 +252,7 @@ void GCamera::OnClickedScreen(int x, int y)
             layerManager->Add(EMeshRenderLayerType::RENDERLAYER_OPAQUE_SELECT, hitResult.renderingData);
         }
        
-        Engine_Log("Hit Actor");
+        Engine_Log("Hit Actor! [time] = %f", hitResult.collisionTime);
     }
     else
     {

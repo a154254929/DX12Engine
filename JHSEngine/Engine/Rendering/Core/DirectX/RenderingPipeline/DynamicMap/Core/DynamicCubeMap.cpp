@@ -56,6 +56,9 @@ void FDynamicCubeMap::BuildViewPort(const fvector_3d& inPosition)
         viewport->SetFrustum(90.f, 1.f, 0.1f, 1000.f);
         
         viewport->BuildViewMatrix(0.016f);
+        
+        viewport->viewportInfo = renderTarget->GetViewport();
+        viewport->viewportRect = renderTarget->GetScissorRect();
     }
 }
 

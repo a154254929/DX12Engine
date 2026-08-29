@@ -211,6 +211,10 @@ void FDynamicShadowMap::BuildViewPort(const fvector_3d& inPosition)
     viewport->SetPosition(XMFLOAT3(inPosition.x, inPosition.y, inPosition.z));
     viewport->LookAt(inPosition, fvector_3d(10.f), fvector_3d(0.f, 1.f, 0.f));
     viewport->SetFrustum(45.f, 1.0f, 0.1f, 10000.f);
+        
+    viewport->viewportInfo = renderTarget->GetViewport();
+    viewport->viewportRect = renderTarget->GetScissorRect();
+    
     BuildViewMatrix(0.3f);
 }
 

@@ -4,8 +4,10 @@
 DEFINITION_MULTICAST_SINGLE_DELEGATE(FCaptureOnMousesDelegate, void, int, int);
 DEFINITION_MULTICAST_SINGLE_DELEGATE(FCaptureOnMousesWheelDelegate, void, int, int, float);
 
-extern FCaptureOnMousesDelegate MouseDownDelegate;
-extern FCaptureOnMousesDelegate MouseUpDelegate;
+extern FCaptureOnMousesDelegate LeftMouseDownDelegate;
+extern FCaptureOnMousesDelegate LeftMouseUpDelegate;
+extern FCaptureOnMousesDelegate RightMouseDownDelegate;
+extern FCaptureOnMousesDelegate RightMouseUpDelegate;
 
 extern FCaptureOnMousesWheelDelegate MouseWheelDelegate;
 

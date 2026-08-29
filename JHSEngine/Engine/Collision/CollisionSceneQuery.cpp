@@ -14,6 +14,10 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
     for (int i = 0; i < FGeometry::renderingDataArray.size(); ++i)
     {
         std::shared_ptr<FRenderingData> renderingData = FGeometry::renderingDataArray[i];
+        if (!renderingData->meshComp->IsPickup())
+        {
+            continue;
+        }
         
         XMMATRIX worldMatrix = XMLoadFloat4x4(&renderingData->worldMatrix);
         XMVECTOR worldMatrixDeterminant = XMMatrixDeterminant(worldMatrix);

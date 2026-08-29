@@ -23,6 +23,8 @@ public:
     virtual void PreDraw(float deltaTime);
     virtual void Draw(float deltaTime);
     virtual void PostDraw(float deltaTime);
+    
+    virtual void SetPickup(bool inPickup);
 
 public:
     virtual CMeshComponent * GetMeshComponent() { return meshComponent; }

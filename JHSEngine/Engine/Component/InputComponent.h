@@ -13,10 +13,16 @@ public:
     FCaptureKeyboardInforDelegate captureKeyboardInforDelegate;
 
     CVARIABLE()
-    FCaptureOnMouseDelegate OnMouseButtonDownDelegate;
+    FCaptureOnMouseDelegate OnLeftMouseButtonDownDelegate;
 
     CVARIABLE()
-    FCaptureOnMouseDelegate OnMouseButtonUpDelegate;
+    FCaptureOnMouseDelegate OnLeftMouseButtonUpDelegate;
+
+    CVARIABLE()
+    FCaptureOnMouseDelegate OnRightMouseButtonDownDelegate;
+
+    CVARIABLE()
+    FCaptureOnMouseDelegate OnRightMouseButtonUpDelegate;
 
     CVARIABLE()
     FCaptureOnMouseDelegate OnMouseMoveDelegate;
@@ -28,8 +34,12 @@ public:
     virtual void BeginInit();
     virtual void Tick(float deltaTime);
 
-    virtual void OnMouseButtonDown(int x, int y);
-    virtual void OnMouseButtonUp(int x, int y);
+    virtual void OnLeftMouseButtonDown(int x, int y);
+    virtual void OnLeftMouseButtonUp(int x, int y);
+
+    virtual void OnRightMouseButtonDown(int x, int y);
+    virtual void OnRightMouseButtonUp(int x, int y);
+    
     virtual void OnMouseMove(int x, int y);
     virtual void OnMouseWheel(int x, int y, float inDelta);
 };

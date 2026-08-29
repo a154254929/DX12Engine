@@ -48,8 +48,8 @@ void FRenderTarget::ResetViewport(UINT inWidth, UINT inHeight)
     viewport = {
         0.0f,
         0.0f,
-        (float)width,
-        (float)height,
+        (float)inWidth,
+        (float)inHeight,
         0.0f,
         1.0f
     };
@@ -60,7 +60,7 @@ void FRenderTarget::ResetScissorRect(UINT inWidth, UINT inHeight)
     scissorRect = {
         0,
         0,
-        (LONG)width,
-        (LONG)height
+        (LONG)inWidth,
+        (LONG)inHeight
     };
 }

@@ -32,6 +32,11 @@ public:
     void SetCastShadow(bool inCastShadows) {bCastShadow = inCastShadows;}
     bool IsCastShadow() const {return bCastShadow;}
     
+    void SetPickup(bool inPickup) {bPickup = inPickup;}
+    bool IsPickup() const {return bPickup;}
+    
 protected:
     bool bCastShadow;
+    
+    bool bPickup;
 };

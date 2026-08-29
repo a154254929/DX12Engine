@@ -25,6 +25,7 @@
 #include "../../../../Core/WinMainCommandParameters.h"
 #include "../../../../Mesh/AesmaMesh.h"
 #include "../../../../Mesh/DonutMesh.h"
+#include "Engine/Core/Camera.h"
 
 
 //class FVector
@@ -148,6 +149,7 @@ int CDirectXRenderingEngine::PostInit()
                 material->SetBaseColor(fvector_4d(.5f, .8f, .5f, 1.f));
                 material->SetMaterialType(EMaterialType::HalfLambertain);
             }
+            planeMesh->SetPickup(false);
         }
         
         if (GSky* sky = world->CreateActorObject<GSky>())
@@ -706,9 +708,10 @@ void CDirectXRenderingEngine::StartSetMainViewportRenderTarget()
 
     graphicsCommandList->ResourceBarrier(1, &resourceBarrierPresent);
 
+    
     //需要每帧执行,绑定矩形框
-    graphicsCommandList->RSSetViewports(1, &viewportInfo);
-    graphicsCommandList->RSSetScissorRects(1, &viewportRect);
+    graphicsCommandList->RSSetViewports(1, &world->GetCamera()->viewportInfo);
+    graphicsCommandList->RSSetScissorRects(1, &world->GetCamera()->viewportRect);
 
     //输出的合并阶段
     D3D12_CPU_DESCRIPTOR_HANDLE swapBufferView = GetCurrentSwapBufferView();
@@ -1036,21 +1039,6 @@ void CDirectXRenderingEngine::PostInitDirect3D()
 
     ID3D12CommandList* commandList[] = { graphicsCommandList.Get() };
     commandQueue->ExecuteCommandLists(_countof(commandList), commandList);
-
-    //覆盖原先Window画布
-    //描述视口尺寸
-    viewportInfo.TopLeftX = 0;
-    viewportInfo.TopLeftY = 0;
-    viewportInfo.Width = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
-    viewportInfo.Height = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
-    viewportInfo.MinDepth = 0.f;
-    viewportInfo.MaxDepth = 1.f;
-
-    //矩形
-    viewportRect.left = 0;
-    viewportRect.top = 0;
-    viewportRect.right = FEngineRenderConfig::GetRenderConfig()->ScreenWidth;
-    viewportRect.bottom = FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
 
     WaitGPUCommandQueueComplete();
     return;

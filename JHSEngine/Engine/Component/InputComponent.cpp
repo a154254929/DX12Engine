@@ -3,8 +3,11 @@
 
 void CInputComponent::BeginInit()
 {
-    MouseDownDelegate.AddFunction(this, &CInputComponent::OnMouseButtonDown);
-    MouseUpDelegate.AddFunction(this, &CInputComponent::OnMouseButtonUp);
+    LeftMouseDownDelegate.AddFunction(this, &CInputComponent::OnLeftMouseButtonDown);
+    LeftMouseUpDelegate.AddFunction(this, &CInputComponent::OnLeftMouseButtonUp);
+    RightMouseDownDelegate.AddFunction(this, &CInputComponent::OnRightMouseButtonDown);
+    RightMouseUpDelegate.AddFunction(this, &CInputComponent::OnRightMouseButtonUp);
+    
     MouseMoveDelegate.AddFunction(this, &CInputComponent::OnMouseMove);
     MouseWheelDelegate.AddFunction(this, &CInputComponent::OnMouseWheel);
 }
@@ -54,19 +57,35 @@ void CInputComponent::Tick(float deltaTime)
     }
 }
 
-void CInputComponent::OnMouseButtonDown(int x, int y)
+void CInputComponent::OnLeftMouseButtonDown(int x, int y)
 {
-    if (OnMouseButtonDownDelegate.IsBound())
+    if (OnLeftMouseButtonDownDelegate.IsBound())
     {
-        OnMouseButtonDownDelegate.Execute(x, y);
+        OnLeftMouseButtonDownDelegate.Execute(x, y);
     }
 }
 
-void CInputComponent::OnMouseButtonUp(int x, int y)
+void CInputComponent::OnLeftMouseButtonUp(int x, int y)
 {
-    if (OnMouseButtonUpDelegate.IsBound())
+    if (OnLeftMouseButtonUpDelegate.IsBound())
     {
-        OnMouseButtonUpDelegate.Execute(x, y);
+        OnLeftMouseButtonUpDelegate.Execute(x, y);
+    }
+}
+
+void CInputComponent::OnRightMouseButtonDown(int x, int y)
+{
+    if (OnRightMouseButtonDownDelegate.IsBound())
+    {
+        OnRightMouseButtonDownDelegate.Execute(x, y);
+    }
+}
+
+void CInputComponent::OnRightMouseButtonUp(int x, int y)
+{
+    if (OnRightMouseButtonUpDelegate.IsBound())
+    {
+        OnRightMouseButtonUpDelegate.Execute(x, y);
     }
 }
 

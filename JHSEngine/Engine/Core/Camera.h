@@ -24,8 +24,11 @@ public:
     virtual void BuildViewMatrix(float deltaTime);
 
 public:
-    virtual void OnMouseButtonDown(int x, int y);
-    virtual void OnMouseButtonUp(int x, int y);
+    virtual void OnLeftMouseButtonDown(int x, int y);
+    virtual void OnLeftMouseButtonUp(int x, int y);
+    virtual void OnRightMouseButtonDown(int x, int y);
+    virtual void OnRightMouseButtonUp(int x, int y);
+    
     virtual void OnMouseMove(int x, int y);
     virtual void OnMouseWheel(int x, int y, float inDelta);
 
@@ -46,6 +49,7 @@ public:
 protected:
     POINT lsatMousePosition;
 
+    bool bLeftMosueDown{ false };
     bool bRightMosueDown{ false };
 
     //鼠标灵敏度

@@ -31,6 +31,11 @@ void GMesh::PostDraw(float deltaTime)
 {
 }
 
+void GMesh::SetPickup(bool inPickup)
+{
+    GetMeshComponent()->SetPickup(inPickup);
+}
+
 UINT GMesh::GetMaterialNum()const
 {
     return meshComponent->GetMaterialNum();

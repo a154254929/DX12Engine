@@ -16,20 +16,18 @@ LRESULT CALLBACK EngineWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     case WM_CLOSE:
         PostQuitMessage(0);
         return 0;
+    case WM_LBUTTONDOWN:
+        LeftMouseDownDelegate.Broadcast(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        return 0;
+    case WM_LBUTTONUP:
+        LeftMouseUpDelegate.Broadcast(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        return 0;
     case WM_RBUTTONDOWN:
-        MouseDownDelegate.Broadcast(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        RightMouseDownDelegate.Broadcast(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
         return 0;
     case WM_RBUTTONUP:
-        MouseUpDelegate.Broadcast(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        RightMouseUpDelegate.Broadcast(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
         return 0;
-    /*
-    case WM_LBUTTONUP:
-        MouseUpDelegate.Broadcast(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-        return 0;
-    case WM_LBUTTONDOWN:
-        MouseDownDelegate.Broadcast(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-        return 0;
-    */
     case WM_MOUSEMOVE:
         MouseMoveDelegate.Broadcast(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
         return 0;
