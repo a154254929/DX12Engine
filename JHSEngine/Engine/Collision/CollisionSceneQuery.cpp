@@ -24,19 +24,19 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
         XMVECTOR objectOriginPoint = XMVector3Transform(originPoint, viewToObjectMatrix);
         XMVECTOR objectDirection = XMVector3Normalize(XMVector3TransformNormal(direction, viewToObjectMatrix));
         
-        float time = 0.f;
+        float time = FLT_MAX;
         
         if (renderingData->boundingBox.Intersects(objectOriginPoint, objectDirection, time))
         {
             
-            if (finalTime < time)
+            if (time < 0 || finalTime <= time)
             {
                 continue;
             }
             
             if (renderingData->meshRenderingData)
             {
-                UINT triangleCount =  renderingData->vertexSize / 3;
+                UINT triangleCount =  renderingData->indexSize / 3;
                 for (UINT j = 0; j < triangleCount; ++j)
                 {
                     fvector_3d indices;
@@ -44,7 +44,7 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
                     indices.y = renderingData->meshRenderingData->indexData[renderingData->indexOffsetPosition + j * 3 + 1];
                     indices.z = renderingData->meshRenderingData->indexData[renderingData->indexOffsetPosition + j * 3 + 2];
                     
-                    float triangleTestTime = 0.f;
+                    float triangleTestTime = FLT_MAX;
                     
                     XMVECTOR vertexes[3];
                     vertexes[0] = XMLoadFloat3(&renderingData->meshRenderingData->vertexData[renderingData->vertexOffsetPosition + indices.x].position);
@@ -62,14 +62,13 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
                             outResult.collisionComponent = renderingData->meshComp;
                             //outResult.collisionPoint = ;
                             outResult.collisionActor = dynamic_cast<GActorObject*>(renderingData->meshComp->GetOwner());
+                            outResult.renderingData = renderingData;
                         }
                         
                     }
                 
                 }
             }
-            outResult.collisionTime = time;
-            return true;
         }
     }
     return false;

@@ -6,5 +6,5 @@ class CWorld;
 
 struct FRaycastSystemLibrary
 {
-    static bool HitResultByScreen(CWorld* world, int screenX, int screenY, FCollisionResult);
+    static bool HitResultByScreen(CWorld* world, int screenX, int screenY, FCollisionResult& outHitResult);
 };

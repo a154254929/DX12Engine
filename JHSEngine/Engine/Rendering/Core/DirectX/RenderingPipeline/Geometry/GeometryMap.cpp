@@ -609,7 +609,7 @@ void FGeometryMap::LoadTexture()
     init_def_c_paths(&filePaths);
     
     char rootPath[] = "../JHSEngine/Asset/Texture";
-    find_files(rootPath, &filePaths, true);
+    find_files(rootPath, &filePaths, true, false);
 
     std::vector<std::string> ddsPaths;
     ddsPaths.reserve(filePaths.index);

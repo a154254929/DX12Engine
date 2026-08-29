@@ -46,7 +46,7 @@ public:
 protected:
     POINT lsatMousePosition;
 
-    bool bLeftMosueDown{ false };
+    bool bRightMosueDown{ false };
 
     //鼠标灵敏度
     float mounseSensitivity;

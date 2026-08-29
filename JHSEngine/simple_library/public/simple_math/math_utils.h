@@ -2,79 +2,79 @@
 #include <vector>
 
 #include "../simple_library_macro.h"
-//ï¿½ï¿½ï¿½ï¿½
+//ÏòÁ¿
 #include "transformation/vector/vector_2d.h"
 #include "transformation/vector/vector_3d.h"
 #include "transformation/vector/vector_4d.h"
 
-//ï¿½ï¿½ï¿½ï¿½
+//¾ØÕó
 #include "transformation/matrix/matrix_2x2.h"
 #include "transformation/matrix/matrix_3x3.h"
 #include "transformation/matrix/matrix_4x4.h"
 
-//ï¿½ï¿½Ôªï¿½ï¿½
+//ËÄÔªÊý
 #include "transformation/quaternion/quat.h"
 
 using namespace std;
 namespace math_utils
 {
-    //ï¿½ï¿½ï¿½ï¿½Ë·ï¿½
-    fvector_3d SIMPLE_LIBRARY_API mul(const fvector_2d &in_3d, const fmatrix_3x3& in_matrix_3x3);
-    fvector_3d SIMPLE_LIBRARY_API mul(const fvector_3d &in_3d, const fmatrix_3x3& in_matrix_3x3);
-    fvector_4d SIMPLE_LIBRARY_API mul(const fvector_4d &in_3d, const fmatrix_4x4& in_matrix_3x3);
+	//¾ØÕó³Ë·¨
+	fvector_3d SIMPLE_LIBRARY_API mul(const fvector_2d &in_3d, const fmatrix_3x3& in_matrix_3x3);
+	fvector_3d SIMPLE_LIBRARY_API mul(const fvector_3d &in_3d, const fmatrix_3x3& in_matrix_3x3);
+	fvector_4d SIMPLE_LIBRARY_API mul(const fvector_4d &in_3d, const fmatrix_4x4& in_matrix_3x3);
 
-    float SIMPLE_LIBRARY_API angle_to_radian(float angle);
-    float SIMPLE_LIBRARY_API radian_to_angle(float radian);
+	float SIMPLE_LIBRARY_API angle_to_radian(float angle);
+	float SIMPLE_LIBRARY_API radian_to_angle(float radian);
 
-    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª
-    void SIMPLE_LIBRARY_API rot_radian(float in_radian, fmatrix_3x3& in_world_matrix_3x3);
-    void SIMPLE_LIBRARY_API rot_angle(float in_angle, fmatrix_3x3& in_world_matrix_3x3);
+	//¾ØÕóÐý×ª
+	void SIMPLE_LIBRARY_API rot_radian(float in_radian, fmatrix_3x3& in_world_matrix_3x3);
+	void SIMPLE_LIBRARY_API rot_angle(float in_angle, fmatrix_3x3& in_world_matrix_3x3);
 
-    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    void SIMPLE_LIBRARY_API set_scale(const fvector_2d& in_scale, fmatrix_3x3& in_world_matrix_3x3);
-    fmatrix_3x3 SIMPLE_LIBRARY_API set_scale(const fvector_2d& in_scale);
+	//¾ØÕóËõ·Å
+	void SIMPLE_LIBRARY_API set_scale(const fvector_2d& in_scale, fmatrix_3x3& in_world_matrix_3x3);
+	fmatrix_3x3 SIMPLE_LIBRARY_API set_scale(const fvector_2d& in_scale);
 
-    //ï¿½Ð¶ï¿½boolï¿½Ç²ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Î§ï¿½ï¿½
-    bool SIMPLE_LIBRARY_API scalar_neare_qual_float(float f1, float f2, float epsilon);
-    bool SIMPLE_LIBRARY_API scalar_neare_qual_int(int i1, int i2, int epsilon);
+	//ÅÐ¶¨boolÊÇ²»ÊÇÔÚÒ»¶¨·¶Î§ÄÚ
+	bool SIMPLE_LIBRARY_API scalar_neare_qual_float(float f1, float f2, float epsilon);
+	bool SIMPLE_LIBRARY_API scalar_neare_qual_int(int i1, int i2, int epsilon);
 
-    fmatrix_4x4 SIMPLE_LIBRARY_API matrix_perspective(float in_fov_radian, float aspect_ratio, float near_z, float far_z);
+	fmatrix_4x4 SIMPLE_LIBRARY_API matrix_perspective(float in_fov_radian, float aspect_ratio, float near_z, float far_z);
 
-    //ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½
-    fmatrix_4x4 SIMPLE_LIBRARY_API matrix_look_at_target(const fvector_4d &in_view_pos, const fvector_4d& in_target_pos, const fvector_4d& in_view_up);
+	//¿´ÏòÄ¿±ê
+	fmatrix_4x4 SIMPLE_LIBRARY_API matrix_look_at_target(const fvector_4d &in_view_pos, const fvector_4d& in_target_pos, const fvector_4d& in_view_up);
 
-    //ï¿½ï¿½ï¿½ï¿½Í¸ï¿½Ó¾ï¿½ï¿½ï¿½
-    fmatrix_4x4 SIMPLE_LIBRARY_API build_view_matrix(const fvector_4d& in_view_pos, const fmatrix_4x4& in_view_matrix);
+	//¹¹½¨Í¸ÊÓ¾ØÕó
+	fmatrix_4x4 SIMPLE_LIBRARY_API build_view_matrix(const fvector_4d& in_view_pos, const fmatrix_4x4& in_view_matrix);
 
-    //ï¿½ï¿½×ª
-    fmatrix_4x4 SIMPLE_LIBRARY_API matrix_rotation_y(const float angle);
-    fmatrix_4x4 SIMPLE_LIBRARY_API matrix_rotation_x(const float angle);
-    fmatrix_4x4 SIMPLE_LIBRARY_API matrix_rotation_z(const float angle);
+	//Ðý×ª
+	fmatrix_4x4 SIMPLE_LIBRARY_API matrix_rotation_y(const float angle);
+	fmatrix_4x4 SIMPLE_LIBRARY_API matrix_rotation_x(const float angle);
+	fmatrix_4x4 SIMPLE_LIBRARY_API matrix_rotation_z(const float angle);
 
-    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª
-    fmatrix_4x4 SIMPLE_LIBRARY_API matrix_rotation_axis(const fvector_3d &axis,const float angle);
+	//ÈÎÒâÖáÐý×ª
+	fmatrix_4x4 SIMPLE_LIBRARY_API matrix_rotation_axis(const fvector_3d &axis,const float angle);
 
-    //ï¿½ï¿½Ôªï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
-    //ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½
-    void SIMPLE_LIBRARY_API inertia_to_object(const fquat &in_quat, fmatrix_3x3& out_rotation_matrix);
+	//ËÄÔªÊý×ª¾ØÕó
+	//¹ßÐÔ->ÎïÌå
+	void SIMPLE_LIBRARY_API inertia_to_object(const fquat &in_quat, fmatrix_3x3& out_rotation_matrix);
 
-    //ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½
-    void SIMPLE_LIBRARY_API object_to_inertia(const fquat &in_quat, fmatrix_3x3& out_rotation_matrix);
+	//ÎïÌå->¹ßÐÔ
+	void SIMPLE_LIBRARY_API object_to_inertia(const fquat &in_quat, fmatrix_3x3& out_rotation_matrix);
 
-    //ï¿½ï¿½ï¿½ï¿½
-    //ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½ 
-    //Ä¬ï¿½Ïµï¿½ in_rotation_matrix ï¿½ï¿½ ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½
-    fvector_3d SIMPLE_LIBRARY_API inertia_to_object(const fvector_3d& in_vector,const fmatrix_3x3& in_rotation_matrix);
+	//ÏòÁ¿
+	//¹ßÐÔ->ÎïÌå 
+	//Ä¬ÈÏµÄ in_rotation_matrix ÊÇ ¹ß->ÎïÌå
+	fvector_3d SIMPLE_LIBRARY_API inertia_to_object(const fvector_3d& in_vector,const fmatrix_3x3& in_rotation_matrix);
 
-    //ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½
-    fvector_3d SIMPLE_LIBRARY_API object_to_inertia(const fvector_3d& in_vector, const fmatrix_3x3& in_rotation_matrix);
+	//ÎïÌå->¹ßÐÔ
+	fvector_3d SIMPLE_LIBRARY_API object_to_inertia(const fvector_3d& in_vector, const fmatrix_3x3& in_rotation_matrix);
 
-    //ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½Ôªï¿½ï¿½
-    void SIMPLE_LIBRARY_API matrix_to_quat(const fmatrix_3x3& in_rotation_matrix, fquat& out_quat);
+	//Ðý×ª¾ØÕó->ËÄÔªÊý
+	void SIMPLE_LIBRARY_API matrix_to_quat(const fmatrix_3x3& in_rotation_matrix, fquat& out_quat);
 
-    //ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½Ôªï¿½ï¿½
-    fquat SIMPLE_LIBRARY_API matrix_to_quat(const fmatrix_3x3& in_rotation_matrix);
+	//Ðý×ª¾ØÕó->ËÄÔªÊý
+	fquat SIMPLE_LIBRARY_API matrix_to_quat(const fmatrix_3x3& in_rotation_matrix);
 
-    //ï¿½ï¿½Ôªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    fquat SIMPLE_LIBRARY_API pow(const fquat &in_q,float in_exponent);
+	//ËÄÔªÊýÇóÃÝ
+	fquat SIMPLE_LIBRARY_API pow(const fquat &in_q,float in_exponent);
 }

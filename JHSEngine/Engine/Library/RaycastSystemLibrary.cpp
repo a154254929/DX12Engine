@@ -4,7 +4,7 @@
 #include "../Core/World.h"
 #include "../Collision/CollisionSceneQuery.h"
 
-bool FRaycastSystemLibrary::HitResultByScreen(CWorld* world, int screenX, int screenY, FCollisionResult)
+bool FRaycastSystemLibrary::HitResultByScreen(CWorld* world, int screenX, int screenY, FCollisionResult& outResult)
 {
     if (GCamera* camera = world->GetCamera())
     {
@@ -23,7 +23,6 @@ bool FRaycastSystemLibrary::HitResultByScreen(CWorld* world, int screenX, int sc
         XMVECTOR viewMatrixDeterminant = XMMatrixDeterminant(viewMatrix);
         XMMATRIX viewInvMatrix = XMMatrixInverse(&viewMatrixDeterminant, viewMatrix);
         
-        FCollisionResult outResult;
         FCollisionSceneQuery::RaySingle(viewOrigin, viewDir, viewInvMatrix, outResult);
     }
     return false;

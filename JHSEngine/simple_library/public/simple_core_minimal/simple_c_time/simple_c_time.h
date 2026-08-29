@@ -1,19 +1,19 @@
 // Copyright (C) RenZhai.2022.All Rights Reserved.
 #pragma once
-#include "../simple_c_core/simple_core_minimal.h"
+#include "simple_library/public/simple_core_minimal/simple_c_core/simple_core_minimal.h"
 
 _CRT_BEGIN_C_HEADER
 typedef enum 
 {
-    LOCAL_TIME,
-    GM
+	LOCAL_TIME,
+	GM
 }etime_type;
 
 char *get_locale(char *in_buffer, const char *in_locale, const char *in_encoding);
 
 struct tm *get_local_time_tm();
 
-//锟斤拷取锟斤拷锟角憋拷锟斤拷时锟斤拷
+//获取的是本地时间
 time_t get_time_t();
 
 void get_local_time_string(char *t_buffer);

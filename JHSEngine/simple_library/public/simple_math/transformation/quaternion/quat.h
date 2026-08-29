@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../simple_library_macro.h"
+#include "simple_library/public/simple_library_macro.h"
 
 struct fvector_3d;
 struct frotator;
@@ -7,74 +7,84 @@ struct frotator;
 __declspec(align(16)) struct SIMPLE_LIBRARY_API fquat
 {
 public:
-    float x;
-    float y;
-    float z;
-    float w;
+	float x;
+	float y;
+	float z;
+	float w;
 
 public:
-    fquat();
-    fquat(float in_x, float in_y, float in_z, float in_w);
+	fquat();
+	fquat(float in_x, float in_y, float in_z, float in_w);
 
-    fquat operator*(const fquat& q) const;
-    fquat operator*=(const fquat& q) ;
-    fquat operator*(const float& q) const;
-    fquat operator*(const int& q) const;
-    fquat operator*=(const float& q);
-    fquat operator*=(const int& q);
-    fquat operator+(const fquat& q) const;
-    fquat operator-(const fquat& q) const;
-    fquat operator+=(const fquat& q);
-    fquat operator-=(const fquat& q);
-    float operator|(const fquat& q)const;
+	fquat operator*(const fquat& q) const;
+	fquat operator*=(const fquat& q) ;
+	fquat operator*(const float& q) const;
+	fquat operator*(const int& q) const;
+	fquat operator*=(const float& q);
+	fquat operator*=(const int& q);
+	fquat operator+(const fquat& q) const;
+	fquat operator-(const fquat& q) const;
+	fquat operator+=(const fquat& q);
+	fquat operator-=(const fquat& q);
+	float operator|(const fquat& q)const;
 
-    fquat log()const;
-    fquat exp()const;
+	fquat log()const;
+	fquat exp()const;
 
-    float size() const;
-    float size_squared() const;
+	float size() const;
+	float size_squared() const;
 
-    float get_half_angle_radian() const;
-    float get_angle_radian() const;
-    float get_angle()const;
+	float get_half_angle_radian() const;
+	float get_angle_radian() const;
+	float get_angle()const;
 
-    void normalize(float in_tolerance = 1.e-8f);
+	void normalize(float in_tolerance = 1.e-8f);
 
-    bool is_normalized() const;
+	bool is_normalized() const;
 
-    void rotator_by_x(float theta);
-    void rotator_by_y(float theta);
-    void rotator_by_z(float theta);
-    void rotator_by_axis(float theta, const fvector_3d& axis);
+	void rotator_by_x(float theta);
+	void rotator_by_y(float theta);
+	void rotator_by_z(float theta);
+	void rotator_by_axis(float theta, const fvector_3d& axis);
 
-    fquat inverse()const;
+	fquat inverse()const;
 
-    //Å·ï¿½ï¿½×ªï¿½ï¿½Ôª
-    //ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½
-    void inertia_to_object(const frotator& in_rot);
+	//Å·À­×ªËÄÔª
+	//¹ßÐÔ->ÎïÌå
+	void inertia_to_object(const frotator& in_rot);
 
-    //ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½
-    void object_to_inertia(const frotator& in_rot);
+	//ÎïÌå->¹ßÐÔ
+	void object_to_inertia(const frotator& in_rot);
 
-    //Ã»ï¿½Ð¹ï¿½Ò»ï¿½ï¿½ï¿½ï¿½fquat
-    static fquat lerp(const fquat &in_q0,const fquat &in_q1,float in_t);
+	//
+	void object_to_inertia_v2(const frotator& in_rot);
+	void inertia_to_object_v2(const frotator& in_rot);
 
-    //Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½ï¿½ï¿½Öµ
-    static fquat bilinear_lerp(
-        const fquat& in_q00, const fquat& in_q10,
-        const fquat& in_q01, const fquat& in_q11,
-        float frac_x, float frac_y);
-    
-    //Ã»ï¿½Ð¹ï¿½Ò»ï¿½ï¿½
-    static fquat s_lerp(const fquat& in_q0, const fquat& in_q1, float in_t);
+	frotator get_rot_by_object_to_inertia_v2();
+	frotator get_rot_by_inertia_to_object_v2();
 
-    //ï¿½ï¿½Ôªï¿½ï¿½ï¿½ï¿½Öµ È«Â·ï¿½ï¿½
-    static fquat s_lerp_full_path(const fquat& in_q0, const fquat& in_q1, float in_t);
-    static fquat s_quad(const fquat& in_q0, const fquat& in_q1, const fquat& in_s0, const fquat& in_s1, float in_t);
-    static fquat s_quad_full_path(const fquat& in_q0, const fquat& in_q1, const fquat& in_s0, const fquat& in_s1, float in_t);
-    
-    //ï¿½ï¿½È¡in_s0 in_s1
-    static fquat get_tangents(const fquat& in_prev_q, const fquat& in_q, const fquat& in_nest_q);
-    
-    const fquat identity();
+	//Ã»ÓÐ¹éÒ»»¯µÄfquat
+	static fquat lerp(const fquat &in_q0,const fquat &in_q1,float in_t);
+
+	//Ë«ÏßÐÔËÄÔªÊý²åÖµ
+	static fquat bilinear_lerp(
+		const fquat& in_q00, const fquat& in_q10,
+		const fquat& in_q01, const fquat& in_q11,
+		float frac_x, float frac_y);
+	
+	//Ã»ÓÐ¹éÒ»»¯
+	static fquat s_lerp(const fquat& in_q0, const fquat& in_q1, float in_t);
+
+	//ËÄÔªÊý²åÖµ È«Â·¾¶
+	static fquat s_lerp_full_path(const fquat& in_q0, const fquat& in_q1, float in_t);
+	static fquat s_quad(const fquat& in_q0, const fquat& in_q1, const fquat& in_s0, const fquat& in_s1, float in_t);
+	static fquat s_quad_full_path(const fquat& in_q0, const fquat& in_q1, const fquat& in_s0, const fquat& in_s1, float in_t);
+	
+	//»ñÈ¡in_s0 in_s1
+	static fquat get_tangents(const fquat& in_prev_q, const fquat& in_q, const fquat& in_nest_q);
+	
+	const fquat identity();
+
+protected:
+	void get_cos_sin(const frotator& in_rot, float& cos_h_roll, float& sin_h_roll, float& cos_h_pitch, float& sin_h_pitch, float& cos_h_yaw, float& sin_h_yaw);
 };

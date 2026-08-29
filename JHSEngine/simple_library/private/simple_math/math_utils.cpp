@@ -1,4 +1,4 @@
-#include "..\..\public\simple_math\math_utils.h"
+#include "simple_library/public/simple_math/math_utils.h"
 
 namespace math_utils
 {
@@ -41,12 +41,12 @@ namespace math_utils
 
     float angle_to_radian(float angle)
     {
-        return angle * 0.0174;//angle * (¦Ð / 180£©= radian
+        return angle * 0.017453f;//angle * (¦Ð / 180£©= radian
     }
 
     float radian_to_angle(float radian)
     {
-        return radian * 57.3;//radian * (180/¦Ð£©= angle
+        return radian * 57.29578f;//radian * (180/¦Ð£©= angle
     }
 
     void rot_radian(float in_radian, fmatrix_3x3& in_world_matrix_3x3)
@@ -97,7 +97,7 @@ namespace math_utils
 
     fmatrix_4x4 matrix_perspective(
         float in_fov_radian,
-        float aspect_ratio, 
+        float aspect_ratio,
         float near_z, float far_z)
     {
         assert(near_z > 0.f && far_z > 0.f);
@@ -131,7 +131,7 @@ namespace math_utils
         fvector_4d n = in_target_pos - in_view_pos;
         n.normalize();//µ¥Î»»¯
 
-        fvector_4d u = fvector_4d::cross_product(in_view_up,n);
+        fvector_4d u = fvector_4d::cross_product(in_view_up, n);
         u.normalize();
 
         fvector_4d v = fvector_4d::cross_product(n, u);
@@ -143,7 +143,7 @@ namespace math_utils
             u.z, v.z, n.z, 0.f,
             -fvector_4d::dot(u, in_view_pos),
             -fvector_4d::dot(v, in_view_pos),
-            -fvector_4d::dot(n, in_view_pos),1.f);
+            -fvector_4d::dot(n, in_view_pos), 1.f);
     }
 
     fmatrix_4x4 build_view_matrix(const fvector_4d& in_view_pos, const fmatrix_4x4& in_view_matrix)
@@ -165,30 +165,30 @@ namespace math_utils
         float radian = angle_to_radian(angle);
 
         return fmatrix_4x4(
-            cos(radian),    0.f,            sin(radian),   0.f,
-            0.f,            1.f,            0.f,            0.f,
-            -sin(radian),   0.f,            cos(radian),    0.f,
-            0.f,            0.f,            0.f,            1.f);
+            cos(radian), 0.f, sin(radian), 0.f,
+            0.f, 1.f, 0.f, 0.f,
+            -sin(radian), 0.f, cos(radian), 0.f,
+            0.f, 0.f, 0.f, 1.f);
     }
     fmatrix_4x4 matrix_rotation_x(const float angle)
     {
         float radian = angle_to_radian(angle);
-        
+
         return fmatrix_4x4(
-        1.f,            0.f,            0.f,           0.f,
-        0.f,            cos(radian),    -sin(radian),  0.f,
-        0.f,            sin(radian),    cos(radian),   0.f,
-        0.f,            0.f,            0.f,           1.f);
+            1.f, 0.f, 0.f, 0.f,
+            0.f, cos(radian), -sin(radian), 0.f,
+            0.f, sin(radian), cos(radian), 0.f,
+            0.f, 0.f, 0.f, 1.f);
     }
     fmatrix_4x4 matrix_rotation_z(const float angle)
     {
         float radian = angle_to_radian(angle);
 
         return fmatrix_4x4(
-            cos(radian),    -sin(radian),   0.f,    0.f,
-            sin(radian),    cos(radian),    0.f,    0.f,
-            0.f,            0.f,            1.f,    0.f, 
-            0.f,            0.f,            0.f,    1.f);
+            cos(radian), -sin(radian), 0.f, 0.f,
+            sin(radian), cos(radian), 0.f, 0.f,
+            0.f, 0.f, 1.f, 0.f,
+            0.f, 0.f, 0.f, 1.f);
     }
 
     fmatrix_4x4 matrix_rotation_axis(const fvector_3d& axis, const float angle)
@@ -199,10 +199,10 @@ namespace math_utils
         float radian = angle_to_radian(angle);
 
         return fmatrix_4x4(
-            n.x * n.x * (1.f-  cos(radian)) + cos(radian),        n.x * n.y * (1.f - cos(radian)) - n.z * sin(radian),  n.x * n.z * (1.f - cos(radian)) + n.y * sin(radian),  0.f,
-            n.x * n.y * (1.f - cos(radian)) + n.z * sin(radian),  n.y * n.y * (1.f - cos(radian)) + cos(radian),        n.y * n.z * (1.f - cos(radian)) - n.x * sin(radian),  0.f,
-            n.x * n.z * (1.f - cos(radian)) - n.y * sin(radian),  n.z * n.y * (1.f - cos(radian)) + n.x * sin(radian),  n.z * n.z * (1.f - cos(radian)) + cos(radian),        0.f,
-            0.f,                                                  0.f,                                                  0.f,                                                  1.f);
+            n.x * n.x * (1.f - cos(radian)) + cos(radian), n.x * n.y * (1.f - cos(radian)) - n.z * sin(radian), n.x * n.z * (1.f - cos(radian)) + n.y * sin(radian), 0.f,
+            n.x * n.y * (1.f - cos(radian)) + n.z * sin(radian), n.y * n.y * (1.f - cos(radian)) + cos(radian), n.y * n.z * (1.f - cos(radian)) - n.x * sin(radian), 0.f,
+            n.x * n.z * (1.f - cos(radian)) - n.y * sin(radian), n.z * n.y * (1.f - cos(radian)) + n.x * sin(radian), n.z * n.z * (1.f - cos(radian)) + cos(radian), 0.f,
+            0.f, 0.f, 0.f, 1.f);
     }
 
     void inertia_to_object(const fquat& in_quat, fmatrix_3x3& out_rotation_matrix)
@@ -216,8 +216,8 @@ namespace math_utils
         out_rotation_matrix.m23 = 2.f * (in_quat.y * in_quat.z + in_quat.w * in_quat.x);
 
         out_rotation_matrix.m31 = 2.f * (in_quat.x * in_quat.z + in_quat.w * in_quat.y);
-        out_rotation_matrix.m32 = 2.f * (in_quat.y * in_quat.z - in_quat.w * in_quat.x);    
-        out_rotation_matrix.m33 = 1.f-2.f * (in_quat.x * in_quat.x + in_quat.y * in_quat.y);
+        out_rotation_matrix.m32 = 2.f * (in_quat.y * in_quat.z - in_quat.w * in_quat.x);
+        out_rotation_matrix.m33 = 1.f - 2.f * (in_quat.x * in_quat.x + in_quat.y * in_quat.y);
     }
 
     void object_to_inertia(const fquat& in_quat, fmatrix_3x3& out_rotation_matrix)
@@ -241,32 +241,32 @@ namespace math_utils
 
     void matrix_to_quat(const fmatrix_3x3& in_rotation_matrix, fquat& out_quat)
     {
-       float value[4] = { 0 };
-    
-       value[0] = in_rotation_matrix.m11 + in_rotation_matrix.m22 + in_rotation_matrix.m33;//w
-       value[1] = in_rotation_matrix.m11 - in_rotation_matrix.m22 - in_rotation_matrix.m33;//x
-       value[2] = -in_rotation_matrix.m11 + in_rotation_matrix.m22 - in_rotation_matrix.m33;//y
-       value[3] = -in_rotation_matrix.m11 - in_rotation_matrix.m22 + in_rotation_matrix.m33;//z
+        float value[4] = { 0 };
 
-       float tmp_value = 0.f;
+        value[0] = in_rotation_matrix.m11 + in_rotation_matrix.m22 + in_rotation_matrix.m33;//w
+        value[1] = in_rotation_matrix.m11 - in_rotation_matrix.m22 - in_rotation_matrix.m33;//x
+        value[2] = -in_rotation_matrix.m11 + in_rotation_matrix.m22 - in_rotation_matrix.m33;//y
+        value[3] = -in_rotation_matrix.m11 - in_rotation_matrix.m22 + in_rotation_matrix.m33;//z
 
-       int index = 0;
-       for (int i = 0; i < 4; i++)
-       {
-           if (value[i] > tmp_value)
-           {
-               tmp_value = value[i];
-               index = i;
-          }
-       }
+        float tmp_value = 0.f;
 
-       if (tmp_value != 0.f)
-       {
-          float value_sqrt = sqrt(tmp_value + 1.f) * 0.5f;
-          float mult = 0.25f / value_sqrt;
+        int index = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            if (value[i] > tmp_value)
+            {
+                tmp_value = value[i];
+                index = i;
+            }
+        }
 
-          switch (index)
-          {
+        if (tmp_value != 0.f)
+        {
+            float value_sqrt = sqrt(tmp_value + 1.f) * 0.5f;
+            float mult = 0.25f / value_sqrt;
+
+            switch (index)
+            {
             case 0://w
             {
                 out_quat.w = value_sqrt;
@@ -274,7 +274,7 @@ namespace math_utils
                 out_quat.y = (in_rotation_matrix.m31 - in_rotation_matrix.m13) * mult;
                 out_quat.z = (in_rotation_matrix.m12 - in_rotation_matrix.m21) * mult;
                 break;
-            } 
+            }
             case 1://x
             {
                 out_quat.w = (in_rotation_matrix.m23 - in_rotation_matrix.m32) * mult;
@@ -299,8 +299,8 @@ namespace math_utils
                 out_quat.z = value_sqrt;
                 break;
             }
-          }
-       }
+            }
+        }
     }
 
     fquat matrix_to_quat(const fmatrix_3x3& in_rotation_matrix)

@@ -1,85 +1,94 @@
 #pragma once
 #include <assert.h>
-#include "../../../simple_library_macro.h"
+#include "simple_library/public/simple_library_macro.h"
 
 struct fmatrix_3x3;
 struct fquat;
 
-//Å·ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//Å·À­½Ç »¡¶È
 struct SIMPLE_LIBRARY_API feuler
 {
-    feuler()
-        :heading(0.f)
-        ,pitch(0.f)
-        ,bank(0.f)
-    {}
+	feuler()
+		:heading(0.f)
+		,pitch(0.f)
+		,bank(0.f)
+	{}
 
-    feuler(float in_heading,float in_pitch,float in_bank)
-        :heading(in_heading)
-        , pitch(in_pitch)
-        , bank(in_bank)
-    {}
+	feuler(float in_heading,float in_pitch,float in_bank)
+		:heading(in_heading)
+		, pitch(in_pitch)
+		, bank(in_bank)
+	{}
 
-    feuler operator/(float k)
-    {
-        assert(k!=0.f);
+	feuler operator/(float k)
+	{
+		assert(k!=0.f);
 
-        return feuler(heading/k, pitch/k, bank/k);
-    }
+		return feuler(heading/k, pitch/k, bank/k);
+	}
 
-    feuler operator/=(float k)
-    {
-        *this = *this / k;
-        return *this;
-    }
+	feuler operator/=(float k)
+	{
+		*this = *this / k;
+		return *this;
+	}
 
-    float heading;
-    float pitch;
-    float bank;
+	float heading;
+	float pitch;
+	float bank;
 };
 
 //ue axis
 struct SIMPLE_LIBRARY_API frotator
 {
-    //y right axis
-    float pitch;
+	//y right axis
+	float pitch;
 
-    //z up axis
-    float yaw;
+	//z up axis
+	float yaw;
 
-    //x forward axis
-    float roll;
+	//x forward axis
+	float roll;
 public:
-    frotator operator-(const frotator& a) const
-    {
-        return frotator(pitch-a.pitch,yaw-a.yaw,roll-a.roll);
-    }
+	frotator operator-(const frotator& a) const
+	{
+		return frotator(pitch-a.pitch,yaw-a.yaw,roll-a.roll);
+	}
 
+	frotator operator+(const frotator& a) const
+	{
+		return frotator(pitch + a.pitch, yaw + a.yaw, roll + a.roll);
+	}
+
+	frotator operator*(const float a) const
+	{
+		return frotator(pitch * a, yaw * a, roll * a);
+	}
 public:
-    
-    frotator();
+	
+	frotator();
 
-    frotator(float in_pitch,float in_yaw,float in_roll);
+	frotator(float in_pitch,float in_yaw,float in_roll);
 
-    //ï¿½ï¿½ï¿½ï¿½ ×ª Å·ï¿½ï¿½ï¿½ï¿½
-    //ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½
-    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ Ö´ï¿½Ð¸ï¿½APIï¿½ï¿½ï¿½ï¿½
-    void inertia_to_object(const fmatrix_3x3& in_rot_matrix);
+	//¾ØÕó ×ª Å·À­½Ç
+	//¹ßÐÔ->ÎïÌå
+	//Èç¹ûÊÇÐý×ª¾ØÕó Ö´ÐÐ¸ÃAPI¼´¿É
+	void inertia_to_object(const fmatrix_3x3& in_rot_matrix);
 
-    //ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½
-    void object_to_inertia(const fmatrix_3x3& in_rot_matrix);
+	//ÎïÌå->¹ßÐÔ
+	void object_to_inertia(const fmatrix_3x3& in_rot_matrix);
 
-    //ï¿½ï¿½Ôªï¿½ï¿½ ×ª Å·ï¿½ï¿½ï¿½ï¿½
-    //ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½
-    void inertia_to_object(const fquat& in_quat);
+	//ËÄÔªÊý ×ª Å·À­½Ç
+	//¹ßÐÔ->ÎïÌå
+	void inertia_to_object(const fquat& in_quat);
 
-    //ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½
-    void object_to_inertia(const fquat& in_quat);
+	//ÎïÌå->¹ßÐÔ
+	void object_to_inertia(const fquat& in_quat);
 
-    //×ªï¿½Ç¶ï¿½
-    void euler_to_rotator(const feuler& in_euler);
+	//×ª½Ç¶È
+	void euler_to_rotator(const feuler& in_euler);
 
-    //×ªï¿½Ç¶ï¿½
-    void rotator_to_euler(feuler& in_euler) const;
-    feuler rotator_to_euler() const;
+	//×ª½Ç¶È
+	void rotator_to_euler(feuler& in_euler) const;
+	feuler rotator_to_euler() const;
 };

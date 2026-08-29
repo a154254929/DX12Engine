@@ -5,8 +5,8 @@
 #include "simple_net_type.h"
 
 #define DEFINITION_SIMPLE_BUFFER \
-    TArray<unsigned char> Buffer; \
-    FSimpleIOStream Stream(Buffer);
+	TArray<unsigned char> Buffer; \
+	FSimpleIOStream Stream(Buffer);
 
 template<unsigned int ProtocolsType>
 class FSimpleProtocols{};
@@ -14,31 +14,31 @@ class FSimpleProtocols{};
 class FRecursionMessageInfo
 {
 public:
-    template<typename ...ParamTypes>
-    static unsigned int GetBuildParams(ParamTypes &...Params)
-    {
-        return sizeof ...(Params);
-    }
+	template<typename ...ParamTypes>
+	static unsigned int GetBuildParams(ParamTypes &...Params)
+	{
+		return sizeof ...(Params);
+	}
 
-    template<typename ...ParamTypes>
-    static void BuildSendParams(FSimpleIOStream& InStream, ParamTypes &...Params){}
+	template<typename ...ParamTypes>
+	static void BuildSendParams(FSimpleIOStream& InStream, ParamTypes &...Params){}
 
-    template<class T,typename ...ParamTypes>
-    static void BuildSendParams(FSimpleIOStream& InStream, T& FirestParam, ParamTypes &...Params)
-    {
-        InStream << FirestParam;
-        BuildSendParams(InStream, Params...);
-    }
+	template<class T,typename ...ParamTypes>
+	static void BuildSendParams(FSimpleIOStream& InStream, T& FirestParam, ParamTypes &...Params)
+	{
+		InStream << FirestParam;
+		BuildSendParams(InStream, Params...);
+	}
 
-    template<typename ...ParamTypes>
-    static void BuildReceiveParams(FSimpleIOStream& InStream, ParamTypes &...Params) {}
+	template<typename ...ParamTypes>
+	static void BuildReceiveParams(FSimpleIOStream& InStream, ParamTypes &...Params) {}
 
-    template<class T, typename ...ParamTypes>
-    static void BuildReceiveParams(FSimpleIOStream& InStream, T& FirestParam, ParamTypes &...Params)
-    {
-        InStream >> FirestParam;
-        BuildReceiveParams(InStream, Params...);
-    }
+	template<class T, typename ...ParamTypes>
+	static void BuildReceiveParams(FSimpleIOStream& InStream, T& FirestParam, ParamTypes &...Params)
+	{
+		InStream >> FirestParam;
+		BuildReceiveParams(InStream, Params...);
+	}
 };
 
 #define DEFINITION_SIMPLE_PROTOCOLS(ProtocolsName,ProtocolsNumber) \
@@ -46,43 +46,43 @@ enum {SP_##ProtocolsName = ProtocolsNumber}; \
 template<> class FSimpleProtocols<ProtocolsNumber>\
 {\
 public:\
-    template<typename ...ParamTypes>\
-    static void Send(FSimpleChannel* InChannel, ParamTypes &...Params)\
-    {\
-        DEFINITION_SIMPLE_BUFFER \
-        FSimpleBunchHead Head;\
-        Head.Protocols = ProtocolsNumber;\
-        Head.ParamNum = FRecursionMessageInfo::GetBuildParams(Params...);\
-        Head.ChannelID = InChannel->GetGuid();\
-        Stream << Head;\
-        FRecursionMessageInfo::BuildSendParams(Stream, Params...);\
-        InChannel->Send(Buffer);\
-    }\
-    template<typename ...ParamTypes>\
-    static void Receive(FSimpleChannel* InChannel, ParamTypes &...Params)\
-    {\
-        DEFINITION_SIMPLE_BUFFER \
-        if (InChannel->Receive(Buffer))\
-        {\
-            Stream.Seek(sizeof(FSimpleBunchHead));\
-            FRecursionMessageInfo::BuildReceiveParams(Stream, Params...);\
-        }\
-    }\
+	template<typename ...ParamTypes>\
+	static void Send(FSimpleChannel* InChannel, ParamTypes &...Params)\
+	{\
+		DEFINITION_SIMPLE_BUFFER \
+		FSimpleBunchHead Head;\
+		Head.Protocols = ProtocolsNumber;\
+		Head.ParamNum = FRecursionMessageInfo::GetBuildParams(Params...);\
+		Head.ChannelID = InChannel->GetGuid();\
+		Stream << Head;\
+		FRecursionMessageInfo::BuildSendParams(Stream, Params...);\
+		InChannel->Send(Buffer);\
+	}\
+	template<typename ...ParamTypes>\
+	static void Receive(FSimpleChannel* InChannel, ParamTypes &...Params)\
+	{\
+		DEFINITION_SIMPLE_BUFFER \
+		if (InChannel->Receive(Buffer))\
+		{\
+			Stream.Seek(sizeof(FSimpleBunchHead));\
+			FRecursionMessageInfo::BuildReceiveParams(Stream, Params...);\
+		}\
+	}\
 };
 
 #define SIMPLE_PROTOCOLS_SEND(InProtocols,...) FSimpleProtocols<InProtocols>::Send(Channel,__VA_ARGS__);
 #define SIMPLE_PROTOCOLS_RECEIVE(InProtocols,...)  FSimpleProtocols<InProtocols>::Receive(Channel,__VA_ARGS__);
 
-//ï¿½ï¿½ï¿½ï¿½
-//Ð­ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½
+//°¸Àý
+//Ð­ÒéµÄ¶¨Òå
 //DEFINITION_SIMPLE_PROTOCOLS(Debug,0)
-//ï¿½ï¿½ï¿½Í¶ï¿½
+//·¢ËÍ¶Ë
 //int a, int b;
 //std::stirng data = "Hello World";
 //FSimpleChannel *Channel;
 //SIMPLE_PROTOCOLS_SEND(Channel, a, b, data);
 
-//ï¿½ï¿½ï¿½Ü¶ï¿½
+//½ÓÊÜ¶Ë
 //int a, int b;
 //std::stirng data;
 //FSimpleChannel *Channel;

@@ -2,15 +2,15 @@
 #pragma once
 #include "simple_protocols_definition.h"
 
-DEFINITION_SIMPLE_PROTOCOLS(Hello, 0);        //ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hello
-DEFINITION_SIMPLE_PROTOCOLS(Challenge, 1)    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ö¤ï¿½Í»ï¿½ï¿½ï¿½
-DEFINITION_SIMPLE_PROTOCOLS(Login, 2)        //ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½Íµï¿½Â½ï¿½ï¿½ï¿½ï¿½
-DEFINITION_SIMPLE_PROTOCOLS(Welcom, 3)        //ï¿½ï¿½ï¿½ï¿½Ë·ï¿½ï¿½Í»ï¿½Ó­
-DEFINITION_SIMPLE_PROTOCOLS(Join, 4)        //ï¿½É¹ï¿½
+DEFINITION_SIMPLE_PROTOCOLS(Hello, 0);		//¿Í»§¶ËÏò·þÎñÆ÷·¢ËÍhello
+DEFINITION_SIMPLE_PROTOCOLS(Challenge, 1)	//·þÎñÆ÷ÐèÒªÑéÖ¤¿Í»§¶Ë
+DEFINITION_SIMPLE_PROTOCOLS(Login, 2)		//¿Í»§¶Ë·¢ËÍµÇÂ½ÇëÇó
+DEFINITION_SIMPLE_PROTOCOLS(Welcom, 3)		//·þÎñ¶Ë·¢ËÍ»¶Ó­
+DEFINITION_SIMPLE_PROTOCOLS(Join, 4)		//³É¹¦
 
-DEFINITION_SIMPLE_PROTOCOLS(Debug,5)        //ï¿½ï¿½Òªï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
-DEFINITION_SIMPLE_PROTOCOLS(Failure,6)        //ï¿½ï¿½ï¿½ï¿½
-DEFINITION_SIMPLE_PROTOCOLS(Upgrade, 7)        //ï¿½æ±¾ï¿½ï¿½Ò»ï¿½ï¿½
+DEFINITION_SIMPLE_PROTOCOLS(Debug,5)		//Ö÷ÒªÓÃÓÚµ÷ÊÔÐÅÏ¢
+DEFINITION_SIMPLE_PROTOCOLS(Failure,6)		//´íÎó
+DEFINITION_SIMPLE_PROTOCOLS(Upgrade, 7)		//°æ±¾²»Ò»ÖÂ
 
-DEFINITION_SIMPLE_PROTOCOLS(HeartBeat,8)    //ï¿½ï¿½ï¿½ï¿½
-DEFINITION_SIMPLE_PROTOCOLS(Close,9)        //ï¿½Ø±ï¿½ï¿½ï¿½ï¿½Óµï¿½ Ð­ï¿½ï¿½
+DEFINITION_SIMPLE_PROTOCOLS(HeartBeat,8)	//ÐÄÌø
+DEFINITION_SIMPLE_PROTOCOLS(Close,9)		//¹Ø±ÕÁ¬½ÓµÄ Ð­Òé

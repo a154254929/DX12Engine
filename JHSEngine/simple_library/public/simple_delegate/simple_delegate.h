@@ -1,206 +1,238 @@
 // Copyright (C) RenZhai.2022.All Rights Reserved.
 #pragma once
 #include <map>
-#include "../simple_core_minimal/simple_c_guid/simple_guid.h"
+#include "simple_library/public/simple_core_minimal/simple_c_guid/simple_guid.h"
+#include <functional>
 
 template< class TReturn, typename ...ParamTypes>
 class FDelegateBase
 {
 public:
-    virtual TReturn Execute(ParamTypes ...Params)
-    {
-        return TReturn();
-    }
+	virtual TReturn Execute(ParamTypes ...Params)
+	{
+		return TReturn();
+	}
 };
 
-//ï¿½ï¿½òµ¥µï¿½ Ö§ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//×î¼òµ¥µÄ Ö§³Ö¶à²ÎÊý´úÀí
 template<class TObjectType, class TReturn, typename ...ParamTypes>
 class FObjectDelegate :public FDelegateBase<TReturn, ParamTypes...>
 {
 public:
-    FObjectDelegate(TObjectType* InObject, TReturn(TObjectType::* InFuncation)(ParamTypes ...))
-        :Object(InObject)
-        , Funcation(InFuncation)
-    {}
+	FObjectDelegate(TObjectType* InObject, TReturn(TObjectType::* InFuncation)(ParamTypes ...))
+		:Object(InObject)
+		, Funcation(InFuncation)
+	{}
 
-    virtual TReturn Execute(ParamTypes ...Params)
-    {
-        return (Object->*Funcation)(Params...);
-    }
+	virtual TReturn Execute(ParamTypes ...Params)
+	{
+		return (Object->*Funcation)(Params...);
+	}
 
 private:
-    TObjectType* Object;
-    TReturn(TObjectType::* Funcation)(ParamTypes ...);
+	TObjectType* Object;
+	TReturn(TObjectType::* Funcation)(ParamTypes ...);
 };
 
 template<class TReturn, typename ...ParamTypes>
 class FFunctionDelegate :public FDelegateBase<TReturn, ParamTypes...>
 {
 public:
-    FFunctionDelegate(TReturn(*InFuncation)(ParamTypes ...))
-        :Funcation(InFuncation)
-    {}
+	FFunctionDelegate(TReturn(*InFuncation)(ParamTypes ...))
+		:Funcation(InFuncation)
+	{}
 
-    virtual TReturn Execute(ParamTypes ...Params)
-    {
-        return (*Funcation)(Params...);
-    }
+	virtual TReturn Execute(ParamTypes ...Params)
+	{
+		return (*Funcation)(Params...);
+	}
 
 private:
-    TReturn(* Funcation)(ParamTypes ...);
+	TReturn(* Funcation)(ParamTypes ...);
+};
+
+template<class TReturn, typename ...ParamTypes>
+class FLambdaDelegate :public FDelegateBase<TReturn, ParamTypes...>
+{
+public:
+	FLambdaDelegate(std::function<TReturn(ParamTypes...)> InLambda)
+		:LambdaFuncation(InLambda)
+	{}
+
+	virtual TReturn Execute(ParamTypes ...Params)
+	{
+		return LambdaFuncation(Params...);
+	}
+
+private:
+	std::function<TReturn(ParamTypes...)> LambdaFuncation;
 };
 
 template<class TReturn, typename ...ParamTypes>
 class FDelegate
 {
 public:
-    FDelegate()
-        :CurrentDelegatePtr(nullptr)
-    {}
+	FDelegate()
+		:CurrentDelegatePtr(nullptr)
+	{}
 
-    ~FDelegate()
-    {
-        //CheckDelegate();
-    }
+	~FDelegate()
+	{
+		//CheckDelegate();
+	}
 
-    void ReleaseDelegate()
-    {
-        if (CurrentDelegatePtr)
-        {
-            delete CurrentDelegatePtr;
-            CurrentDelegatePtr = nullptr;
-        }
-    }
-
-public:
-    template<class TObjectType>
-    static FDelegate<TReturn, ParamTypes...> Create(TObjectType* InObject, TReturn(TObjectType::* InFuncation)(ParamTypes ...))
-    {
-        FDelegate<TReturn, ParamTypes...>  DelegateInstance;
-        DelegateInstance.Bind(InObject, InFuncation);
-        return DelegateInstance;
-    }
-
-    static FDelegate<TReturn, ParamTypes...> Create(TReturn(*InFuncation)(ParamTypes...))
-    {
-        FDelegate<TReturn, ParamTypes...>  DelegateInstance;
-        DelegateInstance.Bind(InFuncation);
-        return DelegateInstance;
-    }
+	void ReleaseDelegate()
+	{
+		if (CurrentDelegatePtr)
+		{
+			delete CurrentDelegatePtr;
+			CurrentDelegatePtr = nullptr;
+		}
+	}
 
 public:
-    template<class TObjectType>
-    void Bind(TObjectType *InObject, TReturn(TObjectType::* InFuncation)(ParamTypes ...))
-    {
-        ReleaseDelegate();
+	template<class TObjectType>
+	static FDelegate<TReturn, ParamTypes...> Create(TObjectType* InObject, TReturn(TObjectType::* InFuncation)(ParamTypes ...))
+	{
+		FDelegate<TReturn, ParamTypes...>  DelegateInstance;
+		DelegateInstance.Bind(InObject, InFuncation);
+		return DelegateInstance;
+	}
 
-        CurrentDelegatePtr = new FObjectDelegate<TObjectType,TReturn, ParamTypes...>(InObject, InFuncation);
-    }
+	static FDelegate<TReturn, ParamTypes...> Create(TReturn(*InFuncation)(ParamTypes...))
+	{
+		FDelegate<TReturn, ParamTypes...>  DelegateInstance;
+		DelegateInstance.Bind(InFuncation);
+		return DelegateInstance;
+	}
 
-    void Bind(TReturn(* InFuncation)(ParamTypes...))
-    {
-        ReleaseDelegate();
+	static FDelegate<TReturn, ParamTypes...> Create(std::function<TReturn(ParamTypes...)> InLambda)
+	{
+		FDelegate<TReturn, ParamTypes...>  DelegateInstance;
+		DelegateInstance.BindLambda(InLambda);
+		return DelegateInstance;
+	}
 
-        CurrentDelegatePtr = new FFunctionDelegate<TReturn,ParamTypes...>(InFuncation);
-    }
+public:
+	template<class TObjectType>
+	void Bind(TObjectType *InObject, TReturn(TObjectType::* InFuncation)(ParamTypes ...))
+	{
+		ReleaseDelegate();
 
-    bool IsBound()
-    {
-        return CurrentDelegatePtr != nullptr;
-    }
+		CurrentDelegatePtr = new FObjectDelegate<TObjectType,TReturn, ParamTypes...>(InObject, InFuncation);
+	}
 
-    virtual TReturn Execute(ParamTypes ...Params)
-    {
-        return CurrentDelegatePtr->Execute(Params...);
-    }
+	void BindLambda(std::function<TReturn(ParamTypes...)> InLambda)
+	{
+		ReleaseDelegate();
 
-    FDelegate<TReturn, ParamTypes...> &operator=(const FDelegate<TReturn, ParamTypes...> &InDelegate)
-    {
-        CurrentDelegatePtr = InDelegate.CurrentDelegatePtr;
-        return *this;
-    }
+		CurrentDelegatePtr = new FLambdaDelegate<TReturn, ParamTypes...>(InLambda);
+	}
+
+	void Bind(TReturn(* InFuncation)(ParamTypes...))
+	{
+		ReleaseDelegate();
+
+		CurrentDelegatePtr = new FFunctionDelegate<TReturn,ParamTypes...>(InFuncation);
+	}
+
+	bool IsBound()
+	{
+		return CurrentDelegatePtr != nullptr;
+	}
+
+	virtual TReturn Execute(ParamTypes ...Params)
+	{
+		return CurrentDelegatePtr->Execute(Params...);
+	}
+
+	FDelegate<TReturn, ParamTypes...> &operator=(const FDelegate<TReturn, ParamTypes...> &InDelegate)
+	{
+		CurrentDelegatePtr = InDelegate.CurrentDelegatePtr;
+		return *this;
+	}
 private:
-    FDelegateBase<TReturn, ParamTypes...>* CurrentDelegatePtr;
+	FDelegateBase<TReturn, ParamTypes...>* CurrentDelegatePtr;
 };
 
 template<class TReturn, typename ...ParamTypes>
 class FSingleDelegate :public FDelegate<TReturn, ParamTypes...>
 {
 public:
-    FSingleDelegate()
-        :FDelegate<TReturn, ParamTypes...>()
-    {}
+	FSingleDelegate()
+		:FDelegate<TReturn, ParamTypes...>()
+	{}
 };
 
 struct FDelegateHandle
 {
-    FDelegateHandle()
-    {
-        create_guid(&Guid);
-    }
+	FDelegateHandle()
+	{
+		create_guid(&Guid);
+	}
 
-    friend bool operator<(const FDelegateHandle &K1,const FDelegateHandle &K2)
-    {
-        return K1.Guid.a < K2.Guid.a;
-    }
+	friend bool operator<(const FDelegateHandle &K1,const FDelegateHandle &K2)
+	{
+		return K1.Guid.a < K2.Guid.a;
+	}
 
-    simple_c_guid Guid;
+	simple_c_guid Guid;
 };
 
 template<class TReturn, typename ...ParamTypes>
 class FMulticastDelegate :public std::map<FDelegateHandle,FDelegate<TReturn, ParamTypes...>>
 {
-    typedef FDelegate<TReturn, ParamTypes...> TDelegate;
+	typedef FDelegate<TReturn, ParamTypes...> TDelegate;
 public:
-    FMulticastDelegate()
-    {}
+	FMulticastDelegate()
+	{}
 
-    void RemoveDelegate(const FDelegateHandle &InGuid)
-    {
-        this->erase(InGuid);
-    }
+	void RemoveDelegate(const FDelegateHandle &InGuid)
+	{
+		this->erase(InGuid);
+	}
 
-    template<class TObjectType>
-    const FDelegateHandle AddFunction(TObjectType* InObject, TReturn(TObjectType::* InFuncation)(ParamTypes ...))
-    {
-        //ï¿½ï¿½ï¿½ï¿½GUID
-        FDelegateHandle Handle;
+	template<class TObjectType>
+	const FDelegateHandle AddFunction(TObjectType* InObject, TReturn(TObjectType::* InFuncation)(ParamTypes ...))
+	{
+		//Éú³ÉGUID
+		FDelegateHandle Handle;
 
-        this->insert(std::make_pair(Handle,TDelegate()));//ï¿½ï¿½ï¿½
+		this->insert(std::make_pair(Handle,TDelegate()));//Ìí¼Ó
 
-        TDelegate &InDelegate = this->at(Handle);
-        InDelegate.Bind(InObject, InFuncation);
+		TDelegate &InDelegate = this->at(Handle);
+		InDelegate.Bind(InObject, InFuncation);
 
-        return Handle;
-    }
+		return Handle;
+	}
 
-    const FDelegateHandle &AddFunction(TReturn(*InFuncation)(ParamTypes...))
-    {
-        FDelegateHandle Handle;
-        this->insert(std::make_pair(Handle, TDelegate()));//ï¿½ï¿½ï¿½
+	const FDelegateHandle &AddFunction(TReturn(*InFuncation)(ParamTypes...))
+	{
+		FDelegateHandle Handle;
+		this->insert(std::make_pair(Handle, TDelegate()));//Ìí¼Ó
 
-        TDelegate& InDelegate = this->at(Handle);
-        InDelegate.Bind(InFuncation);
+		TDelegate& InDelegate = this->at(Handle);
+		InDelegate.Bind(InFuncation);
 
-        return Handle;
-    }
+		return Handle;
+	}
 
-    void Broadcast(ParamTypes ...Params)
-    {
-        for (auto &Tmp :*this)
-        {
-            //Tmp.second.Execute(std::forward<ParamTypes>(Params)...);
-            Tmp.second.Execute(Params...);
-        }        
-    }
+	void Broadcast(ParamTypes ...Params)
+	{
+		for (auto &Tmp :*this)
+		{
+			//Tmp.second.Execute(std::forward<ParamTypes>(Params)...);
+			Tmp.second.Execute(Params...);
+		}		
+	}
 
-    void ReleaseDelegates()
-    {
-        for (auto& Tmp : *this)
-        {
-            Tmp.ReleaseDelegate();
-        }
-    }
+	void ReleaseDelegates()
+	{
+		for (auto& Tmp : *this)
+		{
+			Tmp.ReleaseDelegate();
+		}
+	}
 };
 
 #define SIMPLE_SINGLE_DELEGATE(Name,Return,...) FSingleDelegate<Return,__VA_ARGS__> Name

@@ -1,562 +1,916 @@
 // Copyright (C) RenZhai.2022.All Rights Reserved.
-#include "../../../public/simple_core_minimal/simple_c_helper_file/simple_file_helper.h"
-#include "../../../public/simple_core_minimal/simple_c_core/simple_c_array/simple_c_array_string.h"
+#include "simple_library/public/simple_core_minimal/simple_c_helper_file/simple_file_helper.h"
+#include "simple_library/public/simple_core_minimal/simple_c_core/simple_c_array/simple_c_array_string.h"
+#include "simple_library/public/simple_core_minimal/simple_c_core/simple_c_string_algorithm/string_algorithm.h"
 
-//ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ShellExecuteï¿½Ä·ï¿½ï¿½ï¿½Öµï¿½ï¿½Ï¢
+#ifdef  _WIN64
+struct _finddatai64_t finddata;
+char separator[] = "/";
+char wildcard[] = "*";
+#else
+#ifdef _WIN32    
+struct _finddata_t finddata;
+char separator[] = "\\";
+char wildcard[] = "*";
+#endif 
+#endif 
+
+//ÓÃÓÚ¼ì²âShellExecuteµÄ·µ»ØÖµÐÅÏ¢
 bool check_ShellExecute_ret(int ret)
 {
-    if (ret == 0)
-    {
-        // ï¿½Ú´æ²»ï¿½ï¿½
-        assert(0, "open_url_w=>insufficient memory.");
-    }
-    else if (ret == 2)
-    {
-        // ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        assert(0, "open_url_w=>File name error.");
-    }
-    else if (ret == 3)
-    {
-        // Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        assert(0, "open_url_w=>Path name error.");
-    }
-    else if (ret == 11)
-    {
-        // EXE ï¿½Ä¼ï¿½ï¿½ï¿½Ð§
-        assert(0, "open_url_w=>Invalid .exe file.");
-    }
-    else if (ret == 26)
-    {
-        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        assert(0, "open_url_w=>A sharing error occurred.");
-    }
-    else if (ret == 27)
-    {
-        // ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½Ð§
-        assert(0, "open_url_w=>incomplete or invalid file name.");
-    }
-    else if (ret == 28)
-    {
-        // ï¿½ï¿½Ê±
-        assert(0, "open_url_w=>timeout.");
-    }
-    else if (ret == 29)
-    {
-        // DDE ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
-        assert(0, "open_url_w=> DDE transaction failed.");
-    }
-    else if (ret == 30)
-    {
-        // ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ DDE ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¸ï¿½ DDE ï¿½ï¿½ï¿½ï¿½
-        assert(0, "open_url_w=> is processing another DDE transaction and cannot complete the DDE transaction.");
-    }
-    else if (ret == 31)
-    {
-        // Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ã³ï¿½ï¿½ï¿½
-        assert(0, "open_url_w=>no associated application.");
-    }
+	if (ret == 0)
+	{
+		// ÄÚ´æ²»×ã
+		assert(0, "open_url_w=>insufficient memory.");
+	}
+	else if (ret == 2)
+	{
+		// ÎÄ¼þÃû´íÎó
+		assert(0, "open_url_w=>File name error.");
+	}
+	else if (ret == 3)
+	{
+		// Â·¾¶Ãû´íÎó
+		assert(0, "open_url_w=>Path name error.");
+	}
+	else if (ret == 11)
+	{
+		// EXE ÎÄ¼þÎÞÐ§
+		assert(0, "open_url_w=>Invalid .exe file.");
+	}
+	else if (ret == 26)
+	{
+		// ·¢Éú¹²Ïí´íÎó
+		assert(0, "open_url_w=>A sharing error occurred.");
+	}
+	else if (ret == 27)
+	{
+		// ÎÄ¼þÃû²»ÍêÈ«»òÎÞÐ§
+		assert(0, "open_url_w=>incomplete or invalid file name.");
+	}
+	else if (ret == 28)
+	{
+		// ³¬Ê±
+		assert(0, "open_url_w=>timeout.");
+	}
+	else if (ret == 29)
+	{
+		// DDE ÊÂÎñÊ§°Ü
+		assert(0, "open_url_w=> DDE transaction failed.");
+	}
+	else if (ret == 30)
+	{
+		// ÕýÔÚ´¦ÀíÆäËû DDE ÊÂÎñ¶ø²»ÄÜÍê³É¸Ã DDE ÊÂÎñ
+		assert(0, "open_url_w=> is processing another DDE transaction and cannot complete the DDE transaction.");
+	}
+	else if (ret == 31)
+	{
+		// Ã»ÓÐÏà¹ØÁªµÄÓ¦ÓÃ³ÌÐò
+		assert(0, "open_url_w=>no associated application.");
+	}
 
-    return ret <= 32;
+	return ret <= 32;
 }
 
 void init_def_c_paths(def_c_paths *c_paths)
 {
-    c_paths->index = 0;
-    memset(c_paths->paths,0,sizeof(c_paths->paths) - 1);
+	c_paths->index = 0;
+	memset(c_paths->paths,0,sizeof(c_paths->paths) - 1);
 }
 
 void init_def_c_paths_w(def_c_paths_w* c_paths)
 {
-    c_paths->index = 0;
-    memset(c_paths->paths, 0, sizeof(c_paths->paths) - 1);
+	c_paths->index = 0;
+	memset(c_paths->paths, 0, sizeof(c_paths->paths) - 1);
 }
 
 int copy_file(char *Src, char *Dest)
 {
-    //ï¿½ï¿½Ç°ï¿½Ä»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½1MBï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½std Cï¿½Î³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¹
-    char Buf[1024 * 1024] = { 0 };
-    int FileSize = 0;
-    FILE *FpSrc = NULL;
-    FILE *FpDest = NULL;
+	//µ±Ç°µÄ»º´æ »º´æ1MB´óÐ¡£¬Èç¹û³¬¹ý¾Í»á³öÎÊÌâ Õâ¸ö»áÔÚstd C¿Î³ÌÀïÃæ¼ÌÐøÀ©Õ¹
+	char Buf[1024 * 1024] = { 0 };
+	int FileSize = 0;
+	FILE *FpSrc = NULL;
+	FILE *FpDest = NULL;
 
-    if ((FpSrc = fopen(Src, "rb")) != NULL)
-    {
-        if ((FpDest = fopen(Dest, "wb")) != NULL)
-        {
-            while ((FileSize = fread(Buf, 1, 512, FpSrc)) > 0)
-            {
-                fwrite(Buf, FileSize, sizeof(char), FpDest);
-                memset(Buf, 0, sizeof(Buf));
-            }
+	if ((FpSrc = fopen(Src, "rb")) != NULL)
+	{
+		if ((FpDest = fopen(Dest, "wb")) != NULL)
+		{
+			while ((FileSize = fread(Buf, 1, 512, FpSrc)) > 0)
+			{
+				fwrite(Buf, FileSize, sizeof(char), FpDest);
+				memset(Buf, 0, sizeof(Buf));
+			}
 
-            fclose(FpSrc);
-            fclose(FpDest);
+			fclose(FpSrc);
+			fclose(FpDest);
 
-            return 0;
-        }
-    }
+			return 0;
+		}
+	}
 
-    return -1;
+	return -1;
 }
-void find_files(char const *in_path, def_c_paths *str, bool b_recursion)
+
+void remove_dir_all_files(const char* file_dir)
 {
-#ifdef  _WIN64
-    struct _finddatai64_t finddata;
-#else
-#ifdef _WIN32    
-    struct _finddata_t finddata;
-#endif 
-#endif 
+	if (!file_dir)
+	{
+		return;
+	}
+
+	def_c_paths Paths;
+	init_def_c_paths(&Paths);
+
+	find_files(file_dir, &Paths, true,false);
+
+	for (int i = 0; i < Paths.index; i++)
+	{
+		remove(Paths.paths[i]);
+	}
+}
+
+void find_files_v2(char const* in_path, def_c_paths_v2* str, bool b_recursion, bool b_include_folder)
+{
+	char in_path_buff[512] = { 0 };
+
+	strcpy(in_path_buff, in_path);
+	int my_len = strlen(in_path) - 1;
+
+	if (my_len > 0)
+	{
+		if (in_path_buff[my_len] == '/')
+		{
+			remove_char_end(in_path_buff, '/');
+		}
 
 #ifdef  _WIN64
-    intptr_t hfile = 0;
+		intptr_t hfile = 0;
 #else
 #ifdef _WIN32    
-    long hfile = 0;
+		long hfile = 0;
 #endif 
 #endif 
-    
-    char tmp_path[1024] = { 0 };
-    strcpy(tmp_path, in_path);
-    strcat(tmp_path, "\\*");
-    if ((hfile = 
+		char buff[1024] = { 0 };
+
+		strcpy(buff, in_path_buff);
+		strcat(buff, separator);
+
+		if (b_include_folder)
+		{
+			//Ìí¼ÓÂ·¾¶ µÚÒ»¸öÂ·¾¶
+			add_def_c_paths(str, buff);
+		}
+
+		//Æ´½Ó
+		strcat(buff, wildcard);
+		if ((hfile =
 #ifdef _WIN64
-        _findfirst64
+			_findfirst64
 #else
-#ifdef WIN32    
-        _findfirst
+#ifdef WIN32	
+			_findfirst
 #endif // _WIN64
 #endif // _WIN32
-        (tmp_path, &finddata)) != -1)
-    {
-        do
-        {
-            if (finddata.attrib & _A_SUBDIR)
-            {
-                if (b_recursion)
-                {
-                    if (strcmp(finddata.name, ".") == 0 ||
-                        strcmp(finddata.name, "..") == 0)
-                    {
-                        continue;
-                    }
+			(buff, &finddata)) != -1)
+		{
+			do
+			{
+				if (finddata.attrib & _A_SUBDIR)
+				{
+					if (strcmp(finddata.name, ".") == 0 ||
+						strcmp(finddata.name, "..") == 0)
+					{
+						continue;
+					}
 
-                    char new_path[1024] = { 0 };
-                    strcpy(new_path, in_path);
-                    strcat(new_path, "\\");
-                    strcat(new_path, finddata.name);
+					memset(buff, 0, 1024);
 
-                    find_files(new_path, str, b_recursion);
-                }
-            }
-            else
-            {
-                strcpy(str->paths[str->index], in_path);
-                strcat(str->paths[str->index], "\\");
-                strcat(str->paths[str->index++], finddata.name);
-            }
+					strcpy(buff, in_path_buff);
+					strcat(buff, separator);
+					strcat(buff, finddata.name);
 
-        } while (
+					if (b_recursion)
+					{
+						find_files_v2(buff, str, b_recursion, b_include_folder);
+					}
+				}
+				else
+				{
+					memset(buff, 0, 1024);
+
+					strcpy(buff, in_path_buff);
+					strcat(buff, separator);
+					strcat(buff, finddata.name);
+
+					add_def_c_paths(str, buff);
+				}
+
+			} while (
 #ifdef _WIN64
-        _findnext64
+				_findnext64
 #else
 #ifdef _WIN32
-            
-        _findnext
+
+				_findnext
 #endif
 #endif
-            (hfile, &finddata) == 0);
-        _findclose(hfile);
-    }
+				(hfile, &finddata) == 0);
+			_findclose(hfile);
+		}
+	}
+}
+
+int get_def_c_offset(const char* str)
+{
+	return 
+		strlen(str) + 
+		sizeof(char) + //ÎÒÃÇÌá¹©µÄ\0½áÎ²
+		sizeof(char);//¿½±´ÖÐ×Ô´øµÄ\0½áÎ²
+}
+
+int get_def_c_offset_w(const wchar_t* str)
+{
+	return
+		wcslen(str) +
+		sizeof(wchar_t) + //ÎÒÃÇÌá¹©µÄ\0½áÎ²
+		sizeof(wchar_t);//¿½±´ÖÐ×Ô´øµÄ\0½áÎ²
+}
+
+char* get_max_len_path(const def_c_paths *Paths,int *max_len)
+{
+	if (Paths)
+	{
+		char* max_path = NULL;
+		for (int i = 0; i < Paths->index; i++)
+		{
+			int paht_len = strlen(Paths->paths[i]);
+			if (paht_len > *max_len)
+			{
+				*max_len = paht_len;
+				max_path = Paths->paths[i];
+			}
+		}
+
+		return max_path;
+	}
+
+	return NULL;
+}
+
+void remove_directory_all(const char* file_dir)
+{
+	def_c_paths Paths;
+	init_def_c_paths(&Paths);
+
+	find_files(file_dir, &Paths, true, true);
+
+	def_c_paths_v2 tmp_paths;
+	init_def_c_paths_v2(&tmp_paths);
+
+	//´Ó³¤µ½¶ÌÅÅÁÐ
+	for (int i = 0; i < Paths.index; i++)
+	{
+		int max_len = 0;
+		char* max_path = get_max_len_path(&Paths,&max_len);
+
+		if (max_path && max_path[0]!= '\0')
+		{
+			//Ìí¼ÓÂ·¾¶
+			add_def_c_paths(&tmp_paths, max_path);
+
+			memset(max_path, 0, strlen(max_path));
+		}
+	}
+
+	int offset = 0;
+	for (int i = 0; i < tmp_paths.num; i++)
+	{
+		char * in_tmp_path = get_def_c_paths_by_offset(&tmp_paths, offset);
+		offset += get_def_c_offset(in_tmp_path);
+
+		if (in_tmp_path)
+		{
+			wchar_t pathw[128] = { 0 };
+			char_to_wchar_t(pathw, 128, in_tmp_path);
+			RemoveDirectory(pathw);
+		}
+	}
+
+	destroy_def_c_paths_v2(&tmp_paths);
+}
+
+void find_files(char const *in_path, def_c_paths *str, bool b_recursion,bool b_include_folder)
+{
+	char in_path_buff[512] = { 0 };
+
+	strcpy(in_path_buff, in_path);
+	int my_len = strlen(in_path)-1;
+
+	if (my_len > 0)
+	{
+		if (in_path_buff[my_len] == '/')
+		{
+			remove_char_end(in_path_buff, '/');
+		}
+
+#ifdef  _WIN64
+		intptr_t hfile = 0;
+#else
+#ifdef _WIN32    
+		long hfile = 0;
+#endif 
+#endif 
+
+		char tmp_path[1024] = { 0 };
+		strcpy(tmp_path, in_path_buff);
+
+		if (b_include_folder)
+		{
+			strcpy(str->paths[str->index], in_path_buff);
+			strcat(str->paths[str->index++], separator);
+		}
+
+		//Æ´½Ó
+		strcat(tmp_path, separator);
+		strcat(tmp_path, wildcard);
+		if ((hfile =
+#ifdef _WIN64
+			_findfirst64
+#else
+#ifdef WIN32	
+			_findfirst
+#endif // _WIN64
+#endif // _WIN32
+			(tmp_path, &finddata)) != -1)
+		{
+			do
+			{
+				if (finddata.attrib & _A_SUBDIR)
+				{
+					if (strcmp(finddata.name, ".") == 0 ||
+						strcmp(finddata.name, "..") == 0)
+					{
+						continue;
+					}
+
+					char new_path[1024] = { 0 };
+					strcpy(new_path, in_path_buff);
+					strcat(new_path, separator);
+					strcat(new_path, finddata.name);
+
+					if (b_recursion)
+					{
+						find_files(new_path, str, b_recursion, b_include_folder);
+					}
+				}
+				else
+				{
+					strcpy(str->paths[str->index], in_path_buff);
+					strcat(str->paths[str->index], separator);
+					strcat(str->paths[str->index++], finddata.name);
+				}
+
+			} while (
+#ifdef _WIN64
+				_findnext64
+#else
+#ifdef _WIN32
+
+				_findnext
+#endif
+#endif
+				(hfile, &finddata) == 0);
+			_findclose(hfile);
+		}
+	}
 }
 
 bool is_file_exists(char const* filename)
 {
-    FILE* file = fopen(filename, "r");
-    if(file)
-    {
-        fclose(file);
-        return true;
-    }
-    return false;
+	FILE* file = fopen(filename, "r");
+	if(file)
+	{
+		fclose(file);
+		return true;
+	}
+	return false;
 }
 
 bool create_file(char const *filename)
 {
-    FILE *f = NULL;
-    if ((f = fopen(filename,"w+")) != NULL)
-    {
-        fclose(f);
+	FILE *f = NULL;
+	if ((f = fopen(filename,"w+")) != NULL)
+	{
+		fclose(f);
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 bool create_file_directory(char const *in_path)
 {
-    simple_c_string c_file;
-    if (strstr(in_path, "\\"))
-    {
-        dismantling_string(in_path, "\\", &c_file);
-    }
-    else if (strstr(in_path, "/"))
-    {
-        dismantling_string(in_path, "/", &c_file);
-    }
+	simple_c_string c_file;
+	if (strstr(in_path, "\\"))
+	{
+		dismantling_string(in_path, "\\", &c_file);
+	}
+	else if (strstr(in_path, "/"))
+	{
+		dismantling_string(in_path, "/", &c_file);
+	}
 
-    char path[260] = { 0 };
-    for (int i = 0;i < c_file.size;i++)
-    {
-        char *value = get_string(i,&c_file);
-        strcat(value, "\\");
-        strcat(path, value);
-        if (_access(path,0) == -1)
-        {
-            _mkdir(path);
-        }
-    }
+	char path[260] = { 0 };
+	for (int i = 0;i < c_file.size;i++)
+	{
+		char *value = get_string(i,&c_file);
+		strcat(value, "\\");
+		strcat(path, value);
+		if (_access(path,0) == -1)
+		{
+			_mkdir(path);
+		}
+	}
 
-    destroy_string(&c_file);
+	destroy_string(&c_file);
 
-    return _access(path, 0) == 0;
+	return _access(path, 0) == 0;
 }
 
 bool open_url(const char* url)
 {
-    //ï¿½ï¿½ï¿½Ö·ï¿½×ªÎªÕ­ï¿½Ö·ï¿½
-    wchar_t path[1024] = { 0 };
-    char_to_wchar_t(path,1024, url);
+	//¿í×Ö·û×ªÎªÕ­×Ö·û
+	wchar_t path[1024] = { 0 };
+	char_to_wchar_t(path,1024, url);
 
-    return open_url_w(path);
+	return open_url_w(path);
 }
 
 bool open_url_by_param(const char* url, const char* param)
 {
-    //ï¿½ï¿½ï¿½Ö·ï¿½×ªÎªÕ­ï¿½Ö·ï¿½
-    wchar_t path[1024] = { 0 };
-    char_to_wchar_t(path, 1024, url);
+	//¿í×Ö·û×ªÎªÕ­×Ö·û
+	wchar_t path[1024] = { 0 };
+	char_to_wchar_t(path, 1024, url);
 
-    wchar_t my_param[1024] = { 0 };
-    char_to_wchar_t(my_param, 1024, param);
-    return open_url_by_param_w(path, my_param);
+	wchar_t my_param[1024] = { 0 };
+	char_to_wchar_t(my_param, 1024, param);
+	return open_url_by_param_w(path, my_param);
 }
 
 bool open_by_operation(const char* in_operation, const char* url, const char* param)
 {
-    wchar_t my_operation[1024] = { 0 };
-    char_to_wchar_t(my_operation, 1024, in_operation);
+	wchar_t my_operation[1024] = { 0 };
+	char_to_wchar_t(my_operation, 1024, in_operation);
 
-    //ï¿½ï¿½ï¿½Ö·ï¿½×ªÎªÕ­ï¿½Ö·ï¿½
-    wchar_t path[1024] = { 0 };
-    char_to_wchar_t(path, 1024, url);
+	//¿í×Ö·û×ªÎªÕ­×Ö·û
+	wchar_t path[1024] = { 0 };
+	char_to_wchar_t(path, 1024, url);
 
-    wchar_t my_param[1024] = { 0 };
-    char_to_wchar_t(my_param, 1024, param);
+	wchar_t my_param[1024] = { 0 };
+	char_to_wchar_t(my_param, 1024, param);
 
-    return open_by_operation_w(my_operation,path, my_param);
+	return open_by_operation_w(my_operation,path, my_param);
 }
 
 bool open_explore(const char* url)
 {
-    //ï¿½ï¿½ï¿½Ö·ï¿½×ªÎªÕ­ï¿½Ö·ï¿½
-    wchar_t path[1024] = { 0 };
-    char_to_wchar_t(path, 1024, url);
+	//¿í×Ö·û×ªÎªÕ­×Ö·û
+	wchar_t path[1024] = { 0 };
+	char_to_wchar_t(path, 1024, url);
 
-    return open_explore_w(path);
+	return open_explore_w(path);
 }
 
 bool get_file_buf(const char *path, char *buf)
 {
-    FILE *f = NULL;
-    if ((f = fopen(path, "r")) != NULL)
-    {
-        char buf_tmp[2048] = { 0 };
-        int file_size = 0;
-        while ((file_size = fread(buf_tmp, 1,1024, f)) > 0)
-        {
-            strcat(buf, buf_tmp);
-            memset(buf_tmp, 0, sizeof(buf_tmp));
-        }
+	FILE *f = NULL;
+	if ((f = fopen(path, "r")) != NULL)
+	{
+		char buf_tmp[2048] = { 0 };
+		int file_size = 0;
+		while ((file_size = fread(buf_tmp, 1,1024, f)) > 0)
+		{
+			strcat(buf, buf_tmp);
+			memset(buf_tmp, 0, sizeof(buf_tmp));
+		}
 
-        fclose(f);
+		fclose(f);
 
-        return buf[0] != '\0';
-    }
+		return buf[0] != '\0';
+	}
 
-    return false;
+	return false;
 }
 
 bool save_file_buff(const char* path, char* buf)
 {
-    FILE* f = NULL;
-    if ((f = fopen(path, "w")) != NULL)
-    {
-        fprintf(f, "%s", buf);
-        fclose(f);
+	FILE* f = NULL;
+	if ((f = fopen(path, "w")) != NULL)
+	{
+		fprintf(f, "%s", buf);
+		fclose(f);
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 bool add_file_buf(const char *path, char *buf)
 {
-    FILE *f = NULL;
-    if ((f = fopen(path, "a+")) != NULL)
-    {
-        fprintf(f, "%s", buf);
-        fclose(f);
+	FILE *f = NULL;
+	if ((f = fopen(path, "a+")) != NULL)
+	{
+		fprintf(f, "%s", buf);
+		fclose(f);
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 bool add_new_file_buf(const char *path, char *buf)
 {
-    FILE *f = NULL;
-    if ((f = fopen(path, "w+")) != NULL)
-    {
-        fprintf(f, "%s", buf);
-        fclose(f);
+	FILE *f = NULL;
+	if ((f = fopen(path, "w+")) != NULL)
+	{
+		fprintf(f, "%s", buf);
+		fclose(f);
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 bool add_new_file_buf_w(const wchar_t* path, char* buf)
 {
-    FILE* f = NULL;
-    if ((f = _wfopen(path, L"w+")) != NULL)
-    {
-        fprintf(f, "%s", buf);
-        fclose(f);
+	FILE* f = NULL;
+	if ((f = _wfopen(path, L"w+")) != NULL)
+	{
+		fprintf(f, "%s", buf);
+		fclose(f);
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 bool get_file_buf_w(const wchar_t* path, char* buf)
 {
-    FILE* f = NULL;
-    if ((f = _wpopen(path, L"r")) != NULL)
-    {
-        char buf_tmp[2048] = { 0 };
-        int file_size = 0;
-        while ((file_size = fread(buf_tmp, 1, 1024, f)) > 0)
-        {
-            strcat(buf, buf_tmp);
-            memset(buf_tmp, 0, sizeof(buf_tmp));
-        }
+	FILE* f = NULL;
+	if ((f = _wpopen(path, L"r")) != NULL)
+	{
+		char buf_tmp[2048] = { 0 };
+		int file_size = 0;
+		while ((file_size = fread(buf_tmp, 1, 1024, f)) > 0)
+		{
+			strcat(buf, buf_tmp);
+			memset(buf_tmp, 0, sizeof(buf_tmp));
+		}
 
-        fclose(f);
+		fclose(f);
 
-        return buf[0] != '\0';
-    }
+		return buf[0] != '\0';
+	}
 
-    return false;
+	return false;
 }
 
 bool save_data_to_disk_w(const wchar_t* path, char* buf, int buf_size)
 {
-    FILE* f = NULL;
-    if ((f = _wfopen(path, L"w+")) != NULL)
-    {
-        fwrite(buf, buf_size, 1, f);
-        fclose(f);
-        return true;
-    }
+	FILE* f = NULL;
+	if ((f = _wfopen(path, L"w+")) != NULL)
+	{
+		fwrite(buf, buf_size, 1, f);
+		fclose(f);
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 bool load_data_from_disk_w(const wchar_t* path, char* buf)
 {
-    FILE* f = NULL;
-    if ((f = _wfopen(path, L"rb")) != NULL)
-    {
-        //ï¿½ï¿½ï¿½Ä¼ï¿½Ö¸ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½;
-        fseek(f, 0, SEEK_END);
+	FILE* f = NULL;
+	if ((f = _wfopen(path, L"rb")) != NULL)
+	{
+		//°ÑÎÄ¼þÖ¸ÕëÒÆ¶¯µ½ÎÄ¼þÎ²²¿;
+		fseek(f, 0, SEEK_END);
 
-        int l = 0;
-        //ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Øµï¿½Î»Îªï¿½Ö½ï¿½ ï¿½ï¿½ï¿½ï¿½0 ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ð§
-        if ((l = ftell(f)) > 0)
-        {
-            //ï¿½ï¿½ï¿½Ä¼ï¿½Ö¸ï¿½ï¿½ï¿½Æµï¿½ï¿½Ä¼ï¿½Í·ï¿½ï¿½
-            rewind(f);
-            //ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-            fread(buf, sizeof(unsigned char), l, f);
-            //ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª0ï¿½ï¿½Î²
-            //buf[l] = '\0';
-        }
-        fclose(f);
+		int l = 0;
+		//À´·µ»Øµ±Ç°ÎÄ¼þµÄÎ»ÖÃ£¬·µ»Øµ¥Î»Îª×Ö½Ú ´óÓÚ0 ´ú±íÎÄ¼þÓÐÐ§
+		if ((l = ftell(f)) > 0)
+		{
+			//°ÑÎÄ¼þÖ¸ÕëÒÆµ½ÎÄ¼þÍ·²¿
+			rewind(f);
+			//°ÑÎÄ¼þ¿½±´µ½»º´æ
+			fread(buf, sizeof(unsigned char), l, f);
+			//ÎÄ¼þºóÃæÐèÒª0½áÎ²
+			//buf[l] = '\0';
+		}
+		fclose(f);
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 bool is_file_exists_w(const wchar_t* filename)
 {
-    FILE* f = NULL;
-    if ((f = _wfopen(filename, L"r")) != NULL)
-    {
-        fclose(f);
+	FILE* f = NULL;
+	if ((f = _wfopen(filename, L"r")) != NULL)
+	{
+		fclose(f);
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 bool open_url_w(const wchar_t* url)
 {
-    return open_by_operation_w(L"open", url, NULL);;
+	return open_by_operation_w(L"open", url, NULL);;
 }
 
 bool open_url_by_param_w(const wchar_t* url, const wchar_t* param)
 {
-    return open_by_operation_w(L"open", url, param);;
+	return open_by_operation_w(L"open", url, param);;
 }
 
 bool open_by_operation_w(const wchar_t* in_operation, const wchar_t* url, const wchar_t* param)
 {
-    return check_ShellExecute_ret(ShellExecute(NULL,
-        in_operation,
-        url,
-        param,
-        NULL,
-        SW_SHOWNORMAL));
+	return check_ShellExecute_ret(ShellExecute(NULL,
+		in_operation,
+		url,
+		param,
+		NULL,
+		SW_SHOWNORMAL));
 }
 
 bool open_explore_w(const wchar_t* url)
 {
-    return open_by_operation_w(L"explore", url,NULL);;
+	return open_by_operation_w(L"explore", url,NULL);;
 }
 
 unsigned int get_file_size_by_filename_w(const wchar_t* filename)
 {
-    unsigned int file_size = 0;
+	unsigned int file_size = 0;
 
-    FILE* f = NULL;
-    if ((f = _wfopen(filename, L"r")) != NULL)
-    {
-        file_size = get_file_size(f);
+	FILE* f = NULL;
+	if ((f = _wfopen(filename, L"r")) != NULL)
+	{
+		file_size = get_file_size(f);
 
-        fclose(f);
-    }
+		fclose(f);
+	}
 
-    return file_size;
+	return file_size;
+}
+
+void init_def_c_paths_v2(def_c_paths_v2* c_paths)
+{
+	c_paths->index = 0;
+	c_paths->num = 0;
+	c_paths->paths = NULL;
+}
+
+void init_def_c_paths_w_v2(def_c_paths_w_v2* c_paths)
+{
+	c_paths->index = 0;
+	c_paths->num = 0;
+	c_paths->paths = NULL;
+}
+
+void add_def_c_paths(def_c_paths_v2* c_paths, const char* str)
+{
+	int str_len = strlen(str);
+	str_len += sizeof(char);//×îºóÒ»¸ö /0½áÎ²
+
+	if (!c_paths->paths)
+	{
+		c_paths->paths = (char*)malloc(str_len);
+	}
+	else
+	{
+		c_paths->paths = (char*)realloc(c_paths->paths, c_paths->index + str_len);
+	}
+
+	memset(&c_paths->paths[c_paths->index], 0, str_len);
+
+	memcpy(&c_paths->paths[c_paths->index++],str, str_len -sizeof(char));
+
+	c_paths->index += str_len;
+	c_paths->num++;
+}
+
+void add_def_c_paths_w(def_c_paths_w_v2* c_paths, const wchar_t* str)
+{
+	int str_len = wcslen(str);
+	str_len += sizeof(wchar_t);//×îºóÒ»¸ö /0½áÎ²
+
+	if (!c_paths->paths)
+	{
+		c_paths->paths = (wchar_t*)malloc(str_len);
+	}
+	else
+	{
+		c_paths->paths = (wchar_t*)realloc(c_paths->paths, c_paths->index + str_len);
+	}
+
+	memset(&c_paths->paths[c_paths->index], 0, str_len);
+
+	memcpy(&c_paths->paths[c_paths->index], str, str_len- sizeof(wchar_t));
+
+	c_paths->index += str_len;
+	c_paths->num++;
+}
+
+int get_def_c_paths_offset_by_index(def_c_paths_v2* c_paths, int index)
+{
+	int offset = 0;
+	for (int i = 0; i < c_paths->num; i++)
+	{
+		if (i == index)
+		{
+			return offset;
+		}
+
+		int len = strlen(c_paths->paths[offset]);
+		offset += len + sizeof(char);
+	}
+
+	return -1;
+}
+
+int get_def_c_paths_offset_by_index_w(def_c_paths_w_v2* c_paths, int index)
+{
+	int offset = 0;
+	for (int i = 0; i < c_paths->num; i++)
+	{
+		if (i == index)
+		{
+			return offset;
+		}
+
+		int len = wcslen(c_paths->paths[offset]);
+		offset += len + sizeof(wchar_t);
+	}
+
+	return -1;
+}
+
+char* get_def_c_paths_by_offset(def_c_paths_v2* c_paths, int in_offset)
+{
+	return &c_paths->paths[in_offset];
+}
+
+wchar_t* get_def_c_paths_by_offset_w(def_c_paths_w_v2* c_paths, int in_offset)
+{
+	return &c_paths->paths[in_offset];
+}
+
+char *get_def_c_paths_by_index(def_c_paths_v2* c_paths, int index)
+{
+	int offset = get_def_c_paths_offset_by_index(c_paths, index);
+
+	if (offset != -1)
+	{
+		return get_def_c_paths_by_offset(c_paths, offset);
+	}
+
+	return NULL;
+}
+
+wchar_t *get_def_c_paths_by_index_w(def_c_paths_w_v2* c_paths, int index)
+{
+	int offset = get_def_c_paths_offset_by_index_w(c_paths, index);
+
+	if (offset != -1)
+	{
+		return get_def_c_paths_by_offset_w(c_paths, offset);
+	}
+
+	return NULL;
+}
+
+void destroy_def_c_paths_v2(def_c_paths_v2* c_paths)
+{
+	free(c_paths->paths);
+	init_def_c_paths_v2(c_paths);
+}
+
+void destroy_def_c_paths_w_v2(def_c_paths_w_v2* c_paths)
+{
+	free(c_paths->paths);
+	init_def_c_paths_w_v2(c_paths);
 }
 
 bool load_data_from_disk(const char* path, char* buf)
 {
-    FILE* f = NULL;
-    if ((f = fopen(path, "rb")) != NULL)
-    {
-        //ï¿½ï¿½ï¿½Ä¼ï¿½Ö¸ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½;
-        fseek(f, 0, SEEK_END);
+	FILE* f = NULL;
+	if ((f = fopen(path, "rb")) != NULL)
+	{
+		//°ÑÎÄ¼þÖ¸ÕëÒÆ¶¯µ½ÎÄ¼þÎ²²¿;
+		fseek(f, 0, SEEK_END);
 
-        int l = 0;
-        //ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Øµï¿½Î»Îªï¿½Ö½ï¿½ ï¿½ï¿½ï¿½ï¿½0 ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ð§
-        if ((l = ftell(f)) > 0)
-        {
-            //ï¿½ï¿½ï¿½Ä¼ï¿½Ö¸ï¿½ï¿½ï¿½Æµï¿½ï¿½Ä¼ï¿½Í·ï¿½ï¿½
-            rewind(f);
-            //ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-            fread(buf, 1, l, f);
-            //ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª0ï¿½ï¿½Î²
-            //buf[l] = '\0';
-        }
-        fclose(f);
+		int l = 0;
+		//À´·µ»Øµ±Ç°ÎÄ¼þµÄÎ»ÖÃ£¬·µ»Øµ¥Î»Îª×Ö½Ú ´óÓÚ0 ´ú±íÎÄ¼þÓÐÐ§
+		if ((l = ftell(f)) > 0)
+		{
+			//°ÑÎÄ¼þÖ¸ÕëÒÆµ½ÎÄ¼þÍ·²¿
+			rewind(f);
+			//°ÑÎÄ¼þ¿½±´µ½»º´æ
+			fread(buf, 1, l, f);
+			//ÎÄ¼þºóÃæÐèÒª0½áÎ²
+			//buf[l] = '\0';
+		}
+		fclose(f);
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 unsigned int get_file_size_by_filename(const char *filename)
 {
-    unsigned int file_size = 0;
+	unsigned int file_size = 0;
 
-    FILE *f = NULL;
-    if ((f = fopen(filename,"r")) != NULL)
-    {
-        file_size = get_file_size(f);
+	FILE *f = NULL;
+	if ((f = fopen(filename,"r")) != NULL)
+	{
+		file_size = get_file_size(f);
 
-        fclose(f);
-    }
+		fclose(f);
+	}
 
-    return file_size;
+	return file_size;
 }
 
 //asdoiajoi ajs aoisjd oaisjd oiasjdoi asodao ijaosijd oaisdja index
 unsigned int get_file_size(FILE *file_handle)
 {
-    unsigned int file_size = 0;
+	unsigned int file_size = 0;
 
-    unsigned int current_read_postion = ftell(file_handle);
-    fseek(file_handle, 0, SEEK_END);
-    file_size = ftell(file_handle);
-    fseek(file_handle, current_read_postion, SEEK_SET);
+	unsigned int current_read_postion = ftell(file_handle);
+	fseek(file_handle, 0, SEEK_END);
+	file_size = ftell(file_handle);
+	fseek(file_handle, current_read_postion, SEEK_SET);
 
-    return file_size;
+	return file_size;
 }
 
 bool save_data_to_disk(const char* path, char* buf, int buf_size)
 {
-    FILE* f = NULL;
-    if ((f = fopen(path, L"wb")) != NULL)
-    {
-        fwrite(buf, buf_size, 1, f);
-        fclose(f);
-        return true;
-    }
+	FILE* f = NULL;
+	if ((f = fopen(path, L"wb")) != NULL)
+	{
+		fwrite(buf, buf_size, 1, f);
+		fclose(f);
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 size_t wchar_t_to_char(
-    _out_pram(char*) dst_char,
-    size_t char_size,
-    _in_pram(wchar_t const*) _Src)
+	_out_pram(char*) dst_char,
+	size_t char_size,
+	_in_pram(wchar_t const*) _Src)
 {
-    size_t wchar_t_size = wcslen(_Src);
+	size_t wchar_t_size = wcslen(_Src);
 
-    size_t wchar_t_to_char_count = 0;
-    printf("\nwchar_t to char:[%s];\n", strerror(wcstombs_s(
-        &wchar_t_to_char_count, 
-        dst_char, char_size, 
-        _Src,
-        wchar_t_size)));
+	size_t wchar_t_to_char_count = 0;
+	printf("\nwchar_t to char:[%s];\n", strerror(wcstombs_s(
+		&wchar_t_to_char_count, 
+		dst_char, char_size, 
+		_Src,
+		wchar_t_size)));
 
-    return wchar_t_to_char_count;
+	return wchar_t_to_char_count;
 }
 
 size_t char_to_wchar_t(
-    _out_pram(wchar_t*) dst_wchar_t,
-    size_t wchar_t_size, 
-    _in_pram(char const*) _Src)
+	_out_pram(wchar_t*) dst_wchar_t,
+	size_t wchar_t_size, 
+	_in_pram(char const*) _Src)
 {
-    size_t char_size = strlen(_Src);
-    
-    size_t char_to_wchar_t_count = 0;
-    printf("\nchar to wchar_t:[%s];\n", strerror(mbstowcs_s(
-        &char_to_wchar_t_count, 
-        dst_wchar_t,
-        wchar_t_size, 
-        _Src,
-        char_size)));
-    
-    return char_to_wchar_t_count;
+	size_t char_size = strlen(_Src);
+	
+	size_t char_to_wchar_t_count = 0;
+	printf("\nchar to wchar_t:[%s];\n", strerror(mbstowcs_s(
+		&char_to_wchar_t_count, 
+		dst_wchar_t,
+		wchar_t_size, 
+		_Src,
+		char_size)));
+	
+	return char_to_wchar_t_count;
 }

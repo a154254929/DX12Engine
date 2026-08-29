@@ -120,7 +120,7 @@ void GCamera::BuildViewMatrix(float deltaTime)
 
 void GCamera::OnMouseButtonDown(int x, int y)
 {
-    bLeftMosueDown = true;
+    bRightMosueDown = true;
     
     OnClickedScreen(x, y);
     
@@ -129,13 +129,13 @@ void GCamera::OnMouseButtonDown(int x, int y)
 
 void GCamera::OnMouseButtonUp(int x, int y)
 {
-    bLeftMosueDown = false;
+    bRightMosueDown = false;
     ReleaseCapture();
 }
 
 void GCamera::OnMouseMove(int x, int y)
 {
-    if (bLeftMosueDown)
+    if (bRightMosueDown)
     {
         float yRadians = XMConvertToRadians(x - lsatMousePosition.x) * mounseSensitivity;
         float xRadians = XMConvertToRadians(y - lsatMousePosition.y) * mounseSensitivity;

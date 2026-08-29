@@ -81,7 +81,7 @@
     <ClCompile Include="simple_library\private\simple_image\simple_image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="simple_library\private\simple_math\simple_math.c">
+    <ClCompile Include="simple_library\private\simple_math\simple_math.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Core\Engine.cpp">

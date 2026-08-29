@@ -1,211 +1,211 @@
 // Copyright (C) RenZhai.2022.All Rights Reserved.
-#include "../../simple_library.h"
-#include "../../simple_library_macro.h"
+#include "simple_library/public/simple_library.h"
+#include "simple_library/public/simple_library_macro.h"
 
 #define VARIABLE(...)
 
 namespace soft_rasterization
 {
-    ////////////////////////////ï¿½ï¿½ï¿½ï¿½
-    //ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
-    class SIMPLE_LIBRARY_API fobject
-    {
-        friend class fengine;
-    public:
-        fobject();
+	////////////////////////////¶ÔÏó
+	//ÍòÎï½ÔÎª¶ÔÏó
+	class SIMPLE_LIBRARY_API fobject
+	{
+		friend class fengine;
+	public:
+		fobject();
 
-    public:
-        virtual void build(float in_time) {}
-        virtual void tick(float in_time) {}
-        virtual void clear() {}
+	public:
+		virtual void build(float in_time) {}
+		virtual void tick(float in_time) {}
+		virtual void clear() {}
 
-    public:
-        template<class t>
-        t *create_object()
-        {
-            gobject_array.push_back(new t());
+	public:
+		template<class t>
+		t *create_object()
+		{
+			gobject_array.push_back(new t());
 
-            return dynamic_cast<t*>(gobject_array[gobject_array.size() - 1]);
-        }
+			return dynamic_cast<t*>(gobject_array[gobject_array.size() - 1]);
+		}
 
-    private:
-        static void gobject_array_init(float in_time);
-        static void gobject_array_tick(float in_time);
-        static void gobject_array_clear();
+	private:
+		static void gobject_array_init(float in_time);
+		static void gobject_array_tick(float in_time);
+		static void gobject_array_clear();
 
-    private:
-        static std::vector<fobject*> gobject_array;
-    };
+	private:
+		static std::vector<fobject*> gobject_array;
+	};
 
-    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    class SIMPLE_LIBRARY_API fcomponent : public fobject
-    {
-    public:
-        fcomponent* parent;
-        std::vector<fcomponent*> children;
-    };
+	//×é¼þ»ùÀà
+	class SIMPLE_LIBRARY_API fcomponent : public fobject
+	{
+	public:
+		fcomponent* parent;
+		std::vector<fcomponent*> children;
+	};
 
-    //Î»ï¿½ï¿½ï¿½ï¿½ï¿½
-    class SIMPLE_LIBRARY_API ftransform_component :public fcomponent
-    {
-    public:
-        ftransform_component();
+	//Î»ÒÆ×é¼þ
+	class SIMPLE_LIBRARY_API ftransform_component :public fcomponent
+	{
+	public:
+		ftransform_component();
 
-        virtual void build(float in_time) {}
-        virtual void tick(float in_time);
-        virtual void clear() {}
+		virtual void build(float in_time) {}
+		virtual void tick(float in_time);
+		virtual void clear() {}
 
-    public:
-        virtual void set_rot(const frotator &in_rot);
+	public:
+		virtual void set_rot(const frotator &in_rot);
 
-        virtual frotator get_rot() const { return rotation; }
+		virtual frotator get_rot() const { return rotation; }
 
-    public:
-        fvector_3d position;
-        frotator rotation;
-        fvector_3d scale;
+	public:
+		fvector_3d position;
+		frotator rotation;
+		fvector_3d scale;
 
-        //ï¿½ï¿½×ªï¿½Ð¹ï¿½
-        fvector_3d forward_vector;
-        fvector_3d right_vector;
-        fvector_3d up_vector;
+		//Ðý×ªÓÐ¹Ø
+		fvector_3d forward_vector;
+		fvector_3d right_vector;
+		fvector_3d up_vector;
 
-        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã´ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªÎªï¿½Ö²ï¿½ï¿½Õ¼ï¿½ï¿½Â¡ï¿½
-        //ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½Íµï¿½worldmatrix ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾Ö²ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½
-        fmatrix_4x4 matrix;
-        fmatrix_4x4 viewProj_matrix;
+		//Èç¹ûÊÇÉãÏñ»ú ÄÇÃ´ËüÊÇ°ÑÊÀ½çµã×ªÎª¾Ö²¿¿Õ¼äÏÂ¡£
+		//Èç¹ûÊÇÄ£ÐÍµÄworldmatrix ÄÇÃ´Ëü½«°Ñ¾Ö²¿µã×ªµ½ÊÀ½ç¿Õ¼äÏÂ
+		fmatrix_4x4 matrix;
+		fmatrix_4x4 viewProj_matrix;
 
-    protected:
-        frotator last_rotation;
-    };
+	protected:
+		frotator last_rotation;
+	};
 
-    //Meshï¿½ï¿½ï¿½
-    class SIMPLE_LIBRARY_API fmesh_component :public ftransform_component
-    {
-    public:
-        std::vector<fvector_3d> vertex_data;
-    };
+	//Mesh×é¼þ
+	class SIMPLE_LIBRARY_API fmesh_component :public ftransform_component
+	{
+	public:
+		std::vector<fvector_3d> vertex_data;
+	};
 
-    //ï¿½Ü¿ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½
-    class SIMPLE_LIBRARY_API factor :public fobject
-    {
-        VARIABLE(category = actor, visibleanywhere, blueprintreadonly, meta = (allowprivateaccess = "true"))
-        ftransform_component* transform;//root component
+	//ÄÜ¿´µ½µÄ»ùÀà
+	class SIMPLE_LIBRARY_API factor :public fobject
+	{
+		VARIABLE(category = actor, visibleanywhere, blueprintreadonly, meta = (allowprivateaccess = "true"))
+		ftransform_component* transform;//root component
 
-    public:
-        factor();
-        virtual ~factor();
+	public:
+		factor();
+		virtual ~factor();
 
-        virtual void set_rot(const frotator& in_rot);
-        virtual frotator get_rot() const {return transform->get_rot();}
+		virtual void set_rot(const frotator& in_rot);
+		virtual frotator get_rot() const {return transform->get_rot();}
 
-        FORCEINLINE ftransform_component* get_transform() { return transform; }
-    };
+		FORCEINLINE ftransform_component* get_transform() { return transform; }
+	};
 
-    //ï¿½ï¿½ï¿½ï¿½ï¿½
-    class SIMPLE_LIBRARY_API fcamera :public factor
-    {
-    public:
-    };
+	//ÉãÏñ»ú
+	class SIMPLE_LIBRARY_API fcamera :public factor
+	{
+	public:
+	};
 
-    //Ä£ï¿½ï¿½Actor
-    class fmesh_actor :public factor
-    {
-        VARIABLE(category = actor, visibleanywhere, blueprintreadonly, meta = (allowprivateaccess = "true"))
-        fmesh_component* mesh_component;
+	//Ä£ÐÍActor
+	class fmesh_actor :public factor
+	{
+		VARIABLE(category = actor, visibleanywhere, blueprintreadonly, meta = (allowprivateaccess = "true"))
+		fmesh_component* mesh_component;
 
-    public:
-        fmesh_actor();
-        ~fmesh_actor();
+	public:
+		fmesh_actor();
+		~fmesh_actor();
 
-        FORCEINLINE fmesh_component* get_mesh() { return mesh_component; }
-    };
+		FORCEINLINE fmesh_component* get_mesh() { return mesh_component; }
+	};
 
-    //ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½
-    struct SIMPLE_LIBRARY_API fviewport_config
-    {
-        fviewport_config()
-            :viewport_size(1920, 1080)
-            , fov(0.5f * 3.1415926f)
-            , aspect_ratio(viewport_size.x / viewport_size.y)
-            , near_z(1.f)
-            , far_z(1000.f)
-        {
-        }
+	//ÊÓ¿ÚÅäÖÃ
+	struct SIMPLE_LIBRARY_API fviewport_config
+	{
+		fviewport_config()
+			:viewport_size(1920, 1080)
+			, fov(0.5f * 3.1415926f)
+			, aspect_ratio(viewport_size.x / viewport_size.y)
+			, near_z(1.f)
+			, far_z(1000.f)
+		{
+		}
 
-        fvector_2d viewport_size;
+		fvector_2d viewport_size;
 
-        float fov;
-        float aspect_ratio;
-        float near_z;
-        float far_z;
-    };
-    ////////////////////////////Òªï¿½ï¿½È¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    struct SIMPLE_LIBRARY_API frender_data_3d
-    {
-        std::vector<fvector_3d> vertex_data;
-        std::vector<uint16_t> index_data;
+		float fov;
+		float aspect_ratio;
+		float near_z;
+		float far_z;
+	};
+	////////////////////////////ÒªäÖÈ¾µÄÊý¾Ý
+	struct SIMPLE_LIBRARY_API frender_data_3d
+	{
+		std::vector<fvector_3d> vertex_data;
+		std::vector<uint16_t> index_data;
 
-        fmatrix_4x4 matrix;
-    };
+		fmatrix_4x4 matrix;
+	};
 
-    struct SIMPLE_LIBRARY_API frender_data_2d
-    {
-        std::vector<fvector_2d> vertex_data;
-        std::vector<uint16_t> index_data;
-    };
+	struct SIMPLE_LIBRARY_API frender_data_2d
+	{
+		std::vector<fvector_2d> vertex_data;
+		std::vector<uint16_t> index_data;
+	};
 
-    ////////////////////////////ï¿½ï¿½ï¿½ï¿½
-    class SIMPLE_LIBRARY_API fengine
-    {
-    public:
-        virtual void init(float in_time);
-        virtual void tick(float in_time);
-        virtual void exit();
-    };
+	////////////////////////////ÒýÇæ
+	class SIMPLE_LIBRARY_API fengine
+	{
+	public:
+		virtual void init(float in_time);
+		virtual void tick(float in_time);
+		virtual void exit();
+	};
 
-    class SIMPLE_LIBRARY_API frender_engine :public fengine
-    {
-        typedef fengine super;
+	class SIMPLE_LIBRARY_API frender_engine :public fengine
+	{
+		typedef fengine super;
 
-    public:
-        virtual void init(float in_time);
-        virtual void tick(float in_time);
-        virtual void exit();
+	public:
+		virtual void init(float in_time);
+		virtual void tick(float in_time);
+		virtual void exit();
 
-    public:
-        void build_input_path(const std::wstring& in_path);
-        void build_draw_object(const std::vector<fmesh_actor*>& in_objs);
-        void build_camera(const fvector_3d& in_position, const fviewport_config& in_config);
-    
-    public:
-        void strat_update(float in_time);
-        void draw(float in_time);
-        void end_update(float in_time);
+	public:
+		void build_input_path(const std::wstring& in_path);
+		void build_draw_object(const std::vector<fmesh_actor*>& in_objs);
+		void build_camera(const fvector_3d& in_position, const fviewport_config& in_config);
+	
+	public:
+		void strat_update(float in_time, bool breset_bone = false);
+		void draw(float in_time);
+		void end_update(float in_time);
 
-    protected:
-        fcamera camera;
-        fviewport_config viewport_config;
+	protected:
+		fcamera camera;
+		fviewport_config viewport_config;
 
-        std::vector<fmesh_actor*> draw_obj;
+		std::vector<fmesh_actor*> draw_obj;
 
-        //Ã¿Ò»Ö¡Òªï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½
-        std::vector<frender_data_3d> frame_render_data3;
-        std::wstring wpath;
+		//Ã¿Ò»Ö¡Òª»æÖÆµÄÊý¾Ý
+		std::vector<frender_data_3d> frame_render_data3;
+		std::wstring wpath;
 
-        //Ö¡ï¿½ï¿½
-        int index;//
-    };
+		//Ö¡Êý
+		int index;//
+	};
 
-    class SIMPLE_LIBRARY_API fengine_factory
-    {
-    public:
-        template<class t>
-        t* create_engine()
-        {
-            return new t();
-        }
-    };
+	class SIMPLE_LIBRARY_API fengine_factory
+	{
+	public:
+		template<class t>
+		t* create_engine()
+		{
+			return new t();
+		}
+	};
 }
 
 /*
@@ -215,72 +215,72 @@ using namespace soft_rasterization;
 
 int main()
 {
-    class ftest_mesh_actor :public soft_rasterization::fmesh_actor
-    {
-        typedef soft_rasterization::fmesh_actor super;
-    public:
-        virtual void tick(float in_time)
-        {
-            super::tick(in_time);
+	class ftest_mesh_actor :public soft_rasterization::fmesh_actor
+	{
+		typedef soft_rasterization::fmesh_actor super;
+	public:
+		virtual void tick(float in_time)
+		{
+			super::tick(in_time);
 
-            frotator r = get_rot();
+			frotator r = get_rot();
 
-            //r.yaw += 10.f;
-            r.pitch -= 5.f;
-            //r.roll += 14.f;
-            set_rot(r);
+			//r.yaw += 10.f;
+			r.pitch -= 5.f;
+			//r.roll += 14.f;
+			set_rot(r);
 
-            //
-            //// Î»ï¿½ï¿½
-            //get_transform()->position.x -= 1.f;
-            //get_transform()->position.y -= 1.f;
-            //get_transform()->position.z -= 1.f;
-            ////// ï¿½ï¿½×ª
-            ////get_transform()->rotation.yaw += 6.f;
-            //// ï¿½ï¿½ï¿½ï¿½
-            //get_transform()->scale.x -= 0.1f;
-            //get_transform()->scale.y -= 0.4f;
-            //get_transform()->scale.z -= 0.4f;
-        }
-    };
+			//
+			//// Î»ÖÃ
+			//get_transform()->position.x -= 1.f;
+			//get_transform()->position.y -= 1.f;
+			//get_transform()->position.z -= 1.f;
+			////// Ðý×ª
+			////get_transform()->rotation.yaw += 6.f;
+			//// Ëõ·Å
+			//get_transform()->scale.x -= 0.1f;
+			//get_transform()->scale.y -= 0.4f;
+			//get_transform()->scale.z -= 0.4f;
+		}
+	};
 
-    fengine_factory factory;
-    if (frender_engine* render_enigne = factory.create_engine<frender_engine>())
-    {
-        std::vector<fmesh_actor*> in_objs;
-        {
-            in_objs.push_back(new ftest_mesh_actor());
-            fmesh_actor* in_actor = in_objs[in_objs.size() - 1];
+	fengine_factory factory;
+	if (frender_engine* render_enigne = factory.create_engine<frender_engine>())
+	{
+		std::vector<fmesh_actor*> in_objs;
+		{
+			in_objs.push_back(new ftest_mesh_actor());
+			fmesh_actor* in_actor = in_objs[in_objs.size() - 1];
 
-            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¬
-            in_actor->get_mesh()->vertex_data.push_back(fvector_3d(0.f, 0.f, 0.f));
-            in_actor->get_mesh()->vertex_data.push_back(fvector_3d(0.f, 10.f, 10.f));
-            in_actor->get_mesh()->vertex_data.push_back(fvector_3d(10.f, 0.f, 0.f));
-        }
+			//Èý½ÇÐÎ ÃæÆ¬
+			in_actor->get_mesh()->vertex_data.push_back(fvector_3d(0.f, 0.f, 0.f));
+			in_actor->get_mesh()->vertex_data.push_back(fvector_3d(0.f, 10.f, 10.f));
+			in_actor->get_mesh()->vertex_data.push_back(fvector_3d(10.f, 0.f, 0.f));
+		}
 
-        //1.×ªÂ·ï¿½ï¿½
-        char path_buff[1024] = { 0 };
-        char path[] = "../Math/render/a_%i.bmp";
-        get_full_path(path_buff, 1024, path);
+		//1.×ªÂ·¾¶
+		char path_buff[1024] = { 0 };
+		char path[] = "../Math/render/a_%i.bmp";
+		get_full_path(path_buff, 1024, path);
 
-        wchar_t dst_wchar_t[1024] = { 0 };
-        char_to_wchar_t(dst_wchar_t, 1024, path_buff);
+		wchar_t dst_wchar_t[1024] = { 0 };
+		char_to_wchar_t(dst_wchar_t, 1024, path_buff);
 
-        fviewport_config config;
-        render_enigne->build_draw_object(in_objs);
-        render_enigne->build_camera(fvector_3d(1.f, 40.f, 1.f), config);
-        render_enigne->build_input_path(dst_wchar_t);
+		fviewport_config config;
+		render_enigne->build_draw_object(in_objs);
+		render_enigne->build_camera(fvector_3d(1.f, 40.f, 1.f), config);
+		render_enigne->build_input_path(dst_wchar_t);
 
-        render_enigne->init(0.2f);
+		render_enigne->init(0.2f);
 
-        while (1)
-        {
-            render_enigne->tick(0.03f);
-        }
+		while (1)
+		{
+			render_enigne->tick(0.03f);
+		}
 
-        render_enigne->exit();
-    }
+		render_enigne->exit();
+	}
 
-    return 0;
+	return 0;
 }
 */

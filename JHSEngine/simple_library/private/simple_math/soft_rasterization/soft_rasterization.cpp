@@ -1,456 +1,467 @@
-#include "../../../public/simple_math/soft_rasterization/soft_rasterization.h"
+#include "simple_library/public/simple_math/soft_rasterization/soft_rasterization.h"
 
 namespace soft_rasterization
 {
-    std::vector<fobject*> fobject::gobject_array;
-
-    factor::factor()
-    {
-        transform = create_object<ftransform_component>();
-    }
-
-    factor::~factor()
-    {
-        
-    }
-
-    void factor::set_rot(const frotator& in_rot)
-    {
-        transform->set_rot(in_rot);
-    }
-
-    fmesh_actor::fmesh_actor()
-    {
-        mesh_component = create_object<fmesh_component>();
-
-        //×¢ï¿½ï¿½ï¿½Ó¸ï¿½ï¿½ï¿½ï¿½ï¿½Ïµ
-        mesh_component->parent = get_transform();
-        get_transform()->children.push_back(mesh_component);
-    }
-
-    fmesh_actor::~fmesh_actor()
-    {
-        
-    }
-
-    void frender_engine::init(float in_time)
-    {
-        super::init(in_time);
-    }
-
-    void frender_engine::tick(float in_time)
-    {
-        super::tick(in_time);
-
-        //I ×¼ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        strat_update(in_time);
-
-        //II ï¿½ï¿½È¾Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        draw(in_time);
-
-        //III ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        end_update(in_time);
-    }
-
-    void frender_engine::exit()
-    {
-        super::exit();
-    }
-
-    void frender_engine::build_input_path(const std::wstring& in_path)
-    {
-        wpath = in_path;
-    }
-
-    void frender_engine::build_draw_object(const std::vector<fmesh_actor*>& in_objs)
-    {
-        draw_obj = in_objs;
-    }
-
-    void frender_engine::build_camera(const fvector_3d& in_position, const fviewport_config& in_config)
-    {
-        viewport_config = in_config;
-        camera.get_transform()->position = in_position;
-
-        //ï¿½ï¿½ï¿½ï¿½view matrix
-        fvector_4d up(0.f, 1.f, 0.f, 1.f);
-        camera.get_transform()->matrix = math_utils::matrix_look_at_target(
-            fvector_4d(
-                camera.get_transform()->position.x,
-                camera.get_transform()->position.y,
-                camera.get_transform()->position.z,
-                1.f), fvector_4d(0.f), up);
-
-        //ï¿½ï¿½ï¿½ï¿½Proj_matrix
-        fmatrix_4x4 Proj_matrix = math_utils::matrix_perspective(
-            in_config.fov,//90
-            in_config.aspect_ratio,
-            in_config.near_z,
-            in_config.far_z);
-
-        //ï¿½ï¿½ï¿½ï¿½ viewProj_matrix
-        Proj_matrix.transpose();
-        camera.get_transform()->viewProj_matrix =
-            camera.get_transform()->matrix * Proj_matrix;
-    }
-
-    void frender_engine::strat_update(float in_time)
-    {
-        //×¢ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        for (auto& tmp : draw_obj)
-        {
-            frame_render_data3.push_back(frender_data_3d());
-            frender_data_3d& data_3d = frame_render_data3[frame_render_data3.size() - 1];
-        
-            //Iï¿½Ãµï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-            data_3d.vertex_data = tmp->get_mesh()->vertex_data;
-
-            //II world matrix
-            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª
-            fvector_3d forward_vector = tmp->get_mesh()->forward_vector;
-            fvector_3d right_vector = tmp->get_mesh()->right_vector;
-            fvector_3d up_vector = tmp->get_mesh()->up_vector;
-
-            fvector_3d position = tmp->get_mesh()->position;
-            fvector_3d scale = tmp->get_mesh()->scale;
-
-            //UVNï¿½ï¿½ï¿½ï¿½
-            //ï¿½ï¿½ï¿½ï¿½
-            fvector_3d dot_position;
-            dot_position.x = fvector_3d::dot(position, right_vector);
-            dot_position.y = fvector_3d::dot(position, up_vector);
-            dot_position.z = fvector_3d::dot(position, forward_vector);
-
-            data_3d.matrix = {
-            right_vector.x * scale.x,    up_vector.x,            forward_vector.x,            0.f,
-            right_vector.y,                up_vector.y * scale.y,    forward_vector.y,            0.f,
-            right_vector.z,                up_vector.z,            forward_vector.z * scale.z, 0.f,
-            dot_position.x,                dot_position.y,            dot_position.z,                1.f
-        };
-
-            //ï¿½ï¿½ï¿½ï¿½
-            tmp->get_transform()->matrix = data_3d.matrix;
-        }
-    }
-
-    bool is_inside_triangles(
-        const std::vector<primitives::ftriangle>& in_triangles,
-        int x, int y, fvector_4d& in_color)
-    {
-        for (auto& tmp : in_triangles)
-        {
-            if (primitives::is_inside_triangle(tmp, x, y))
-            {
-                in_color = tmp.Color;
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    //ï¿½ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    void frender_engine::draw(float in_time)
-    {
-        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
-        vector<fvector_4d> world_pos;
-        for (auto& tmp : frame_render_data3)
-        {
-            for (size_t i = 0; i < tmp.vertex_data.size(); i += 3)
-            {
-                {
-                    fvector_3d v = tmp.vertex_data[i];
-                    fvector_4d mesh_pos_world = math_utils::mul(fvector_4d(v.x, v.y, v.z, 1.f), tmp.matrix);
-                    mesh_pos_world.w = 1.f;
-                    world_pos.push_back(mesh_pos_world);
-                }
-
-                {
-                    fvector_3d v = tmp.vertex_data[i + 1];
-                    fvector_4d mesh_pos_world = math_utils::mul(fvector_4d(v.x, v.y, v.z, 1.f), tmp.matrix);
-                    mesh_pos_world.w = 1.f;
-                    world_pos.push_back(mesh_pos_world);
-                }
-
-                {
-                    fvector_3d v = tmp.vertex_data[i + 2];
-                    fvector_4d mesh_pos_world = math_utils::mul(fvector_4d(v.x, v.y, v.z, 1.f), tmp.matrix);
-                    mesh_pos_world.w = 1.f;
-                    world_pos.push_back(mesh_pos_world);
-                }
-            }
-        }
-
-        //×ªï¿½ï¿½ï¿½Ã¼ï¿½ï¿½Õ¼ï¿½
-        vector<fvector_4d> clip_space;
-        for (size_t i = 0; i < world_pos.size(); i += 3)
-        {
-            {
-                fvector_4d point = world_pos[i];
-                fvector_4d cs_point = math_utils::mul(point, camera.get_transform()->viewProj_matrix);
-
-                clip_space.push_back(cs_point);
-            }
-
-            {
-                fvector_4d point = world_pos[i + 1];
-                fvector_4d cs_point = math_utils::mul(point, camera.get_transform()->viewProj_matrix);
-
-                clip_space.push_back(cs_point);
-            }
-
-            {
-                fvector_4d point = world_pos[i + 2];
-                fvector_4d cs_point = math_utils::mul(point, camera.get_transform()->viewProj_matrix);
-
-                clip_space.push_back(cs_point);
-            }
-        }
-
-        //ï¿½ï¿½Î³ï¿½ï¿½ï¿½ Ó³ï¿½äµ½NDCï¿½Õ¼ï¿½
-        vector<fvector_4d> ndc_space;
-        for (size_t i = 0; i < clip_space.size(); i += 3)
-        {
-            {
-                fvector_4d ndc;
-                ndc.x = clip_space[i].x / clip_space[i].w;
-                ndc.y = clip_space[i].y / clip_space[i].w;
-                ndc.z = clip_space[i].z / clip_space[i].w;
-
-                ndc_space.push_back(ndc);
-            }
-
-            {
-                fvector_4d ndc;
-                ndc.x = clip_space[i + 1].x / clip_space[i + 1].w;
-                ndc.y = clip_space[i + 1].y / clip_space[i + 1].w;
-                ndc.z = clip_space[i + 1].z / clip_space[i + 1].w;
-
-                ndc_space.push_back(ndc);
-            }
-
-            {
-                fvector_4d ndc;
-                ndc.x = clip_space[i + 2].x / clip_space[i + 2].w;
-                ndc.y = clip_space[i + 2].y / clip_space[i + 2].w;
-                ndc.z = clip_space[i + 2].z / clip_space[i + 2].w;
-
-                ndc_space.push_back(ndc);
-            }
-        }
-
-        frender_data_2d render_data2;
-        //NDCÓ³ï¿½äµ½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        for (size_t i = 0; i < ndc_space.size(); i += 3)
-        {
-            render_data2.vertex_data.push_back(fvector_2d(
-                (ndc_space[i].x * 0.5f + 0.5f) * viewport_config.viewport_size.x,//Ó³ï¿½äµ½Êµï¿½ï¿½ï¿½ï¿½Ä»ï¿½Õ¼ï¿½
-                (ndc_space[i].y * 0.5f + 0.5f) * viewport_config.viewport_size.y));//Ó³ï¿½äµ½Êµï¿½ï¿½ï¿½ï¿½Ä»ï¿½Õ¼ï¿½
-
-            render_data2.vertex_data.push_back(fvector_2d(
-                (ndc_space[i + 1].x * 0.5f + 0.5f) * viewport_config.viewport_size.x,//Ó³ï¿½äµ½Êµï¿½ï¿½ï¿½ï¿½Ä»ï¿½Õ¼ï¿½
-                (ndc_space[i + 1].y * 0.5f + 0.5f) * viewport_config.viewport_size.y));//Ó³ï¿½äµ½Êµï¿½ï¿½ï¿½ï¿½Ä»ï¿½Õ¼ï¿½
-
-            render_data2.vertex_data.push_back(fvector_2d(
-                (ndc_space[i + 2].x * 0.5f + 0.5f) * viewport_config.viewport_size.x,//Ó³ï¿½äµ½Êµï¿½ï¿½ï¿½ï¿½Ä»ï¿½Õ¼ï¿½
-                (ndc_space[i + 2].y * 0.5f + 0.5f) * viewport_config.viewport_size.y));//Ó³ï¿½äµ½Êµï¿½ï¿½ï¿½ï¿½Ä»ï¿½Õ¼ï¿½
-        }
-
-        //2.ï¿½Ãµï¿½buff
-        std::vector<unsigned char> data;
-        SimpleImage::FImageInfo image_info;
-        image_info.Height = (int)viewport_config.viewport_size.y;
-        image_info.Width = (int)viewport_config.viewport_size.x;
-        image_info.Channel = SimpleImage::EImageChannel::Channel_24Bit;
-        image_info.ImageType = SimpleImage::EImageType::Bmp;
-        SimpleImage::GetImageDataExcludeHeaderInfor(image_info, data);
-
-        //3.×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    
-        std::vector<primitives::ftriangle> triangles;
-        for (int i = 0; i < (int)render_data2.vertex_data.size(); i += 3)
-        {
-            triangles.push_back(primitives::ftriangle());
-            primitives::ftriangle& in_triangle = triangles[triangles.size() - 1];
-
-            in_triangle.point_1 = render_data2.vertex_data[i];
-            in_triangle.point_2 = render_data2.vertex_data[i + 1];
-            in_triangle.point_3 = render_data2.vertex_data[i + 2];
-            in_triangle.Color.x = 32;
-            in_triangle.Color.y = 100;
-            in_triangle.Color.z = 255;
-        }
-
-        //4.ï¿½ï¿½Õ¤ï¿½ï¿½ ï¿½Ï²ï¿½ï¿½×¶ï¿½
-        for (int i = 0; i < image_info.Height; i++)
-        {
-            for (int j = 0; j < image_info.Width * (int)image_info.Channel; j += 3)
-            {
-                //row ï¿½ï¿½ï¿½ï¿½
-                int number_rows = i * image_info.Width * image_info.Channel;
-
-                //ï¿½ï¿½ï¿½Øµï¿½Î»ï¿½ï¿½
-                int x = j / image_info.Channel;
-                int y = i;
-
-                fvector_4d my_color;
-                if (is_inside_triangles(triangles, x, y, my_color))
-                {
-                    //BGR bmp
-                    data[number_rows + j] = my_color.x;            //B
-                    data[number_rows + j + 1] = my_color.y;        //G
-                    data[number_rows + j + 2] = my_color.z;        //R
-                }
-                else
-                {
-                    //BGR bmp
-                    data[number_rows + j] = 0;        //B
-                    data[number_rows + j + 1] = 0;        //G
-                    data[number_rows + j + 2] = 0;        //R
-                }
-            }
-        }
-
-        //ï¿½ï¿½ï¿½ï¿½×¶ï¿½
-        wchar_t path[1024] = { 0 };
-        if (!wpath.empty())
-        {
-            wget_printf(path, wpath.c_str(), index++);
-        }
-        else
-        {
-            wchar_t f[] = L"../Math/a_%i.bmp";
-            wget_printf(path, f, index++);
-        }
-
-        bool bok = SimpleImage::SaveImageToDisk(
-            image_info,
-            path,
-            data);
-
-        open_url_w(path);
-    }
-
-    void frender_engine::end_update(float in_time)
-    {
-        //ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        frame_render_data3.clear();
-    }
-
-    fobject::fobject()
-    {
-        gobject_array.push_back(this);
-    }
-
-    void fobject::gobject_array_init(float in_time)
-    {
-        for (auto &tmp : gobject_array)
-        {
-            tmp->build(in_time);
-        }
-    }
-
-    void fobject::gobject_array_tick(float in_time)
-    {
-        for (auto& tmp : gobject_array)
-        {
-            tmp->tick(in_time);
-        }
-    }
-
-    void fobject::gobject_array_clear()
-    {
-        //Í¨Öªï¿½Ï²ï¿½ï¿½ß¼ï¿½ ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½
-        for (auto& tmp : gobject_array)
-        {
-            tmp->clear();
-        }
-
-        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        for (auto& tmp : gobject_array)
-        {
-            delete tmp;
-            tmp = nullptr;
-        }
-
-        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        gobject_array.clear();
-    }
-
-    void fengine::init(float in_time)
-    {
-        fobject::gobject_array_init(in_time);
-    }
-
-    void fengine::tick(float in_time)
-    {
-        fobject::gobject_array_tick(in_time);
-    }
-
-    void fengine::exit()
-    {
-        fobject::gobject_array_clear();
-    }
-
-    ftransform_component::ftransform_component()
-        :scale(1.f)
-        , forward_vector(0.f, 0.f, 1.f)
-        , right_vector(1.f, 0.f, 0.f)
-        , up_vector(0.f, 1.f, 0.f)
-    {
-
-    }
-
-    void ftransform_component::tick(float in_time)
-    {
-        for (auto &tmp : children)
-        {
-            if (ftransform_component *in_component = dynamic_cast<ftransform_component*>(tmp))
-            {
-                in_component->position = position;
-                in_component->rotation = rotation;
-                in_component->scale = scale;
-
-                in_component->forward_vector = forward_vector;
-                in_component->up_vector = up_vector;
-                in_component->right_vector = right_vector;
-
-                in_component->viewProj_matrix = viewProj_matrix;
-                in_component->matrix = matrix;
-            }
-        }
-    }
-
-    void ftransform_component::set_rot(const frotator& in_rot)
-    {
-        //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
-        rotation = in_rot;
-
-        //ï¿½ÂµÄ·ï¿½ï¿½ï¿½
-        //ï¿½ï¿½Ô­ï¿½È±ï¿½ï¿½ï¿½Ä¾ï¿½ï¿½ï¿½×ªÎªÅ·ï¿½ï¿½ï¿½ï¿½
-        //frotator last_rotator;
-        //fmatrix_3x3 last_matrix_3x3(matrix);
-        //last_rotation.object_to_inertia(quat);
-
-        frotator new_rotator =  rotation - last_rotation;
-
-        printf("  rotation(yaw=%f.roll=%f.path=%f)\n", rotation.yaw, rotation.roll, rotation.pitch);
-        printf("last_rotator(yaw=%f.roll=%f.path=%f)\n", last_rotation.yaw, last_rotation.roll, last_rotation.pitch);
-        printf("------------------\n");
-
-        //ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½
-        fmatrix_3x3 rot_matrix_3x3;
-        //rot_matrix_3x3.object_to_inertia(in_rot); //ï¿½ï¿½×ªrollï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        fquat q;
-        q.object_to_inertia(new_rotator);
-
-        math_utils::object_to_inertia(q, rot_matrix_3x3);
-
-        //ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½for right up
-        forward_vector = math_utils::mul(forward_vector, rot_matrix_3x3);
-        right_vector = math_utils::mul(right_vector, rot_matrix_3x3);
-        up_vector = math_utils::mul(up_vector, rot_matrix_3x3);
-
-        last_rotation = rotation;
-    }
+	std::vector<fobject*> fobject::gobject_array;
+
+	factor::factor()
+	{
+		transform = create_object<ftransform_component>();
+	}
+
+	factor::~factor()
+	{
+		
+	}
+
+	void factor::set_rot(const frotator& in_rot)
+	{
+		transform->set_rot(in_rot);
+	}
+
+	fmesh_actor::fmesh_actor()
+	{
+		mesh_component = create_object<fmesh_component>();
+
+		//×¢²á×Ó¸¸¼¶¹ØÏµ
+		mesh_component->parent = get_transform();
+		get_transform()->children.push_back(mesh_component);
+	}
+
+	fmesh_actor::~fmesh_actor()
+	{
+		
+	}
+
+	void frender_engine::init(float in_time)
+	{
+		super::init(in_time);
+	}
+
+	void frender_engine::tick(float in_time)
+	{
+		super::tick(in_time);
+
+		//I ×¼±¸Ö¡»º´æÊý¾Ý
+		strat_update(in_time);
+
+		//II äÖÈ¾Ö¡»º´æÊý¾Ý
+		draw(in_time);
+
+		//III Çå³ýÖ¡»º´æÊý¾Ý
+		end_update(in_time);
+	}
+
+	void frender_engine::exit()
+	{
+		super::exit();
+	}
+
+	void frender_engine::build_input_path(const std::wstring& in_path)
+	{
+		wpath = in_path;
+	}
+
+	void frender_engine::build_draw_object(const std::vector<fmesh_actor*>& in_objs)
+	{
+		draw_obj = in_objs;
+	}
+
+	void frender_engine::build_camera(const fvector_3d& in_position, const fviewport_config& in_config)
+	{
+		viewport_config = in_config;
+		camera.get_transform()->position = in_position;
+
+		//¹¹½¨view matrix
+		fvector_4d up(0.f, 1.f, 0.f, 1.f);
+		camera.get_transform()->matrix = math_utils::matrix_look_at_target(
+			fvector_4d(
+				camera.get_transform()->position.x,
+				camera.get_transform()->position.y,
+				camera.get_transform()->position.z,
+				1.f), fvector_4d(0.f), up);
+
+		//¹¹½¨Proj_matrix
+		fmatrix_4x4 Proj_matrix = math_utils::matrix_perspective(
+			in_config.fov,//90
+			in_config.aspect_ratio,
+			in_config.near_z,
+			in_config.far_z);
+
+		//¹¹½¨ viewProj_matrix
+		Proj_matrix.transpose();
+		camera.get_transform()->viewProj_matrix =
+			camera.get_transform()->matrix * Proj_matrix;
+	}
+
+	void frender_engine::strat_update(float in_time, bool breset_bone)
+	{
+		frame_render_data3.clear();
+		
+		//×¢²áÖ¡»º´æÊý¾Ý
+		for (auto& tmp : draw_obj)
+		{
+			if (breset_bone)
+			{
+				frame_render_data3.push_back(frender_data_3d());
+				frender_data_3d& data_3d = frame_render_data3[frame_render_data3.size() - 1];
+
+				//IÄÃµ½Ä£ÐÍÊý¾Ý
+				data_3d.vertex_data = tmp->get_mesh()->vertex_data;
+
+				//II world matrix
+				//¹¹½¨Ðý×ª
+				fvector_3d forward_vector = tmp->get_mesh()->forward_vector;
+				fvector_3d right_vector = tmp->get_mesh()->right_vector;
+				fvector_3d up_vector = tmp->get_mesh()->up_vector;
+
+				fvector_3d position = tmp->get_mesh()->position;
+				fvector_3d scale = tmp->get_mesh()->scale;
+
+				//UVN¾ØÕó
+				//½ÃÕý
+				fvector_3d dot_position;
+				dot_position.x = fvector_3d::dot(position, right_vector);
+				dot_position.y = fvector_3d::dot(position, up_vector);
+				dot_position.z = fvector_3d::dot(position, forward_vector);
+
+				data_3d.matrix = {
+				right_vector.x * scale.x,up_vector.x * scale.y,forward_vector.x * scale.z,0.f,
+				right_vector.y * scale.x,up_vector.y * scale.y,forward_vector.y * scale.z,0.f,
+				right_vector.z * scale.x,up_vector.z * scale.y,forward_vector.z * scale.z,0.f,
+				dot_position.x,dot_position.y,dot_position.z,				1.f
+				};
+
+				//±£´æ
+				tmp->get_transform()->matrix = data_3d.matrix;
+			}
+			else
+			{
+				frame_render_data3.push_back(frender_data_3d());
+				frender_data_3d& data_3d = frame_render_data3[frame_render_data3.size() - 1];
+				data_3d.matrix = tmp->get_transform()->matrix;
+			}
+		}
+	}
+
+	bool is_inside_triangles(
+		const std::vector<primitives::ftriangle>& in_triangles,
+		int x, int y, fvector_4d& in_color)
+	{
+		for (auto& tmp : in_triangles)
+		{
+			if (primitives::is_inside_triangle(tmp, x, y))
+			{
+				in_color = tmp.Color;
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	//»æÖÆÖ¡»º´æÊý¾Ý
+	void frender_engine::draw(float in_time)
+	{
+		//Ïà¶Ô×ø±ê×ªÊÀ½ç
+		vector<fvector_4d> world_pos;
+		for (auto& tmp : frame_render_data3)
+		{
+			for (size_t i = 0; i < tmp.vertex_data.size(); i += 3)
+			{
+				{
+					fvector_3d v = tmp.vertex_data[i];
+					fvector_4d mesh_pos_world = math_utils::mul(fvector_4d(v.x, v.y, v.z, 1.f), tmp.matrix);
+					mesh_pos_world.w = 1.f;
+					world_pos.push_back(mesh_pos_world);
+				}
+
+				{
+					fvector_3d v = tmp.vertex_data[i + 1];
+					fvector_4d mesh_pos_world = math_utils::mul(fvector_4d(v.x, v.y, v.z, 1.f), tmp.matrix);
+					mesh_pos_world.w = 1.f;
+					world_pos.push_back(mesh_pos_world);
+				}
+
+				{
+					fvector_3d v = tmp.vertex_data[i + 2];
+					fvector_4d mesh_pos_world = math_utils::mul(fvector_4d(v.x, v.y, v.z, 1.f), tmp.matrix);
+					mesh_pos_world.w = 1.f;
+					world_pos.push_back(mesh_pos_world);
+				}
+			}
+		}
+
+		//×ªµ½²Ã¼ô¿Õ¼ä
+		vector<fvector_4d> clip_space;
+		for (size_t i = 0; i < world_pos.size(); i += 3)
+		{
+			{
+				fvector_4d point = world_pos[i];
+				fvector_4d cs_point = math_utils::mul(point, camera.get_transform()->viewProj_matrix);
+
+				clip_space.push_back(cs_point);
+			}
+
+			{
+				fvector_4d point = world_pos[i + 1];
+				fvector_4d cs_point = math_utils::mul(point, camera.get_transform()->viewProj_matrix);
+
+				clip_space.push_back(cs_point);
+			}
+
+			{
+				fvector_4d point = world_pos[i + 2];
+				fvector_4d cs_point = math_utils::mul(point, camera.get_transform()->viewProj_matrix);
+
+				clip_space.push_back(cs_point);
+			}
+		}
+
+		//Æë´Î³ý·¨ Ó³Éäµ½NDC¿Õ¼ä
+		vector<fvector_4d> ndc_space;
+		for (size_t i = 0; i < clip_space.size(); i += 3)
+		{
+			{
+				fvector_4d ndc;
+				ndc.x = clip_space[i].x / clip_space[i].w;
+				ndc.y = clip_space[i].y / clip_space[i].w;
+				ndc.z = clip_space[i].z / clip_space[i].w;
+
+				ndc_space.push_back(ndc);
+			}
+
+			{
+				fvector_4d ndc;
+				ndc.x = clip_space[i + 1].x / clip_space[i + 1].w;
+				ndc.y = clip_space[i + 1].y / clip_space[i + 1].w;
+				ndc.z = clip_space[i + 1].z / clip_space[i + 1].w;
+
+				ndc_space.push_back(ndc);
+			}
+
+			{
+				fvector_4d ndc;
+				ndc.x = clip_space[i + 2].x / clip_space[i + 2].w;
+				ndc.y = clip_space[i + 2].y / clip_space[i + 2].w;
+				ndc.z = clip_space[i + 2].z / clip_space[i + 2].w;
+
+				ndc_space.push_back(ndc);
+			}
+		}
+
+		frender_data_2d render_data2;
+		//NDCÓ³Éäµ½Êµ¼ÊÏñËØ
+		for (size_t i = 0; i < ndc_space.size(); i += 3)
+		{
+			render_data2.vertex_data.push_back(fvector_2d(
+				(ndc_space[i].x * 0.5f + 0.5f) * viewport_config.viewport_size.x,//Ó³Éäµ½Êµ¼ÊÆÁÄ»¿Õ¼ä
+				(ndc_space[i].y * 0.5f + 0.5f) * viewport_config.viewport_size.y));//Ó³Éäµ½Êµ¼ÊÆÁÄ»¿Õ¼ä
+
+			render_data2.vertex_data.push_back(fvector_2d(
+				(ndc_space[i + 1].x * 0.5f + 0.5f) * viewport_config.viewport_size.x,//Ó³Éäµ½Êµ¼ÊÆÁÄ»¿Õ¼ä
+				(ndc_space[i + 1].y * 0.5f + 0.5f) * viewport_config.viewport_size.y));//Ó³Éäµ½Êµ¼ÊÆÁÄ»¿Õ¼ä
+
+			render_data2.vertex_data.push_back(fvector_2d(
+				(ndc_space[i + 2].x * 0.5f + 0.5f) * viewport_config.viewport_size.x,//Ó³Éäµ½Êµ¼ÊÆÁÄ»¿Õ¼ä
+				(ndc_space[i + 2].y * 0.5f + 0.5f) * viewport_config.viewport_size.y));//Ó³Éäµ½Êµ¼ÊÆÁÄ»¿Õ¼ä
+		}
+
+		//2.ÄÃµ½buff
+		std::vector<unsigned char> data;
+		SimpleImage::FImageInfo image_info;
+		image_info.Height = (int)viewport_config.viewport_size.y;
+		image_info.Width = (int)viewport_config.viewport_size.x;
+		image_info.Channel = SimpleImage::EImageChannel::Channel_24Bit;
+		image_info.ImageType = SimpleImage::EImageType::Bmp;
+		SimpleImage::GetImageDataExcludeHeaderInfor(image_info, data);
+
+		//3.×¼±¸Èý½ÇÐÎ	
+		std::vector<primitives::ftriangle> triangles;
+		for (int i = 0; i < (int)render_data2.vertex_data.size(); i += 3)
+		{
+			triangles.push_back(primitives::ftriangle());
+			primitives::ftriangle& in_triangle = triangles[triangles.size() - 1];
+
+			in_triangle.point_1 = render_data2.vertex_data[i];
+			in_triangle.point_2 = render_data2.vertex_data[i + 1];
+			in_triangle.point_3 = render_data2.vertex_data[i + 2];
+			in_triangle.Color.x = 32;
+			in_triangle.Color.y = 100;
+			in_triangle.Color.z = 255;
+		}
+
+		//4.¹âÕ¤»¯ ºÏ²¢½×¶Î
+		for (int i = 0; i < image_info.Height; i++)
+		{
+			for (int j = 0; j < image_info.Width * (int)image_info.Channel; j += 3)
+			{
+				//row ÐÐÊý
+				int number_rows = i * image_info.Width * image_info.Channel;
+
+				//ÏñËØµÄÎ»ÖÃ
+				int x = j / image_info.Channel;
+				int y = i;
+
+				fvector_4d my_color;
+				if (is_inside_triangles(triangles, x, y, my_color))
+				{
+					//BGR bmp
+					data[number_rows + j] = my_color.x;			//B
+					data[number_rows + j + 1] = my_color.y;		//G
+					data[number_rows + j + 2] = my_color.z;		//R
+				}
+				else
+				{
+					//BGR bmp
+					data[number_rows + j] = 0;		//B
+					data[number_rows + j + 1] = 0;		//G
+					data[number_rows + j + 2] = 0;		//R
+				}
+			}
+		}
+
+		//Êä³ö½×¶Î
+		wchar_t path[1024] = { 0 };
+		if (!wpath.empty())
+		{
+			wget_printf(path, wpath.c_str(), index++);
+		}
+		else
+		{
+			wchar_t f[] = L"../Math/a_%i.bmp";
+			wget_printf(path, f, index++);
+		}
+
+		bool bok = SimpleImage::SaveImageToDisk(
+			image_info,
+			path,
+			data);
+
+		open_url_w(path);
+	}
+
+	void frender_engine::end_update(float in_time)
+	{
+		//Çå³ýÖ¡»º´æÊý¾Ý
+		frame_render_data3.clear();
+	}
+
+	fobject::fobject()
+	{
+		gobject_array.push_back(this);
+	}
+
+	void fobject::gobject_array_init(float in_time)
+	{
+		for (auto &tmp : gobject_array)
+		{
+			tmp->build(in_time);
+		}
+	}
+
+	void fobject::gobject_array_tick(float in_time)
+	{
+		for (auto& tmp : gobject_array)
+		{
+			tmp->tick(in_time);
+		}
+	}
+
+	void fobject::gobject_array_clear()
+	{
+		//Í¨ÖªÉÏ²ãÂß¼­ ÎÒÒªÇå³ýÁË
+		for (auto& tmp : gobject_array)
+		{
+			tmp->clear();
+		}
+
+		//ÕæÕýÇå³ý
+		for (auto& tmp : gobject_array)
+		{
+			delete tmp;
+			tmp = nullptr;
+		}
+
+		//ÔÙÇå³ýÈÝÆ÷
+		gobject_array.clear();
+	}
+
+	void fengine::init(float in_time)
+	{
+		fobject::gobject_array_init(in_time);
+	}
+
+	void fengine::tick(float in_time)
+	{
+		fobject::gobject_array_tick(in_time);
+	}
+
+	void fengine::exit()
+	{
+		fobject::gobject_array_clear();
+	}
+
+	ftransform_component::ftransform_component()
+		:scale(1.f)
+		, forward_vector(0.f, 0.f, 1.f)
+		, right_vector(1.f, 0.f, 0.f)
+		, up_vector(0.f, 1.f, 0.f)
+	{
+
+	}
+
+	void ftransform_component::tick(float in_time)
+	{
+		for (auto &tmp : children)
+		{
+			if (ftransform_component *in_component = dynamic_cast<ftransform_component*>(tmp))
+			{
+				in_component->position = position;
+				in_component->rotation = rotation;
+				in_component->scale = scale;
+
+				in_component->forward_vector = forward_vector;
+				in_component->up_vector = up_vector;
+				in_component->right_vector = right_vector;
+
+				in_component->viewProj_matrix = viewProj_matrix;
+				in_component->matrix = matrix;
+			}
+		}
+	}
+
+	void ftransform_component::set_rot(const frotator& in_rot)
+	{
+		//±£´æÒ»ÏÂ
+		rotation = in_rot;
+
+		//ÐÂµÄ·½·¨
+		//½«Ô­ÏÈ±£´æµÄ¾ØÕó×ªÎªÅ·À­½Ç
+		//frotator last_rotator;
+		//fmatrix_3x3 last_matrix_3x3(matrix);
+		//last_rotation.object_to_inertia(quat);
+
+		frotator new_rotator =  rotation - last_rotation;
+
+		printf("  rotation(yaw=%f.roll=%f.path=%f)\n", rotation.yaw, rotation.roll, rotation.pitch);
+		printf("last_rotator(yaw=%f.roll=%f.path=%f)\n", last_rotation.yaw, last_rotation.roll, last_rotation.pitch);
+		printf("------------------\n");
+
+		//¹¹½¨ÎªÐý×ª¾ØÕó
+		fmatrix_3x3 rot_matrix_3x3;
+		//rot_matrix_3x3.object_to_inertia(in_rot); //Ðý×ªroll»á³öÏÖÎÊÌâ
+		fquat q;
+		q.object_to_inertia(new_rotator);
+
+		math_utils::object_to_inertia(q, rot_matrix_3x3);
+
+		//¹¹½¨ÐÂµÄfor right up
+		forward_vector = math_utils::mul(forward_vector, rot_matrix_3x3);
+		right_vector = math_utils::mul(right_vector, rot_matrix_3x3);
+		up_vector = math_utils::mul(up_vector, rot_matrix_3x3);
+
+		last_rotation = rotation;
+	}
 }

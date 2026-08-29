@@ -1,23 +1,23 @@
 #pragma once
 //Copyright (C) RenZhai.2019.All Rights Reserved.
-//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Õ¬
-//ï¿½ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½Ï¸Ô´ï¿½ë½²ï¿½ï¿½ï¿½ï¿½AboutCG ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½cï¿½ï¿½ï¿½Ô¡ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ£º
+//×÷Õß ÈËÕ¬
+//¸Ãc¿âµÄÏêÏ¸Ô´Âë½²½âÔÚAboutCG ¡¶ÊÖ°ÑÊÖÈëÃÅÓ²ºËcÓïÑÔ¡·ÊÓÆµ¹¤³ÌÀïÃæ£º
 //https://www.aboutcg.org/courseDetails/902/introduce
-//Ï£ï¿½ï¿½Ñ§Ï°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ¼¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½UE4ï¿½ï¿½Ï·, ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½
+//Ï£ÍûÑ§Ï°ÆäËû·½Ãæ¼¼Êõ ±ÈÈç×öUE4ÓÎÏ·, ¿ÉÒÔ·ÃÎÊÏÂÁÐÍøÖ·£º
 //https://zhuanlan.zhihu.com/p/60117613
 //
-//bibiï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¬Ïµï¿½Ð½Ì³Ì½ï¿½ï¿½Ü£ï¿½
+//bibi¿ÉÒÔ¿´µ½¸÷¸öÈËÕ¬ÏµÁÐ½Ì³Ì½éÉÜ£º
 //https://space.bilibili.com/29544409
 //
-//ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½ï¿½ï¿½Õ¾
+//¸öÈË²©¿ÍÍøÕ¾
 //http://renzhai.net
 //
-//ï¿½ï¿½ï¿½Ú±ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ :
-//ï¿½ï¿½ï¿½Ö°æ±¾(ï¿½ï¿½Ï¸)ï¿½ï¿½
+//¹ØÓÚ±¾Ì×°¸ÀýµÄÏêÏ¸²Ù×÷ :
+//ÎÄ×Ö°æ±¾(ÏêÏ¸)£º
 //https://zhuanlan.zhihu.com/p/144558934
-//ï¿½ï¿½Æµï¿½æ±¾ï¿½ï¿½
+//ÊÓÆµ°æ±¾£º
 //https://www.bilibili.com/video/BV1x5411s7s3
-#include "../simple_c_core/simple_core_minimal.h"
+#include "simple_library/public/simple_core_minimal/simple_c_core/simple_core_minimal.h"
 
 _CRT_BEGIN_C_HEADER
 #define _number_of_successful_conversions(a) a
@@ -26,14 +26,14 @@ _CRT_BEGIN_C_HEADER
 
 typedef struct
 {
-    int index;
-    char paths[2048][512];//MAX_PATH
+	int index;
+	char paths[2048][512];//MAX_PATH
 }def_c_paths;
 
 typedef struct
 {
-    int index;
-    wchar_t paths[2048][512];//MAX_PATH
+	int index;
+	wchar_t paths[2048][512];//MAX_PATH
 }def_c_paths_w;
 
 void init_def_c_paths(def_c_paths *c_paths);
@@ -41,84 +41,129 @@ void init_def_c_paths_w(def_c_paths_w* c_paths);
 
 int copy_file(char *Src, char *Dest);
 
-void find_files(char const *in_path, def_c_paths *str,bool b_recursion);
+//ÒÆ³ýÄ¿Â¼ÏÂËùÓÐÎÄ¼þ
+void remove_dir_all_files(const char* file_dir);
+
+//µÝ¹éÒÆ³ýÎÄ¼þÂ·¾¶ Ê¹ÓÃ¸ÃAPIÈ·±£Â·¾¶ÏÂÒÑ¾­Ã»ÓÐÎÄ¼þ Ö»ÓÐÎÄ¼þ¼Ð
+void remove_directory_all(const char* file_dir);
+
+void find_files(char const *in_path, def_c_paths *str,bool b_recursion,bool b_include_folder);
 
 bool is_file_exists(char const* filename);
 
 bool create_file(char const *filename);
  
-//ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
+//´´½¨Â·¾¶
 bool create_file_directory(char const *in_path);
 
-//ï¿½ò¿ªµï¿½Ö·
+//´ò¿ªµØÖ·
 bool open_url(const char* url);
 
-//Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½url
+//Í¨¹ý²ÎÊý´ò¿ªurl
 bool open_url_by_param(const char* url, const char* param);
 
-//Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//Í¨¹ý²Ù×÷´ò¿ªÄ³¸ö¶«Î÷
 bool open_by_operation(const char* in_operation, const char* url, const char* param);
 
-//ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+//´ò¿ªÒ»¸öÎÄ¼þ¼Ð
 bool open_explore(const char* url);
 
-//Ê¹ï¿½Ã¸Ã½Ó¿ï¿½ Ò»ï¿½ï¿½Òªï¿½ï¿½Ê¼ï¿½ï¿½buf
+//Ê¹ÓÃ¸Ã½Ó¿Ú Ò»¶¨Òª³õÊ¼»¯buf
 bool get_file_buf(const char *path,char *buf);
 
 bool save_file_buff(const char* path, char* buf);
 
 bool add_file_buf(const char *path, char *buf);
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ä·ï¿½Ê½ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0 ï¿½Ô¶ï¿½ï¿½Ø¶Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½Æ´æ´¢
+//Õâ¸öº¯ÊýÊÇÒÔ×Ö·û´®µÄ·½Ê½´æ´¢£¬Èç¹ûÊý¾ÝÖÐÓÐ0 ×Ô¶¯½Ø¶Ï£¬½¨ÒéÓÃ¶þ½øÖÆ´æ´¢
 bool add_new_file_buf(const char *path, char *buf);
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Æ·ï¿½Ê½ï¿½ï¿½È¡
+//Õâ¸öÊÇÒÔ¶þ½øÖÆ·½Ê½¶ÁÈ¡
 bool load_data_from_disk(const char* path, char* buf);
 
 unsigned int get_file_size_by_filename(const char *filename);
 
 unsigned int get_file_size(FILE *file_handle);
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Æ·ï¿½Ê½ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½Ô¶ï¿½ï¿½Ø¶Ïµï¿½ï¿½ï¿½ï¿½
+//Õâ¸öÊÇÒÔ¶þ½øÖÆ·½Ê½´æ´¢£¬²»»áÓöµ½Ïñ0×Ô¶¯½Ø¶ÏµÄÇé¿ö
 bool save_data_to_disk(const char* path, char* buf, int buf_size);
-//ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½Õ­ï¿½Ö·ï¿½
+//¿í×Ö·ûºÍÕ­×Ö·û
 // 
-//ï¿½ï¿½ï¿½Ö·ï¿½×ªÕ­ï¿½Ö·ï¿½
+//¿í×Ö·û×ªÕ­×Ö·û
 _number_of_successful_conversions(size_t) wchar_t_to_char(
-    _out_pram(char*) dst_char,
-    size_t char_size,
-    _in_pram(wchar_t const*) _Src);
+	_out_pram(char*) dst_char,
+	size_t char_size,
+	_in_pram(wchar_t const*) _Src);
 
-//Õ­ï¿½Ö·ï¿½×ªï¿½ï¿½ï¿½Ö·ï¿½
+//Õ­×Ö·û×ª¿í×Ö·û
 _number_of_successful_conversions(size_t) char_to_wchar_t(
-    _out_pram(wchar_t*) dst_wchar_t,
-    size_t wchar_t_size,
-    _in_pram(char const*) _Src);
+	_out_pram(wchar_t*) dst_wchar_t,
+	size_t wchar_t_size,
+	_in_pram(char const*) _Src);
 
-//ï¿½ï¿½ï¿½Ö·ï¿½
+//¿í×Ö·û
 //////////////////////////////////////////////
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ä·ï¿½Ê½ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0 ï¿½Ô¶ï¿½ï¿½Ø¶Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½Æ´æ´¢
+//Õâ¸öº¯ÊýÊÇÒÔ×Ö·û´®µÄ·½Ê½´æ´¢£¬Èç¹ûÊý¾ÝÖÐÓÐ0 ×Ô¶¯½Ø¶Ï£¬½¨ÒéÓÃ¶þ½øÖÆ´æ´¢
 bool add_new_file_buf_w(const wchar_t* path, char* buf);
 
 bool get_file_buf_w(const wchar_t* path, char* buf);
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Æ·ï¿½Ê½ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½Ô¶ï¿½ï¿½Ø¶Ïµï¿½ï¿½ï¿½ï¿½
+//Õâ¸öÊÇÒÔ¶þ½øÖÆ·½Ê½´æ´¢£¬²»»áÓöµ½Ïñ0×Ô¶¯½Ø¶ÏµÄÇé¿ö
 bool save_data_to_disk_w(const wchar_t* path, char* buf,int buf_size);
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Æ·ï¿½Ê½ï¿½ï¿½È¡ bufï¿½Ä´ï¿½Ð¡Òªï¿½ï¿½Êµï¿½Ê´ï¿½Ð¡+1 ï¿½ï¿½Îªï¿½ï¿½ï¿½Ò»Î»ï¿½ï¿½ï¿½ï¿½/0
+//Õâ¸öÊÇÒÔ¶þ½øÖÆ·½Ê½¶ÁÈ¡ bufµÄ´óÐ¡Òª±ÈÊµ¼Ê´óÐ¡+1 ÒòÎª×îºóÒ»Î»Áô¸ø/0
 bool load_data_from_disk_w(const wchar_t* path, char* buf);
 
 bool is_file_exists_w(const wchar_t *filename);
 
-//ï¿½ò¿ªµï¿½Ö·
+//´ò¿ªµØÖ·
 bool open_url_w(const wchar_t* url);
 
 bool open_url_by_param_w(const wchar_t* url,const wchar_t *param);
 
 bool open_by_operation_w(const wchar_t *in_operation, const wchar_t* url, const wchar_t* param);
 
-//ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+//´ò¿ªÒ»¸öÎÄ¼þ¼Ð
 bool open_explore_w(const wchar_t* url);
 
 unsigned int get_file_size_by_filename_w(const wchar_t* filename);
+
+//v2°æ±¾ Â·¾¶×ÔÊÊÓ¦
+
+typedef struct
+{
+	int index;//±íÊ¾µ±Ç°Æ«ÒÆ
+	int num;//±íÊ¾ÊýÁ¿
+	char* paths;//MAX_PATH
+}def_c_paths_v2;
+
+typedef struct
+{
+	int index;//±íÊ¾µ±Ç°Æ«ÒÆ
+	int num;//±íÊ¾ÊýÁ¿
+	wchar_t* paths;//MAX_PATH
+}def_c_paths_w_v2;
+
+void init_def_c_paths_v2(def_c_paths_v2* c_paths);
+void init_def_c_paths_w_v2(def_c_paths_w_v2* c_paths);
+
+void find_files_v2(char const* in_path, def_c_paths_v2* str, bool b_recursion, bool b_include_folder);
+
+int get_def_c_offset(const char* str);
+int get_def_c_offset_w(const wchar_t* str);
+
+void add_def_c_paths(def_c_paths_v2* c_paths,const char *str);
+void add_def_c_paths_w(def_c_paths_w_v2* c_paths, const wchar_t* str);
+
+int get_def_c_paths_offset_by_index(def_c_paths_v2* c_paths, int index);
+int get_def_c_paths_offset_by_index_w(def_c_paths_w_v2* c_paths, int index);
+
+char* get_def_c_paths_by_offset(def_c_paths_v2* c_paths, int in_offset);
+wchar_t* get_def_c_paths_by_offset_w(def_c_paths_w_v2* c_paths, int in_offset);
+
+char* get_def_c_paths_by_index(def_c_paths_v2* c_paths,int index);
+wchar_t *get_def_c_paths_by_index_w(def_c_paths_w_v2* c_paths, int index);
+
+void destroy_def_c_paths_v2(def_c_paths_v2* c_paths);
+void destroy_def_c_paths_w_v2(def_c_paths_w_v2* c_paths);
 _CRT_END_C_HEADER

@@ -1,128 +1,128 @@
 #pragma once
 //Copyright (C) RenZhai.2019.All Rights Reserved.
-//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Õ¬
-//ï¿½ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½Ï¸Ô´ï¿½ë½²ï¿½ï¿½ï¿½ï¿½AboutCG ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½cï¿½ï¿½ï¿½Ô¡ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ£º
+//×÷Õß ÈËÕ¬
+//¸Ãc¿âµÄÏêÏ¸Ô´Âë½²½âÔÚAboutCG ¡¶ÊÖ°ÑÊÖÈëÃÅÓ²ºËcÓïÑÔ¡·ÊÓÆµ¹¤³ÌÀïÃæ£º
 //https://www.aboutcg.org/courseDetails/902/introduce
-//Ï£ï¿½ï¿½Ñ§Ï°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ¼¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½UE4ï¿½ï¿½Ï·, ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½
+//Ï£ÍûÑ§Ï°ÆäËû·½Ãæ¼¼Êõ ±ÈÈç×öUE4ÓÎÏ·, ¿ÉÒÔ·ÃÎÊÏÂÁÐÍøÖ·£º
 //https://zhuanlan.zhihu.com/p/60117613
 //
-//bibiï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¬Ïµï¿½Ð½Ì³Ì½ï¿½ï¿½Ü£ï¿½
+//bibi¿ÉÒÔ¿´µ½¸÷¸öÈËÕ¬ÏµÁÐ½Ì³Ì½éÉÜ£º
 //https://space.bilibili.com/29544409
 //
-//ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½ï¿½ï¿½Õ¾
+//¸öÈË²©¿ÍÍøÕ¾
 //http://renzhai.net
 //
-//ï¿½ï¿½ï¿½Ú±ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ :
-//ï¿½ï¿½ï¿½Ö°æ±¾(ï¿½ï¿½Ï¸)ï¿½ï¿½
+//¹ØÓÚ±¾Ì×°¸ÀýµÄÏêÏ¸²Ù×÷ :
+//ÎÄ×Ö°æ±¾(ÏêÏ¸)£º
 //https://zhuanlan.zhihu.com/p/144558934
-//ï¿½ï¿½Æµï¿½æ±¾ï¿½ï¿½
+//ÊÓÆµ°æ±¾£º
 //https://www.bilibili.com/video/BV1x5411s7s3
-#include "../simple_c_core/simple_core_minimal.h"
+#include "simple_library/public/simple_core_minimal/simple_c_core/simple_core_minimal.h"
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¹ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½
+//ÔËÐÐÅú´¦Àí ÒÔ¹ÜÀíÔ±Æô¶¯
 //mshta vbscript:CreateObject("Shell.Application").ShellExecute("%~dp0git_install.exe","1 F:\c\c\20\20.exe F:\c\c\git_install\git_install\icon1.ico test_git1","","runas",1)(window.close)&&exit
-//ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½
+//ÏÂÃæÊÇ°¸Àý
 /*
-#define REG_SHELL_DIRECTORY                    "*\\Shell\\"                        //ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½
-#define REG_DIRECTORY                        "Directory\\Background\\shell\\"    //ï¿½Ú¿Õ°×µÄµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ ï¿½ï¿½Ó°ï¿½Å¥
-#define REG_DESKTOPBACKGROUND                "DesktopBackground\\shell\\"        //ï¿½Ú¿Õ°×µÄµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ ï¿½ï¿½Ó°ï¿½Å¥
+#define REG_SHELL_DIRECTORY					"*\\Shell\\"						//ÔÚ¶ÔÏóÉÏÊó±êÓÒ¼ü
+#define REG_DIRECTORY						"Directory\\Background\\shell\\"	//ÔÚ¿Õ°×µÄµØÇøµã»÷ÓÒ¼ü Ìí¼Ó°´Å¥
+#define REG_DESKTOPBACKGROUND				"DesktopBackground\\shell\\"		//ÔÚ¿Õ°×µÄµØÇøµã»÷ÓÒ¼ü Ìí¼Ó°´Å¥
 
 #define REG_PATH_TEST REG_DIRECTORY
 int main(int argc, char *argv[])
 {
-    const char *commit_type = argv[1];
-    const char *path_exe = argv[2];
-    const char *path_icon = argv[3];
-    const char *name = argv[4];
+	const char *commit_type = argv[1];
+	const char *path_exe = argv[2];
+	const char *path_icon = argv[3];
+	const char *name = argv[4];
 
-    char buf_reg_key[MAX_PATH] = { 0 };
-    char buf_reg_sub_key[MAX_PATH] = { 0 };
-    strcpy(buf_reg_key, REG_PATH_TEST);
-    strcat(buf_reg_key, name);
+	char buf_reg_key[MAX_PATH] = { 0 };
+	char buf_reg_sub_key[MAX_PATH] = { 0 };
+	strcpy(buf_reg_key, REG_PATH_TEST);
+	strcat(buf_reg_key, name);
 
-    strcpy(buf_reg_sub_key, REG_PATH_TEST);
-    strcat(buf_reg_sub_key, name);
-    strcat(buf_reg_sub_key, "\\command");
+	strcpy(buf_reg_sub_key, REG_PATH_TEST);
+	strcat(buf_reg_sub_key, name);
+	strcat(buf_reg_sub_key, "\\command");
 
-    if (strcmp(commit_type ,"1") == 0) //ï¿½ï¿½×°
-    {
-        //key
-        freg_info info;
-        init_feg_info(&info);
+	if (strcmp(commit_type ,"1") == 0) //°²×°
+	{
+		//key
+		freg_info info;
+		init_feg_info(&info);
 
-        strcpy(info.filename, buf_reg_key);
-        info.hkey = HKEY_CLASSES_ROOT;
-        {
-            info.value[info.size_value].type = REG_SZ;
-            strcpy(info.value[info.size_value++].buf, name);
+		strcpy(info.filename, buf_reg_key);
+		info.hkey = HKEY_CLASSES_ROOT;
+		{
+			info.value[info.size_value].type = REG_SZ;
+			strcpy(info.value[info.size_value++].buf, name);
 
-            info.value[info.size_value].type = REG_SZ;
-            strcpy(info.value[info.size_value].name, "icon");
-            strcpy(info.value[info.size_value++].buf, path_icon);
-        }
+			info.value[info.size_value].type = REG_SZ;
+			strcpy(info.value[info.size_value].name, "icon");
+			strcpy(info.value[info.size_value++].buf, path_icon);
+		}
 
-        if (!register_info(&info))
-        {
-            printf("\n 1 ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ô±È¨ï¿½ï¿½~~ \n");
-            system("pause");
+		if (!register_info(&info))
+		{
+			printf("\n 1 ÐèÒª¹ÜÀíÔ±È¨ÏÞ~~ \n");
+			system("pause");
 
-            return 1;
-        }
+			return 1;
+		}
 
-        //sub key
-        init_feg_info(&info);
-        strcpy(info.filename, buf_reg_sub_key);
-        info.hkey = HKEY_CLASSES_ROOT;
-        {
-            info.value[info.size_value].type = REG_SZ;
-            strcpy(info.value[info.size_value++].buf, path_exe);
-        }
+		//sub key
+		init_feg_info(&info);
+		strcpy(info.filename, buf_reg_sub_key);
+		info.hkey = HKEY_CLASSES_ROOT;
+		{
+			info.value[info.size_value].type = REG_SZ;
+			strcpy(info.value[info.size_value++].buf, path_exe);
+		}
 
-        if (!register_info(&info))
-        {
-            printf("\n 2 ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ô±È¨ï¿½ï¿½~~ \n");
-            system("pause");
+		if (!register_info(&info))
+		{
+			printf("\n 2 ÐèÒª¹ÜÀíÔ±È¨ÏÞ~~ \n");
+			system("pause");
 
-            return 1;
-        }
-    }
-    else if (strcmp(commit_type, "2") == 0) //Ð¶ï¿½ï¿½
-    {
-        if (delete_register_info(HKEY_CLASSES_ROOT, buf_reg_key))
-        {
-            delete_reg_key(HKEY_CLASSES_ROOT, REG_PATH_TEST, name);
-        }
-    }
+			return 1;
+		}
+	}
+	else if (strcmp(commit_type, "2") == 0) //Ð¶ÔØ
+	{
+		if (delete_register_info(HKEY_CLASSES_ROOT, buf_reg_key))
+		{
+			delete_reg_key(HKEY_CLASSES_ROOT, REG_PATH_TEST, name);
+		}
+	}
 
-    return 0;
+	return 0;
 }
 */
 
 _CRT_BEGIN_C_HEADER
 typedef struct
 {
-    char name[MAX_PATH];
-    DWORD type;
-    char buf[1024];
+	char name[MAX_PATH];
+	DWORD type;
+	char buf[1024];
 }freg_value;
 
 typedef struct
 {
-    HKEY hkey;
-    char filename[MAX_PATH];
+	HKEY hkey;
+	char filename[MAX_PATH];
 
-    int size_value;
-    freg_value value[1024];
+	int size_value;
+	freg_value value[1024];
 }freg_info;
 
 void init_feg_info(freg_info *info);
 
-//×¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¢
+//×¢²á ¼üÐÅÏ¢
 bool register_info(const freg_info *info);
 
-//ï¿½ï¿½ï¿½î²»ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½Ê§ï¿½ï¿½
+//×ÓÏî²»ÔËÐÐ´æÔÚ×ÓÏî ·ñÔòÉ¾³ýÊ§°Ü
 bool delete_register_info(HKEY hkey, const char *filename);
 
-//ï¿½ï¿½ï¿½î²»ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½Ê§ï¿½ï¿½
+//×ÓÏî²»ÔËÐÐ´æÔÚ×ÓÏî ·ñÔòÉ¾³ýÊ§°Ü
 bool delete_reg_key(HKEY hkey, const char *filename, const char *subkey_name);
 _CRT_END_C_HEADER

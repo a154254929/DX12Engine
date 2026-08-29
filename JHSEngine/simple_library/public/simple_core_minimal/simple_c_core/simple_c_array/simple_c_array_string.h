@@ -1,40 +1,39 @@
 #pragma once
 //Copyright (C) RenZhai.2019.All Rights Reserved.
-//锟斤拷锟斤拷 锟斤拷宅
-//锟斤拷c锟斤拷锟斤拷锟较冈达拷虢诧拷锟斤拷锟紸boutCG 锟斤拷锟街帮拷锟斤拷锟斤拷锟斤拷硬锟斤拷c锟斤拷锟皆★拷锟斤拷频锟斤拷锟斤拷锟斤拷锟芥：
+//作者 人宅
+//该c库的详细源码讲解在AboutCG 《手把手入门硬核c语言》视频工程里面：
 //https://www.aboutcg.org/courseDetails/902/introduce
-//希锟斤拷学习锟斤拷锟斤拷锟斤拷锟芥技锟斤拷 锟斤拷锟斤拷锟斤拷UE4锟斤拷戏, 锟斤拷锟皆凤拷锟斤拷锟斤拷锟斤拷锟斤拷址锟斤拷
+//希望学习其他方面技术 比如做UE4游戏, 可以访问下列网址：
 //https://zhuanlan.zhihu.com/p/60117613
 //
-//bibi锟斤拷锟皆匡拷锟斤拷锟斤拷锟斤拷锟斤拷宅系锟叫教程斤拷锟杰ｏ拷
+//bibi可以看到各个人宅系列教程介绍：
 //https://space.bilibili.com/29544409
 //
-//锟斤拷锟剿诧拷锟斤拷锟斤拷站
+//个人博客网站
 //http://renzhai.net
 //
-//锟斤拷锟节憋拷锟阶帮拷锟斤拷锟斤拷锟斤拷细锟斤拷锟斤拷 :
-//锟斤拷锟街版本(锟斤拷细)锟斤拷
+//关于本套案例的详细操作 :
+//文字版本(详细)：
 //https://zhuanlan.zhihu.com/p/144558934
-//锟斤拷频锟芥本锟斤拷
+//视频版本：
 //https://www.bilibili.com/video/BV1x5411s7s3
 #include "Core/simple_array_c_macro.h"
-#include "../../../simple_library_macro.h"
 
 typedef struct
 {
-    wchar_t data[8196];
+	wchar_t data[8196];
 }wstr_node;
 SIMPLE_ARRAY_C_STRUCT(simple_c_wstring, wstr_node)
 
 typedef struct
 {
-    char data[8196];
+	char data[8196];
 }str_node;
 SIMPLE_ARRAY_C_STRUCT(simple_c_string,str_node)
 
 _CRT_BEGIN_C_HEADER
-//窄锟街凤拷
- void init_string(simple_c_string *array_c);//锟斤拷始锟斤拷 锟斤拷锟斤拷锟节达拷
+//窄字符
+ void init_string(simple_c_string *array_c);//初始化 分配内存
 
  void destroy_string(simple_c_string *array_c);
 
@@ -50,10 +49,10 @@ _CRT_BEGIN_C_HEADER
 
  bool is_exist(char const *  in_data, simple_c_string *array_c);
  
- //锟斤拷锟街凤拷
+ //宽字符
  void dismantling_wstring(const wchar_t* in_data, const wchar_t* str_sub, simple_c_wstring* array_c);
  
- void init_wstring(simple_c_wstring* array_c);//锟斤拷始锟斤拷 锟斤拷锟斤拷锟节达拷
+ void init_wstring(simple_c_wstring* array_c);//初始化 分配内存
 
  void destroy_wstring(simple_c_wstring* array_c);
 
