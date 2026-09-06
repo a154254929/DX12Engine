@@ -74,6 +74,33 @@ namespace CollectClassInfo
         return paramElement;
     }
     
+    bool GetCodeTypeByPropn(
+        const string& rowString,
+        FVariableAnalysis& variableAnalysis)
+    {
+        char l[1024] = { 0 };
+        char r[1024] = { 0 };
+        
+        char* ptr = const_cast<char*>(rowString.c_str());
+        split(ptr, codeType, r, l, false);
+        
+        vector<string> elementStr;
+        simple_cpp_string_algorithm::parse_into_vector_array(l, elementStr, commaString);
+        
+        if (elementStr[0].find("Resource"))
+        {
+            variableAnalysis.codeType = "Resource";
+            return true;
+        }
+        else if (elementStr[0].find("Describe"))
+        {
+            variableAnalysis.codeType = "Describe";
+            return true;
+        }
+
+        return false;
+    }
+    
     bool Collection(const string& paths, FClassAnalysis& classAnalysis)
     {
         vector<string> stringArray;
@@ -249,10 +276,54 @@ namespace CollectClassInfo
                 }
             }
             
-            
-            
+            //获取标记的成员变量
+            if (contain("JPROPERTY"))
+            {
+                if (contain("CodeType"))
+                {
+                    FVariableAnalysis variableAnalysis;
+                    if (GetCodeTypeByPropn(row, variableAnalysis))
+                    {
+                        char l[1024] = { 0 };
+                        char r[1024] = { 0 };
+                        
+                        row = stringArray[i + 1];
+                        
+                        remove_char_start(rowPtr, '\t');
+                        remove_char_end(rowPtr, ';');
+                        
+                        split(rowPtr, spaceString, r, l, false);
+                        if (contain(starString))
+                        {
+                            variableAnalysis.bPointer = true;
+                            split(rowPtr, starString, r, l, false);
+                        }
+                        else if (contain(fetchAddressString))
+                        {
+                            variableAnalysis.bReference = true;
+                            split(rowPtr, fetchAddressString, r, l, false);
+                        }
+                        else
+                        {
+                            split(rowPtr, spaceString, r, l, false);
+                        }
+                        
+                        if (contain("const"))
+                        {
+                            variableAnalysis.bConst = true;
+                            remove_string_start(r, "const");
+                        }
+                        trim_start_and_end_inline(r);
+                        trim_start_and_end_inline(l);
+                        variableAnalysis.type = r;
+                        variableAnalysis.name = l;
+                        
+                        classAnalysis.variablesArray.push_back(variableAnalysis);
+                    }
+                }
+            }
         }
         
-        return false;
+        return true;
     }
 }
