@@ -35,14 +35,14 @@ struct FVariableAnalysis : public FParamElement
 struct FFunctionAnalysis
 {
     std::vector<FParamElement> paramsArray;    //参数列表
-    string returnType;                     //返回类型
+    FParamElement returnElement;               //返回类型
     
     string functionName;                   //函数名称
     bool bStatic;                          //是否是静态函数
     bool bVirtual;                         //是否是虚函数
     bool bConst;                           //是否是常量函数
     
-    string CodeType;                         //代码类型
+    string codeType;                         //代码类型
     
     FFunctionAnalysis()
         : bStatic(false)

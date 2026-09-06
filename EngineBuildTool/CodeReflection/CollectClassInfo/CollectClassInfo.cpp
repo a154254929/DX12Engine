@@ -9,6 +9,71 @@ namespace CollectClassInfo
     const char rightParenthesisString[] = ")";
     const char starString[] = "*";
     const char fetchAddressString[] = "&";
+    const char codeType[] = "CodeType";
+    
+    bool GetCodeTypeByFunction(const string& rowString, FFunctionAnalysis& functionAnalysis)
+    {
+        char* rowPtr = const_cast<char*>(rowString.c_str());
+                    
+        char l[1024] = { 0 };
+        char r[1024] = { 0 };
+                    
+        split(rowPtr, codeType, r, l, false);
+        
+        vector<string> elementStr;
+        simple_cpp_string_algorithm::parse_into_vector_array(l, elementStr, commaString);
+        
+        if (elementStr[0].find("Event") != string::npos)
+        {
+            functionAnalysis.codeType = "Event";
+            return true;
+        }
+        else if (elementStr[0].find("Describe") != string::npos)
+        {
+            functionAnalysis.codeType = "Describe";
+            return true;
+        }
+        
+        return false;
+    }
+    
+    FParamElement CollectionVariableType(
+        std::string variable,
+        ECollectionParamType collectionParamType = ECollectionParamType::CollectionParamType_Param
+    )
+    {
+        char* ptr = const_cast<char*>(variable.c_str());
+        
+        FParamElement paramElement;
+        paramElement.name = "ReturnValue";
+        
+        if (simple_cpp_string_algorithm::string_contain(variable, starString))
+        {
+            remove_char_end(ptr, '*');
+            paramElement.bPointer = true;
+        }
+        
+        if (simple_cpp_string_algorithm::string_contain(variable, fetchAddressString))
+        {
+            remove_char_end(ptr, '&');
+            paramElement.bReference = true;
+        }
+        
+        if (simple_cpp_string_algorithm::string_contain(variable, "const"))
+        {
+            trim_start_and_end_inline(ptr);
+            remove_string_start(ptr, "const");
+            paramElement.bConst = true;
+        }
+        
+        trim_start_and_end_inline(ptr);
+        remove_char_start((const_cast<char*>(variable.c_str())), '\t');
+        
+        paramElement.type = variable;
+        
+        return paramElement;
+    }
+    
     bool Collection(const string& paths, FClassAnalysis& classAnalysis)
     {
         vector<string> stringArray;
@@ -86,6 +151,105 @@ namespace CollectClassInfo
                 }
                 
             }
+            
+            //获取标记的成员函数
+            if (contain("JFUNCTION"))
+            {
+                FFunctionAnalysis funtionAnalysis;
+                if (GetCodeTypeByFunction(row, funtionAnalysis))
+                {
+                    row = stringArray[i + 1];
+                    rowPtr = const_cast<char*>(row.c_str());
+                    if (contain("static") || contain("\tstatic"))
+                    {
+                        funtionAnalysis.bStatic = true;
+                        
+                        char l[1024] = { 0 };
+                        char r[1024] = { 0 };
+                        
+                        split(rowPtr, spaceString, r, l, false);
+                        
+                        row = l;
+                    }
+                    else if (contain("virtual") || contain("\tvirtual"))
+                    {
+                        funtionAnalysis.bVirtual = true;
+                        
+                        char l[1024] = { 0 };
+                        char r[1024] = { 0 };
+                        
+                        split(rowPtr, spaceString, r, l, false);
+                        
+                        row = l;
+                    }
+                    
+                    //确定函数的返回类型
+                    char tmp[1024] = { 0 };
+                    {
+                        char r[1024] = { 0 };
+                        trim_start_inline(rowPtr);
+                        
+                        split(rowPtr, leftParenthesisString, r, tmp, false);
+                        
+                        funtionAnalysis.returnElement = CollectionVariableType(r, ECollectionParamType::CollectionParamType_Return);
+                        
+                        {
+                            remove_char_end(tmp, '}');
+                            remove_char_end(tmp, '{');
+                            trim_end_inline(tmp);
+                            remove_char_end(tmp, ';');
+                            remove_char_end(tmp, '));
+                        }
+                        
+                        char rStr[1024] = { 0 };
+                        char lStr[1024] = { 0 };
+                        
+                        split(tmp, leftParenthesisString, rStr, lStr, false);
+                        //函数名
+                        funtionAnalysis.functionName = rStr;
+                        
+                        //解析参数和参数名
+                        vector<string> elementStr;
+                        simple_cpp_string_algorithm::parse_into_vector_array(lStr, elementStr, commaString);
+                        for (auto& element : elementStr)
+                        {
+                            char* elementPtr = const_cast<char*>(element.c_str());
+                            trim_start_and_end_inline(elementPtr);
+                            
+                            FParamElement paramElement;
+                            char r[1024] = { 0 };
+                            char l[1024] = { 0 };
+                            if (simple_cpp_string_algorithm::string_contain(elementPtr, starString))
+                            {
+                                paramElement.bPointer = true;
+                                split(elementPtr, starString, r, l, false);
+                            }
+                            else if (simple_cpp_string_algorithm::string_contain(elementPtr, fetchAddressString))
+                            {
+                                paramElement.bReference = true;
+                                split(elementPtr, fetchAddressString, r, l, false);
+                            }
+                            else
+                            {
+                                split(elementPtr, spaceString, r, l, false);
+                            }
+                            if (simple_cpp_string_algorithm::string_contain(r, "const"))
+                            {
+                                paramElement.bConst = true;
+                                remove_string_start(r, "const");
+                            }
+                            trim_start_and_end_inline(r);
+                            trim_start_and_end_inline(l);
+                            
+                            paramElement.type = r;
+                            paramElement.name = l;
+                            funtionAnalysis.paramsArray.push_back(paramElement);
+                        }
+                    }
+                }
+            }
+            
+            
             
         }
         
