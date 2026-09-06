@@ -18,3 +18,8 @@ log/
 /JHSEngine/SDK/FBX/FBXSDK/FBXSDK/x64/*
 
 imgui.ini
+
+/EngineBuildTool/EngineBuildTool/x64/*
+/EngineBuildTool/Debug/*
+/EngineBuildTool/Release/*
+/EngineBuildTool/x64/*
