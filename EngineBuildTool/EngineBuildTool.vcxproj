@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
+    <ClCompile Include="CodeReflection\CollectClassInfo\CollectClassInfo.cpp" />
     <ClCompile Include="EngineBuildTool.cpp" />
     <ClCompile Include="simple_library\private\simple_channel\simple_io_stream\simple_io_stream.cpp" />
     <ClCompile Include="simple_library\private\simple_channel\simple_net_channel\simple_channel.cpp" />
@@ -184,6 +185,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ClInclude Include="CodeReflection\CollectClassInfo\CollectClassInfo.h" />
+    <ClInclude Include="CodeReflection\CppSourceCodeType.h" />
     <ClInclude Include="simple_library\private\simple_channel\simple_net_connetion\simple_connetion_tcp.h" />
     <ClInclude Include="simple_library\private\simple_channel\simple_net_connetion\simple_connetion_udp.h" />
     <ClInclude Include="simple_library\private\simple_channel\simple_net_drive\simple_net_drive_tcp.h" />
