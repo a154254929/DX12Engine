@@ -5,7 +5,5 @@
 
 namespace CollectClassInfo
 {
-    bool Get
-    
     bool Collection(const string& paths, FClassAnalysis& classAnalysis);
 }

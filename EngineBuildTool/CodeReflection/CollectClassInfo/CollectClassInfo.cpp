@@ -216,7 +216,7 @@ namespace CollectClassInfo
                         char r[1024] = { 0 };
                         trim_start_inline(rowPtr);
                         
-                        split(rowPtr, leftParenthesisString, r, tmp, false);
+                        split(rowPtr, spaceString, r, tmp, false);
                         
                         funtionAnalysis.returnElement = CollectionVariableType(r, ECollectionParamType::CollectionParamType_Return);
                         
@@ -225,7 +225,7 @@ namespace CollectClassInfo
                             remove_char_end(tmp, '{');
                             trim_end_inline(tmp);
                             remove_char_end(tmp, ';');
-                            remove_char_end(tmp, '));
+                            remove_char_end(tmp, ')');
                         }
                         
                         char rStr[1024] = { 0 };
@@ -274,14 +274,15 @@ namespace CollectClassInfo
                         }
                     }
                 }
+                classAnalysis.functionsArray.push_back(funtionAnalysis);
             }
             
             //获取标记的成员变量
             if (contain("JPROPERTY"))
             {
+                FVariableAnalysis variableAnalysis;
                 if (contain("CodeType"))
                 {
-                    FVariableAnalysis variableAnalysis;
                     if (GetCodeTypeByPropn(row, variableAnalysis))
                     {
                         char l[1024] = { 0 };
@@ -317,10 +318,10 @@ namespace CollectClassInfo
                         trim_start_and_end_inline(l);
                         variableAnalysis.type = r;
                         variableAnalysis.name = l;
-                        
-                        classAnalysis.variablesArray.push_back(variableAnalysis);
                     }
                 }
+                        
+                classAnalysis.variablesArray.push_back(variableAnalysis);
             }
         }
         
