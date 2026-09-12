@@ -20,12 +20,18 @@ public:
         T *inArray = new T();
         inArray->SetOwner(this);
         ActorObjects.push_back(inArray);
+        
+        char objectName[128] = {0};
+        sprintf(objectName, "ActorObject_%d", ActorObjects.size());
+        inArray->Rename(objectName);
 
         return inArray;
     }
     
 public:
-bool LineTraceBySingle(FCollisionResult& outHitResult, fvector_3d inStart, fvector_3d inEnd);
+    bool LineTraceBySingle(FCollisionResult& outHitResult, fvector_3d inStart, fvector_3d inEnd);
+    
+    const vector<GActorObject*>& GetAllActors() const { return ActorObjects; }
 
 protected:
     CVARIABLE()

@@ -7,6 +7,11 @@
 #include "RenderLayers/OpaqueReflectorRenderLayer.h"
 #include "RenderLayers/OpaqueShadowRenderLayer.h"
 #include "../../../../../Core/Viewport/ViewportInfo.h"
+#include "Engine/Component/Mesh/Core/MeshComponent.h"
+#include "Engine/Component/Mesh/Core/MeshComponentType.h"
+#include "Engine/Core/World.h"
+#include "Engine/Mesh/Core/Mesh.h"
+#include "Engine/Rendering/Core/DirectX/RenderingPipeline/Geometry/GeometryMap.h"
 #include "RenderLayers/SelectRenderLayer.h"
 
 std::vector<shared_ptr<FRenderLayer>> FRenderLayerManager::renderLayers;
@@ -84,6 +89,62 @@ void FRenderLayerManager::BuildPSO()
     for (auto& tmp : renderLayers)
     {
         tmp->BuildPSO();
+    }
+}
+
+void FRenderLayerManager::HighlightDisplayObject(GActorObject* inActorObject)
+{
+    if (GMesh* inMeshActor = dynamic_cast<GMesh*>(inActorObject))
+    {
+        CMeshComponent* inMeshComponent = inMeshActor->GetMeshComponent();
+        FGeometry::FindRenderingDatas([&](std::shared_ptr<FRenderingData> renderingData)
+        {
+            if (renderingData->meshComp == inMeshComponent)
+            {
+                HighlightDisplayObject(renderingData);
+                return EFindValueType::EFindValueType_Complete;
+            }
+            return EFindValueType::EFindValueType_In_progress;
+        });
+    }
+}
+
+extern int actorSelectId;
+void FRenderLayerManager::HighlightDisplayObject(std::weak_ptr<FRenderingData> inRenderingData)
+{
+    Clear(EMeshRenderLayerType::RENDERLAYER_OPAQUE_SELECT);
+    Add(EMeshRenderLayerType::RENDERLAYER_OPAQUE_SELECT, inRenderingData);
+    
+#if EDITOR_ENGINE
+    //记录index
+    GActorObject* inActorObject = dynamic_cast<GActorObject*>(inRenderingData.lock()->meshComp->GetOwner());
+    if (inActorObject)
+    {
+        for (int i = 0; i < GetWorld()->GetAllActors().size(); ++i)
+        {
+            if (GetWorld()->GetAllActors()[i] == inActorObject)
+            {
+                actorSelectId = i;
+                break;
+            }
+        }
+    }
+#endif
+}
+
+void FRenderLayerManager::HighlightDisplayObject(CComponent* inComponent)
+{
+    if (CMeshComponent* inMeshComponent = dynamic_cast<CMeshComponent*>(inComponent))
+    {
+        FGeometry::FindRenderingDatas([&](std::shared_ptr<FRenderingData> renderingData)
+        {
+            if (renderingData->meshComp == inMeshComponent)
+            {
+                HighlightDisplayObject(renderingData);
+                return EFindValueType::EFindValueType_Complete;
+            }
+            return EFindValueType::EFindValueType_In_progress;
+        });
     }
 }
 

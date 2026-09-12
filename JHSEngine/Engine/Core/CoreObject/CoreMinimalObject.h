@@ -27,11 +27,14 @@ public:
     bool IsTick()const { return bTick; }
     
     FORCEINLINE CCoreMinimalObject* GetOwner() const { return owner; }
+    std::string GetName() { return name; }
     void SetOwner(CCoreMinimalObject* newOwner) { owner = newOwner; }
+    void Rename(const std::string& newName) { name = newName; }
 protected:
     bool bTick;
     
     CCoreMinimalObject* owner;
+    std::string name;
 };
 
 extern vector<CCoreMinimalObject*> gObjects;

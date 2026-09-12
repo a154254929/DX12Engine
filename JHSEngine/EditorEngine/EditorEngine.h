@@ -35,4 +35,5 @@ public:
 protected:
     class FToolbarEditor* toolbarEditor;
     class FLogEditor* logEditor;
+    class FOutlineEditor* outlineEditor;
 };

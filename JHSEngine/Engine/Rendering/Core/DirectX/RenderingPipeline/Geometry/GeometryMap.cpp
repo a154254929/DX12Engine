@@ -944,3 +944,16 @@ D3D12_INDEX_BUFFER_VIEW FGeometry::GetIndexBufferView()
     ibv.Format = DXGI_FORMAT_R16_UINT;
     return ibv;
 }
+
+void FGeometry::FindRenderingDatas(
+    std::function<EFindValueType(std::shared_ptr<FRenderingData>&)> inFunction)
+{
+    for (auto& tmpRenderingData : renderingDataArray)
+    {
+        EFindValueType returnValue = inFunction(tmpRenderingData);
+        if (returnValue == EFindValueType::EFindValueType_Complete)
+        {
+            break;
+        }
+    }
+}

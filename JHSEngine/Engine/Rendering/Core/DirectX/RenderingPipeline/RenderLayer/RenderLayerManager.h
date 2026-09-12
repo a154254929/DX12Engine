@@ -1,7 +1,10 @@
 #pragma once
 #include "Core/RenderLayer.h"
 
-class FRenderLayerManager
+class CComponent;
+class GActorObject;
+
+class FRenderLayerManager : public IDirectXDeviceInterface
 {
     friend class FRenderLayer;
     friend class FGeometryMap;
@@ -23,6 +26,10 @@ public:
     virtual void FindObjDraw(int inLayer, float deltaTime, const CMeshComponent* inMeshComponent);
 
     virtual void BuildPSO();
+    
+    virtual void HighlightDisplayObject(GActorObject* inActorObject);
+    virtual void HighlightDisplayObject(std::weak_ptr<FRenderingData> inRenderingData);
+    virtual void HighlightDisplayObject(CComponent* inComponent);
 
     virtual void UpdateCalculations(float deltaTime, const FViewportInfo viewportInfo);
     

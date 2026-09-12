@@ -2,6 +2,7 @@
 #include "../../TransformationComponent.h"
 #include "MeshComponentType.h"
 
+struct FRenderingData;
 class CMaterial;
 struct FMeshRenderingData;
 class CMeshComponent : public CTransformationComponent

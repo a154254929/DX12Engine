@@ -248,8 +248,7 @@ void GCamera::OnClickedScreen(int x, int y)
     {
         if (FRenderLayerManager* layerManager = GetRenderingLayerManager())
         {
-            layerManager->Clear(EMeshRenderLayerType::RENDERLAYER_OPAQUE_SELECT);
-            layerManager->Add(EMeshRenderLayerType::RENDERLAYER_OPAQUE_SELECT, hitResult.renderingData);
+            layerManager->HighlightDisplayObject(hitResult.renderingData);
         }
        
         Engine_Log("Hit Actor! [time] = %f", hitResult.collisionTime);
