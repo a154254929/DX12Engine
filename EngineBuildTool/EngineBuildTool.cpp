@@ -1,6 +1,7 @@
 #include "simple_library/public/simple_library.h"
 #include "CodeReflection/CollectClassInfo/CollectClassInfo.h"
 #include "CodeReflection/IntermediateFile/SpawnIntermediateFile.h"
+#include "EngineBuildTool.h"
 
 int main()
 {

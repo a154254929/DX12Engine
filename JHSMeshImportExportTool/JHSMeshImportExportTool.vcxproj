@@ -79,10 +79,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)JHSMeshImportExportTool\ThirdPartyLibrary\FBX\include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)JHSMeshImportExportTool\ThirdPartyLibrary\FBX\lib\vs2019\x64\debug</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)JHSMeshImportExportTool\ThirdPartyLibrary\FBX\include;$(SolutionDir)SimpleBaseLibrary</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)JHSMeshImportExportTool\ThirdPartyLibrary\FBX\lib\vs2019\x64\debug;$(SolutionDir)Binaries\Win64</LibraryPath>
     <OutDir>$(SolutionDir)Binaries\Win64\</OutDir>
-    <IntDir>$(SolutionDir)Intermediate\Other\</IntDir>
+    <IntDir>$(SolutionDir)Intermediate\Other\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -168,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FBXSDK.h" />
+    <ClInclude Include="JHSMeshImportExportTool.h" />
     <ClInclude Include="ThirdPartyLibrary\FBX\include\fbxsdk.h" />
     <ClInclude Include="ThirdPartyLibrary\FBX\include\fbxsdk\core\arch\fbxalloc.h" />
     <ClInclude Include="ThirdPartyLibrary\FBX\include\fbxsdk\core\arch\fbxarch.h" />
