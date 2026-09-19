@@ -6,6 +6,8 @@
 #include "../../Core/Camera.h"
 #include "../../Rendering/Engine/DirectX/DirectX12RenderingEngine.h"
 
+#include "Core/Path/EnginePath.h"
+
 #if EDITOR_ENGINE
 #include "../../../EditorEngine/EditorEngine.h"
 #endif
@@ -36,17 +38,21 @@ CWindowsEngine::~CWindowsEngine()
 
 int CWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
 {
-    //日志系统初始化
-    const char logPath[] = "../../Saved/Logs";
+    // //日志系统初始化
+    // const char relativeLogPath[] = "../../Saved/Logs";
+    //
+    // char absoluteLogPath[1024] = { 0 };
+    // get_full_path(absoluteLogPath, 1024, relativeLogPath);
     
-    char pathBuff[1024] = { 0 };
-    get_full_path(pathBuff, 1024, logPath);
+    //init_log_system(absoluteLogPath);
     
-    init_log_system(pathBuff);
+    std::string absoluteLogPath = FEnginePathHelper::RelativeToAbsolutePath(FEnginePathHelper::GetEngineRelativeLogsPath());
+    
+    init_log_system(absoluteLogPath.c_str());
     Engine_Log("Log Init.");
     
     //创建路径
-    create_file_directory(pathBuff);
+    create_file_directory(absoluteLogPath.c_str());
      
     //处理命令
 

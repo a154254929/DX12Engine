@@ -2,6 +2,10 @@
 
 #include "simple_library/public/simple_library.h"
 #pragma comment(lib, "SimpleBaseLibrary.lib")
+
+//链接EngineCore
+#pragma comment(lib, "JHSEngineCore.lib")
+
 #include "Debug/Log/SimpleLog.h"
 
 #include<vector>

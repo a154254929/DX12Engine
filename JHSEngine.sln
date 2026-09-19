@@ -4,12 +4,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JHSEngine", "Source\JHSEngine\JHSEngine.vcxproj", "{A516BAE9-DC9B-4E51-8AC0-D277BAAB40E2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90} = {7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineBuildTool", "Source\EngineBuildTool\EngineBuildTool.vcxproj", "{EB2EA555-A2CC-4E23-A9FA-FCFDDE779C7F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90} = {7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}
+		{24F84F14-8510-4101-8630-FB93D857F13C} = {24F84F14-8510-4101-8630-FB93D857F13C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JHSMeshImportExportTool", "Source\JHSMeshImportExportTool\JHSMeshImportExportTool.vcxproj", "{BCB04DD5-A10E-4D45-B4AC-75DFAFB42D9B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{24F84F14-8510-4101-8630-FB93D857F13C} = {24F84F14-8510-4101-8630-FB93D857F13C}
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90} = {7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleBaseLibrary", "Source\SimpleBaseLibrary\SimpleBaseLibrary.vcxproj", "{24F84F14-8510-4101-8630-FB93D857F13C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JHSEngineCore", "Source\JHSEngineCore\JHSEngineCore.vcxproj", "{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +64,14 @@ Global
 		{24F84F14-8510-4101-8630-FB93D857F13C}.Release|x64.Build.0 = Release|x64
 		{24F84F14-8510-4101-8630-FB93D857F13C}.Release|x86.ActiveCfg = Release|Win32
 		{24F84F14-8510-4101-8630-FB93D857F13C}.Release|x86.Build.0 = Release|Win32
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}.Debug|x64.ActiveCfg = Debug|x64
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}.Debug|x64.Build.0 = Debug|x64
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}.Debug|x86.ActiveCfg = Debug|Win32
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}.Debug|x86.Build.0 = Debug|Win32
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}.Release|x64.ActiveCfg = Release|x64
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}.Release|x64.Build.0 = Release|x64
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}.Release|x86.ActiveCfg = Release|Win32
+		{7A8A6FDE-B24D-4BBC-AC41-FD04F0397B90}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
