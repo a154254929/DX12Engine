@@ -28,6 +28,10 @@ public:
     virtual int PostExit();
 
     CDirectXRenderingEngine* GetRenderingEngine() { return renderingEngine; }
+    
+public:
+    void InitPath();
+    
 
 public:
     CMeshManager* GetMeshManager();

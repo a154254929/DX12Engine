@@ -7,7 +7,7 @@ CSpotLightComponent::CSpotLightComponent()
     : Super()
 {
     //读取模型资源
-    static string meshPath = FEnginePathHelper::GetEngineContentRelativeLogsPath() + "/SpotLightMesh.obj";
+    static string meshPath = FEnginePathHelper::GetEngineRelativeContentPath() + "/SpotLightMesh.obj";
     FCreateObjectParam param;
     param.owner = this;
     SetLightMesh(GetMeshManager()->CreateMeshComponent(param, meshPath));

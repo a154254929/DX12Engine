@@ -7,17 +7,22 @@ std::string FEnginePathHelper::GetEngineRootPath()
 
 std::string FEnginePathHelper::GetEngineRelativeLogsPath()
 {
-    return "..\\..\\Saved/Logs";
+    return "..\\..\\Saved\\Logs";
 }
 
-std::string FEnginePathHelper::GetEngineContentRelativeLogsPath()
+std::string FEnginePathHelper::GetEngineRelativeContentPath()
 {
     return "..\\..\\Content";
 }
 
-std::wstring FEnginePathHelper::GetEngineShaderRelativeLogsPath()
+std::wstring FEnginePathHelper::GetEngineRelativeShadersPath()
 {
     return L"..\\..\\Shaders";
+}
+
+std::string FEnginePathHelper::GetEngineRelativeBinariesPath()
+{
+    return "..\\..\\Binaries\\Win64";
 }
 
 std::string FEnginePathHelper::RelativeToAbsolutePath(const std::string& relativePath)

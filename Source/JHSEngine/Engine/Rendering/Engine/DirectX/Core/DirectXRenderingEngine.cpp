@@ -223,7 +223,7 @@ int CDirectXRenderingEngine::PostInit()
             if (CMaterial* material = (*boxMesh->GetMaterials())[0])
             {
                 material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
-                material->SetBaseColorIndexKey(FEnginePathHelper::GetEngineContentRelativeLogsPath() + "/Texture/Texture2.dds");
+                material->SetBaseColorIndexKey(FEnginePathHelper::GetEngineRelativeContentPath() + "/Texture/Texture2.dds");
                 material->SetMaterialType(EMaterialType::BaseColor);
                 material->SetFresnelF0(fvector_3d(1.f));
             }
@@ -237,8 +237,8 @@ int CDirectXRenderingEngine::PostInit()
                 if (CMaterial* material = (*sphereMeshLambertain->GetMaterials())[0])
                 {
                     material->SetBaseColor(fvector_4d(.5f, .5f, .8f, 1.f));
-                    material->SetBaseColorIndexKey(FEnginePathHelper::GetEngineContentRelativeLogsPath() + "/Texture/Texture2.dds");
-                    material->SetNormalMapIndexKey(FEnginePathHelper::GetEngineContentRelativeLogsPath() + "/Texture/Texture2_NRM.dds");
+                    material->SetBaseColorIndexKey(FEnginePathHelper::GetEngineRelativeContentPath() + "/Texture/Texture2.dds");
+                    material->SetNormalMapIndexKey(FEnginePathHelper::GetEngineRelativeContentPath() + "/Texture/Texture2_NRM.dds");
                     material->SetMaterialType(EMaterialType::BlinnPhong);
                 }
             }

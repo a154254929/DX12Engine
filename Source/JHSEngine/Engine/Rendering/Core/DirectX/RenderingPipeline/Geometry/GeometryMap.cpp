@@ -608,7 +608,7 @@ void FGeometryMap::LoadTexture()
     def_c_paths filePaths;
     init_def_c_paths(&filePaths);
     
-    std::string contentPath = FEnginePathHelper::RelativeToAbsolutePath(FEnginePathHelper::GetEngineContentRelativeLogsPath()) + "/Texture";
+    std::string contentPath = FEnginePathHelper::RelativeToAbsolutePath(FEnginePathHelper::GetEngineRelativeContentPath()) + "/Texture";
     
     find_files(contentPath.c_str(), &filePaths, true, false);\
     

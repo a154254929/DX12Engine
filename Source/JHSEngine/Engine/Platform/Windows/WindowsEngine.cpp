@@ -36,6 +36,8 @@ CWindowsEngine::~CWindowsEngine()
 
 int CWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
 {
+    InitPath();
+    
     // //日志系统初始化
     // const char relativeLogPath[] = "../../Saved/Logs";
     //
@@ -48,9 +50,6 @@ int CWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
     
     init_log_system(absoluteLogPath.c_str());
     Engine_Log("Log Init.");
-    
-    //创建路径
-    create_file_directory(absoluteLogPath.c_str());
      
     //处理命令
 
@@ -134,6 +133,28 @@ int CWindowsEngine::PostExit()
     renderingEngine->PostExit();
     Engine_Log("Engine post exit complete.");
     return 0;
+}
+
+void CWindowsEngine::InitPath()
+{
+    auto CreateFileDirectory = [](const std::string& inRelativePath)
+    {
+        std::string absoluteFilePath = FEnginePathHelper::RelativeToAbsolutePath(inRelativePath);
+        //创建路径
+        create_file_directory(absoluteFilePath.c_str());
+    };
+    
+    CreateFileDirectory(FEnginePathHelper::GetEngineRelativeLogsPath());
+    
+    CreateFileDirectory(FEnginePathHelper::GetEngineRelativeContentPath());
+    
+    std::wstring relativeShadersPath = FEnginePathHelper::GetEngineRelativeShadersPath();
+    char shaderPath[1024] = { 0 };
+    wchar_t_to_char(shaderPath, 1024, relativeShadersPath.c_str());
+    CreateFileDirectory(shaderPath);
+    
+    CreateFileDirectory(FEnginePathHelper::GetEngineRelativeBinariesPath());
+    
 }
 
 CMeshManager* CWindowsEngine::GetMeshManager()

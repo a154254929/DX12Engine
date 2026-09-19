@@ -213,7 +213,7 @@ void FRenderLayer::DrawMesh(float deltaTime, ERenderingConditions inRenderingCon
 
 std::wstring FRenderLayer::BuildShadersPaths(const std::wstring& inShadersHLSLName)
 {
-    return FEnginePathHelper::GetEngineShaderRelativeLogsPath() + L"\\" + inShadersHLSLName + L".hlsl";
+    return FEnginePathHelper::GetEngineRelativeShadersPath() + L"\\" + inShadersHLSLName + L".hlsl";
 }
 
 void FRenderLayer::Add(std::weak_ptr<FRenderingData> inWeakRenderingData)

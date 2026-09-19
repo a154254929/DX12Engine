@@ -6,7 +6,7 @@
 CParallelLightComponent::CParallelLightComponent()
 {
     //读取模型资源
-    static string meshPath = FEnginePathHelper::GetEngineContentRelativeLogsPath() + "/SunMesh.obj";
+    static string meshPath = FEnginePathHelper::GetEngineRelativeContentPath() + "/SunMesh.obj";
     FCreateObjectParam param;
     param.owner = this;
     SetLightMesh(GetMeshManager()->CreateMeshComponent(param, meshPath));
