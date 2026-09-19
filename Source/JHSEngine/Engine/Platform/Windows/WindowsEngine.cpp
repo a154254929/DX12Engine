@@ -6,8 +6,6 @@
 #include "../../Core/Camera.h"
 #include "../../Rendering/Engine/DirectX/DirectX12RenderingEngine.h"
 
-#include "Core/Path/EnginePath.h"
-
 #if EDITOR_ENGINE
 #include "../../../EditorEngine/EditorEngine.h"
 #endif

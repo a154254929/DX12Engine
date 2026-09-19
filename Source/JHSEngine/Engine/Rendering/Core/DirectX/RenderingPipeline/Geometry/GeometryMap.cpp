@@ -608,8 +608,11 @@ void FGeometryMap::LoadTexture()
     def_c_paths filePaths;
     init_def_c_paths(&filePaths);
     
-    char rootPath[] = "../JHSEngine/Asset/Texture";
-    find_files(rootPath, &filePaths, true, false);
+    std::string contentPath = FEnginePathHelper::RelativeToAbsolutePath(FEnginePathHelper::GetEngineContentRelativeLogsPath()) + "/Texture";
+    
+    find_files(contentPath.c_str(), &filePaths, true, false);\
+    
+    Engine_Log("Load texture root path: [%s].", contentPath.c_str());
 
     std::vector<std::string> ddsPaths;
     ddsPaths.reserve(filePaths.index);

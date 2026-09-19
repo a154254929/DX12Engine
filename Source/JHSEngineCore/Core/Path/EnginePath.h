@@ -9,5 +9,7 @@ struct JHS_ENGINE_CORE_API FEnginePathHelper
     
     static std::string GetEngineRelativeLogsPath();
     
+    static std::string GetEngineContentRelativeLogsPath();
+    
     static std::string RelativeToAbsolutePath(const std::string& relativePath);
 };

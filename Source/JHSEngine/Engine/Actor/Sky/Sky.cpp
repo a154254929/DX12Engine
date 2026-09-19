@@ -13,7 +13,7 @@ GSky::GSky()
     {
         //material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
         material->SetBaseColor(fvector_4d(0.f, 0.f, 0.f, 1.f));
-        material->SetBaseColorIndexKey("../JHSEngine/Asset/Texture/EpicQuadPanorama_CC.dds");
+        material->SetBaseColorIndexKey(FEnginePathHelper::GetEngineContentRelativeLogsPath() + "/Texture/EpicQuadPanorama_CC.dds");
         material->SetMaterialType(EMaterialType::BaseColor);
     }
     

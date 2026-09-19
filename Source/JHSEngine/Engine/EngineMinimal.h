@@ -4,6 +4,8 @@
 #pragma comment(lib, "SimpleBaseLibrary.lib")
 
 //链接EngineCore
+
+#include "Core/Path/EnginePath.h"
 #pragma comment(lib, "JHSEngineCore.lib")
 
 #include "Debug/Log/SimpleLog.h"

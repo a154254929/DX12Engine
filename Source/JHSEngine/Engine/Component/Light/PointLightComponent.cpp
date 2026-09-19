@@ -7,7 +7,7 @@ CPointLightComponent::CPointLightComponent()
     : Super()
 {
     //读取模型资源
-    static string meshPath = "../JHSEngine/Asset/PointLightMesh.obj";
+    static string meshPath = FEnginePathHelper::GetEngineContentRelativeLogsPath() + "/PointLightMesh.obj";
     FCreateObjectParam param;
     param.owner = this;
     SetLightMesh(GetMeshManager()->CreateMeshComponent(param, meshPath));
