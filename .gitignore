@@ -9,6 +9,8 @@
 /JHSEngine/Debug/
 /JHSEngine/Release/
 /JHSEngine/x64/
+/Binaries/Win64/
+Intermediate/Other/
 
 # Logs
 log/

@@ -3,9 +3,9 @@
 #include "../../Mesh/Core/MeshType.h"
 #if THIRD_PARTY_LIBRARY
 
-#include "../../../SDK/FBX/FBXSDK/FBXSDK.h"
+#include "FBXSDK.h"
 
-//#pragma comment(lib, "FBXSDK.lib")
+#pragma comment(lib, "JHSMeshImportExportTool.lib")
 
 #endif
 #include <limits>

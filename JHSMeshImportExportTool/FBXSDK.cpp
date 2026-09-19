@@ -1,5 +1,5 @@
 #include "FBXSDK.h"
-#include "include/fbxsdk.h"
+#include "ThirdPartyLibrary/FBX/include/fbxsdk.h"
 #include <limits>
 #include <utility>
 #pragma comment(lib, "libfbxsdk.lib")
