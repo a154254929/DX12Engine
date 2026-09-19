@@ -36,6 +36,10 @@ public:
     virtual void ResetPSO(EPipelineState inPipelineState);
     //渲染 不包含PSO
     virtual void DrawMesh(float deltaTime, ERenderingConditions inRenderingConditions = ERenderingConditions::RC_None);
+    
+public:
+    std::wstring BuildShadersPaths(const std::wstring& inShadersHLSLName);
+    
 public:  
     const UINT GetRenderLayerPriority() const {return renderPriority;}
     

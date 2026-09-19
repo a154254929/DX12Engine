@@ -21,8 +21,19 @@ void FOpaqueShadowRenderLayer::BuildShader()
     std::vector<D3D_SHADER_MACRO> d3DShaderMacro;
     ShaderType::ToD3DShaderMacro(shaderMacros, d3DShaderMacro);
     
-    vertexShader.BuildShaders(L"../JHSEngine/Shader/VientianeShadow.hlsl", "ShadowVertexShader", "vs_5_1", d3DShaderMacro.data());
-    pixelShader.BuildShaders(L"../JHSEngine/Shader/VientianeShadow.hlsl", "ShadowPixelShader", "ps_5_1", d3DShaderMacro.data());
+    std:: wstring shaderPath = BuildShadersPaths(L"VientianeShadow");
+    vertexShader.BuildShaders(
+        shaderPath,
+        "ShadowVertexShader",
+        "vs_5_1",
+        d3DShaderMacro.data()
+    );
+    pixelShader.BuildShaders(
+        shaderPath,
+        "ShadowPixelShader",
+        "ps_5_1",
+        d3DShaderMacro.data()
+    );
     directXPipelineState->BindShader(vertexShader, pixelShader);
 
     //输入布局

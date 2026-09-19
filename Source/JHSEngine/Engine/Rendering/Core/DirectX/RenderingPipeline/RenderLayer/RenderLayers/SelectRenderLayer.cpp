@@ -21,8 +21,19 @@ void FSelectRenderLayer::BuildShader()
     std::vector<D3D_SHADER_MACRO> d3DShaderMacro;
     ShaderType::ToD3DShaderMacro(shaderMacros, d3DShaderMacro);
     
-    vertexShader.BuildShaders(L"../JHSEngine/Shader/SelectOutline.hlsl", "SelectOutlineVertexShader", "vs_5_1", d3DShaderMacro.data());
-    pixelShader.BuildShaders(L"../JHSEngine/Shader/SelectOutline.hlsl", "SelectOutlinePixelShader", "ps_5_1", d3DShaderMacro.data());
+    std:: wstring shaderPath = BuildShadersPaths(L"SelectOutline");
+    vertexShader.BuildShaders(
+        shaderPath,
+        "SelectOutlineVertexShader",
+        "vs_5_1",
+        d3DShaderMacro.data()
+    );
+    pixelShader.BuildShaders(
+        shaderPath,
+        "SelectOutlinePixelShader",
+        "ps_5_1",
+        d3DShaderMacro.data()
+    );
     directXPipelineState->BindShader(vertexShader, pixelShader);
 
     //输入布局

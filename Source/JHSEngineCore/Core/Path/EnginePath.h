@@ -11,5 +11,7 @@ struct JHS_ENGINE_CORE_API FEnginePathHelper
     
     static std::string GetEngineContentRelativeLogsPath();
     
+    static std::wstring GetEngineShaderRelativeLogsPath();
+    
     static std::string RelativeToAbsolutePath(const std::string& relativePath);
 };
