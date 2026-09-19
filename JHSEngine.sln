@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JHSEngine", "JHSEngine\JHSEngine.vcxproj", "{A516BAE9-DC9B-4E51-8AC0-D277BAAB40E2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JHSEngine", "Source\JHSEngine\JHSEngine.vcxproj", "{A516BAE9-DC9B-4E51-8AC0-D277BAAB40E2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineBuildTool", "EngineBuildTool\EngineBuildTool.vcxproj", "{EB2EA555-A2CC-4E23-A9FA-FCFDDE779C7F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineBuildTool", "Source\EngineBuildTool\EngineBuildTool.vcxproj", "{EB2EA555-A2CC-4E23-A9FA-FCFDDE779C7F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JHSMeshImportExportTool", "JHSMeshImportExportTool\JHSMeshImportExportTool.vcxproj", "{BCB04DD5-A10E-4D45-B4AC-75DFAFB42D9B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JHSMeshImportExportTool", "Source\JHSMeshImportExportTool\JHSMeshImportExportTool.vcxproj", "{BCB04DD5-A10E-4D45-B4AC-75DFAFB42D9B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleBaseLibrary", "SimpleBaseLibrary\SimpleBaseLibrary.vcxproj", "{24F84F14-8510-4101-8630-FB93D857F13C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleBaseLibrary", "Source\SimpleBaseLibrary\SimpleBaseLibrary.vcxproj", "{24F84F14-8510-4101-8630-FB93D857F13C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
