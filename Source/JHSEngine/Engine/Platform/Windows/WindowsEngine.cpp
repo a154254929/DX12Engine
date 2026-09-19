@@ -37,9 +37,16 @@ CWindowsEngine::~CWindowsEngine()
 int CWindowsEngine::PreInit(FWinMainCommandParameters inParameters)
 {
     //日志系统初始化
-    const char logPath[] = "../log";
-    init_log_system(logPath);
+    const char logPath[] = "../../Saved/Logs";
+    
+    char pathBuff[1024] = { 0 };
+    get_full_path(pathBuff, 1024, logPath);
+    
+    init_log_system(pathBuff);
     Engine_Log("Log Init.");
+    
+    //创建路径
+    create_file_directory(pathBuff);
      
     //处理命令
 
