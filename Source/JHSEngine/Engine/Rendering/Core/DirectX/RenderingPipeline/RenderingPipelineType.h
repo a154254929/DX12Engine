@@ -14,6 +14,7 @@ enum EPipelineState
     PerspectiveShadowShadow = 9,
     VientianeShadowShadow,
     Select,
+    OperationHandle,
 };
 
 enum ERenderingConditions

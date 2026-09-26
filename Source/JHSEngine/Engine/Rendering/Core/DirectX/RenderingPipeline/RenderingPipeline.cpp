@@ -180,8 +180,12 @@ void FRenderingPipeline::Draw(float deltaTime)
     renderLayerManager.Draw(RENDERLAYER_TRANSPARENT, deltaTime);
     renderLayerManager.Draw(RENDERLAYER_POSTPROCESS, deltaTime);
     
+#if EDITOR_ENGINE
     //选择物体
     renderLayerManager.Draw(RENDERLAYER_OPAQUE_SELECT, deltaTime);
+    //操作手柄
+    renderLayerManager.Draw(RENDERLAYER_OPERATION_HANDLE, deltaTime);
+#endif
     
     uiPipeline.Draw(deltaTime);
     

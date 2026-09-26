@@ -12,7 +12,10 @@
 #include "Engine/Core/World.h"
 #include "Engine/Mesh/Core/Mesh.h"
 #include "Engine/Rendering/Core/DirectX/RenderingPipeline/Geometry/GeometryMap.h"
+#if EDITOR_ENGINE
+#include "RenderLayers/OperationHandleRenderLayer.h"
 #include "RenderLayers/SelectRenderLayer.h"
+#endif
 
 std::vector<shared_ptr<FRenderLayer>> FRenderLayerManager::renderLayers;
 
@@ -27,7 +30,10 @@ FRenderLayerManager::FRenderLayerManager()
     CreateRenderLayer<FBackGroundRenderLayer>();
     CreateRenderLayer<FOpaqueReflectorRenderLayer>();
     CreateRenderLayer<FOpaqueShadowRenderLayer>();
+#if EDITOR_ENGINE
     CreateRenderLayer<FSelectRenderLayer>();
+    CreateRenderLayer<FOperationHandleRenderLayer>();
+#endif
 }
 
 FRenderLayerManager::~FRenderLayerManager()
