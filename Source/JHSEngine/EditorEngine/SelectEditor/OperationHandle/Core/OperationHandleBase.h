@@ -22,4 +22,6 @@ protected:
     
 public:
     GOperationHandleBase();
+    
+    virtual void SetMeshRenderLayerType(EMeshRenderLayerType inRenderLayerType);
 };

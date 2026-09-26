@@ -10,6 +10,8 @@ GMoveArrow::GMoveArrow()
     xAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
     yAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
     zAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
+    
+   SetMeshRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE);
 }
 
 void GMoveArrow::CreateMesh()

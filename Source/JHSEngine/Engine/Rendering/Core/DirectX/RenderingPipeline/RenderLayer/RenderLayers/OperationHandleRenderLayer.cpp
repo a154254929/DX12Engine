@@ -21,16 +21,16 @@ void FOperationHandleRenderLayer::BuildShader()
     std::vector<D3D_SHADER_MACRO> d3DShaderMacro;
     ShaderType::ToD3DShaderMacro(shaderMacros, d3DShaderMacro);
     
-    std:: wstring shaderPath = BuildShadersPaths(L"Unlit");
+    std:: wstring shaderPath = BuildShadersPaths(L"OperationHandle");
     vertexShader.BuildShaders(
         shaderPath,
-        "VertexShaderUnlit",
+        "VertexShaderOperationHandle",
         "vs_5_1",
         d3DShaderMacro.data()
     );
     pixelShader.BuildShaders(
         shaderPath,
-        "PixelShaderUnlit",
+        "PixelShaderOperationHandle",
         "ps_5_1",
         d3DShaderMacro.data()
     );
