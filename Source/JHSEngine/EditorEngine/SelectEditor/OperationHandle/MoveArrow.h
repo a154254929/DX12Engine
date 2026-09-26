@@ -9,4 +9,9 @@ public:
     GMoveArrow();
     
     void CreateMesh();
+    
+protected:
+    virtual void OnMouseMove(int x, int y);
+    virtual void OnLeftButtonDown(int x, int y);
+    virtual void OnLeftButtonUp(int x, int y);
 };

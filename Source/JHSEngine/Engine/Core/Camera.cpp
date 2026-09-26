@@ -238,28 +238,45 @@ void GCamera::MoveUp(float inValue)
     }
 }
 
+#if EDITOR_ENGINE
+extern GActorObject* selectedObject;
+extern CMeshComponent* selectedAxisComponent;
+#endif
 void GCamera::OnClickedScreen(int x, int y)
 {
-    
-    FCollisionResult hitResult;
-    FRaycastSystemLibrary::HitResultByScreen(GetWorld(), x, y, hitResult);
-    
-    if (hitResult.bIsCollided)
+#if EDITOR_ENGINE
+    if (!selectedAxisComponent)
+#endif
     {
-        if (FRenderLayerManager* layerManager = GetRenderingLayerManager())
+        FCollisionResult hitResult;
+        FRaycastSystemLibrary::HitResultByScreen(GetWorld(), x, y, hitResult);
+    
+        if (hitResult.bIsCollided)
         {
-            layerManager->HighlightDisplayObject(hitResult.renderingData);
-        }
+            if (FRenderLayerManager* layerManager = GetRenderingLayerManager())
+            {
+                layerManager->HighlightDisplayObject(hitResult.renderingData);
+            }
+        
+#if EDITOR_ENGINE
+            selectedObject = hitResult.collisionActor;
+#endif
        
-        Engine_Log("Hit Actor! [time] = %f", hitResult.collisionTime);
-    }
-    else
-    {
-        if (FRenderLayerManager* layerManager = GetRenderingLayerManager())
-        {
-            layerManager->Clear(EMeshRenderLayerType::RENDERLAYER_OPAQUE_SELECT);
+            Engine_Log("Hit Actor! [time] = %f", hitResult.collisionTime);
         }
-        Engine_Log("No Hit");
+        else
+        {
+            if (FRenderLayerManager* layerManager = GetRenderingLayerManager())
+            {
+                layerManager->Clear(EMeshRenderLayerType::RENDERLAYER_OPAQUE_SELECT);
+            }
+        
+#if EDITOR_ENGINE
+            selectedObject = nullptr;
+#endif
+        
+            Engine_Log("No Hit");
+        }
     }
     
 }

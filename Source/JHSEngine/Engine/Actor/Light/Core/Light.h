@@ -12,9 +12,9 @@ public:
 
     virtual void Tick(float deltaTime);
 public:
-    void SetPosition(const XMFLOAT3& inPosition);
-    void SetRotation(const fvector_3d& inRotation);
-    void SetScale(const fvector_3d& inScale);
+    virtual void SetPosition(const XMFLOAT3& inPosition) override;
+    virtual void SetRotation(const fvector_3d& inRotation) override;
+    virtual void SetScale(const fvector_3d& inScale) override;
     void SetLightIntensity(const fvector_3d& inLightIntensity);
     fvector_3d GetLightIntensity() const;
     

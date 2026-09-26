@@ -13,6 +13,8 @@ class GMesh
     public IRenderingInterface,
     public IDirectXDeviceInterface
 {
+    typedef GActorObject Super;
+    
     CVARIABLE()
     CMeshComponent* meshComponent;
 
@@ -48,7 +50,7 @@ public:
     vector<CMaterial*>* GetMaterials();
 
     // 重写位置/旋转/缩放，同步到 meshComponent
-    void SetPosition(const XMFLOAT3& inPosition);
-    void SetRotation(const fvector_3d& inRotation);
-    void SetScale(const fvector_3d& inScale);
+    virtual void SetPosition(const XMFLOAT3& inPosition) override;
+    virtual void SetRotation(const fvector_3d& inRotation) override;
+    virtual void SetScale(const fvector_3d& inScale) override;
 };

@@ -15,9 +15,9 @@ public:
     FORCEINLINE CTransformationComponent* GetTransformationComponent() { return transformationComponent; };
 
 public:
-    void SetPosition(const XMFLOAT3& inPosition);
-    void SetRotation(const fvector_3d& inRotation);
-    void SetScale(const fvector_3d& inScale);
+    virtual void SetPosition(const XMFLOAT3& inPosition);
+    virtual void SetRotation(const fvector_3d& inRotation);
+    virtual void SetScale(const fvector_3d& inScale);
     
     virtual void SetPickup(bool inPickup);
 

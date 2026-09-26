@@ -5,7 +5,7 @@
 #include "../Collision/CollisionSceneQuery.h"
 
 
-bool GetRaycastParam(
+bool FRaycastSystemLibrary::GetRaycastByScreenParam(
     CWorld* world,
     fvector_2d screenPosition,
     XMVECTOR& originPoint,
@@ -39,7 +39,7 @@ bool FRaycastSystemLibrary::HitResultByScreen(CWorld* world, int screenX, int sc
     XMVECTOR viewOrigin;
     XMVECTOR viewDir;
     XMMATRIX viewInvMatrix;
-    if (GetRaycastParam(world, fvector_2d(screenX, screenY), viewOrigin, viewDir, viewInvMatrix))
+    if (GetRaycastByScreenParam(world, fvector_2d(screenX, screenY), viewOrigin, viewDir, viewInvMatrix))
     {
     
         return FCollisionSceneQuery::RaySingle(viewOrigin, viewDir, viewInvMatrix, outResult);
@@ -56,7 +56,7 @@ bool FRaycastSystemLibrary::HitSpecialObjectsResultByScreen(
     XMVECTOR viewOrigin;
     XMVECTOR viewDir;
     XMMATRIX viewInvMatrix;
-    if (GetRaycastParam(world, fvector_2d(screenX, screenY), viewOrigin, viewDir, viewInvMatrix))
+    if (GetRaycastByScreenParam(world, fvector_2d(screenX, screenY), viewOrigin, viewDir, viewInvMatrix))
     {
     
         FCollisionSceneQuery::RaySingle(inSpecialObject, viewOrigin, viewDir, viewInvMatrix, outHitResult);

@@ -75,7 +75,7 @@ bool GMesh::IsCastShadow() const
 
 void GMesh::SetPosition(const XMFLOAT3& inPosition)
 {
-    GActorObject::SetPosition(inPosition);
+    Super::SetPosition(inPosition);
     if (meshComponent)
     {
         meshComponent->SetPosition(inPosition);
@@ -84,7 +84,7 @@ void GMesh::SetPosition(const XMFLOAT3& inPosition)
 
 void GMesh::SetRotation(const fvector_3d& inRotation)
 {
-    GActorObject::SetRotation(inRotation);
+    Super::SetRotation(inRotation);
     if (meshComponent)
     {
         meshComponent->SetRotation(inRotation);
@@ -93,7 +93,7 @@ void GMesh::SetRotation(const fvector_3d& inRotation)
 
 void GMesh::SetScale(const fvector_3d& inScale)
 {
-    GActorObject::SetScale(inScale);
+    Super::SetScale(inScale);
     if (meshComponent)
     {
         meshComponent->SetScale(inScale);

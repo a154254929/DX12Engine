@@ -6,6 +6,14 @@ class CWorld;
 
 struct FRaycastSystemLibrary
 {
+    static bool GetRaycastByScreenParam(
+        CWorld* world,
+        fvector_2d screenPosition,
+        XMVECTOR& originPoint,
+        XMVECTOR& direction,
+        XMMATRIX& viewInvMatrix
+    );
+    
     static bool HitResultByScreen(CWorld* world, int screenX, int screenY, FCollisionResult& outHitResult);
     
     static bool HitSpecialObjectsResultByScreen(CWorld* world, GActorObject* inSpecialObject, int screenX, int screenY, FCollisionResult& outHitResult);

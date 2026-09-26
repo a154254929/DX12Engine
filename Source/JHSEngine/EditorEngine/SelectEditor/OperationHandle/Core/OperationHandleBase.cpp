@@ -5,6 +5,8 @@
 #include "Engine/Library/RaycastSystemLibrary.h"
 #include "Engine/Mesh/Core/Material/Material.h"
 
+extern CMeshComponent* selectedAxisComponent;
+
 GOperationHandleBase::GOperationHandleBase()
 {
     FCreateObjectParam param;
@@ -17,6 +19,23 @@ void GOperationHandleBase::SetMeshRenderLayerType(EMeshRenderLayerType inRenderL
     xAxisComponent->SetRenderLayerType(inRenderLayerType);
     yAxisComponent->SetRenderLayerType(inRenderLayerType);
     zAxisComponent->SetRenderLayerType(inRenderLayerType);
+}
+
+GOperationHandleBase::ESelectAxisType GOperationHandleBase::GetSelectAxisType()
+{
+    if (selectedAxisComponent == xAxisComponent)
+    {
+        return ESelectAxis_X;
+    }
+    else if (selectedAxisComponent == yAxisComponent)
+    {
+        return ESelectAxis_Y;
+    }
+    else if (selectedAxisComponent == zAxisComponent)
+    {
+        return ESelectAxis_Z;
+    }
+    return ESelectAxis_None;
 }
 
 void GOperationHandleBase::ResetColor()
@@ -48,6 +67,10 @@ void GOperationHandleBase::BeginInit()
 
 void GOperationHandleBase::OnMouseMove(int x, int y)
 {
+    if (isLeftButtonDown)
+    {
+        return;
+    }
     FCollisionResult collisionResult;
     FRaycastSystemLibrary::HitSpecialObjectsResultByScreen(GetWorld(), this, x, y, collisionResult);
     
@@ -56,13 +79,25 @@ void GOperationHandleBase::OnMouseMove(int x, int y)
     {
         CCustomMeshComponent* selectCustomMeshComponent = dynamic_cast<CCustomMeshComponent*>(collisionResult.collisionComponent);
         ResetColor(selectCustomMeshComponent, fvector_4d(1.f, 1.f, 0.f, 1.f));
+        selectedAxisComponent = selectCustomMeshComponent;
+    }
+    else
+    {
+        selectedAxisComponent = nullptr;
     }
 }
 
 void GOperationHandleBase::OnLeftButtonDown(int x, int y)
 {
+    isLeftButtonDown = true;
 }
 
 void GOperationHandleBase::OnLeftButtonUp(int x, int y)
 {
+    isLeftButtonDown = false;
+    if (selectedAxisComponent)
+    {
+        ResetColor();
+        selectedAxisComponent = nullptr;
+    }
 }

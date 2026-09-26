@@ -11,6 +11,15 @@ class GOperationHandleBase :
     typedef GActorObject Super;
     
 protected:
+    enum ESelectAxisType
+    {
+        ESelectAxis_None,
+        ESelectAxis_X,
+        ESelectAxis_Y,
+        ESelectAxis_Z
+    };
+    
+protected:
     CVARIABLE()
     CInputComponent* inputComponent;
     
@@ -29,6 +38,8 @@ public:
     
     virtual void SetMeshRenderLayerType(EMeshRenderLayerType inRenderLayerType);
     
+    ESelectAxisType GetSelectAxisType();
+    
 public:
     void ResetColor();
     
@@ -41,4 +52,6 @@ protected:
     virtual void OnMouseMove(int x, int y);
     virtual void OnLeftButtonDown(int x, int y);
     virtual void OnLeftButtonUp(int x, int y);
+    
+    bool isLeftButtonDown{ false };
 };
