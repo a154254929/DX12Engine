@@ -6,8 +6,32 @@
 #include "../Component/Mesh/Core/MeshComponent.h"
 #include "../Actor/Core/ActorObject.h"
 
-bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR& direction,
-    const XMMATRIX& viewInvMatrix, FCollisionResult& outResult)
+void GetRaycastDataByLocal(
+    std::shared_ptr<FRenderingData>& inRenderingData,
+    const XMVECTOR& originPoint,
+    const XMVECTOR& direction,
+    const XMMATRIX& viewInvMatrix,
+    XMVECTOR& outObjectOriginPoint,
+    XMVECTOR& outObjectDirection
+)
+{
+        
+    XMMATRIX worldMatrix = XMLoadFloat4x4(&inRenderingData->worldMatrix);
+    XMVECTOR worldMatrixDeterminant = XMMatrixDeterminant(worldMatrix);
+    XMMATRIX worldToObjectMatrix = XMMatrixInverse(&worldMatrixDeterminant, worldMatrix);
+        
+    XMMATRIX viewToObjectMatrix = XMMatrixMultiply(viewInvMatrix, worldToObjectMatrix);
+        
+    outObjectOriginPoint = XMVector3Transform(originPoint, viewToObjectMatrix);
+    outObjectDirection = XMVector3Normalize(XMVector3TransformNormal(direction, viewToObjectMatrix));
+}
+
+bool FCollisionSceneQuery::RaySingle(
+    const XMVECTOR& originPoint,
+    const XMVECTOR& direction,
+    const XMMATRIX& viewInvMatrix,
+    FCollisionResult& outResult
+)
 {
     float finalTime = FLT_MAX;
         
@@ -19,14 +43,10 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
             continue;
         }
         
-        XMMATRIX worldMatrix = XMLoadFloat4x4(&renderingData->worldMatrix);
-        XMVECTOR worldMatrixDeterminant = XMMatrixDeterminant(worldMatrix);
-        XMMATRIX worldToObjectMatrix = XMMatrixInverse(&worldMatrixDeterminant, worldMatrix);
+        XMVECTOR objectOriginPoint;
+        XMVECTOR objectDirection;
         
-       XMMATRIX viewToObjectMatrix = XMMatrixMultiply(viewInvMatrix, worldToObjectMatrix);
-        
-        XMVECTOR objectOriginPoint = XMVector3Transform(originPoint, viewToObjectMatrix);
-        XMVECTOR objectDirection = XMVector3Normalize(XMVector3TransformNormal(direction, viewToObjectMatrix));
+        GetRaycastDataByLocal(renderingData, originPoint, direction, viewInvMatrix, objectOriginPoint, objectDirection);
         
         float time = FLT_MAX;
         
@@ -75,5 +95,50 @@ bool FCollisionSceneQuery::RaySingle(const XMVECTOR& originPoint, const XMVECTOR
             }
         }
     }
-    return false;
+    return outResult.bIsCollided;
+}
+
+bool FCollisionSceneQuery::RaySingle(
+    GActorObject* inSpecialObject,
+    const XMVECTOR& originPoint,
+    const XMVECTOR& direction,
+    const XMMATRIX& viewInvMatrix,
+    FCollisionResult& outResult
+)
+{
+    float finalTime = FLT_MAX;
+        
+    for (int i = 0; i < FGeometry::renderingDataArray.size(); ++i)
+    {
+        std::shared_ptr<FRenderingData> renderingData = FGeometry::renderingDataArray[i];
+        if (!renderingData->meshComp->IsPickup())
+        {
+            continue;
+        }
+        
+        XMVECTOR objectOriginPoint;
+        XMVECTOR objectDirection;
+        
+        GetRaycastDataByLocal(renderingData, originPoint, direction, viewInvMatrix, objectOriginPoint, objectDirection);
+        
+        float time = FLT_MAX;
+        
+        if (renderingData->boundingBox.Intersects(objectOriginPoint, objectDirection, time))
+        {
+            if (GActorObject* actorObject = dynamic_cast<GActorObject*>(renderingData->meshComp->GetOwner()))
+            {
+                if (actorObject == inSpecialObject)
+                {
+                    outResult.bIsCollided = true;
+                    outResult.collisionTime = time;
+                    //outResult.collisionDistance = finalTime;
+                    outResult.collisionComponent = renderingData->meshComp;
+                    //outResult.collisionPoint = ;
+                    outResult.collisionActor = dynamic_cast<GActorObject*>(renderingData->meshComp->GetOwner());
+                    outResult.renderingData = renderingData;
+                }
+            }
+        }
+    }
+    return outResult.bIsCollided;
 }

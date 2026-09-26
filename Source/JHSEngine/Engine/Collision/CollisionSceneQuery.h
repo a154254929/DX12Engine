@@ -10,4 +10,12 @@ struct FCollisionSceneQuery
         , const XMMATRIX& viewInvMatrix
         , FCollisionResult& outResult
     );
+    
+    static bool RaySingle(
+        GActorObject* inSpecialObject,
+        const XMVECTOR& originPoint
+        , const XMVECTOR& direction
+        , const XMMATRIX& viewInvMatrix
+        , FCollisionResult& outResult
+    );
 };

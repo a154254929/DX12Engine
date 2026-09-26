@@ -3,6 +3,7 @@
 #include "Engine/Component/Mesh/CustomMeshComponent.h"
 #include "Engine/Interface/DirectXDeviceInterface.h"
 
+class CInputComponent;
 class GOperationHandleBase :
     public GActorObject,
     public IDirectXDeviceInterface
@@ -10,6 +11,9 @@ class GOperationHandleBase :
     typedef GActorObject Super;
     
 protected:
+    CVARIABLE()
+    CInputComponent* inputComponent;
+    
     CVARIABLE()
     CCustomMeshComponent* xAxisComponent;
     
@@ -29,4 +33,12 @@ public:
     void ResetColor();
     
     void ResetColor(CCustomMeshComponent* inAxisComponent, const fvector_4d& incolor);
+    
+public:
+    virtual void BeginInit();
+    
+protected:
+    virtual void OnMouseMove(int x, int y);
+    virtual void OnLeftButtonDown(int x, int y);
+    virtual void OnLeftButtonUp(int x, int y);
 };
