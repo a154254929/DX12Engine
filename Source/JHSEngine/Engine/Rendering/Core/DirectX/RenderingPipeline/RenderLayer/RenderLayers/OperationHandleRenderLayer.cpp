@@ -51,6 +51,14 @@ void FOperationHandleRenderLayer::BuildShader()
 void FOperationHandleRenderLayer::BuildPSO()
 {
     Super::BuildPSO();
+    
+    CD3DX12_DEPTH_STENCIL_DESC depthStencilDesc = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+    depthStencilDesc.DepthEnable = FALSE;
+    depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+    depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+    depthStencilDesc.StencilEnable = FALSE;
+    
+    directXPipelineState->SetDepthStencilState(depthStencilDesc);
 
     directXPipelineState->Build(EPipelineState::OperationHandle);
 }
