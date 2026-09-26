@@ -24,4 +24,9 @@ public:
     GOperationHandleBase();
     
     virtual void SetMeshRenderLayerType(EMeshRenderLayerType inRenderLayerType);
+    
+public:
+    void ResetColor();
+    
+    void ResetColor(CCustomMeshComponent* inAxisComponent, const fvector_4d& incolor);
 };

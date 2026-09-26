@@ -24,4 +24,7 @@ void GMoveArrow::CreateMesh()
     
     xAxisComponent->SetRotation(fvector_3d(0.f, 90.f, 0.f));
     yAxisComponent->SetRotation(fvector_3d(90.f, 0.f, 0.f));
+    
+    ResetColor();
+    
 }
