@@ -26,6 +26,9 @@
 #include "../../../../Mesh/AesmaMesh.h"
 #include "../../../../Mesh/DonutMesh.h"
 #include "Engine/Core/Camera.h"
+#if EDITOR_ENGINE
+#include "EditorEngine/SelectEditor/OperationHandle/MoveArrow.h"
+#endif
 
 
 //class FVector
@@ -86,7 +89,15 @@ int CDirectXRenderingEngine::PostInit()
 {
     ANALYSIS_HRESULT(graphicsCommandList->Reset(commandAllocator.Get(), NULL));
     {
+#if EDITOR_ENGINE
+        if (GMoveArrow* moveArrow = world->CreateActorObject<GMoveArrow>())
+        {
+            moveArrow->CreateMesh();
+            moveArrow->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
+            moveArrow->SetScale(fvector_3d(1.f, 1.f, 1.f));
+        }
         
+#endif
         //构建灯光
         if (GParallelLight* parallelLight1 = world->CreateActorObject<GParallelLight>())
         {
