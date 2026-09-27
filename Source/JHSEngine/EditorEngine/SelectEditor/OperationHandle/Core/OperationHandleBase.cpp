@@ -2,7 +2,10 @@
 
 #include "Engine/EngineType.h"
 #include "Engine/Component/InputComponent.h"
+#include "Engine/Core/Camera.h"
+#include "Engine/Core/World.h"
 #include "Engine/Library/RaycastSystemLibrary.h"
+#include "Engine/Math/EngineMath.h"
 #include "Engine/Mesh/Core/Material/Material.h"
 
 extern CMeshComponent* selectedAxisComponent;
@@ -12,6 +15,7 @@ GOperationHandleBase::GOperationHandleBase()
     FCreateObjectParam param;
     param.owner = this;
     inputComponent = ConstructionObject<CInputComponent>(param);
+    fixedZoom = 80.f;
 }
 
 void GOperationHandleBase::SetMeshRenderLayerType(EMeshRenderLayerType inRenderLayerType)
@@ -74,6 +78,7 @@ void GOperationHandleBase::SetRotation(const fvector_3d& inRotation)
 
 void GOperationHandleBase::SetScale(const fvector_3d& inScale)
 {
+
     Super::SetScale(inScale);
     if (xAxisComponent)
     {
@@ -129,6 +134,27 @@ void GOperationHandleBase::BeginInit()
     inputComponent->OnLeftMouseButtonUpDelegate.Bind(this, &GOperationHandleBase::OnLeftButtonUp);
     inputComponent->OnMouseMoveDelegate.Bind(this, &GOperationHandleBase::OnMouseMove);
     SetVisible(false);
+}
+
+void GOperationHandleBase::Tick(float deltaTime)
+{
+    Super::Tick(deltaTime);
+    
+    if (CWorld* world = GetWorld())
+    {
+        if (GCamera* camera = world->GetCamera())
+        {
+            fvector_3d cameraPosition = EngineMath::ToVector3d(camera->GetPosition());
+            fvector_3d handlePosition = EngineMath::ToVector3d(GetPosition());
+            fvector_3d distanceVector = cameraPosition - handlePosition;
+            float distance = distanceVector.len();
+            // Keep the last valid scale when the camera is at the handle's position.
+            if (distance > 1.e-4f)
+            {
+                SetScale(fvector_3d(distance / fixedZoom));
+            }
+        }
+    }
 }
 
 void GOperationHandleBase::SetVisible(bool inVisible)

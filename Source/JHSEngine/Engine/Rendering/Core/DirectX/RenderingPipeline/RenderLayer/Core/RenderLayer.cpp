@@ -174,9 +174,9 @@ void FRenderLayer::UpdateCalculations(float deltaTime, const FViewportInfo viewp
                 XMFLOAT3 forwardVector = renderingData->meshComp->GetForwardVector();
 
                 renderingData->worldMatrix = {
-                    rightVector.x * scale.x,      rightVector.y * scale.x,      rightVector.z * scale.x,      0.f,
-                    upVector.x * scale.y,         upVector.y * scale.y,         upVector.z * scale.y,         0.f,
-                    forwardVector.x * scale.z,    forwardVector.y * scale.z,    forwardVector.z * scale.z,    0.f,
+                    rightVector.x * scale.x,      rightVector.y * scale.y,      rightVector.z * scale.z,      0.f,
+                    upVector.x * scale.x,         upVector.y * scale.y,         upVector.z * scale.z,         0.f,
+                    forwardVector.x * scale.x,    forwardVector.y * scale.y,    forwardVector.z * scale.z,    0.f,
                     position.x,                   position.y,                   position.z,                   1.f
                 };
             }

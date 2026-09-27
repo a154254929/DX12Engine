@@ -101,19 +101,40 @@ bool GMoveArrow::GetRayInterHitPosition(int x, int y, fvector_3d& outHitPosition
         
         fvector_3d worldActorPosition = EngineMath::ToVector3d(selectedObject->GetPosition());
         fvector_3d worldActorDir;
-        switch (axisType)
+        
+        if (true)
         {
-        case ESelectAxis_X:
-            worldActorDir = EngineMath::ToVector3d(selectedObject->GetRightVector());
-            break;
-        case ESelectAxis_Y:
-            worldActorDir = EngineMath::ToVector3d(selectedObject->GetUpVector());
-            break;
-        case ESelectAxis_Z:
-            worldActorDir = EngineMath::ToVector3d(selectedObject->GetForwardVector());
-            break;
-        default:
-            break;  
+            switch (axisType)
+            {
+            case ESelectAxis_X:
+                worldActorDir =fvector_3d(1.f, 0.f, 0.f);
+                break;
+            case ESelectAxis_Y:
+                worldActorDir =fvector_3d(0.f, 1.f, 0.f);
+                break;
+            case ESelectAxis_Z:
+                worldActorDir =fvector_3d(0.f, 0.f, 1.f);
+                break;
+            default:
+                break;  
+            }
+        }
+        else
+        {
+            switch (axisType)
+            {
+            case ESelectAxis_X:
+                worldActorDir = EngineMath::ToVector3d(selectedObject->GetRightVector());
+                break;
+            case ESelectAxis_Y:
+                worldActorDir = EngineMath::ToVector3d(selectedObject->GetUpVector());
+                break;
+            case ESelectAxis_Z:
+                worldActorDir = EngineMath::ToVector3d(selectedObject->GetForwardVector());
+                break;
+            default:
+                break;  
+            }
         }
             
         fvector_3d v1Xv2 = fvector_3d::cross_product(worldOriginDir3d, worldActorDir);

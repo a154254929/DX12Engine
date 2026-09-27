@@ -55,6 +55,7 @@ public:
     
 public:
     virtual void BeginInit();
+    virtual void Tick(float deltaTime);
     
     void SetVisible(bool inVisible);
    // virtual bool IsVisible() const;
@@ -65,4 +66,5 @@ protected:
     virtual void OnLeftButtonUp(int x, int y);
     
     bool bOperationHandleSelect{ false };
+    float fixedZoom;
 };

@@ -20,6 +20,18 @@ Attribute VertexShaderOperationHandle(Varying input)
     Attribute output = (Attribute)0;
     output.localPosition = float4(input.position, 1.0);
     
+    /*
+    float3 worldOriginPosition = mul(float4(0, 0, 0, 1), WorldMatrix).xyz;
+    float3 viewDir = worldOriginPosition - ViewportWorldPosition.xyz;
+    float3 worldDistance = length(viewDir);
+    float3 scaledWorldOriginPosition = ViewportWorldPosition + viewDir * (100 / worldDistance);
+    float4x4 newWorldMatrix = WorldMatrix;
+    newWorldMatrix[3][0] = scaledWorldOriginPosition.x;
+    newWorldMatrix[3][1] = scaledWorldOriginPosition.y;
+    newWorldMatrix[3][2] = scaledWorldOriginPosition.z;
+    output.worldPosition = mul(float4(input.position, 1), newWorldMatrix);
+    */
+    
     output.worldPosition = mul(float4(input.position, 1), WorldMatrix);
     output.position = mul(output.worldPosition, ViewProjectionMatrix);
     
