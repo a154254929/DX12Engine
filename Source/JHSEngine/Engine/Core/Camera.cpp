@@ -5,6 +5,7 @@
 #include "../Library/RaycastSystemLibrary.h"
 #include "../Rendering/Core/DirectX/RenderingPipeline/RenderLayer/RenderLayerManager.h"
 #include "../Component/Mesh/Core/MeshComponentType.h"
+#include "EditorEngine/SelectEditor/OperationHandle/MoveArrow.h"
 
 GCamera::GCamera()
     : Super()
@@ -241,6 +242,7 @@ void GCamera::MoveUp(float inValue)
 #if EDITOR_ENGINE
 extern GActorObject* selectedObject;
 extern CMeshComponent* selectedAxisComponent;
+extern GMoveArrow* moveArrow;
 #endif
 void GCamera::OnClickedScreen(int x, int y)
 {
@@ -260,6 +262,10 @@ void GCamera::OnClickedScreen(int x, int y)
         
 #if EDITOR_ENGINE
             selectedObject = hitResult.collisionActor;
+            if (moveArrow)
+            {
+                moveArrow->SetPosition(hitResult.collisionActor->GetTransformationComponent()->GetPosition());
+            }
 #endif
        
             Engine_Log("Hit Actor! [time] = %f", hitResult.collisionTime);

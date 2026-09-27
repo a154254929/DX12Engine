@@ -38,6 +38,57 @@ GOperationHandleBase::ESelectAxisType GOperationHandleBase::GetSelectAxisType()
     return ESelectAxis_None;
 }
 
+void GOperationHandleBase::SetPosition(const XMFLOAT3& inPosition)
+{
+    Super::SetPosition(inPosition);
+    if (xAxisComponent)
+    {
+        xAxisComponent->SetPosition(inPosition);
+    }
+    if (yAxisComponent)
+    {
+        yAxisComponent->SetPosition(inPosition);
+    }
+    if (zAxisComponent)
+    {
+        zAxisComponent->SetPosition(inPosition);
+    }
+}
+
+void GOperationHandleBase::SetRotation(const fvector_3d& inRotation)
+{
+    Super::SetRotation(inRotation);
+    if (xAxisComponent)
+    {
+        xAxisComponent->SetRotation(inRotation);
+    }
+    if (yAxisComponent)
+    {
+        yAxisComponent->SetRotation(inRotation);
+    }
+    if (zAxisComponent)
+    {
+        zAxisComponent->SetRotation(inRotation);
+    }
+}
+
+void GOperationHandleBase::SetScale(const fvector_3d& inScale)
+{
+    Super::SetScale(inScale);
+    if (xAxisComponent)
+    {
+        xAxisComponent->SetScale(inScale);
+    }
+    if (yAxisComponent)
+    {
+        yAxisComponent->SetScale(inScale);
+    }
+    if (zAxisComponent)
+    {
+        zAxisComponent->SetScale(inScale);
+    }
+}
+
 void GOperationHandleBase::ResetColor()
 {
     ResetColor(xAxisComponent, fvector_4d(1.f, 0.f, 0.f, 1.f));
@@ -67,7 +118,7 @@ void GOperationHandleBase::BeginInit()
 
 void GOperationHandleBase::OnMouseMove(int x, int y)
 {
-    if (isLeftButtonDown)
+    if (bOperationHandleSelect)
     {
         return;
     }
@@ -89,12 +140,12 @@ void GOperationHandleBase::OnMouseMove(int x, int y)
 
 void GOperationHandleBase::OnLeftButtonDown(int x, int y)
 {
-    isLeftButtonDown = true;
+    bOperationHandleSelect = true;
 }
 
 void GOperationHandleBase::OnLeftButtonUp(int x, int y)
 {
-    isLeftButtonDown = false;
+    bOperationHandleSelect = false;
     if (selectedAxisComponent)
     {
         ResetColor();

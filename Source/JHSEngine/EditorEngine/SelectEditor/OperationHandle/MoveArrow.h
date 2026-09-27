@@ -8,10 +8,15 @@ class GMoveArrow : public GOperationHandleBase
 public:
     GMoveArrow();
     
-    void CreateMesh();
+    void CreateMesh(); 
     
 protected:
     virtual void OnMouseMove(int x, int y);
     virtual void OnLeftButtonDown(int x, int y);
     virtual void OnLeftButtonUp(int x, int y);
+    
+    bool GetRayInterHitPosition(int x, int y, fvector_3d& outHitPosition);
+    
+protected:
+    fvector_3d relativePosition;
 };

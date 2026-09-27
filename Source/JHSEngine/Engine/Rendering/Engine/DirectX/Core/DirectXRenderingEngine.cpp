@@ -85,16 +85,21 @@ int CDirectXRenderingEngine::Init(FWinMainCommandParameters inParameters)
     return 0;
 }
 
+#if EDITOR_ENGINE
+extern GMoveArrow* moveArrow;
+#endif
 int CDirectXRenderingEngine::PostInit()
 {
     ANALYSIS_HRESULT(graphicsCommandList->Reset(commandAllocator.Get(), NULL));
     {
 #if EDITOR_ENGINE
-        if (GMoveArrow* moveArrow = world->CreateActorObject<GMoveArrow>())
+        if (GMoveArrow* editorMoveArrow = world->CreateActorObject<GMoveArrow>())
         {
-            moveArrow->CreateMesh();
-            moveArrow->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
-            moveArrow->SetScale(fvector_3d(1.f, 1.f, 1.f));
+            editorMoveArrow->CreateMesh();
+            editorMoveArrow->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
+            editorMoveArrow->SetScale(fvector_3d(1.f, 1.f, 1.f));
+    
+            moveArrow = editorMoveArrow;
         }
         
 #endif

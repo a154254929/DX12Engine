@@ -40,6 +40,10 @@ public:
     
     ESelectAxisType GetSelectAxisType();
     
+    virtual void SetPosition(const XMFLOAT3& inPosition) override;
+    virtual void SetRotation(const fvector_3d& inRotation) override;
+    virtual void SetScale(const fvector_3d& inScale) override;
+    
 public:
     void ResetColor();
     
@@ -53,5 +57,5 @@ protected:
     virtual void OnLeftButtonDown(int x, int y);
     virtual void OnLeftButtonUp(int x, int y);
     
-    bool isLeftButtonDown{ false };
+    bool bOperationHandleSelect{ false };
 };
