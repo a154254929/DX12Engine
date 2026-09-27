@@ -111,7 +111,7 @@ bool FCollisionSceneQuery::RaySingle(
     for (int i = 0; i < FGeometry::renderingDataArray.size(); ++i)
     {
         std::shared_ptr<FRenderingData> renderingData = FGeometry::renderingDataArray[i];
-        if (!renderingData->meshComp->IsPickup())
+        if (!renderingData->meshComp->IsPickup() || !renderingData->meshComp->IsVisible())
         {
             continue;
         }

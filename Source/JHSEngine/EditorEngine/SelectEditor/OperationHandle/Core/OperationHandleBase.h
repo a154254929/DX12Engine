@@ -45,12 +45,19 @@ public:
     virtual void SetScale(const fvector_3d& inScale) override;
     
 public:
+    void ResetVisible();
+    
+    void ResetVisible(CMeshComponent* inAxisComponent, bool inVisible);
+    
     void ResetColor();
     
     void ResetColor(CCustomMeshComponent* inAxisComponent, const fvector_4d& incolor);
     
 public:
     virtual void BeginInit();
+    
+    void SetVisible(bool inVisible);
+   // virtual bool IsVisible() const;
     
 protected:
     virtual void OnMouseMove(int x, int y);

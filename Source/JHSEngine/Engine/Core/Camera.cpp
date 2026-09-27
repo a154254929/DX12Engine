@@ -265,6 +265,7 @@ void GCamera::OnClickedScreen(int x, int y)
             if (moveArrow)
             {
                 moveArrow->SetPosition(hitResult.collisionActor->GetTransformationComponent()->GetPosition());
+                moveArrow->SetVisible(true);
             }
 #endif
        
@@ -279,6 +280,7 @@ void GCamera::OnClickedScreen(int x, int y)
         
 #if EDITOR_ENGINE
             selectedObject = nullptr;
+            moveArrow->SetVisible(false);
 #endif
         
             Engine_Log("No Hit");

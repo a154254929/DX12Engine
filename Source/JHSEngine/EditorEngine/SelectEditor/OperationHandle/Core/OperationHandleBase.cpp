@@ -89,6 +89,20 @@ void GOperationHandleBase::SetScale(const fvector_3d& inScale)
     }
 }
 
+void GOperationHandleBase::ResetVisible()
+{
+    SetVisible(true);
+}
+
+void GOperationHandleBase::ResetVisible(CMeshComponent* inAxisComponent, bool inVisible)
+{
+    SetVisible(!inVisible);
+    if (inAxisComponent)
+    {
+        inAxisComponent->SetVisible(inVisible);
+    }
+}
+
 void GOperationHandleBase::ResetColor()
 {
     ResetColor(xAxisComponent, fvector_4d(1.f, 0.f, 0.f, 1.f));
@@ -114,6 +128,23 @@ void GOperationHandleBase::BeginInit()
     inputComponent->OnLeftMouseButtonDownDelegate.Bind(this, &GOperationHandleBase::OnLeftButtonDown);
     inputComponent->OnLeftMouseButtonUpDelegate.Bind(this, &GOperationHandleBase::OnLeftButtonUp);
     inputComponent->OnMouseMoveDelegate.Bind(this, &GOperationHandleBase::OnMouseMove);
+    SetVisible(false);
+}
+
+void GOperationHandleBase::SetVisible(bool inVisible)
+{
+    if (xAxisComponent)
+    {
+        xAxisComponent->SetVisible(inVisible);
+    }
+    if (yAxisComponent)
+    {
+        yAxisComponent->SetVisible(inVisible);
+    }
+    if (zAxisComponent)
+    {
+        zAxisComponent->SetVisible(inVisible);
+    }
 }
 
 void GOperationHandleBase::OnMouseMove(int x, int y)
@@ -141,6 +172,10 @@ void GOperationHandleBase::OnMouseMove(int x, int y)
 void GOperationHandleBase::OnLeftButtonDown(int x, int y)
 {
     bOperationHandleSelect = true;
+    if (selectedAxisComponent)
+    {
+        ResetVisible(selectedAxisComponent, true);
+    }
 }
 
 void GOperationHandleBase::OnLeftButtonUp(int x, int y)
@@ -149,6 +184,7 @@ void GOperationHandleBase::OnLeftButtonUp(int x, int y)
     if (selectedAxisComponent)
     {
         ResetColor();
+        ResetVisible();
         selectedAxisComponent = nullptr;
     }
 }

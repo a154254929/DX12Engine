@@ -64,7 +64,6 @@ void GMoveArrow::OnLeftButtonDown(int x, int y)
     fvector_3d rayInterHitPosition;
     if (GetRayInterHitPosition(x, y, rayInterHitPosition))
     {
-        
         relativePosition = EngineMath::ToVector3d(selectedObject->GetPosition()) - rayInterHitPosition;
     }
 }
