@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Common\EngineVariableTable.cpp" />
+    <ClCompile Include="Common\OperationHandleSelectManager.cpp" />
     <ClCompile Include="EditorEngine\Core\EditorBase.cpp" />
     <ClCompile Include="EditorEngine\EditorEngine.cpp" />
     <ClCompile Include="EditorEngine\LogEditor\LogEditor.cpp" />
@@ -503,6 +504,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\OperationHandleSelectManager.h" />
     <Content Include="Engine\Rendering\Core\DirectX\RenderingPipeline\DynamicMap\ShadowMap\DynamicShadowCubeMap.h" />
     <Content Include="imgui\libs\glfw\COPYING.txt" />
     <Content Include="imgui\libs\glfw\lib-vc2010-32\glfw3.lib" />
