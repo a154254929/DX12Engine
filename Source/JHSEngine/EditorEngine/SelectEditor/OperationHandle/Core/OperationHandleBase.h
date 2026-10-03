@@ -2,6 +2,7 @@
 #include "Engine/Actor/Core/ActorObject.h"
 #include "Engine/Component/Mesh/CustomMeshComponent.h"
 #include "Engine/Interface/DirectXDeviceInterface.h"
+#include "../../../../Engine/Component/Input/InputType.h"
 
 class CInputComponent;
 class GOperationHandleBase :
@@ -65,6 +66,7 @@ protected:
     virtual void OnMouseMove(int x, int y);
     virtual void OnLeftButtonDown(int x, int y);
     virtual void OnLeftButtonUp(int x, int y);
+    virtual void OnCaptureKeyboardInformation(const FInputKey& inputKey);
     
 protected:
     bool GetRayInterHitPosition(int x, int y, fvector_3d& outHitPosition);

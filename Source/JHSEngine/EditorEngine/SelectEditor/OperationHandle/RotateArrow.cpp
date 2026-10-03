@@ -1,18 +1,11 @@
 #include "RotateArrow.h"
 
+#include "Common/OperationHandleSelectManager.h"
 #include "Engine/Core/Consttruction/MacroConstruction.h"
 #include "Engine/Library/RaycastSystemLibrary.h"
 
 GRotateArrow::GRotateArrow()
 {
-    FCreateObjectParam param;
-    param.owner = this;
-    
-    xAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
-    yAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
-    zAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
-    
-   SetMeshRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE);
 }
 
 void GRotateArrow::CreateMesh()
@@ -70,4 +63,16 @@ void GRotateArrow::OnLeftButtonDown(int x, int y)
 void GRotateArrow::OnLeftButtonUp(int x, int y)
 {
     Super::OnLeftButtonUp(x, y);
+}
+
+void GRotateArrow::OnCaptureKeyboardInformation(const FInputKey& inputKey)
+{
+    Super::OnCaptureKeyboardInformation(inputKey);
+    if (selectedObject)
+    {
+        if (inputKey.keyName == "E")
+        {
+            FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle(this);
+        }
+    }
 }

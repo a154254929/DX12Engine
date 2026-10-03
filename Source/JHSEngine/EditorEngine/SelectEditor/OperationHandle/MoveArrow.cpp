@@ -1,18 +1,11 @@
 #include "MoveArrow.h"
 
+#include "Common/OperationHandleSelectManager.h"
 #include "Engine/Core/Consttruction/MacroConstruction.h"
 #include "Engine/Library/RaycastSystemLibrary.h"
 
 GMoveArrow::GMoveArrow()
 {
-    FCreateObjectParam param;
-    param.owner = this;
-    
-    xAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
-    yAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
-    zAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
-    
-   SetMeshRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE);
 }
 
 void GMoveArrow::CreateMesh()
@@ -71,4 +64,16 @@ void GMoveArrow::OnLeftButtonDown(int x, int y)
 void GMoveArrow::OnLeftButtonUp(int x, int y)
 {
     Super::OnLeftButtonUp(x, y);
+}
+
+void GMoveArrow::OnCaptureKeyboardInformation(const FInputKey& inputKey)
+{
+    Super::OnCaptureKeyboardInformation(inputKey);
+    if (selectedObject)
+    {
+        if (inputKey.keyName == "W")
+        {
+            FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle(this);
+        }
+    }
 }

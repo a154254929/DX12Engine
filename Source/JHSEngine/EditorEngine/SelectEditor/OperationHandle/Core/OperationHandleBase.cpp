@@ -16,6 +16,12 @@ GOperationHandleBase::GOperationHandleBase()
     param.owner = this;
     inputComponent = ConstructionObject<CInputComponent>(param);
     fixedZoom = 80.f;
+    
+    xAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
+    yAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
+    zAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
+    
+    SetMeshRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE);
 }
 
 void GOperationHandleBase::SetMeshRenderLayerType(EMeshRenderLayerType inRenderLayerType)
@@ -130,6 +136,7 @@ void GOperationHandleBase::BeginInit()
 {
     Super::BeginInit();
     
+    inputComponent->captureKeyboardInforDelegate.Bind(this, &GOperationHandleBase::OnCaptureKeyboardInformation);
     inputComponent->OnLeftMouseButtonDownDelegate.Bind(this, &GOperationHandleBase::OnLeftButtonDown);
     inputComponent->OnLeftMouseButtonUpDelegate.Bind(this, &GOperationHandleBase::OnLeftButtonUp);
     inputComponent->OnMouseMoveDelegate.Bind(this, &GOperationHandleBase::OnMouseMove);
@@ -175,7 +182,7 @@ void GOperationHandleBase::SetVisible(bool inVisible)
 
 void GOperationHandleBase::OnMouseMove(int x, int y)
 {
-    if (bOperationHandleSelect)
+    if (bOperationHandleSelect || (!xAxisComponent->IsVisible() && !yAxisComponent->IsVisible() && !zAxisComponent->IsVisible()))
     {
         return;
     }
@@ -213,6 +220,10 @@ void GOperationHandleBase::OnLeftButtonUp(int x, int y)
         ResetVisible();
         selectedAxisComponent = nullptr;
     }
+}
+
+void GOperationHandleBase::OnCaptureKeyboardInformation(const FInputKey& inputKey)
+{
 }
 
 extern GActorObject* selectedObject;

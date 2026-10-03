@@ -3,10 +3,12 @@
 
 #include "EngineVariableTable.h"
 #include "EditorEngine/SelectEditor/OperationHandle/MoveArrow.h"
+#include "EditorEngine/SelectEditor/OperationHandle/RotateArrow.h"
+#include "EditorEngine/SelectEditor/OperationHandle/ScaleArrow.h"
 
 extern class GMoveArrow* moveArrow;
-// extern class GScaleArrow* scaleArrow;
-// extern class GROtateArrow* rotateArrow;
+extern class GScaleArrow* scaleArrow;
+extern class GRotateArrow* rotateArrow;
 extern class GActorObject* selectedObject;
 
 FOperationHandleSelectManager* FOperationHandleSelectManager::instance = nullptr;
@@ -33,6 +35,38 @@ void FOperationHandleSelectManager::DestroyInstance()
     }
 }
 
+void FOperationHandleSelectManager::AllOperationHandleHide()
+{
+    if (moveArrow)
+    {
+        moveArrow->SetVisible(false);
+    }
+    if (scaleArrow)
+    {
+        scaleArrow->SetVisible(false);
+    }
+    if (rotateArrow)
+    {
+        rotateArrow->SetVisible(false);
+    }
+}
+
+void FOperationHandleSelectManager::DisplaySelectOperationHandle(GActorObject* inSelectOperationHandle)
+{
+    if (selectedObject)
+    {
+        AllOperationHandleHide();
+        
+        if (GOperationHandleBase* inHandleBase = dynamic_cast<GOperationHandleBase*>(inSelectOperationHandle))
+        {
+            inHandleBase->SetPosition(selectedObject->GetPosition());
+            //inHandleBase->SetRotation(selectedObject->GetRotation());
+            inHandleBase->SetVisible(true);
+        }
+            SetNewSelectOperationHandle(inSelectOperationHandle);
+    }
+}
+
 
 void FOperationHandleSelectManager::DisplaySelectOperationHandle()
 {            
@@ -43,6 +77,7 @@ void FOperationHandleSelectManager::DisplaySelectOperationHandle()
             if (moveArrow)
             {
                 moveArrow->SetPosition(selectedObject->GetPosition());
+                //inHandleBase->SetRotation(selectedObject->GetRotation());
                 moveArrow->SetVisible(true);
                 
                 SetNewSelectOperationHandle(moveArrow);
@@ -53,6 +88,7 @@ void FOperationHandleSelectManager::DisplaySelectOperationHandle()
             if (GOperationHandleBase* inHandleBase = dynamic_cast<GOperationHandleBase*>(selectOperationHandle))
             {
                 inHandleBase->SetPosition(selectedObject->GetPosition());
+                //inHandleBase->SetRotation(selectedObject->GetRotation());
                 inHandleBase->SetVisible(true);
             }
         }

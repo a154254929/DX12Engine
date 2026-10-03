@@ -37,6 +37,10 @@ void CInputComponent::Tick(float deltaTime)
         {
             inputKey.keyName = "E";
         }
+        else if (GetAsyncKeyState('R') & 0x8000)
+        {
+            inputKey.keyName = "R";
+        }
         else if (GetAsyncKeyState('Q') & 0x8000)
         {
             inputKey.keyName = "Q";
@@ -48,6 +52,10 @@ void CInputComponent::Tick(float deltaTime)
         else if (GetAsyncKeyState('Y') & 0x8000)
         {
             inputKey.keyName = "Y";
+        }
+        else if (GetAsyncKeyState('F') & 0x8000)
+        {
+            inputKey.keyName = "F";
         }
         else
         {

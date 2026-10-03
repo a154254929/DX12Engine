@@ -13,6 +13,10 @@ public:
     static void DestroyInstance();
     
 public:
+    void AllOperationHandleHide();
+    
+public:
+    void DisplaySelectOperationHandle(GActorObject* inSelectOperationHandle);
     void DisplaySelectOperationHandle();
     void HideSelectOperationHandle();
     

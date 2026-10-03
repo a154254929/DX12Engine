@@ -1,18 +1,11 @@
 #include "ScaleArrow.h"
 
+#include "Common/OperationHandleSelectManager.h"
 #include "Engine/Core/Consttruction/MacroConstruction.h"
 #include "Engine/Library/RaycastSystemLibrary.h"
 
 GScaleArrow::GScaleArrow()
 {
-    FCreateObjectParam param;
-    param.owner = this;
-    
-    xAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
-    yAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
-    zAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
-    
-   SetMeshRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE);
 }
 
 void GScaleArrow::CreateMesh()
@@ -71,4 +64,16 @@ void GScaleArrow::OnLeftButtonDown(int x, int y)
 void GScaleArrow::OnLeftButtonUp(int x, int y)
 {
     Super::OnLeftButtonUp(x, y);
+}
+
+void GScaleArrow::OnCaptureKeyboardInformation(const FInputKey& inputKey)
+{
+    Super::OnCaptureKeyboardInformation(inputKey);
+    if (selectedObject)
+    {
+        if (inputKey.keyName == "R")
+        {
+            FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle(this);
+        }
+    }
 }
