@@ -2,11 +2,11 @@
 #include "Core/OperationHandleBase.h"
 
 
-class GMoveArrow : public GOperationHandleBase
+class GRotateArrow : public GOperationHandleBase
 {
     typedef GOperationHandleBase Super;
 public:
-    GMoveArrow();
+    GRotateArrow();
     
     void CreateMesh(); 
     

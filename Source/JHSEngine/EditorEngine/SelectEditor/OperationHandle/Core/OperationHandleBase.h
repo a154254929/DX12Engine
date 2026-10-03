@@ -16,7 +16,8 @@ protected:
         ESelectAxis_None,
         ESelectAxis_X,
         ESelectAxis_Y,
-        ESelectAxis_Z
+        ESelectAxis_Z,
+        ESelectAxis_Any
     };
     
 protected:
@@ -64,6 +65,9 @@ protected:
     virtual void OnMouseMove(int x, int y);
     virtual void OnLeftButtonDown(int x, int y);
     virtual void OnLeftButtonUp(int x, int y);
+    
+protected:
+    bool GetRayInterHitPosition(int x, int y, fvector_3d& outHitPosition);
     
     bool bOperationHandleSelect{ false };
     float fixedZoom;

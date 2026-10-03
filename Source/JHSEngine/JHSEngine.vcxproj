@@ -153,6 +153,8 @@
     <ClCompile Include="EditorEngine\OutlineEditor\OutlineEditor.cpp" />
     <ClCompile Include="EditorEngine\SelectEditor\OperationHandle\Core\OperationHandleBase.cpp" />
     <ClCompile Include="EditorEngine\SelectEditor\OperationHandle\MoveArrow.cpp" />
+    <ClCompile Include="EditorEngine\SelectEditor\OperationHandle\RotateArrow.cpp" />
+    <ClCompile Include="EditorEngine\SelectEditor\OperationHandle\ScaleArrow.cpp" />
     <ClCompile Include="EditorEngine\ToolbarEditor\ToolbarEditor.cpp" />
     <ClCompile Include="Engine\Actor\Core\ActorObject.cpp" />
     <ClCompile Include="Engine\Actor\Light\Core\Light.cpp" />
@@ -360,6 +362,8 @@
     <ClInclude Include="EditorEngine\OutlineEditor\OutlineEditor.h" />
     <ClInclude Include="EditorEngine\SelectEditor\OperationHandle\Core\OperationHandleBase.h" />
     <ClInclude Include="EditorEngine\SelectEditor\OperationHandle\MoveArrow.h" />
+    <ClInclude Include="EditorEngine\SelectEditor\OperationHandle\RotateArrow.h" />
+    <ClInclude Include="EditorEngine\SelectEditor\OperationHandle\ScaleArrow.h" />
     <ClInclude Include="EditorEngine\ToolbarEditor\ToolbarEditor.h" />
     <ClInclude Include="Engine\Actor\Core\ActorObject.h" />
     <ClInclude Include="Engine\Actor\Light\Core\Light.h" />

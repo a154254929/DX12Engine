@@ -8,5 +8,7 @@ class GActorObject* selectedObject = nullptr;
 class CMeshComponent* selectedAxisComponent = nullptr;
 
 class GMoveArrow* moveArrow = nullptr;
+class GRotateArrow* rotateArrow = nullptr;
+class GScaleArrow* scaleArrow = nullptr;
 
 #endif

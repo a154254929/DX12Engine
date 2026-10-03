@@ -1,9 +1,9 @@
-#include "MoveArrow.h"
+#include "RotateArrow.h"
 
 #include "Engine/Core/Consttruction/MacroConstruction.h"
 #include "Engine/Library/RaycastSystemLibrary.h"
 
-GMoveArrow::GMoveArrow()
+GRotateArrow::GRotateArrow()
 {
     FCreateObjectParam param;
     param.owner = this;
@@ -15,13 +15,12 @@ GMoveArrow::GMoveArrow()
    SetMeshRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE);
 }
 
-void GMoveArrow::CreateMesh()
+void GRotateArrow::CreateMesh()
 {
-    string meshPath = FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\MoveArrow.fbx";
     
-    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, xAxisComponent, meshPath);
-    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, yAxisComponent, meshPath);
-    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, zAxisComponent, meshPath);
+    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, xAxisComponent, FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\RotateHandleX.fbx");
+    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, yAxisComponent, FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\RotateHandleY.fbx");
+    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, zAxisComponent, FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\RotateHandleZ.fbx");
     
     xAxisComponent->SetRotation(fvector_3d(0.f, 90.f, 0.f));
     yAxisComponent->SetRotation(fvector_3d(90.f, 0.f, 0.f));
@@ -31,7 +30,7 @@ void GMoveArrow::CreateMesh()
 }
 
 extern GActorObject* selectedObject;
-void GMoveArrow::OnMouseMove(int x, int y)
+void GRotateArrow::OnMouseMove(int x, int y)
 {
     Super::OnMouseMove(x, y);
 
@@ -57,7 +56,7 @@ void GMoveArrow::OnMouseMove(int x, int y)
     }
 }
 
-void GMoveArrow::OnLeftButtonDown(int x, int y)
+void GRotateArrow::OnLeftButtonDown(int x, int y)
 {
     Super::OnLeftButtonDown(x, y);
     
@@ -68,7 +67,7 @@ void GMoveArrow::OnLeftButtonDown(int x, int y)
     }
 }
 
-void GMoveArrow::OnLeftButtonUp(int x, int y)
+void GRotateArrow::OnLeftButtonUp(int x, int y)
 {
     Super::OnLeftButtonUp(x, y);
 }

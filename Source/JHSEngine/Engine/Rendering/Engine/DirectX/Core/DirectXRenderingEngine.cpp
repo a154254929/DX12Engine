@@ -26,9 +26,6 @@
 #include "../../../../Mesh/AesmaMesh.h"
 #include "../../../../Mesh/DonutMesh.h"
 #include "Engine/Core/Camera.h"
-#if EDITOR_ENGINE
-#include "EditorEngine/SelectEditor/OperationHandle/MoveArrow.h"
-#endif
 
 
 //class FVector
@@ -86,7 +83,12 @@ int CDirectXRenderingEngine::Init(FWinMainCommandParameters inParameters)
 }
 
 #if EDITOR_ENGINE
+#include "EditorEngine/SelectEditor/OperationHandle/MoveArrow.h"
+#include "EditorEngine/SelectEditor/OperationHandle/RotateArrow.h"
+#include "EditorEngine/SelectEditor/OperationHandle/ScaleArrow.h"
 extern GMoveArrow* moveArrow;
+extern GRotateArrow* rotateArrow;
+extern GScaleArrow* scaleArrow;
 #endif
 int CDirectXRenderingEngine::PostInit()
 {
@@ -100,6 +102,24 @@ int CDirectXRenderingEngine::PostInit()
             editorMoveArrow->SetScale(fvector_3d(1.f, 1.f, 1.f));
     
             moveArrow = editorMoveArrow;
+        }
+        
+        if (GRotateArrow* editorRotateArrow = world->CreateActorObject<GRotateArrow>())
+        {
+            editorRotateArrow->CreateMesh();
+            editorRotateArrow->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
+            editorRotateArrow->SetScale(fvector_3d(1.f, 1.f, 1.f));
+    
+            rotateArrow = editorRotateArrow;
+        }
+        
+        if (GScaleArrow* editorScaleArrow = world->CreateActorObject<GScaleArrow>())
+        {
+            editorScaleArrow->CreateMesh();
+            editorScaleArrow->SetPosition(XMFLOAT3(0.f, 0.f, 0.f));
+            editorScaleArrow->SetScale(fvector_3d(1.f, 1.f, 1.f));
+    
+            scaleArrow = editorScaleArrow;
         }
         
 #endif

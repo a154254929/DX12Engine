@@ -1,9 +1,9 @@
-#include "MoveArrow.h"
+#include "ScaleArrow.h"
 
 #include "Engine/Core/Consttruction/MacroConstruction.h"
 #include "Engine/Library/RaycastSystemLibrary.h"
 
-GMoveArrow::GMoveArrow()
+GScaleArrow::GScaleArrow()
 {
     FCreateObjectParam param;
     param.owner = this;
@@ -15,9 +15,9 @@ GMoveArrow::GMoveArrow()
    SetMeshRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE);
 }
 
-void GMoveArrow::CreateMesh()
+void GScaleArrow::CreateMesh()
 {
-    string meshPath = FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\MoveArrow.fbx";
+    string meshPath = FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\ScalingArrow.fbx";
     
     CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, xAxisComponent, meshPath);
     CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, yAxisComponent, meshPath);
@@ -31,7 +31,7 @@ void GMoveArrow::CreateMesh()
 }
 
 extern GActorObject* selectedObject;
-void GMoveArrow::OnMouseMove(int x, int y)
+void GScaleArrow::OnMouseMove(int x, int y)
 {
     Super::OnMouseMove(x, y);
 
@@ -57,7 +57,7 @@ void GMoveArrow::OnMouseMove(int x, int y)
     }
 }
 
-void GMoveArrow::OnLeftButtonDown(int x, int y)
+void GScaleArrow::OnLeftButtonDown(int x, int y)
 {
     Super::OnLeftButtonDown(x, y);
     
@@ -68,7 +68,7 @@ void GMoveArrow::OnLeftButtonDown(int x, int y)
     }
 }
 
-void GMoveArrow::OnLeftButtonUp(int x, int y)
+void GScaleArrow::OnLeftButtonUp(int x, int y)
 {
     Super::OnLeftButtonUp(x, y);
 }
