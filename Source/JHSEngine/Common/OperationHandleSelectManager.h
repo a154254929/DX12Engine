@@ -12,9 +12,17 @@ public:
     static FOperationHandleSelectManager* GetInstance();
     static void DestroyInstance();
     
+public:
+    void DisplaySelectOperationHandle();
+    void HideSelectOperationHandle();
+    
+public:
+    //设置新的手柄
+    void SetNewSelectOperationHandle(GActorObject* inSelectOperationHandle);
+    void SetNewSelectObject(GActorObject* inSelectObject);
 private:
     static FOperationHandleSelectManager* instance;
     
-    GActorObject* selectOperationHandle;
+    GActorObject* selectOperationHandle = nullptr;
 };
 #endif

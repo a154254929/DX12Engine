@@ -5,9 +5,9 @@
 #include "Engine/Component/Mesh/Core/MeshComponentType.h"
 #include "Engine/Mesh/Core/Mesh.h"
 #include "../../Common/EngineVariableTable.h"
-#include "EditorEngine/SelectEditor/OperationHandle/MoveArrow.h"
 #include "Engine/Rendering/Core/DirectX/RenderingPipeline/RenderingPipeline.h"
 #include "Engine/Rendering/Core/DirectX/RenderingPipeline/RenderLayer/RenderLayerManager.h"
+#include "Common/OperationHandleSelectManager.h"
 
 
 void FOutlineEditor::BuildEditor()
@@ -15,8 +15,6 @@ void FOutlineEditor::BuildEditor()
 }
 
 extern int actorSelectId;
-extern GMoveArrow* moveArrow;
-extern GActorObject* selectedObject;
 void FOutlineEditor::DrawEditor(float deltaTime)
 {
     ImGui::Begin("Outline Editor");
@@ -32,12 +30,8 @@ void FOutlineEditor::DrawEditor(float deltaTime)
                 if (ImGui::Selectable(objectName, i == actorSelectId))
                 {
                     actorSelectId = i;
-                    if (moveArrow)
-                    {
-                        moveArrow->SetPosition(actor->GetTransformationComponent()->GetPosition());
-                        moveArrow->SetVisible(true);
-                    }
-                    selectedObject = actor;
+                    FOperationHandleSelectManager::GetInstance()->SetNewSelectObject(actor);
+                    FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle();
                     HighlightDisplayObject(actor);
                 }
             }
