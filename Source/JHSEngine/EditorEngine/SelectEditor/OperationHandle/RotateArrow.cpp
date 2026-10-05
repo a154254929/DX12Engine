@@ -27,7 +27,7 @@ void GRotateArrow::OnMouseMove(int x, int y)
 {
     Super::OnMouseMove(x, y);
 
-    if (!bOperationHandleSelect)
+    if (!bOperationHandleSelect || !IsCurrentOperationHandleSelect())
     {
         return;
     }
@@ -52,6 +52,11 @@ void GRotateArrow::OnMouseMove(int x, int y)
 void GRotateArrow::OnLeftButtonDown(int x, int y)
 {
     Super::OnLeftButtonDown(x, y);
+    
+    if (!IsCurrentOperationHandleSelect())
+    {
+        return;
+    }
     
     fvector_3d rayInterHitPosition;
     if (GetRayInterHitPosition(x, y, rayInterHitPosition))

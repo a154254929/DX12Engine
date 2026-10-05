@@ -71,6 +71,8 @@ protected:
 protected:
     bool GetRayInterHitPosition(int x, int y, fvector_3d& outHitPosition);
     
+    bool IsCurrentOperationHandleSelect() const;
+    
     bool bOperationHandleSelect{ false };
     float fixedZoom;
 };

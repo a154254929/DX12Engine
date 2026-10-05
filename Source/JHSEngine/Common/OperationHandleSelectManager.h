@@ -24,6 +24,10 @@ public:
     //设置新的手柄
     void SetNewSelectOperationHandle(GActorObject* inSelectOperationHandle);
     void SetNewSelectObject(GActorObject* inSelectObject);
+    
+public:
+    GActorObject* GetSelectOperationHandle();
+    
 private:
     static FOperationHandleSelectManager* instance;
     

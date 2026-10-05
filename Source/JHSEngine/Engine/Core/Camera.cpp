@@ -195,7 +195,7 @@ void GCamera::OnMouseWheel(int x, int y, float inDelta)
 
 void GCamera::MoveForward(float inValue)
 {
-    if (cameraType == ECameraType::CameraRoaming)
+    if (cameraType == ECameraType::CameraRoaming && bRightMosueDown)
     {
         XMFLOAT3 f3Position = GetTransformationComponent()->GetPosition();
         XMFLOAT3 f3Forward = GetTransformationComponent()->GetForwardVector();
@@ -210,7 +210,7 @@ void GCamera::MoveForward(float inValue)
 
 void GCamera::MoveRight(float inValue)
 {
-    if (cameraType == ECameraType::CameraRoaming)
+    if (cameraType == ECameraType::CameraRoaming && bRightMosueDown)
     {
         XMFLOAT3 f3Position = GetTransformationComponent()->GetPosition();
         XMFLOAT3 f3Right = GetTransformationComponent()->GetRightVector();
@@ -225,7 +225,7 @@ void GCamera::MoveRight(float inValue)
 
 void GCamera::MoveUp(float inValue)
 {
-    if (cameraType == ECameraType::CameraRoaming)
+    if (cameraType == ECameraType::CameraRoaming && bRightMosueDown)
     {
         XMFLOAT3 f3Position = GetTransformationComponent()->GetPosition();
         XMFLOAT3 f3Up = GetTransformationComponent()->GetUpVector();

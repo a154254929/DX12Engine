@@ -1,5 +1,6 @@
 #include "OperationHandleBase.h"
 
+#include "Common/OperationHandleSelectManager.h"
 #include "Engine/EngineType.h"
 #include "Engine/Component/InputComponent.h"
 #include "Engine/Core/Camera.h"
@@ -182,7 +183,7 @@ void GOperationHandleBase::SetVisible(bool inVisible)
 
 void GOperationHandleBase::OnMouseMove(int x, int y)
 {
-    if (bOperationHandleSelect || (!xAxisComponent->IsVisible() && !yAxisComponent->IsVisible() && !zAxisComponent->IsVisible()))
+    if (bOperationHandleSelect || !IsCurrentOperationHandleSelect())
     {
         return;
     }
@@ -204,6 +205,10 @@ void GOperationHandleBase::OnMouseMove(int x, int y)
 
 void GOperationHandleBase::OnLeftButtonDown(int x, int y)
 {
+    if (!IsCurrentOperationHandleSelect())
+    {
+        return;
+    }
     bOperationHandleSelect = true;
     if (selectedAxisComponent)
     {
@@ -213,6 +218,10 @@ void GOperationHandleBase::OnLeftButtonDown(int x, int y)
 
 void GOperationHandleBase::OnLeftButtonUp(int x, int y)
 {
+    if (!IsCurrentOperationHandleSelect())
+    {
+        return;
+    }
     bOperationHandleSelect = false;
     if (selectedAxisComponent)
     {
@@ -303,4 +312,9 @@ bool GOperationHandleBase::GetRayInterHitPosition(int x, int y, fvector_3d& outH
         return true;
     }
     return false;
+}
+
+bool GOperationHandleBase::IsCurrentOperationHandleSelect() const
+{
+    return this == FOperationHandleSelectManager::GetInstance()->GetSelectOperationHandle();
 }

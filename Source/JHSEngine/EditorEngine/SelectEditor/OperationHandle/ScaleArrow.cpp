@@ -6,6 +6,7 @@
 
 GScaleArrow::GScaleArrow()
 {
+    fixedZoom = 35.f;
 }
 
 void GScaleArrow::CreateMesh()
@@ -28,7 +29,7 @@ void GScaleArrow::OnMouseMove(int x, int y)
 {
     Super::OnMouseMove(x, y);
 
-    if (!bOperationHandleSelect)
+    if (!bOperationHandleSelect || !IsCurrentOperationHandleSelect())
     {
         return;
     }
@@ -53,6 +54,11 @@ void GScaleArrow::OnMouseMove(int x, int y)
 void GScaleArrow::OnLeftButtonDown(int x, int y)
 {
     Super::OnLeftButtonDown(x, y);
+    
+    if (!IsCurrentOperationHandleSelect())
+    {
+        return;
+    }
     
     fvector_3d rayInterHitPosition;
     if (GetRayInterHitPosition(x, y, rayInterHitPosition))

@@ -113,4 +113,9 @@ void FOperationHandleSelectManager::SetNewSelectObject(GActorObject* inSelectObj
     selectedObject = inSelectObject;
 }
 
+GActorObject* FOperationHandleSelectManager::GetSelectOperationHandle()
+{
+    return selectOperationHandle;
+}
+
 #endif
