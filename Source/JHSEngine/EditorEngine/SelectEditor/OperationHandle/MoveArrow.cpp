@@ -33,9 +33,13 @@ void GMoveArrow::OnMouseMove(int x, int y)
         return;
     }
     
-    fvector_3d rayInterHitPosition;
-    if (GetRayInterHitPosition(x, y, rayInterHitPosition))
+    float rayInterHitT1;
+    fvector_3d worldActorDir;
+    fvector_3d worldActorPosition;
+    if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
+            
+        fvector_3d rayInterHitPosition = worldActorDir * rayInterHitT1 + worldActorPosition;
         XMFLOAT3 worldMovePositionFloat3 = EngineMath::ToFloat3(rayInterHitPosition + relativePosition);
         
         selectedObject->SetPosition(worldMovePositionFloat3);
@@ -59,9 +63,13 @@ void GMoveArrow::OnLeftButtonDown(int x, int y)
         return;
     }
     
-    fvector_3d rayInterHitPosition;
-    if (GetRayInterHitPosition(x, y, rayInterHitPosition))
+    float rayInterHitT1;
+    fvector_3d worldActorDir;
+    fvector_3d worldActorPosition;
+    if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
+            
+        fvector_3d rayInterHitPosition = worldActorDir * rayInterHitT1 + worldActorPosition;
         relativePosition = EngineMath::ToVector3d(selectedObject->GetPosition()) - rayInterHitPosition;
     }
 }

@@ -15,9 +15,6 @@ void GRotateArrow::CreateMesh()
     CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, yAxisComponent, FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\RotateHandleY.fbx");
     CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, zAxisComponent, FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\RotateHandleZ.fbx");
     
-    xAxisComponent->SetRotation(fvector_3d(0.f, 90.f, 0.f));
-    yAxisComponent->SetRotation(fvector_3d(90.f, 0.f, 0.f));
-    
     ResetColor();
     
 }
@@ -32,9 +29,13 @@ void GRotateArrow::OnMouseMove(int x, int y)
         return;
     }
     
-    fvector_3d rayInterHitPosition;
-    if (GetRayInterHitPosition(x, y, rayInterHitPosition))
+    float rayInterHitT1;
+    fvector_3d worldActorDir;
+    fvector_3d worldActorPosition;
+    if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
+            
+        fvector_3d rayInterHitPosition = worldActorDir * rayInterHitT1 + worldActorPosition;
         XMFLOAT3 worldMovePositionFloat3 = EngineMath::ToFloat3(rayInterHitPosition + relativePosition);
         
         selectedObject->SetPosition(worldMovePositionFloat3);
@@ -58,9 +59,13 @@ void GRotateArrow::OnLeftButtonDown(int x, int y)
         return;
     }
     
-    fvector_3d rayInterHitPosition;
-    if (GetRayInterHitPosition(x, y, rayInterHitPosition))
+    float rayInterHitT1;
+    fvector_3d worldActorDir;
+    fvector_3d worldActorPosition;
+    if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
+            
+        fvector_3d rayInterHitPosition = worldActorDir * rayInterHitT1 + worldActorPosition;
         relativePosition = EngineMath::ToVector3d(selectedObject->GetPosition()) - rayInterHitPosition;
     }
 }

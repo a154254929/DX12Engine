@@ -34,20 +34,27 @@ void GScaleArrow::OnMouseMove(int x, int y)
         return;
     }
     
-    fvector_3d rayInterHitPosition;
-    if (GetRayInterHitPosition(x, y, rayInterHitPosition))
+    float rayInterHitT1;
+    fvector_3d worldActorDir;
+    fvector_3d worldActorPosition;
+    if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
-        XMFLOAT3 worldMovePositionFloat3 = EngineMath::ToFloat3(rayInterHitPosition + relativePosition);
+        fvector_3d currentScale = selectedObject->GetScale();
+        float diffT1Value = rayInterHitT1 - lastT1Value;
+        float scaleValue = 0.f;
+        if (diffT1Value > 0.f)
+        {
+            scaleValue += 0.25f;
+        }
+        else if (diffT1Value < 0.f)
+        {
+            scaleValue -= 0.25f;
+        }
         
-        selectedObject->SetPosition(worldMovePositionFloat3);
-        SetPosition(worldMovePositionFloat3);
-        /*
-        char fromPos[1024] = {0}; 
-        char toPos[1024] = {0}; 
-        rayInterHitPosition.to_string(fromPos);
-        (rayInterHitPosition + relativePosition).to_string(toPos);
-        Engine_Log("Move Object form {%s} to {%s}", fromPos, toPos);
-        */
+        currentScale += worldActorDir * scaleValue;
+        selectedObject->SetScale(currentScale);
+        lastT1Value = rayInterHitT1;
+
     }
 }
 
@@ -60,10 +67,13 @@ void GScaleArrow::OnLeftButtonDown(int x, int y)
         return;
     }
     
-    fvector_3d rayInterHitPosition;
-    if (GetRayInterHitPosition(x, y, rayInterHitPosition))
+    float rayInterHitT1;
+    fvector_3d worldActorDir;
+    fvector_3d worldActorPosition;
+    if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
-        relativePosition = EngineMath::ToVector3d(selectedObject->GetPosition()) - rayInterHitPosition;
+        fvector_3d rayInterHitPosition = worldActorDir * rayInterHitT1 + worldActorPosition;
+        lastT1Value = rayInterHitT1;
     }
 }
 

@@ -17,5 +17,5 @@ protected:
     virtual void OnCaptureKeyboardInformation(const FInputKey& inputKey);
     
 protected:
-    fvector_3d relativePosition;
+    float lastT1Value;
 };

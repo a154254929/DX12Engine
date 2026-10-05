@@ -69,7 +69,12 @@ protected:
     virtual void OnCaptureKeyboardInformation(const FInputKey& inputKey);
     
 protected:
-    bool GetRayInterHitPosition(int x, int y, fvector_3d& outHitPosition);
+    bool GetRayInterHitPosition(
+        int x, int y,
+        float& outT1,
+        fvector_3d& outWorldActorDir,
+        fvector_3d& outWorldActorPosition
+    );
     
     bool IsCurrentOperationHandleSelect() const;
     

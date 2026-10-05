@@ -236,7 +236,12 @@ void GOperationHandleBase::OnCaptureKeyboardInformation(const FInputKey& inputKe
 }
 
 extern GActorObject* selectedObject;
-bool GOperationHandleBase::GetRayInterHitPosition(int x, int y, fvector_3d& outHitPosition)
+bool GOperationHandleBase::GetRayInterHitPosition(
+    int x, int y,
+    float& outT1,
+    fvector_3d& outWorldActorDir,
+    fvector_3d& outWorldActorPosition
+)
 {
     ESelectAxisType axisType = GetSelectAxisType();
     if (!selectedObject || axisType == ESelectAxis_None)
@@ -262,21 +267,20 @@ bool GOperationHandleBase::GetRayInterHitPosition(int x, int y, fvector_3d& outH
         fvector_3d worldOriginDir3d = EngineMath::ToVector3d(worldDirFloat3);
         worldOriginDir3d.normalize();
         
-        fvector_3d worldActorPosition = EngineMath::ToVector3d(selectedObject->GetPosition());
-        fvector_3d worldActorDir;
+        outWorldActorPosition = EngineMath::ToVector3d(selectedObject->GetPosition());
         
         if (true)
         {
             switch (axisType)
             {
             case ESelectAxis_X:
-                worldActorDir =fvector_3d(1.f, 0.f, 0.f);
+                outWorldActorDir =fvector_3d(1.f, 0.f, 0.f);
                 break;
             case ESelectAxis_Y:
-                worldActorDir =fvector_3d(0.f, 1.f, 0.f);
+                outWorldActorDir =fvector_3d(0.f, 1.f, 0.f);
                 break;
             case ESelectAxis_Z:
-                worldActorDir =fvector_3d(0.f, 0.f, 1.f);
+                outWorldActorDir =fvector_3d(0.f, 0.f, 1.f);
                 break;
             default:
                 break;  
@@ -287,28 +291,26 @@ bool GOperationHandleBase::GetRayInterHitPosition(int x, int y, fvector_3d& outH
             switch (axisType)
             {
             case ESelectAxis_X:
-                worldActorDir = EngineMath::ToVector3d(selectedObject->GetRightVector());
+                outWorldActorDir = EngineMath::ToVector3d(selectedObject->GetRightVector());
                 break;
             case ESelectAxis_Y:
-                worldActorDir = EngineMath::ToVector3d(selectedObject->GetUpVector());
+                outWorldActorDir = EngineMath::ToVector3d(selectedObject->GetUpVector());
                 break;
             case ESelectAxis_Z:
-                worldActorDir = EngineMath::ToVector3d(selectedObject->GetForwardVector());
+                outWorldActorDir = EngineMath::ToVector3d(selectedObject->GetForwardVector());
                 break;
             default:
                 break;  
             }
         }
             
-        fvector_3d v1Xv2 = fvector_3d::cross_product(worldOriginDir3d, worldActorDir);
+        fvector_3d v1Xv2 = fvector_3d::cross_product(worldOriginDir3d, outWorldActorDir);
         float len = v1Xv2.len();
             
-        float t1 = fvector_3d::dot(
-            fvector_3d::cross_product(worldActorPosition - worldOriginPos3d, worldOriginDir3d),
+        outT1 = fvector_3d::dot(
+            fvector_3d::cross_product(outWorldActorPosition - worldOriginPos3d, worldOriginDir3d),
             v1Xv2
         ) / (len * len);
-            
-        outHitPosition = worldActorDir * t1 + worldActorPosition;
         return true;
     }
     return false;
