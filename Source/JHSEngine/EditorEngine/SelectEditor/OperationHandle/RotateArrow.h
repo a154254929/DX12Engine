@@ -10,6 +10,9 @@ public:
     
     void CreateMesh(); 
     
+public:
+    virtual void SetScale(const fvector_3d& inScale);
+    
 protected:
     virtual void OnMouseMove(int x, int y);
     virtual void OnLeftButtonDown(int x, int y);

@@ -34,6 +34,9 @@ protected:
     CVARIABLE()
     CCustomMeshComponent* zAxisComponent;
     
+    CVARIABLE()
+    CCustomMeshComponent* customAxisComponent;
+    
     
 public:
     GOperationHandleBase();

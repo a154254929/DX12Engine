@@ -10,12 +10,26 @@ GRotateArrow::GRotateArrow()
 
 void GRotateArrow::CreateMesh()
 {
+    string meshPath = FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle";
+    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, xAxisComponent, meshPath + "\\RotateHandleX.fbx");
+    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, yAxisComponent, meshPath + "\\RotateHandleY.fbx");
+    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, zAxisComponent, meshPath + "\\RotateHandleZ.fbx");
+    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, customAxisComponent, meshPath + "\\AnyAxis_Type_1.fbx");
     
-    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, xAxisComponent, FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\RotateHandleX.fbx");
-    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, yAxisComponent, FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\RotateHandleY.fbx");
-    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, zAxisComponent, FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\RotateHandleZ.fbx");
+    customAxisComponent->SetPickup(false);
     
     ResetColor();
+    
+}
+
+void GRotateArrow::SetScale(const fvector_3d& inScale)
+{
+    Super::SetScale(inScale);
+    
+    if (customAxisComponent)
+    {
+        customAxisComponent->SetScale(inScale * 1.4f);
+    }
     
 }
 

@@ -11,10 +11,12 @@ GMoveArrow::GMoveArrow()
 void GMoveArrow::CreateMesh()
 {
     string meshPath = FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\MoveArrow.fbx";
+    string customMeshPath = FEnginePathHelper::GetEngineRelativeContentPath() + "\\Handle\\AnyAxis_Type_1.fbx";
     
     CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, xAxisComponent, meshPath);
     CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, yAxisComponent, meshPath);
     CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, zAxisComponent, meshPath);
+    CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, customAxisComponent, customMeshPath);
     
     xAxisComponent->SetRotation(fvector_3d(0.f, 90.f, 0.f));
     yAxisComponent->SetRotation(fvector_3d(90.f, 0.f, 0.f));

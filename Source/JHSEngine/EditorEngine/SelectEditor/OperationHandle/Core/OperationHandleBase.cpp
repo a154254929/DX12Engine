@@ -21,6 +21,7 @@ GOperationHandleBase::GOperationHandleBase()
     xAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
     yAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
     zAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
+    customAxisComponent = ConstructionObject<CCustomMeshComponent>(param);
     
     SetMeshRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE);
 }
@@ -30,6 +31,7 @@ void GOperationHandleBase::SetMeshRenderLayerType(EMeshRenderLayerType inRenderL
     xAxisComponent->SetRenderLayerType(inRenderLayerType);
     yAxisComponent->SetRenderLayerType(inRenderLayerType);
     zAxisComponent->SetRenderLayerType(inRenderLayerType);
+    customAxisComponent->SetRenderLayerType(inRenderLayerType);
 }
 
 GOperationHandleBase::ESelectAxisType GOperationHandleBase::GetSelectAxisType()
@@ -45,6 +47,10 @@ GOperationHandleBase::ESelectAxisType GOperationHandleBase::GetSelectAxisType()
     else if (selectedAxisComponent == zAxisComponent)
     {
         return ESelectAxis_Z;
+    }
+    else if (selectedAxisComponent == customAxisComponent)
+    {
+        return ESelectAxis_Any;
     }
     return ESelectAxis_None;
 }
@@ -64,6 +70,10 @@ void GOperationHandleBase::SetPosition(const XMFLOAT3& inPosition)
     {
         zAxisComponent->SetPosition(inPosition);
     }
+    if (customAxisComponent)
+    {
+        customAxisComponent->SetPosition(inPosition);
+    }
 }
 
 void GOperationHandleBase::SetRotation(const fvector_3d& inRotation)
@@ -80,6 +90,10 @@ void GOperationHandleBase::SetRotation(const fvector_3d& inRotation)
     if (zAxisComponent)
     {
         zAxisComponent->SetRotation(inRotation);
+    }
+    if (customAxisComponent)
+    {
+        customAxisComponent->SetRotation(inRotation);
     }
 }
 
@@ -98,6 +112,10 @@ void GOperationHandleBase::SetScale(const fvector_3d& inScale)
     if (zAxisComponent)
     {
         zAxisComponent->SetScale(inScale);
+    }
+    if (customAxisComponent)
+    {
+        customAxisComponent->SetScale(inScale);
     }
 }
 
@@ -120,6 +138,7 @@ void GOperationHandleBase::ResetColor()
     ResetColor(xAxisComponent, fvector_4d(1.f, 0.f, 0.f, 1.f));
     ResetColor(yAxisComponent, fvector_4d(0.f, 1.f, 0.f, 1.f));
     ResetColor(zAxisComponent, fvector_4d(0.f, 0.f, 1.f, 1.f));
+    ResetColor(customAxisComponent, fvector_4d(.8f, 0.2f, .0f, 1.f));
 }
 
 void GOperationHandleBase::ResetColor(CCustomMeshComponent* inAxisComponent, const fvector_4d& incolor)
@@ -178,6 +197,10 @@ void GOperationHandleBase::SetVisible(bool inVisible)
     if (zAxisComponent)
     {
         zAxisComponent->SetVisible(inVisible);
+    }
+    if (customAxisComponent)
+    {
+        customAxisComponent->SetVisible(inVisible);
     }
 }
 
