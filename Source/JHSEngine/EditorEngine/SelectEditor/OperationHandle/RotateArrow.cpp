@@ -6,6 +6,7 @@
 
 GRotateArrow::GRotateArrow()
 {
+    fixedZoom = 40.f;
 }
 
 void GRotateArrow::CreateMesh()
@@ -38,7 +39,7 @@ void GRotateArrow::OnMouseMove(int x, int y)
 {
     Super::OnMouseMove(x, y);
 
-    if (!bOperationHandleSelect || !IsCurrentOperationHandleSelect())
+    if (!selectedObject || !bOperationHandleSelect || !IsCurrentOperationHandleSelect())
     {
         return;
     }
@@ -48,19 +49,54 @@ void GRotateArrow::OnMouseMove(int x, int y)
     fvector_3d worldActorPosition;
     if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
-            
-        fvector_3d rayInterHitPosition = worldActorDir * rayInterHitT1 + worldActorPosition;
-        XMFLOAT3 worldMovePositionFloat3 = EngineMath::ToFloat3(rayInterHitPosition + relativePosition);
+        float diffT1Value = rayInterHitT1 - lastT1Value;
+        float rotateValue = 0.f;
         
-        selectedObject->SetPosition(worldMovePositionFloat3);
-        SetPosition(worldMovePositionFloat3);
-        /*
-        char fromPos[1024] = {0}; 
-        char toPos[1024] = {0}; 
-        rayInterHitPosition.to_string(fromPos);
-        (rayInterHitPosition + relativePosition).to_string(toPos);
-        Engine_Log("Move Object form {%s} to {%s}", fromPos, toPos);
-        */
+        if (diffT1Value > 0.f)
+        {
+            rotateValue += 2.5f;
+        }
+        else if (diffT1Value < 0.f)
+        {
+            rotateValue -= 2.5f;
+        }
+        lastT1Value = rayInterHitT1;
+
+        if (rotateValue == 0.f)
+        {
+            return;
+        }
+        
+        fvector_3d deltaVector = worldActorDir * rotateValue;
+        
+        fvector_3d lastRotation = selectedObject->GetRotation();
+        frotator lastRotator(lastRotation.y, lastRotation.z, lastRotation.x);
+        frotator deltaRotator(deltaVector.y, deltaVector.z, deltaVector.x);
+        
+        fquat actorRotationQuat;
+        fquat deltaRotationQuat;
+        // Use the same rotation convention as resultRotator.object_to_inertia below.
+        actorRotationQuat.object_to_inertia(lastRotator);
+        deltaRotationQuat.object_to_inertia(deltaRotator);
+        fquat resultRotationQuat;
+        
+        if (false)
+        {
+            
+        }
+        else
+        {
+            resultRotationQuat = actorRotationQuat * deltaRotationQuat;
+            resultRotationQuat.normalize();
+        }
+        
+        frotator resultRotator;
+        resultRotator.object_to_inertia(resultRotationQuat);
+        
+        fvector_3d resultRotation(resultRotator.roll, resultRotator.pitch, resultRotator.yaw);
+        
+        selectedObject->SetRotation(resultRotation);
+        
     }
 }
 
@@ -68,7 +104,7 @@ void GRotateArrow::OnLeftButtonDown(int x, int y)
 {
     Super::OnLeftButtonDown(x, y);
     
-    if (!IsCurrentOperationHandleSelect())
+    if (!selectedObject || !IsCurrentOperationHandleSelect() || GetSelectAxisType() == ESelectAxis_None)
     {
         return;
     }
@@ -78,15 +114,14 @@ void GRotateArrow::OnLeftButtonDown(int x, int y)
     fvector_3d worldActorPosition;
     if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
-            
-        fvector_3d rayInterHitPosition = worldActorDir * rayInterHitT1 + worldActorPosition;
-        relativePosition = EngineMath::ToVector3d(selectedObject->GetPosition()) - rayInterHitPosition;
+        lastT1Value = rayInterHitT1;
     }
 }
 
 void GRotateArrow::OnLeftButtonUp(int x, int y)
 {
     Super::OnLeftButtonUp(x, y);
+    bOperationHandleSelect = false;
 }
 
 void GRotateArrow::OnCaptureKeyboardInformation(const FInputKey& inputKey)

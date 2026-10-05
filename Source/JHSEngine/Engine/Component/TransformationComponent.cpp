@@ -1,4 +1,5 @@
 #include "TransformationComponent.h"
+#include "../Math/EngineMath.h"
 
 CTransformationComponent::CTransformationComponent()
     : position(0.f, 0.f, 0.f)
@@ -17,8 +18,8 @@ void CTransformationComponent::SetPosition(const XMFLOAT3& inPosition)
 
 void CTransformationComponent::SetRotation(const fvector_3d& inRotation)
 {
-    rotation = XMFLOAT3(inRotation.x, inRotation.y, inRotation.z);
-
+    // Like the reference's absolute frotator setter, rebuild from the final pose.
+    // This engine exposes that pose as XYZ degrees through the fvector_3d API.
     float rollRadians = XMConvertToRadians(inRotation.z);
     float pitchRadians = XMConvertToRadians(inRotation.x);
     float yawRadians = XMConvertToRadians(inRotation.y);
@@ -32,6 +33,8 @@ void CTransformationComponent::SetRotation(const fvector_3d& inRotation)
     XMStoreFloat3(&rightVector, XMVector3TransformNormal(right, rotationPitchYawRoll));
     XMStoreFloat3(&upVector, XMVector3TransformNormal(up, rotationPitchYawRoll));
     XMStoreFloat3(&forwardVector, XMVector3TransformNormal(forward, rotationPitchYawRoll));
+    
+    rotation = EngineMath::ToFloat3(inRotation);
 }
 
 void CTransformationComponent::SetScale(const fvector_3d& inScale)

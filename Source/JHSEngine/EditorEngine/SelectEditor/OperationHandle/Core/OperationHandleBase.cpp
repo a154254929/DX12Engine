@@ -8,6 +8,7 @@
 #include "Engine/Library/RaycastSystemLibrary.h"
 #include "Engine/Math/EngineMath.h"
 #include "Engine/Mesh/Core/Material/Material.h"
+#include <cmath>
 
 extern CMeshComponent* selectedAxisComponent;
 
@@ -349,12 +350,16 @@ bool GOperationHandleBase::GetRayInterHitPosition(
             
         fvector_3d v1Xv2 = fvector_3d::cross_product(worldOriginDir3d, outWorldActorDir);
         float len = v1Xv2.len();
+        if (!std::isfinite(len) || len < 1.e-4f)
+        {
+            return false;
+        }
             
         outT1 = fvector_3d::dot(
             fvector_3d::cross_product(outWorldActorPosition - worldOriginPos3d, worldOriginDir3d),
             v1Xv2
         ) / (len * len);
-        return true;
+        return std::isfinite(outT1);
     }
     return false;
 }
