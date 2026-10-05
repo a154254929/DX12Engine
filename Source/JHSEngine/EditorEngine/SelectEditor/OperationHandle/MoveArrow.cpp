@@ -25,6 +25,15 @@ void GMoveArrow::CreateMesh()
     
 }
 
+fvector_3d GMoveArrow::GetCustomAxisDirection(
+    const fvector_3d inRayWorldOriginPosition,
+    const fvector_3d inRayWorldDirection,
+    const fvector_3d inObjectWorldPosition
+) const
+{
+    return inRayWorldDirection;
+}
+
 extern GActorObject* selectedObject;
 void GMoveArrow::OnMouseMove(int x, int y)
 {

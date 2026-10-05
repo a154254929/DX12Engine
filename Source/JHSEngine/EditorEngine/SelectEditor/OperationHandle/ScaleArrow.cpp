@@ -26,6 +26,12 @@ void GScaleArrow::CreateMesh()
     
 }
 
+fvector_3d GScaleArrow::GetCustomAxisDirection(const fvector_3d inRayWorldOriginPosition,
+    const fvector_3d inRayWorldDirection, const fvector_3d inObjectWorldPosition) const
+{
+    return fvector_3d(1.f);
+}
+
 extern GActorObject* selectedObject;
 void GScaleArrow::OnMouseMove(int x, int y)
 {

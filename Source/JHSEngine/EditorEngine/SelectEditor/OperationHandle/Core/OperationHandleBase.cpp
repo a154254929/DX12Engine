@@ -204,6 +204,12 @@ void GOperationHandleBase::SetVisible(bool inVisible)
     }
 }
 
+fvector_3d GOperationHandleBase::GetCustomAxisDirection(const fvector_3d inRayWorldOriginPosition,
+    const fvector_3d inRayWorldDirection, const fvector_3d inObjectWorldPosition) const
+{
+    return fvector_3d(1.f);
+}
+
 void GOperationHandleBase::OnMouseMove(int x, int y)
 {
     if (bOperationHandleSelect || !IsCurrentOperationHandleSelect())
@@ -305,6 +311,13 @@ bool GOperationHandleBase::GetRayInterHitPosition(
             case ESelectAxis_Z:
                 outWorldActorDir =fvector_3d(0.f, 0.f, 1.f);
                 break;
+            case ESelectAxis_Any:
+                outWorldActorDir = GetCustomAxisDirection(
+                    worldOriginPos3d,
+                    worldOriginDir3d,
+                    outWorldActorPosition
+                );
+                break;
             default:
                 break;  
             }
@@ -321,6 +334,13 @@ bool GOperationHandleBase::GetRayInterHitPosition(
                 break;
             case ESelectAxis_Z:
                 outWorldActorDir = EngineMath::ToVector3d(selectedObject->GetForwardVector());
+                break;
+            case ESelectAxis_Any:
+                outWorldActorDir = GetCustomAxisDirection(
+                    worldOriginPos3d,
+                    worldOriginDir3d,
+                    outWorldActorPosition
+                );
                 break;
             default:
                 break;  
