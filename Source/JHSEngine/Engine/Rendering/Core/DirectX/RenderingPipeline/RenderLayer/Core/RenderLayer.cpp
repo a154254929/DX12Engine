@@ -187,6 +187,9 @@ void FRenderLayer::UpdateCalculations(float deltaTime, const FViewportInfo viewp
             XMStoreFloat4x4(&objectTransformation.world, XMMatrixTranspose(artixWorld));
             XMStoreFloat4x4(&objectTransformation.textureTransformation, XMMatrixTranspose(artixTextureTransfom));
             
+            XMVECTOR atrixWorldDeterminant = XMMatrixDeterminant(artixWorld);
+            XMStoreFloat4x4(&objectTransformation.normalWorldMatrix, XMMatrixInverse(&atrixWorldDeterminant, artixWorld));
+            
             //收集材质Index
             if (auto &inMat = (*renderingData->meshComp->GetMaterials())[0])
             {

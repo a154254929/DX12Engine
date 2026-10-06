@@ -30,7 +30,7 @@ Attribute SelectOutlineVertexShader(Varying input)
     //uv坐标
     float4 myTexcoord = mul(float4(input.texcoord, 0.f, 1.0f), ObjectTextureTransform);
     output.uv = myTexcoord.xy;
-    output.worldNormal = normalize(mul(input.normal, (float3x3)WorldMatrix));
+    output.worldNormal = normalize(mul(input.normal, (float3x3)NormalWorldMatrix));
     output.position.z = output.position.z - 0.0001f;
     return output;
 }

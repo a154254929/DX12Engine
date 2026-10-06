@@ -62,7 +62,7 @@ float4 PixelShaderUnlit(Attribute input) : SV_TARGET
 	GetMaterialRoughness(materialConst, input.uv, material);
     float3 normal = normalize(input.normal.xyz);
 	normal = GetMaterialNormal(materialConst, input.uv, normal, input.utangent);
-	float3 worldNormal = normalize(mul(normal, (float3x3) WorldMatrix));
+	float3 worldNormal = normalize(mul(normal, (float3x3) NormalWorldMatrix));
 	
     float3 view = normalize((ViewportWorldPosition - input.worldPosition).xyz);
     

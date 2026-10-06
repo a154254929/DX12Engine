@@ -7,6 +7,7 @@ struct FObjectTransformation
 
     XMFLOAT4X4 world;
     XMFLOAT4X4 textureTransformation;
+    XMFLOAT4X4 normalWorldMatrix;
     UINT materialIndex;
     UINT RR0;
     UINT RR1;

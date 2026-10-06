@@ -13,6 +13,7 @@ cbuffer ObjectConstBuffer : register(b0) //b0->b14
 {
     float4x4 WorldMatrix;
     float4x4 ObjectTextureTransform;
+    float4x4 NormalWorldMatrix;
     uint MaterialIndex;
     uint RR0;
     uint RR1;
