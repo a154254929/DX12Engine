@@ -35,5 +35,16 @@ namespace EngineMath
     
     fvector_3d GetPointSphericalCoordinates(const fvector_3d& inV3d);
     
-    ECubeMapFace GetSampleCubemapIndex(fvector_3d inPointPosition);
+    ECubeMapFace GetSampleCubemapIndex(const fvector_3d& inPointPosition);
+    
+    int GetSample8CubeIndex(const fvector_3d& inPointPosition);
+    
+    void BuildMatrixFromPositionRotationScale(
+        XMFLOAT4X4& outMatrix,
+        XMFLOAT3 inPosition,
+        fvector_3d inScale,
+        XMFLOAT3 inRightVector,
+        XMFLOAT3 inUpVector,
+        XMFLOAT3 inForwardVector
+    );
 }

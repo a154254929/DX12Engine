@@ -18,14 +18,41 @@ void CTransformationComponent::SetPosition(const XMFLOAT3& inPosition)
 
 void CTransformationComponent::SetRotation(const fvector_3d& inRotation)
 {
-    // Like the reference's absolute frotator setter, rebuild from the final pose.
-    // This engine exposes that pose as XYZ degrees through the fvector_3d API.
+    fvector_3d lastRotation = EngineMath::ToVector3d(rotation);
+    fvector_3d offsetRotation = inRotation - lastRotation;
+    
+    /*
+    float rollRadians = XMConvertToRadians(inRotation.z);
+    float pitchRadians = XMConvertToRadians(inRotation.x);
+    float yawRadians = XMConvertToRadians(inRotation.y);
+    */
+    float rollRadians = XMConvertToRadians(offsetRotation.z);
+    float pitchRadians = XMConvertToRadians(offsetRotation.x);
+    float yawRadians = XMConvertToRadians(offsetRotation.y);
+
+    XMMATRIX rotationPitchYawRoll = XMMatrixRotationRollPitchYaw(pitchRadians, yawRadians, rollRadians);
+
+    XMVECTOR right = XMLoadFloat3(&rightVector);
+    XMVECTOR up = XMLoadFloat3(&upVector);
+    XMVECTOR forward = XMLoadFloat3(&forwardVector);
+
+    XMStoreFloat3(&rightVector, XMVector3TransformNormal(right, rotationPitchYawRoll));
+    XMStoreFloat3(&upVector, XMVector3TransformNormal(up, rotationPitchYawRoll));
+    XMStoreFloat3(&forwardVector, XMVector3TransformNormal(forward, rotationPitchYawRoll));
+    
+    rotation = EngineMath::ToFloat3(inRotation);
+}
+
+void CTransformationComponent::SetRotation(const frotator& inRotator)
+{
+    fvector_3d inRotation(inRotator.pitch, inRotator.yaw, inRotator.roll);
+    
     float rollRadians = XMConvertToRadians(inRotation.z);
     float pitchRadians = XMConvertToRadians(inRotation.x);
     float yawRadians = XMConvertToRadians(inRotation.y);
 
     XMMATRIX rotationPitchYawRoll = XMMatrixRotationRollPitchYaw(pitchRadians, yawRadians, rollRadians);
-
+    
     XMVECTOR right = XMVectorSet(1.f, 0.f, 0.f, 0.f);
     XMVECTOR up = XMVectorSet(0.f, 1.f, 0.f, 0.f);
     XMVECTOR forward = XMVectorSet(0.f, 0.f, 1.f, 0.f);

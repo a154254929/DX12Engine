@@ -18,6 +18,11 @@ void GActorObject::SetRotation(const fvector_3d& inRotation)
     transformationComponent->SetRotation(inRotation);
 }
 
+void GActorObject::SetRotation(const frotator& inRotator)
+{
+    transformationComponent->SetRotation(inRotator);
+}
+
 void GActorObject::SetScale(const fvector_3d& inScale)
 {
     transformationComponent->SetScale(inScale);

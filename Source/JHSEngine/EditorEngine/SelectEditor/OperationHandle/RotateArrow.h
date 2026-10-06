@@ -13,6 +13,9 @@ public:
 public:
     virtual void SetScale(const fvector_3d& inScale);
     
+public:
+    virtual void Tick(float deltaTime);
+    
 protected:
     virtual void OnMouseMove(int x, int y);
     virtual void OnLeftButtonDown(int x, int y);

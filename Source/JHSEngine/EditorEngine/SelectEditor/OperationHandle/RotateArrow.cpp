@@ -3,6 +3,8 @@
 #include "Common/OperationHandleSelectManager.h"
 #include "Engine/Core/Consttruction/MacroConstruction.h"
 #include "Engine/Library/RaycastSystemLibrary.h"
+#include "../Engine/Core/World.h"
+#include "../Engine/Core/Camera.h"
 
 GRotateArrow::GRotateArrow()
 {
@@ -32,6 +34,94 @@ void GRotateArrow::SetScale(const fvector_3d& inScale)
         customAxisComponent->SetScale(inScale * 1.4f);
     }
     
+}
+
+void GRotateArrow::Tick(float deltaTime)
+{
+    Super::Tick(deltaTime);
+    
+    if (!IsCurrentOperationHandleSelect())
+    {
+        return;
+    }
+    
+    XMFLOAT4X4 rotateArrowMatrix;
+    EngineMath::BuildMatrixFromPositionRotationScale(
+        rotateArrowMatrix,
+        GetPosition(),
+        GetScale(),
+        GetRightVector(),
+        GetUpVector(),
+        GetForwardVector()
+    );
+    
+    XMMATRIX arrowWorldMatrix = XMLoadFloat4x4(&rotateArrowMatrix);
+    XMVECTOR arrowWorldMatrixRIXDeterminant = XMMatrixDeterminant(arrowWorldMatrix);
+    XMMATRIX arrowWorldMatrixInverse = XMMatrixInverse(&arrowWorldMatrixRIXDeterminant, arrowWorldMatrix);
+    
+    FXMVECTOR cameraPosition = XMLoadFloat3(&GetWorld()->GetCamera()->GetTransformationComponent()->GetPosition());
+    
+    XMVECTOR outObjectPosition = XMVector3TransformCoord(cameraPosition, arrowWorldMatrixInverse);
+    
+    XMFLOAT3 viewPosition;
+    XMStoreFloat3(&viewPosition, outObjectPosition);
+    
+    int type = EngineMath::GetSample8CubeIndex(EngineMath::ToVector3d(viewPosition));
+    
+    Engine_Log("%d", type);
+    
+    switch (type)
+    {
+    case 0:
+        yAxisComponent->SetRotation(frotator(0.f, -90.f, 0.f));
+        xAxisComponent->SetRotation(frotator(90.f, 0.f, 0.f));
+        zAxisComponent->SetRotation(frotator());
+        customAxisComponent->SetRotation(frotator());
+        break;
+    case 1:
+        yAxisComponent->SetRotation(frotator(0.f, -180.f, 0.f));
+        xAxisComponent->SetRotation(frotator(90.f, 0.f, 0.f));
+        zAxisComponent->SetRotation(frotator(0.f, 0.f, 90.f));
+        customAxisComponent->SetRotation(frotator(0.f, 0.f, 90.f));
+        break;
+    case 2:
+        yAxisComponent->SetRotation(frotator(0.f, 90.f, 0.f));
+        xAxisComponent->SetRotation(frotator());
+        zAxisComponent->SetRotation(frotator(0.f, 0.f, 90.f));
+        customAxisComponent->SetRotation(frotator(0.f, 0.f, 90.f));
+        break;
+    case 3:
+        yAxisComponent->SetRotation(frotator());
+        xAxisComponent->SetRotation(frotator());
+        zAxisComponent->SetRotation(frotator());
+        customAxisComponent->SetRotation(frotator());
+        break;
+    case 4:
+        yAxisComponent->SetRotation(frotator(0.f, -90.f, 0.f));
+        xAxisComponent->SetRotation(frotator(-180.f, 0.f, 0.f));
+        zAxisComponent->SetRotation(frotator(0.f, 0.f, -90.f));
+        customAxisComponent->SetRotation(frotator(0.f, 0.f, -90.f));
+        break;
+    case 5:
+        yAxisComponent->SetRotation(frotator(0.f, 180.f, 0.f));
+        xAxisComponent->SetRotation(frotator(-180.f, 0.f, 0.f));
+        zAxisComponent->SetRotation(frotator(0.f, 0.f, -180.f));
+        customAxisComponent->SetRotation(frotator(0.f, 0.f, -180.f));
+        break;
+    case 6:
+        yAxisComponent->SetRotation(frotator(0.f, 0.f, -180.f));
+        xAxisComponent->SetRotation(frotator(0.f, 0.f, 180.f));
+        zAxisComponent->SetRotation(frotator(0.f, 0.f, -180.f));
+        customAxisComponent->SetRotation(frotator(0.f, 0.f, -180.f));
+        break;
+    case 7:
+        yAxisComponent->SetRotation(frotator());
+        xAxisComponent->SetRotation(frotator(0.f, 0.f, 180.f));
+        zAxisComponent->SetRotation(frotator(0.f, 0.f, -90.f));
+        customAxisComponent->SetRotation(frotator(0.f, 0.f, -90.f));
+        break;
+    }
+
 }
 
 extern GActorObject* selectedObject;

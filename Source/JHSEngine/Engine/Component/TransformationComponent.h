@@ -8,7 +8,9 @@ public:
     CTransformationComponent();
     void SetPosition(const XMFLOAT3& inPosition);
     void SetRotation(const fvector_3d& inRotation);
+    void SetRotation(const frotator& inRotator);
     void SetScale(const fvector_3d& inScale);
+    
     void SetForwardVector(const XMFLOAT3& inForwardVector);
     void SetRightVector(const XMFLOAT3& inRightVector);
     void SetUpVector(const XMFLOAT3& inUpVector);

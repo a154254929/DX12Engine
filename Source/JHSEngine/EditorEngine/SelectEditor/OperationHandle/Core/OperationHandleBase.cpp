@@ -168,6 +168,11 @@ void GOperationHandleBase::Tick(float deltaTime)
 {
     Super::Tick(deltaTime);
     
+    if (!IsCurrentOperationHandleSelect())
+    {
+        return;
+    }
+    
     if (CWorld* world = GetWorld())
     {
         if (GCamera* camera = world->GetCamera())

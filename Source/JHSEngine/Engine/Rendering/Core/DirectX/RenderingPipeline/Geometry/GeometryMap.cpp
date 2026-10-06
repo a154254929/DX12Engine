@@ -118,7 +118,7 @@ void FGeometryMap::UpdateCalculationsViewport(
     FViewportTransformation viewportTransformation;
     XMStoreFloat4x4(&viewportTransformation.viewProjectionMatrix, XMMatrixTranspose(viewProjMatrix));
     //拿到视口位置
-    viewportTransformation.viewportWorldPosirion = viewportInfo.viewWorldPosition;
+    viewportTransformation.viewportWorldPosition = viewportInfo.viewWorldPosition;
     viewportConstantBufferView.Update(inConstantBufferOffset, &viewportTransformation);
 }
 

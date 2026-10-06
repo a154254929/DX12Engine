@@ -17,6 +17,7 @@ public:
 public:
     virtual void SetPosition(const XMFLOAT3& inPosition);
     virtual void SetRotation(const fvector_3d& inRotation);
+    virtual void SetRotation(const frotator& inRotator);
     virtual void SetScale(const fvector_3d& inScale);
     
     virtual void SetPickup(bool inPickup);

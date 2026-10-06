@@ -148,7 +148,7 @@ namespace EngineMath
     
     static FCubemapAxialRangeR cubemapAxialRangeR;
     
-    ECubeMapFace GetSampleCubemapIndex(fvector_3d inPointPosition)
+    ECubeMapFace GetSampleCubemapIndex(const fvector_3d& inPointPosition)
     {
         fvector_3d sphericalCoords = GetPointSphericalCoordinates(inPointPosition);
         float theta = sphericalCoords.y;
@@ -181,5 +181,76 @@ namespace EngineMath
         
         
         return Invalid;
+    }
+    
+    bool IsRange(float inValue, float inMin, float inMax)
+    {
+        return inValue >= inMin && inValue <= inMax;
+    }
+
+    int GetSample8CubeIndex(const fvector_3d& inRelativePosition)
+    {
+        fvector_3d sphericalCoords = GetPointSphericalCoordinates(inRelativePosition);
+        float theta = sphericalCoords.y;
+        float phi = sphericalCoords.z;
+        
+        if (IsRange(theta, 0.f, XM_PIDIV2))
+        {
+            if (IsRange(phi, 0, XM_PIDIV2))
+            {
+                return 0;
+            }
+            else if (IsRange(phi, XM_PIDIV2, XM_PI))
+            {
+                return 1;
+            }
+            else if (IsRange(phi, -XM_PI, -XM_PIDIV2))
+            {
+                return 2;
+            }
+            else if (IsRange(phi, -XM_PIDIV2, 0.f))
+            {
+                return 3;
+            }
+        }
+        else if (IsRange(theta, XM_PIDIV2, XM_PI))
+        {
+            if (IsRange(phi, 0, XM_PIDIV2))
+            {
+                return 4;
+            }
+            else if (IsRange(phi, XM_PIDIV2, XM_PI))
+            {
+                return 5;
+            }
+            else if (IsRange(phi, -XM_PI, -XM_PIDIV2))
+            {
+                return 6;
+            }
+            else if (IsRange(phi, -XM_PIDIV2, 0.f))
+            {
+                return 7;
+            }
+        }
+        
+        return -1;
+    }
+
+    void BuildMatrixFromPositionRotationScale(
+        XMFLOAT4X4& outMatrix,
+        XMFLOAT3 inPosition,
+        fvector_3d inScale,
+        XMFLOAT3 inRightVector,
+        XMFLOAT3 inUpVector,
+        XMFLOAT3 inForwardVector
+    )
+    {
+        outMatrix = {
+            inRightVector.x * inScale.x,		inUpVector.x * inScale.y,	inForwardVector.x * inScale.z,	0.f,
+            inRightVector.y * inScale.x,		inUpVector.y * inScale.y,	inForwardVector.y * inScale.z,	0.f,
+            inRightVector.z * inScale.x,		inUpVector.z * inScale.y,	inForwardVector.z * inScale.z,	0.f,
+            inPosition.x,					    inPosition.y,				inPosition.z,					1.f
+        };
+        
     }
 }
