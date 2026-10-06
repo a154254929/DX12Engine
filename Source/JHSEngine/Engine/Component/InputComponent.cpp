@@ -17,45 +17,49 @@ void CInputComponent::Tick(float deltaTime)
     if (captureKeyboardInforDelegate.IsBound())
     {
         FInputKey inputKey;
-        if (GetAsyncKeyState('W') & 0x8000)
+        if (GetAsyncKeyState('W') & KF_UP)
         {
             inputKey.keyName = "W";
         }
-        else if (GetAsyncKeyState('S') & 0x8000)
+        else if (GetAsyncKeyState('S') & KF_UP)
         {
             inputKey.keyName = "S";
         }
-        else if (GetAsyncKeyState('A') & 0x8000)
+        else if (GetAsyncKeyState('A') & KF_UP)
         {
             inputKey.keyName = "A";
         }
-        else if (GetAsyncKeyState('D') & 0x8000)
+        else if (GetAsyncKeyState('D') & KF_UP)
         {
             inputKey.keyName = "D";
         }
-        else if (GetAsyncKeyState('E') & 0x8000)
+        else if (GetAsyncKeyState('E') & KF_UP)
         {
             inputKey.keyName = "E";
         }
-        else if (GetAsyncKeyState('R') & 0x8000)
+        else if (GetAsyncKeyState('R') & KF_UP)
         {
             inputKey.keyName = "R";
         }
-        else if (GetAsyncKeyState('Q') & 0x8000)
+        else if (GetAsyncKeyState('Q') & KF_UP)
         {
             inputKey.keyName = "Q";
         }
-        else if (GetAsyncKeyState('T') & 0x8000)
+        else if (GetAsyncKeyState('T') & KF_UP)
         {
             inputKey.keyName = "T";
         }
-        else if (GetAsyncKeyState('Y') & 0x8000)
+        else if (GetAsyncKeyState('Y') & KF_UP)
         {
             inputKey.keyName = "Y";
         }
-        else if (GetAsyncKeyState('F') & 0x8000)
+        else if (GetAsyncKeyState('F') & KF_UP)
         {
             inputKey.keyName = "F";
+        }
+        else if (GetAsyncKeyState(VK_MENU) & KF_UP)
+        {
+            inputKey.keyName = "alt";
         }
         else
         {

@@ -85,7 +85,8 @@ void GCamera::ExecuteKeboard(const FInputKey& inputKey)
         
         SetDirty(true);
     }
-    else if (inputKey.keyName == "Y")
+    
+    if (inputKey.keyName == "alt")
     {
         cameraType = ECameraType::OvservationObject;
         
@@ -93,6 +94,7 @@ void GCamera::ExecuteKeboard(const FInputKey& inputKey)
     }
 }
 
+extern GActorObject* selectedObject;
 void GCamera::BuildViewMatrix(float deltaTime)
 {
     switch (cameraType)
@@ -111,7 +113,8 @@ void GCamera::BuildViewMatrix(float deltaTime)
             cameraPos.z = radius * sinf(phi) * cosf(theta);
 
             XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
-            XMVECTOR viewTarget = XMVectorZero();
+            XMFLOAT3& targetPosition = selectedObject->GetTransformationComponent()->GetPosition();
+            XMVECTOR viewTarget = XMVectorSet(targetPosition.x, targetPosition.y, targetPosition.z, 1.0f);
             XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
 
             XMMATRIX viewLookAt = XMMatrixLookAtLH(pos, viewTarget, viewUp);
