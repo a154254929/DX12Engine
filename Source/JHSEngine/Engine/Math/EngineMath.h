@@ -47,4 +47,13 @@ namespace EngineMath
         XMFLOAT3 inUpVector,
         XMFLOAT3 inForwardVector
     );
+    
+    void BuildMatrixInvFromPositionRotationScale(
+        XMMATRIX& outInvMatrix,
+        XMFLOAT3 inPosition,
+        fvector_3d inScale,
+        XMFLOAT3 inRightVector,
+        XMFLOAT3 inUpVector,
+        XMFLOAT3 inForwardVector
+    );
 }

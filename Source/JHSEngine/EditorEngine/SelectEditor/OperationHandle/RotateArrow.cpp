@@ -219,19 +219,15 @@ void GRotateArrow::Tick(float deltaTime)
         return;
     }
     
-    XMFLOAT4X4 rotateArrowMatrix;
-    EngineMath::BuildMatrixFromPositionRotationScale(
-        rotateArrowMatrix,
+    XMMATRIX arrowWorldMatrixInverse;
+    EngineMath::BuildMatrixInvFromPositionRotationScale(
+        arrowWorldMatrixInverse,
         GetPosition(),
         GetScale(),
         GetRightVector(),
         GetUpVector(),
         GetForwardVector()
     );
-    
-    XMMATRIX arrowWorldMatrix = XMLoadFloat4x4(&rotateArrowMatrix);
-    XMVECTOR arrowWorldMatrixRIXDeterminant = XMMatrixDeterminant(arrowWorldMatrix);
-    XMMATRIX arrowWorldMatrixInverse = XMMatrixInverse(&arrowWorldMatrixRIXDeterminant, arrowWorldMatrix);
     
     FXMVECTOR cameraPosition = XMLoadFloat3(&GetWorld()->GetCamera()->GetTransformationComponent()->GetPosition());
     
@@ -353,21 +349,40 @@ void GRotateArrow::OnMouseMove(int x, int y)
         actorRotationQuat.object_to_inertia(lastRotator);
         deltaRotationQuat.object_to_inertia(deltaRotator);
         fquat resultRotationQuat;
-        
-        if (false)
-        {
-            
-        }
-        else
-        {
-            resultRotationQuat = actorRotationQuat * deltaRotationQuat;
-            resultRotationQuat.normalize();
-        }
+        resultRotationQuat = actorRotationQuat * deltaRotationQuat;
+        resultRotationQuat.normalize();
         
         frotator resultRotator;
         resultRotator.object_to_inertia(resultRotationQuat);
         
         fvector_3d resultRotation(resultRotator.roll, resultRotator.pitch, resultRotator.yaw);
+        
+        if (true)
+        {
+            XMMATRIX worldInvMatrix;
+            EngineMath::BuildMatrixInvFromPositionRotationScale(
+                worldInvMatrix,
+                selectedObject->GetPosition(),
+                selectedObject->GetScale(),
+                selectedObject->GetRightVector(),
+                selectedObject->GetUpVector(),
+                selectedObject->GetForwardVector()
+            );
+            
+            XMFLOAT3 xmSelectedObjectRot = EngineMath::ToFloat3(resultRotation);
+            FXMVECTOR selectedObjectRotation = XMLoadFloat3(&xmSelectedObjectRot);
+            
+            XMVECTOR outSelectedRot = XMVector3TransformNormal(selectedObjectRotation, worldInvMatrix);
+            
+            XMFLOAT3 selectViewRot;
+            XMStoreFloat3(&selectViewRot, outSelectedRot);
+            
+            
+            resultRotation = EngineMath::ToVector3d(selectViewRot);
+        }
+        else
+        {
+        }
         
         selectedObject->SetRotation(resultRotation);
         

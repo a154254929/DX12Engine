@@ -253,4 +253,22 @@ namespace EngineMath
         };
         
     }
+
+    void BuildMatrixInvFromPositionRotationScale(
+        XMMATRIX& outInvMatrix, XMFLOAT3 inPosition, fvector_3d inScale,
+        XMFLOAT3 inRightVector, XMFLOAT3 inUpVector, XMFLOAT3 inForwardVector)
+    {XMFLOAT4X4 rotateArrowMatrix;
+        BuildMatrixFromPositionRotationScale(
+            rotateArrowMatrix,
+            inPosition,
+            inScale,
+            inRightVector,
+            inUpVector,
+            inForwardVector
+        );
+    
+        XMMATRIX worldMatrix = XMLoadFloat4x4(&rotateArrowMatrix);
+        XMVECTOR worldMatrixRIXDeterminant = XMMatrixDeterminant(worldMatrix);
+        outInvMatrix = XMMatrixInverse(&worldMatrixRIXDeterminant, worldMatrix);
+    }
 }
