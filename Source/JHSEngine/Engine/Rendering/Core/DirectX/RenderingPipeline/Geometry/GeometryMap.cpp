@@ -186,6 +186,11 @@ void FGeometryMap::UpdateMaterialShaderResourceView(float deltaTime, const FView
                     XMMatrixTranspose(materialTransform)
                 );
                 inMaterial->SetDirty(false);
+                
+                materialConstantBuffer.customParam0 = inMaterial->GetFloatCustomParam(0);
+                materialConstantBuffer.customParam1 = inMaterial->GetFloatCustomParam(1);
+                materialConstantBuffer.customParam2 = inMaterial->GetFloatCustomParam(2);
+                materialConstantBuffer.customParam3 = inMaterial->GetFloatCustomParam(3);
             }
             materialConstantBufferView.Update(inMaterial->GetMaterialIndex(), &materialConstantBuffer);
         }

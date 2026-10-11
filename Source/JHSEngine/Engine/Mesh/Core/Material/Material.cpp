@@ -1,5 +1,6 @@
 #include "Material.h"
 #include "../../../Math/EngineMath.h"
+#include "simple_library/public/simple_core_minimal/simple_c_time/simple_c_locale_list.h"
 
 CMaterial::CMaterial()
     : bDirty(true)
@@ -92,4 +93,42 @@ void CMaterial::SetRoughnessMapIndexKey(const std::string inAssetFileName)
 void CMaterial::SetDynamicReflection(bool inDynamicReflection)
 {
     bDynamicReflection = inDynamicReflection;
+}
+
+void CMaterial::SetFloatCustomParam(int paramIndex, float inValue)
+{
+    switch (paramIndex)
+    {
+    case 0:
+        customParam0 = inValue;
+        SetDirty(true);
+        break;
+    case 1:
+        customParam1 = inValue;
+        SetDirty(true);
+        break;
+    case 2:
+        customParam2 = inValue;
+        SetDirty(true);
+        break;
+    default:
+        break;
+    }
+}
+
+float CMaterial::GetFloatCustomParam(int paramIndex) const
+{
+    switch (paramIndex)
+    {
+    case 0:
+        return customParam0;
+    case 1:
+        return customParam1;
+    case 2:
+        return customParam2;
+        break;
+    default:
+        return .0f;
+        break;
+    }
 }

@@ -6,6 +6,7 @@
 #include "../Engine/Core/World.h"
 #include "../Engine/Core/Camera.h"
 #include "Engine/Component/Mesh/PlaneMeshComponent.h"
+#include "Engine/Mesh/Core/Material/Material.h"
 
 GRotateArrow::GRotateArrow()
     : Super()
@@ -52,6 +53,26 @@ void GRotateArrow::CreateMesh()
     
     ResetColor();
     
+}
+
+void GRotateArrow::SetCDValue(CMeshComponent* inMeshComponent, float inCDValue)
+{
+    if (CMaterial* meshMaterial = (*inMeshComponent->GetMaterials())[0])
+    {
+        meshMaterial->SetFloatCustomParam(0, inCDValue);
+    }
+}
+
+void GRotateArrow::SetCDValue(float inCDValue)
+{
+    SetCDValue(xPlaneComponent, inCDValue);
+    SetCDValue(yPlaneComponent, inCDValue);
+    SetCDValue(zPlaneComponent, inCDValue);
+}
+
+void GRotateArrow::ResetCDValue()
+{
+    SetCDValue(0.f);
 }
 
 void GRotateArrow::SetScale(const fvector_3d& inScale)
@@ -223,6 +244,8 @@ void GRotateArrow::OnMouseMove(int x, int y)
     fvector_3d worldActorPosition;
     if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
+        SetCDValue(rayInterHitT1);
+        /*
         float diffT1Value = rayInterHitT1 - lastT1Value;
         float rotateValue = 0.f;
         
@@ -270,6 +293,7 @@ void GRotateArrow::OnMouseMove(int x, int y)
         fvector_3d resultRotation(resultRotator.roll, resultRotator.pitch, resultRotator.yaw);
         
         selectedObject->SetRotation(resultRotation);
+        */
         
     }
 }

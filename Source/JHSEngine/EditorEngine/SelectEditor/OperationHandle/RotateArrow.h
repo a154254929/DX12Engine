@@ -22,6 +22,11 @@ public:
     
     void CreateMesh(); 
     
+protected:
+    void SetCDValue(CMeshComponent* inMeshComponent, float inCDValue);
+    void SetCDValue(float inCDValue);
+    void ResetCDValue();
+    
 public:
     virtual void SetScale(const fvector_3d& inScale);
     virtual void SetPosition(const XMFLOAT3& inPosition);

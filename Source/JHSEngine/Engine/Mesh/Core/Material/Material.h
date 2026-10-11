@@ -22,6 +22,12 @@ public:
     void SetRoughnessMapIndexKey(const std::string inAssetFileName);
     void SetDynamicReflection(bool inDynamicReflection);
 
+//自定义参数
+public:
+    void SetFloatCustomParam(int paramIndex, float inValue);
+    float GetFloatCustomParam(int paramIndex) const;
+
+public:
     FORCEINLINE bool IsDirty() const { return true; }
     FORCEINLINE int GetMaterialIndex() const { return materialIndex; }
     FORCEINLINE fvector_4d GetBaseColor() { return baseColor; }
@@ -65,4 +71,8 @@ private:
     XMFLOAT4X4 materialTransform;
     
     bool bDynamicReflection ;
+
+    float customParam0;
+    float customParam1;
+    float customParam2;
 };

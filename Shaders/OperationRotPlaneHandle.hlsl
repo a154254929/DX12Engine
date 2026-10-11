@@ -47,5 +47,7 @@ Attribute VertexShaderOperationRotPlaneHandle(Varying input)
 float4 PixelShaderOperationRotPlaneHandle(Attribute input) : SV_TARGET
 {
     MaterialConstBuffer material = Materials[MaterialIndex];
-    return float4(material.BaseColor.rgb, .5f);
+    float2 cdTexcoord = GetPolarCoordinate(input.uv);
+
+    return float4(cdTexcoord.xxx, .5f);
 }

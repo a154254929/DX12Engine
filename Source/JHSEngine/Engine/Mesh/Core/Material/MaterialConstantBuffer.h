@@ -13,16 +13,16 @@ public:
     
     int specularMapIndex;
     int roughnessMapIndex;
-    int reversedMapIndex2;
-    int reversedMapIndex3;
+    float customParam0;
+    float customParam1;
 
     XMFLOAT4 baseColor;
     
     XMFLOAT3 specularColor;
-    int XX;
+    float customParam2;
     
     XMFLOAT3 fresnelF0;
-    int XX0;
+    float customParam3;
     
     XMFLOAT4X4 transformation;
 };

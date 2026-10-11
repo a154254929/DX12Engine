@@ -51,16 +51,16 @@ struct MaterialConstBuffer
     
     int SpecularMapIndex;
     int RoughnessMapIndex;
-    int ReversedMapIndex2;
-    int ReversedMapIndex3;
+    float CustomParam0;
+    float CustomParam1;
     
     float4 BaseColor;
     
     float3 SpecularColor;
-    int xx;
+    float CustomParam2;
     
     float3 FresnelF0;
-    float xx1;
+    float CustomParam3;
     
     float4x4 Transformation;
 };
