@@ -40,6 +40,6 @@ float4 SelectOutlinePixelShader(Attribute input) : SV_TARGET
     float3 viewDirection = normalize(ViewportWorldPosition - input.worldPosition.xyz);
     float3 worldNormal = normalize(input.worldNormal.xyz);
 
-    return float4(.6f, .3f, 0.f, 1.f) * smoothstep(.6f, .8f, (1.0f - dot(worldNormal, viewDirection)));
+    return float4(.6f, .3f, 0.f, smoothstep(.7f, .8f, (1.0f - dot(worldNormal, viewDirection))));
     //return float4(worldNormal, 1.f) ;
 }

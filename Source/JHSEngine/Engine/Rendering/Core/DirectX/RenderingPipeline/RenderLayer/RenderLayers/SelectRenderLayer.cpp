@@ -61,6 +61,10 @@ void FSelectRenderLayer::BuildPSO()
     };
     
     directXPipelineState->SetRenderTarget(0, blendDesc);
+    
+    CD3DX12_DEPTH_STENCIL_DESC dsDesc = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);;
+    dsDesc.DepthEnable = false;
+    directXPipelineState->SetDepthStencilState(dsDesc);
     //构建管线
     directXPipelineState->SetFillMode(false);
     directXPipelineState->Build(EPipelineState::Select);
