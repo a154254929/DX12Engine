@@ -145,6 +145,66 @@ void GRotateArrow::ResetVisible(CMeshComponent* inAxisComponent, bool inVisible)
     }
 }
 
+extern GActorObject* selectedObject;
+fvector_3d GRotateArrow::GetSelectedObjectDirection(
+    const fvector_3d& inRayWorldOriginPosition,
+    const fvector_3d& inRayWorldDirection,
+    const fvector_3d& inObjectWorldPosition)
+{
+    ESelectAxisType axisType = GetSelectAxisType();
+        
+    fvector_3d outWorldActorDirection;
+    if (true)
+    {
+        switch (axisType)
+        {
+        case ESelectAxis_X:
+            outWorldActorDirection = fvector_3d(0.f, 1.f, 0.f);
+            break;
+        case ESelectAxis_Y:
+            outWorldActorDirection = fvector_3d(1.f, 0.f, 0.f);
+            break;
+        case ESelectAxis_Z:
+            outWorldActorDirection = fvector_3d(0.f, 1.f, 0.f);
+            break;
+        case ESelectAxis_Any:
+            outWorldActorDirection = GetCustomAxisDirection(
+                inRayWorldOriginPosition,
+                inRayWorldDirection,
+                inObjectWorldPosition
+            );
+            break;
+        default:
+            break;  
+        }
+    }
+    else
+    {
+        switch (axisType)
+        {
+        case ESelectAxis_X:
+            outWorldActorDirection = EngineMath::ToVector3d(selectedObject->GetUpVector());
+            break;
+        case ESelectAxis_Y:
+            outWorldActorDirection = EngineMath::ToVector3d(selectedObject->GetRightVector());
+            break;
+        case ESelectAxis_Z:
+            outWorldActorDirection = EngineMath::ToVector3d(selectedObject->GetUpVector());
+            break;
+        case ESelectAxis_Any:
+            outWorldActorDirection = GetCustomAxisDirection(
+                inRayWorldOriginPosition,
+                inRayWorldDirection,
+                inObjectWorldPosition
+            );
+            break;
+        default:
+            break;  
+        }
+    }
+    return outWorldActorDirection;
+}
+
 void GRotateArrow::BeginInit()
 {
     GOperationHandleBase::BeginInit();
@@ -247,7 +307,6 @@ void GRotateArrow::SetVisible(bool inVisible)
     zPlaneComponent->SetVisible(false);
 }
 
-extern GActorObject* selectedObject;
 void GRotateArrow::OnMouseMove(int x, int y)
 {
     Super::OnMouseMove(x, y);

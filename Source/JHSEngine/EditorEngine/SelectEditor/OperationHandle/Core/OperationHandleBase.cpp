@@ -220,9 +220,9 @@ fvector_3d GOperationHandleBase::GetCustomAxisDirection(const fvector_3d inRayWo
 
 extern GActorObject* selectedObject;
 fvector_3d GOperationHandleBase::GetSelectedObjectDirection(
-    const fvector_3d inRayWorldOriginPosition,
-    const fvector_3d inRayWorldDirection,
-    const fvector_3d inObjectWorldPosition
+    const fvector_3d& inRayWorldOriginPosition,
+    const fvector_3d& inRayWorldDirection,
+    const fvector_3d& inObjectWorldPosition
 )
 {
     ESelectAxisType axisType = GetSelectAxisType();

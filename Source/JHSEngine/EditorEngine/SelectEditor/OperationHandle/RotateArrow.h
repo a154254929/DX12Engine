@@ -41,6 +41,13 @@ public:
     virtual void ResetVisible();
     virtual void ResetVisible(CMeshComponent* inAxisComponent, bool inVisible);
     
+protected:
+    virtual fvector_3d GetSelectedObjectDirection(
+        const fvector_3d& inRayWorldOriginPosition,
+        const fvector_3d& inRayWorldDirection,
+        const fvector_3d& inObjectWorldPosition
+    );
+    
 public:
     virtual void BeginInit();
     virtual void Tick(float deltaTime);

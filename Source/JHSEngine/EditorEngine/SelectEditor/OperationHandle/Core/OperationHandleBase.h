@@ -73,9 +73,9 @@ protected:
     ) const;
     
     virtual fvector_3d GetSelectedObjectDirection(
-        const fvector_3d inRayWorldOriginPosition,
-        const fvector_3d inRayWorldDirection,
-        const fvector_3d inObjectWorldPosition
+        const fvector_3d& inRayWorldOriginPosition,
+        const fvector_3d& inRayWorldDirection,
+        const fvector_3d& inObjectWorldPosition
     );
     
     
