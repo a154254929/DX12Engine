@@ -49,5 +49,6 @@ float4 PixelShaderOperationRotPlaneHandle(Attribute input) : SV_TARGET
     MaterialConstBuffer material = Materials[MaterialIndex];
     float2 cdTexcoord = GetPolarCoordinate(input.uv);
 
-    return float4(cdTexcoord.xxx, .5f);
+    cdTexcoord.x += material.CustomParam0;
+    return float4(1.f, 1.f, 1.f, floor(cdTexcoord.x));
 }

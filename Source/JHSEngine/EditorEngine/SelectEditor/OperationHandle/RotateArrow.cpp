@@ -310,6 +310,7 @@ void GRotateArrow::OnLeftButtonDown(int x, int y)
     float rayInterHitT1;
     fvector_3d worldActorDir;
     fvector_3d worldActorPosition;
+    ResetCDValue();
     if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
         lastT1Value = rayInterHitT1;

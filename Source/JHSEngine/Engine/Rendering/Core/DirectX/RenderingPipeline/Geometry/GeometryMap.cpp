@@ -397,22 +397,15 @@ void FGeometryMap::BuildMaterialShaderResourceView()
 {
     //收集材质,真正收集shader-Index
     int shaderIndex = 0;
-    for (auto& renderLayer : FRenderLayerManager::renderLayers)
+    for (auto& renderingData : FGeometry::renderingDataArray)
     {
-        for (auto& renderingData : renderLayer->renderingDatas)
+        if (auto meshCompMaterials = renderingData->meshComp->GetMaterials())
         {
-            if (renderingData.expired())
+            for (int j = 0; j < meshCompMaterials->size(); ++j)
             {
-                continue;
-            }
-            if (auto meshCompMaterials = renderingData.lock()->meshComp->GetMaterials())
-            {
-                for (int j = 0; j < meshCompMaterials->size(); ++j)
-                {
-                    (*meshCompMaterials)[j]->SetMaterialIndex(shaderIndex);
-                    materials.push_back((*meshCompMaterials)[j]);
-                    shaderIndex++;
-                }
+                (*meshCompMaterials)[j]->SetMaterialIndex(shaderIndex);
+                materials.push_back((*meshCompMaterials)[j]);
+                shaderIndex++;
             }
         }
     }
