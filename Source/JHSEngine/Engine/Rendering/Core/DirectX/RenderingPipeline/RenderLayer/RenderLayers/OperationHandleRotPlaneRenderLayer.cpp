@@ -21,16 +21,16 @@ void FOperationHandleRotPlaneRenderLayer::BuildShader()
     std::vector<D3D_SHADER_MACRO> d3DShaderMacro;
     ShaderType::ToD3DShaderMacro(shaderMacros, d3DShaderMacro);
     
-    std:: wstring shaderPath = BuildShadersPaths(L"OperationHandle");
+    std:: wstring shaderPath = BuildShadersPaths(L"OperationRotPlaneHandle");
     vertexShader.BuildShaders(
         shaderPath,
-        "VertexShaderOperationHandle",
+        "VertexShaderOperationRotPlaneHandle",
         "vs_5_1",
         d3DShaderMacro.data()
     );
     pixelShader.BuildShaders(
         shaderPath,
-        "PixelShaderOperationHandle",
+        "PixelShaderOperationRotPlaneHandle",
         "ps_5_1",
         d3DShaderMacro.data()
     );
@@ -63,6 +63,16 @@ void FOperationHandleRotPlaneRenderLayer::BuildPSO()
     CD3DX12_RASTERIZER_DESC rasterizerDesc = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
     rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
     directXPipelineState->SetRasterizerState(rasterizerDesc);
+    
+    D3D12_RENDER_TARGET_BLEND_DESC blendDesc = {
+        true,
+        false,
+        D3D12_BLEND_SRC_ALPHA, D3D12_BLEND_INV_SRC_ALPHA, D3D12_BLEND_OP_ADD,
+        D3D12_BLEND_ONE, D3D12_BLEND_ZERO, D3D12_BLEND_OP_ADD,
+        D3D12_LOGIC_OP_NOOP,
+        D3D12_COLOR_WRITE_ENABLE_ALL,
+    };
+    directXPipelineState->SetRenderTarget(0, blendDesc);
 
     directXPipelineState->Build(EPipelineState::OperationHandleRotPlane);
 }
