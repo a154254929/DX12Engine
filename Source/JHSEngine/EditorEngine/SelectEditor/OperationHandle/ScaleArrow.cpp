@@ -93,11 +93,13 @@ void GScaleArrow::OnLeftButtonUp(int x, int y)
 void GScaleArrow::OnCaptureKeyboardInformation(const FInputKey& inputKey)
 {
     Super::OnCaptureKeyboardInformation(inputKey);
-    if (selectedObject)
+    if (
+        selectedObject
+        && !bRightMouseButtonDown
+        && !IsCurrentOperationHandleSelect()
+        && inputKey.keyName == "R"
+    )
     {
-        if (inputKey.keyName == "R")
-        {
-            FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle(this);
-        }
+        FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle(this);
     }
 }

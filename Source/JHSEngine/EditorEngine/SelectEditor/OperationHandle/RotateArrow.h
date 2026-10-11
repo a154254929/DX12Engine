@@ -22,6 +22,12 @@ public:
     
     void CreateMesh(); 
     
+    void LoadPlaneComponentMaterial(
+        CMeshComponent* inMeshComponent,
+        const std::string& inFilename,
+        const fvector_3d& inBaseColor
+    );
+    
 protected:
     void SetCDValue(CMeshComponent* inMeshComponent, float inCDValue);
     void SetCDValue(float inCDValue);

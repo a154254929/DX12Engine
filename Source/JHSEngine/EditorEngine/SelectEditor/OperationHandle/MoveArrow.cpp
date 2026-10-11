@@ -93,11 +93,12 @@ void GMoveArrow::OnLeftButtonUp(int x, int y)
 void GMoveArrow::OnCaptureKeyboardInformation(const FInputKey& inputKey)
 {
     Super::OnCaptureKeyboardInformation(inputKey);
-    if (selectedObject)
+    if (selectedObject
+        && !bRightMouseButtonDown
+        && !IsCurrentOperationHandleSelect()
+        && inputKey.keyName == "W"
+    )
     {
-        if (inputKey.keyName == "W")
-        {
-            FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle(this);
-        }
+        FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle(this);
     }
 }

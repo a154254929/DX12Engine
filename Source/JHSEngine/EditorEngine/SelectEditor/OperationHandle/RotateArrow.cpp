@@ -11,7 +11,7 @@
 GRotateArrow::GRotateArrow()
     : Super()
 {
-    fixedZoom = 40.f;
+    fixedZoom = 20.f;
     
     FCreateObjectParam param;
     param.owner = this;
@@ -47,12 +47,30 @@ void GRotateArrow::CreateMesh()
     
     customAxisComponent->SetPickup(false);
     
-    xPlaneComponent->SetRotation(frotator(0.f, 0.f, 0.f));
-    yPlaneComponent->SetRotation(frotator(90.f, 0.f, 0.f));
-    zPlaneComponent->SetRotation(frotator(0.f, 0.f, 90.f));
+    xPlaneComponent->SetRotation(frotator(0.f, 0.f, 90.f));
+    yPlaneComponent->SetRotation(frotator(0.f, 0.f, 0.f));
+    zPlaneComponent->SetRotation(frotator(90.f, 0.f, 0.f));
+    
+    std::string planeComponentTextureFilename = "Rot_Handle_Plane.dds";
+    LoadPlaneComponentMaterial(xPlaneComponent, planeComponentTextureFilename, fvector_3d(1.f, 0.f, 0.f));
+    LoadPlaneComponentMaterial(yPlaneComponent, planeComponentTextureFilename, fvector_3d(0.f, 1.f, 0.f));
+    LoadPlaneComponentMaterial(zPlaneComponent, planeComponentTextureFilename, fvector_3d(0.f, 0.f, 1.f));
     
     ResetColor();
     
+}
+
+void GRotateArrow::LoadPlaneComponentMaterial(
+    CMeshComponent* inMeshComponent,
+    const std::string& inFilename,
+    const fvector_3d& inBaseColor
+)
+{
+    if (CMaterial* meshMaterial = (*inMeshComponent->GetMaterials())[0])
+    {
+        meshMaterial->SetBaseColor(inBaseColor);
+        meshMaterial->SetBaseColorIndexKey(inFilename);
+    }
 }
 
 void GRotateArrow::SetCDValue(CMeshComponent* inMeshComponent, float inCDValue)
@@ -245,7 +263,7 @@ void GRotateArrow::OnMouseMove(int x, int y)
     if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
         SetCDValue(rayInterHitT1);
-        /*
+
         float diffT1Value = rayInterHitT1 - lastT1Value;
         float rotateValue = 0.f;
         
@@ -293,7 +311,6 @@ void GRotateArrow::OnMouseMove(int x, int y)
         fvector_3d resultRotation(resultRotator.roll, resultRotator.pitch, resultRotator.yaw);
         
         selectedObject->SetRotation(resultRotation);
-        */
         
     }
 }
@@ -326,13 +343,14 @@ void GRotateArrow::OnLeftButtonUp(int x, int y)
 void GRotateArrow::OnCaptureKeyboardInformation(const FInputKey& inputKey)
 {
     Super::OnCaptureKeyboardInformation(inputKey);
-    if (selectedObject)
+    if (selectedObject
+        && !bRightMouseButtonDown
+        && !IsCurrentOperationHandleSelect()
+        && inputKey.keyName == "E"
+    )
     {
-        if (inputKey.keyName == "E")
-        {
-            FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle(this);
-            
-            ResetVisible();
-        }
+        FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle(this);
+        
+        ResetVisible();
     }
 }

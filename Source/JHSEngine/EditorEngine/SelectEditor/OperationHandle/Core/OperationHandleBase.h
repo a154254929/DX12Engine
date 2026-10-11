@@ -66,16 +66,26 @@ public:
    // virtual bool IsVisible() const;
     
 protected:
-    fvector_3d GetCustomAxisDirection(
+    virtual fvector_3d GetCustomAxisDirection(
         const fvector_3d inRayWorldOriginPosition,
         const fvector_3d inRayWorldDirection,
         const fvector_3d inObjectWorldPosition
     ) const;
     
+    virtual fvector_3d GetSelectedObjectDirection(
+        const fvector_3d inRayWorldOriginPosition,
+        const fvector_3d inRayWorldDirection,
+        const fvector_3d inObjectWorldPosition
+    );
+    
+    
+    
 protected:
     virtual void OnMouseMove(int x, int y);
     virtual void OnLeftButtonDown(int x, int y);
     virtual void OnLeftButtonUp(int x, int y);
+    virtual void OnRightButtonDown(int x, int y);
+    virtual void OnRightButtonUp(int x, int y);
     virtual void OnCaptureKeyboardInformation(const FInputKey& inputKey);
     
 protected:
@@ -90,6 +100,7 @@ protected:
     
 protected:
     bool bOperationHandleSelect{ false };
+    bool bRightMouseButtonDown{ false };
     float fixedZoom;
     
     std::vector<CComponent*> ignoreComponents;

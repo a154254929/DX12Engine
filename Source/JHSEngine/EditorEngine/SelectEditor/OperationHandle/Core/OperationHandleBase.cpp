@@ -160,6 +160,8 @@ void GOperationHandleBase::BeginInit()
     inputComponent->captureKeyboardInforDelegate.Bind(this, &GOperationHandleBase::OnCaptureKeyboardInformation);
     inputComponent->OnLeftMouseButtonDownDelegate.Bind(this, &GOperationHandleBase::OnLeftButtonDown);
     inputComponent->OnLeftMouseButtonUpDelegate.Bind(this, &GOperationHandleBase::OnLeftButtonUp);
+    inputComponent->OnRightMouseButtonDownDelegate.Bind(this, &GOperationHandleBase::OnRightButtonDown);
+    inputComponent->OnRightMouseButtonUpDelegate.Bind(this, &GOperationHandleBase::OnRightButtonUp);
     inputComponent->OnMouseMoveDelegate.Bind(this, &GOperationHandleBase::OnMouseMove);
     SetVisible(false);
 }
@@ -214,6 +216,67 @@ fvector_3d GOperationHandleBase::GetCustomAxisDirection(const fvector_3d inRayWo
     const fvector_3d inRayWorldDirection, const fvector_3d inObjectWorldPosition) const
 {
     return fvector_3d(1.f);
+}
+
+extern GActorObject* selectedObject;
+fvector_3d GOperationHandleBase::GetSelectedObjectDirection(
+    const fvector_3d inRayWorldOriginPosition,
+    const fvector_3d inRayWorldDirection,
+    const fvector_3d inObjectWorldPosition
+)
+{
+    ESelectAxisType axisType = GetSelectAxisType();
+        
+    fvector_3d outWorldActorDirection;
+    if (true)
+    {
+        switch (axisType)
+        {
+        case ESelectAxis_X:
+            outWorldActorDirection = fvector_3d(1.f, 0.f, 0.f);
+            break;
+        case ESelectAxis_Y:
+            outWorldActorDirection = fvector_3d(0.f, 1.f, 0.f);
+            break;
+        case ESelectAxis_Z:
+            outWorldActorDirection = fvector_3d(0.f, 0.f, 1.f);
+            break;
+        case ESelectAxis_Any:
+            outWorldActorDirection = GetCustomAxisDirection(
+                inRayWorldOriginPosition,
+                inRayWorldDirection,
+                inObjectWorldPosition
+            );
+            break;
+        default:
+            break;  
+        }
+    }
+    else
+    {
+        switch (axisType)
+        {
+        case ESelectAxis_X:
+            outWorldActorDirection = EngineMath::ToVector3d(selectedObject->GetRightVector());
+            break;
+        case ESelectAxis_Y:
+            outWorldActorDirection = EngineMath::ToVector3d(selectedObject->GetUpVector());
+            break;
+        case ESelectAxis_Z:
+            outWorldActorDirection = EngineMath::ToVector3d(selectedObject->GetForwardVector());
+            break;
+        case ESelectAxis_Any:
+            outWorldActorDirection = GetCustomAxisDirection(
+                inRayWorldOriginPosition,
+                inRayWorldDirection,
+                inObjectWorldPosition
+            );
+            break;
+        default:
+            break;  
+        }
+    }
+    return outWorldActorDirection;
 }
 
 void GOperationHandleBase::OnMouseMove(int x, int y)
@@ -272,11 +335,20 @@ void GOperationHandleBase::OnLeftButtonUp(int x, int y)
     }
 }
 
+void GOperationHandleBase::OnRightButtonDown(int x, int y)
+{
+    bRightMouseButtonDown = true;
+}
+
+void GOperationHandleBase::OnRightButtonUp(int x, int y)
+{
+    bRightMouseButtonDown = false;
+}
+
 void GOperationHandleBase::OnCaptureKeyboardInformation(const FInputKey& inputKey)
 {
 }
 
-extern GActorObject* selectedObject;
 bool GOperationHandleBase::GetRayInterHitPosition(
     int x, int y,
     float& outT1,
@@ -309,55 +381,11 @@ bool GOperationHandleBase::GetRayInterHitPosition(
         worldOriginDir3d.normalize();
         
         outWorldActorPosition = EngineMath::ToVector3d(selectedObject->GetPosition());
-        
-        if (true)
-        {
-            switch (axisType)
-            {
-            case ESelectAxis_X:
-                outWorldActorDir =fvector_3d(1.f, 0.f, 0.f);
-                break;
-            case ESelectAxis_Y:
-                outWorldActorDir =fvector_3d(0.f, 1.f, 0.f);
-                break;
-            case ESelectAxis_Z:
-                outWorldActorDir =fvector_3d(0.f, 0.f, 1.f);
-                break;
-            case ESelectAxis_Any:
-                outWorldActorDir = GetCustomAxisDirection(
-                    worldOriginPos3d,
-                    worldOriginDir3d,
-                    outWorldActorPosition
-                );
-                break;
-            default:
-                break;  
-            }
-        }
-        else
-        {
-            switch (axisType)
-            {
-            case ESelectAxis_X:
-                outWorldActorDir = EngineMath::ToVector3d(selectedObject->GetRightVector());
-                break;
-            case ESelectAxis_Y:
-                outWorldActorDir = EngineMath::ToVector3d(selectedObject->GetUpVector());
-                break;
-            case ESelectAxis_Z:
-                outWorldActorDir = EngineMath::ToVector3d(selectedObject->GetForwardVector());
-                break;
-            case ESelectAxis_Any:
-                outWorldActorDir = GetCustomAxisDirection(
-                    worldOriginPos3d,
-                    worldOriginDir3d,
-                    outWorldActorPosition
-                );
-                break;
-            default:
-                break;  
-            }
-        }
+        outWorldActorDir = GetSelectedObjectDirection(
+            worldOriginPos3d,
+            worldOriginDir3d,
+            outWorldActorPosition
+        );
             
         fvector_3d v1Xv2 = fvector_3d::cross_product(worldOriginDir3d, outWorldActorDir);
         float len = v1Xv2.len();
