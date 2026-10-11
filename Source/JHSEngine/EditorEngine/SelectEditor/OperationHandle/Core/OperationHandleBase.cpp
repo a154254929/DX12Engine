@@ -223,7 +223,13 @@ void GOperationHandleBase::OnMouseMove(int x, int y)
         return;
     }
     FCollisionResult collisionResult;
-    FRaycastSystemLibrary::HitSpecialObjectsResultByScreen(GetWorld(), this, x, y, collisionResult);
+    FRaycastSystemLibrary::HitSpecialObjectsResultByScreen(
+        GetWorld(),
+        this,
+        ignoreComponents,
+        x, y,
+        collisionResult
+    );
     
     ResetColor();
     if (collisionResult.bIsCollided)

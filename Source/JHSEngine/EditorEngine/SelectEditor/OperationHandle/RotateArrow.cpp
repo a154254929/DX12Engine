@@ -5,10 +5,22 @@
 #include "Engine/Library/RaycastSystemLibrary.h"
 #include "../Engine/Core/World.h"
 #include "../Engine/Core/Camera.h"
+#include "Engine/Component/Mesh/PlaneMeshComponent.h"
 
 GRotateArrow::GRotateArrow()
+    : Super()
 {
     fixedZoom = 40.f;
+    
+    FCreateObjectParam param;
+    param.owner = this;
+    xPlaneComponent = ConstructionObject<CPlaneMeshComponent>(param);
+    yPlaneComponent = ConstructionObject<CPlaneMeshComponent>(param);
+    zPlaneComponent = ConstructionObject<CPlaneMeshComponent>(param);
+    
+    ignoreComponents.push_back(xPlaneComponent);
+    ignoreComponents.push_back(yPlaneComponent);
+    ignoreComponents.push_back(zPlaneComponent);
 }
 
 void GRotateArrow::CreateMesh()
@@ -19,7 +31,23 @@ void GRotateArrow::CreateMesh()
     CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, zAxisComponent, meshPath + "\\RotateHandleZ.fbx");
     CREATE_RENDER_DATA_BY_COMPONENT(CCustomMeshComponent, customAxisComponent, meshPath + "\\AnyAxis_Type_1.fbx");
     
+    CREATE_RENDER_DATA_BY_COMPONENT(CPlaneMeshComponent, xPlaneComponent, 5.2f, 5.2f, 2, 2);
+    CREATE_RENDER_DATA_BY_COMPONENT(CPlaneMeshComponent, yPlaneComponent, 5.2f, 5.2f, 2, 2);
+    CREATE_RENDER_DATA_BY_COMPONENT(CPlaneMeshComponent, zPlaneComponent, 5.2f, 5.2f, 2, 2);
+    
     customAxisComponent->SetPickup(false);
+    
+    xPlaneComponent->SetRotation(frotator(0.f, 0.f, 0.f));
+    yPlaneComponent->SetRotation(frotator(90.f, 0.f, 0.f));
+    zPlaneComponent->SetRotation(frotator(0.f, 0.f, 90.f));
+    
+    xPlaneComponent->SetVisible(false);
+    yPlaneComponent->SetVisible(false);
+    zPlaneComponent->SetVisible(false);
+    
+    xPlaneComponent->SetPickup(false);
+    yPlaneComponent->SetPickup(false);
+    zPlaneComponent->SetPickup(false);
     
     ResetColor();
     
@@ -34,6 +62,50 @@ void GRotateArrow::SetScale(const fvector_3d& inScale)
         customAxisComponent->SetScale(inScale * 1.4f);
     }
     
+}
+
+void GRotateArrow::SetPosition(const XMFLOAT3& inPosition)
+{
+    Super::SetPosition(inPosition);
+    
+    if (customAxisComponent)
+    {
+        customAxisComponent->SetPosition(inPosition);
+    }
+    xPlaneComponent->SetPosition(inPosition);
+    yPlaneComponent->SetPosition(inPosition);
+    zPlaneComponent->SetPosition(inPosition);
+}
+
+void GRotateArrow::ResetVisible()
+{
+    Super::ResetVisible();
+    xPlaneComponent->SetVisible(false);
+    yPlaneComponent->SetVisible(false);
+    zPlaneComponent->SetVisible(false);
+}
+
+void GRotateArrow::ResetVisible(CMeshComponent* inAxisComponent, bool inVisible)
+{
+    Super::ResetVisible(inAxisComponent, inVisible);
+    GOperationHandleBase::ESelectAxisType axisType = GetSelectAxisType();
+    if (axisType == GOperationHandleBase::ESelectAxisType::ESelectAxis_X)
+    {
+        xPlaneComponent->SetVisible(inVisible);
+    }
+    else if (axisType == GOperationHandleBase::ESelectAxisType::ESelectAxis_Y)
+    {
+        yPlaneComponent->SetVisible(inVisible);
+    }
+    else if (axisType == GOperationHandleBase::ESelectAxisType::ESelectAxis_Z)
+    {
+        zPlaneComponent->SetVisible(inVisible);
+    }
+}
+
+void GRotateArrow::BeginInit()
+{
+    GOperationHandleBase::BeginInit();
 }
 
 void GRotateArrow::Tick(float deltaTime)

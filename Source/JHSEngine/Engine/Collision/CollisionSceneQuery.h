@@ -4,18 +4,21 @@
 
 struct FCollisionSceneQuery
 {
-    static bool RaySingle(
+    static bool RaycastSingle(
         const XMVECTOR& originPoint
         , const XMVECTOR& direction
         , const XMMATRIX& viewInvMatrix
         , FCollisionResult& outResult
     );
     
-    static bool RaySingle(
+    static bool IsIgnoreComponent(CComponent* inComponent, const std::vector<CComponent*>& inIgnoreComponents);
+    
+    static bool RaycastSingle(
         GActorObject* inSpecialObject,
-        const XMVECTOR& originPoint
-        , const XMVECTOR& direction
-        , const XMMATRIX& viewInvMatrix
-        , FCollisionResult& outResult
+        const std::vector<CComponent*>& inIgnoreComponents,
+        const XMVECTOR& originPoint,
+        const XMVECTOR& direction,
+        const XMMATRIX& viewInvMatrix,
+        FCollisionResult& outResult
     );
 };

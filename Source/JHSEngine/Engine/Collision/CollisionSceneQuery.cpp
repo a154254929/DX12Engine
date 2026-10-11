@@ -26,7 +26,7 @@ void GetRaycastDataByLocal(
     outObjectDirection = XMVector3Normalize(XMVector3TransformNormal(direction, viewToObjectMatrix));
 }
 
-bool FCollisionSceneQuery::RaySingle(
+bool FCollisionSceneQuery::RaycastSingle(
     const XMVECTOR& originPoint,
     const XMVECTOR& direction,
     const XMMATRIX& viewInvMatrix,
@@ -98,8 +98,22 @@ bool FCollisionSceneQuery::RaySingle(
     return outResult.bIsCollided;
 }
 
-bool FCollisionSceneQuery::RaySingle(
+bool FCollisionSceneQuery::IsIgnoreComponent(CComponent* inComponent,
+    const std::vector<CComponent*>& inIgnoreComponents)
+{
+    for (CComponent* ignoreComponent : inIgnoreComponents)
+    {
+        if (ignoreComponent == inComponent)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool FCollisionSceneQuery::RaycastSingle(
     GActorObject* inSpecialObject,
+    const std::vector<CComponent*>& inIgnoreComponents,
     const XMVECTOR& originPoint,
     const XMVECTOR& direction,
     const XMMATRIX& viewInvMatrix,
@@ -111,7 +125,10 @@ bool FCollisionSceneQuery::RaySingle(
     for (int i = 0; i < FGeometry::renderingDataArray.size(); ++i)
     {
         std::shared_ptr<FRenderingData> renderingData = FGeometry::renderingDataArray[i];
-        if (!renderingData->meshComp->IsPickup() || !renderingData->meshComp->IsVisible())
+        if (!renderingData->meshComp->IsPickup()
+            || !renderingData->meshComp->IsVisible()
+            || IsIgnoreComponent(renderingData->meshComp, inIgnoreComponents)
+        )
         {
             continue;
         }

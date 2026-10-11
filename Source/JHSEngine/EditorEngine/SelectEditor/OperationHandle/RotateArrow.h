@@ -1,10 +1,20 @@
 #pragma once
 #include "Core/OperationHandleBase.h"
 
-
+class CPlaneMeshComponent;
 class GRotateArrow : public GOperationHandleBase
 {
     typedef GOperationHandleBase Super;
+    
+    CVARIABLE()
+    CPlaneMeshComponent* xPlaneComponent;
+    
+    CVARIABLE()
+    CPlaneMeshComponent* yPlaneComponent;
+    
+    CVARIABLE()
+    CPlaneMeshComponent* zPlaneComponent;
+    
 public:
     GRotateArrow();
     
@@ -12,8 +22,14 @@ public:
     
 public:
     virtual void SetScale(const fvector_3d& inScale);
+    virtual void SetPosition(const XMFLOAT3& inPosition);
     
 public:
+    virtual void ResetVisible();
+    virtual void ResetVisible(CMeshComponent* inAxisComponent, bool inVisible);
+    
+public:
+    virtual void BeginInit();
     virtual void Tick(float deltaTime);
     
 protected:

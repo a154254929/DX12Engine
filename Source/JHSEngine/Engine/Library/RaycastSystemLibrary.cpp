@@ -42,7 +42,7 @@ bool FRaycastSystemLibrary::HitResultByScreen(CWorld* world, int screenX, int sc
     if (GetRaycastByScreenParam(world, fvector_2d(screenX, screenY), viewOrigin, viewDir, viewInvMatrix))
     {
     
-        return FCollisionSceneQuery::RaySingle(viewOrigin, viewDir, viewInvMatrix, outResult);
+        return FCollisionSceneQuery::RaycastSingle(viewOrigin, viewDir, viewInvMatrix, outResult);
     }
     return false;
 }
@@ -50,8 +50,10 @@ bool FRaycastSystemLibrary::HitResultByScreen(CWorld* world, int screenX, int sc
 bool FRaycastSystemLibrary::HitSpecialObjectsResultByScreen(
     CWorld* world,
     GActorObject* inSpecialObject,
+    std::vector<CComponent*>& inIgnoreComponents,
     int screenX, int screenY,
-    FCollisionResult& outHitResult)
+    FCollisionResult& outHitResult
+)
 {
     XMVECTOR viewOrigin;
     XMVECTOR viewDir;
@@ -59,7 +61,12 @@ bool FRaycastSystemLibrary::HitSpecialObjectsResultByScreen(
     if (GetRaycastByScreenParam(world, fvector_2d(screenX, screenY), viewOrigin, viewDir, viewInvMatrix))
     {
     
-        FCollisionSceneQuery::RaySingle(inSpecialObject, viewOrigin, viewDir, viewInvMatrix, outHitResult);
+        FCollisionSceneQuery::RaycastSingle(
+            inSpecialObject,
+            inIgnoreComponents,
+            viewOrigin, viewDir, viewInvMatrix,
+            outHitResult
+        );
     }
     return false;
 }

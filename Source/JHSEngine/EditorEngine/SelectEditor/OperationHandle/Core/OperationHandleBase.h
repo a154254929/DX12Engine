@@ -50,9 +50,9 @@ public:
     virtual void SetScale(const fvector_3d& inScale) override;
     
 public:
-    void ResetVisible();
+    virtual void ResetVisible();
     
-    void ResetVisible(CMeshComponent* inAxisComponent, bool inVisible);
+    virtual void ResetVisible(CMeshComponent* inAxisComponent, bool inVisible);
     
     void ResetColor();
     
@@ -88,6 +88,9 @@ protected:
     
     bool IsCurrentOperationHandleSelect() const;
     
+protected:
     bool bOperationHandleSelect{ false };
     float fixedZoom;
+    
+    std::vector<CComponent*> ignoreComponents;
 };
