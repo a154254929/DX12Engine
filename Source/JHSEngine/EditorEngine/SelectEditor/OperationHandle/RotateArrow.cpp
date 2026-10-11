@@ -21,6 +21,15 @@ GRotateArrow::GRotateArrow()
     ignoreComponents.push_back(xPlaneComponent);
     ignoreComponents.push_back(yPlaneComponent);
     ignoreComponents.push_back(zPlaneComponent);
+    
+    xPlaneComponent->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE_ROT_PLANE);
+    yPlaneComponent->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE_ROT_PLANE);
+    zPlaneComponent->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE_ROT_PLANE);
+}
+
+void GRotateArrow::SetMeshRenderLayerType(EMeshRenderLayerType inRenderLayerType)
+{
+    Super::SetMeshRenderLayerType(inRenderLayerType);
 }
 
 void GRotateArrow::CreateMesh()
@@ -41,14 +50,6 @@ void GRotateArrow::CreateMesh()
     yPlaneComponent->SetRotation(frotator(90.f, 0.f, 0.f));
     zPlaneComponent->SetRotation(frotator(0.f, 0.f, 90.f));
     
-    xPlaneComponent->SetVisible(false);
-    yPlaneComponent->SetVisible(false);
-    zPlaneComponent->SetVisible(false);
-    
-    xPlaneComponent->SetPickup(false);
-    yPlaneComponent->SetPickup(false);
-    zPlaneComponent->SetPickup(false);
-    
     ResetColor();
     
 }
@@ -61,7 +62,9 @@ void GRotateArrow::SetScale(const fvector_3d& inScale)
     {
         customAxisComponent->SetScale(inScale * 1.4f);
     }
-    
+    xPlaneComponent->SetScale(inScale);
+    yPlaneComponent->SetScale(inScale);
+    zPlaneComponent->SetScale(inScale);
 }
 
 void GRotateArrow::SetPosition(const XMFLOAT3& inPosition)
@@ -196,6 +199,15 @@ void GRotateArrow::Tick(float deltaTime)
 
 }
 
+void GRotateArrow::SetVisible(bool inVisible)
+{
+    Super::SetVisible(inVisible);
+    
+    xPlaneComponent->SetVisible(false);
+    yPlaneComponent->SetVisible(false);
+    zPlaneComponent->SetVisible(false);
+}
+
 extern GActorObject* selectedObject;
 void GRotateArrow::OnMouseMove(int x, int y)
 {
@@ -294,6 +306,8 @@ void GRotateArrow::OnCaptureKeyboardInformation(const FInputKey& inputKey)
         if (inputKey.keyName == "E")
         {
             FOperationHandleSelectManager::GetInstance()->DisplaySelectOperationHandle(this);
+            
+            ResetVisible();
         }
     }
 }

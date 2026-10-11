@@ -15,6 +15,7 @@ enum EPipelineState
     VientianeShadowShadow,
     Select,
     OperationHandle,
+    OperationHandleRotPlane,
 };
 
 enum ERenderingConditions

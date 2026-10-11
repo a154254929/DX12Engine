@@ -184,6 +184,7 @@ void FRenderingPipeline::Draw(float deltaTime)
     //选择物体
     renderLayerManager.Draw(RENDERLAYER_OPAQUE_SELECT, deltaTime);
     //操作手柄
+    renderLayerManager.Draw(RENDERLAYER_OPERATION_HANDLE_ROT_PLANE, deltaTime);
     renderLayerManager.Draw(RENDERLAYER_OPERATION_HANDLE, deltaTime);
 #endif
     

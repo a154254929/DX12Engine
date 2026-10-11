@@ -18,6 +18,8 @@ class GRotateArrow : public GOperationHandleBase
 public:
     GRotateArrow();
     
+    virtual void SetMeshRenderLayerType(EMeshRenderLayerType inRenderLayerType);
+    
     void CreateMesh(); 
     
 public:
@@ -31,6 +33,8 @@ public:
 public:
     virtual void BeginInit();
     virtual void Tick(float deltaTime);
+    
+    virtual void SetVisible(bool inVisible);
     
 protected:
     virtual void OnMouseMove(int x, int y);

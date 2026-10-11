@@ -15,6 +15,7 @@
 #if EDITOR_ENGINE
 #include "RenderLayers/OperationHandleRenderLayer.h"
 #include "RenderLayers/SelectRenderLayer.h"
+#include "RenderLayers/OperationHandleRotPlaneRenderLayer.h"
 #endif
 
 std::vector<shared_ptr<FRenderLayer>> FRenderLayerManager::renderLayers;
@@ -33,6 +34,7 @@ FRenderLayerManager::FRenderLayerManager()
 #if EDITOR_ENGINE
     CreateRenderLayer<FSelectRenderLayer>();
     CreateRenderLayer<FOperationHandleRenderLayer>();
+    CreateRenderLayer<FOperationHandleRotPlaneRenderLayer>();
 #endif
 }
 
