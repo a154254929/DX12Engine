@@ -22,12 +22,14 @@ public:
     virtual void SetPosition(const XMFLOAT3& inPosition);
     virtual void SetRotation(const fvector_3d& inRotation);
     virtual void SetRotation(const frotator& inRotator);
+    virtual void SetRotationQuat(const fquat& inRotatorQuat);
     virtual void SetScale(const fvector_3d& inScale);
     
     virtual void SetPickup(bool inPickup);
 
     XMFLOAT3& GetPosition();
     fvector_3d GetRotation() const;
+    fquat GetRotationQuat() const;
     fvector_3d GetScale() const;
 
     XMFLOAT3& GetForwardVector();

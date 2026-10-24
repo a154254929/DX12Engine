@@ -21,6 +21,44 @@ namespace EngineMath
         return fvector_3d(inFloat3d.x, inFloat3d.y, inFloat3d.z);
     }
 
+    fmatrix_4x4 ToMatrix4x4(const XMFLOAT4X4& inFloat4x4)
+    {
+        return fmatrix_4x4(
+            inFloat4x4._11, inFloat4x4._12, inFloat4x4._13, inFloat4x4._14,
+            inFloat4x4._21, inFloat4x4._22, inFloat4x4._23, inFloat4x4._24,
+            inFloat4x4._31, inFloat4x4._32, inFloat4x4._33, inFloat4x4._34,
+            inFloat4x4._41, inFloat4x4._42, inFloat4x4._43, inFloat4x4._44
+        );
+    }
+
+    XMFLOAT4X4 ToFloat4x4(const fmatrix_4x4& inMatrix4x4)
+    {
+        return XMFLOAT4X4(
+            inMatrix4x4.m11, inMatrix4x4.m12, inMatrix4x4.m13, inMatrix4x4.m14,
+            inMatrix4x4.m21, inMatrix4x4.m22, inMatrix4x4.m23, inMatrix4x4.m24,
+            inMatrix4x4.m31, inMatrix4x4.m32, inMatrix4x4.m33, inMatrix4x4.m34,
+            inMatrix4x4.m41, inMatrix4x4.m42, inMatrix4x4.m43, inMatrix4x4.m44
+        );
+    }
+
+    fmatrix_3x3 ToMatrix3x3(const XMFLOAT3X3& inMatrix3x3)
+    {
+        return fmatrix_3x3(
+            inMatrix3x3._11, inMatrix3x3._12, inMatrix3x3._13,
+            inMatrix3x3._21, inMatrix3x3._22, inMatrix3x3._23,
+            inMatrix3x3._31, inMatrix3x3._32, inMatrix3x3._33
+        );
+    }
+
+    XMFLOAT3X3 ToFloat3x3(const fmatrix_3x3& inMatrix3x3)
+    {
+        return XMFLOAT3X3(
+            inMatrix3x3.m11, inMatrix3x3.m12, inMatrix3x3.m13,
+            inMatrix3x3.m21, inMatrix3x3.m22, inMatrix3x3.m23,
+            inMatrix3x3.m31, inMatrix3x3.m32, inMatrix3x3.m33
+        );
+    }
+
     bool IsAngleRange(float inAngle, float x, float y)
     {
         return inAngle >= min(x, y) && inAngle <= max(x, y);
@@ -270,5 +308,28 @@ namespace EngineMath
         XMMATRIX worldMatrix = XMLoadFloat4x4(&rotateArrowMatrix);
         XMVECTOR worldMatrixRIXDeterminant = XMMatrixDeterminant(worldMatrix);
         outInvMatrix = XMMatrixInverse(&worldMatrixRIXDeterminant, worldMatrix);
+    }
+
+    fquat BuildQuat(const fvector_3d inForwardVector, const fvector_3d inUpVector)
+    {
+        fvector_3d rightVector = fvector_3d::cross_product(inUpVector, inForwardVector);
+        rightVector.normalize();
+        fvector_3d upVector = fvector_3d::cross_product(inForwardVector, rightVector);
+        fmatrix_3x3 rotationMatrix = {
+            rightVector.x,		upVector.x,	    inForwardVector.x,
+            rightVector.y,		upVector.y,     inForwardVector.y,
+            rightVector.z,		upVector.z,	    inForwardVector.z
+        };
+        return math_utils::matrix_to_quat(rotationMatrix);
+    }
+
+    void BuildMatrixWithRotation(fmatrix_3x3& outMatrix, XMFLOAT3 inRightVector, XMFLOAT3 inUpVector,
+                                 XMFLOAT3 inForwardVector)
+    {
+        outMatrix = {
+            inRightVector.x,		inUpVector.x,	inForwardVector.x,
+            inRightVector.y,		inUpVector.y,	inForwardVector.y,
+            inRightVector.z,		inUpVector.z,	inForwardVector.z
+        };
     }
 }

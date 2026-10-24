@@ -75,6 +75,11 @@ void GActorObject::SetRotation(const frotator& inRotator)
     rootComponent->SetRotation(inRotator);
 }
 
+void GActorObject::SetRotationQuat(const fquat& inRotatorQuat)
+{
+    rootComponent->SetRotationQuat(inRotatorQuat);
+}
+
 void GActorObject::SetScale(const fvector_3d& inScale)
 {
     rootComponent->SetScale(inScale);
@@ -92,6 +97,11 @@ XMFLOAT3& GActorObject::GetPosition()
 fvector_3d GActorObject::GetRotation() const
 {
     return rootComponent->GetRotation();
+}
+
+fquat GActorObject::GetRotationQuat() const
+{
+    return rootComponent->GetRotationQuat();
 }
 
 fvector_3d GActorObject::GetScale() const

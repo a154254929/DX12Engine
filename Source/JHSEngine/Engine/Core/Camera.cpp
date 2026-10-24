@@ -360,9 +360,7 @@ void GCamera::LookAtAndMoveToSelectedObject(float inTime, float inDeltaTime)
         fvector_3d endPosition = selectedObjectPosition + cameraForward * l * -1.0f;
         fvector_3d currentPosition = EngineMath::Lerp(cameraPosition, endPosition, inDeltaTime);
         
-        SetPosition(
-            EngineMath::ToFloat3(currentPosition)
-        );
+        SetPosition(EngineMath::ToFloat3(currentPosition));
     }
     bFPressed = false;
 }

@@ -20,6 +20,12 @@ namespace EngineMath
     
     fvector_3d ToVector3d(const XMFLOAT3& inV3d);
     
+    fmatrix_4x4 ToMatrix4x4(const XMFLOAT4X4& inFloat4x4);
+    XMFLOAT4X4 ToFloat4x4(const fmatrix_4x4& inMatrix4x4);
+    
+    fmatrix_3x3 ToMatrix3x3(const XMFLOAT3X3& inMatrix3x3);
+    XMFLOAT3X3 ToFloat3x3(const fmatrix_3x3& inMatrix3x3);
+    
     bool IsAngleRange(float inAngle, float x, float y);
     
     bool IsAngleAxisRange(float inAngle, float x, float y, float inCriticalValue, bool bCompMin);
@@ -52,6 +58,18 @@ namespace EngineMath
         XMMATRIX& outInvMatrix,
         XMFLOAT3 inPosition,
         fvector_3d inScale,
+        XMFLOAT3 inRightVector,
+        XMFLOAT3 inUpVector,
+        XMFLOAT3 inForwardVector
+    );
+    
+    fquat BuildQuat(
+        const fvector_3d inForwardVector,
+        const fvector_3d inUpVector = fvector_3d(0.f, 1.f, 0.f)
+    );
+    
+    void BuildMatrixWithRotation(
+        fmatrix_3x3& outMatrix,
         XMFLOAT3 inRightVector,
         XMFLOAT3 inUpVector,
         XMFLOAT3 inForwardVector

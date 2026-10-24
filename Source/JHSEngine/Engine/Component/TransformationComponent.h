@@ -9,6 +9,7 @@ public:
     void SetPosition(const XMFLOAT3& inPosition);
     void SetRotation(const fvector_3d& inRotation);
     void SetRotation(const frotator& inRotator);
+    void SetRotationQuat(const fquat& inRotatorQuat);
     void SetScale(const fvector_3d& inScale);
     
     void SetForwardVector(const XMFLOAT3& inForwardVector);
@@ -17,6 +18,7 @@ public:
 
     XMFLOAT3& GetPosition() { return position; };
     fvector_3d GetRotation() const { return fvector_3d(rotation.x, rotation.y, rotation.z); };
+    fquat GetRotationQuat() const ;
     fvector_3d GetScale() const { return fvector_3d(scale.x, scale.y, scale.z); };
     XMFLOAT3& GetForwardVector() { return forwardVector; };
     XMFLOAT3& GetRightVector() { return rightVector; };
