@@ -329,7 +329,6 @@ void GRotateArrow::OnMouseMove(int x, int y)
     fvector_3d worldActorPosition;
     if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
-        SetCDValue(rayInterHitT1);
         
         //保证摄像机和物体的相对拖拽偏移保持不变
         float cmaeraAndSelectedDistance = 
@@ -355,7 +354,13 @@ void GRotateArrow::OnMouseMove(int x, int y)
             fvector_3d()
         );
         
+        //模型旋转
         fvector_3d deltaVector = worldActorDir * rotateSymbol * fabsf(diffT1Value) * 360.f;
+        
+        //材质旋转
+        float mateirlSymbol = GetSymbolMaterialByCubeIndex(diffT1Value);
+        SetCDValue(rotateRate * mateirlSymbol);
+        
         
         frotator lastRotator;
         frotator deltaRotator(deltaVector.y, deltaVector.z, deltaVector.x);
@@ -568,4 +573,61 @@ float GRotateArrow::GetSymbolByCubeIndex(float inValueOffset)
     }
     
     return 0.f;
+}
+
+float GRotateArrow::GetSymbolMaterialByCubeIndex(float inValueOffset)
+{
+    GOperationHandleBase::ESelectAxisType axisType = GetSelectAxisType();
+        
+    switch (sample8CubeIndex)
+    {
+    case 2:
+    case 3:
+        {
+            switch (axisType)
+            {
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_X:
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Y:
+                return 1.f;
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Z:
+                return sample8CubeIndex == 3 ? -1.f : 1.f;
+                break;
+            }
+        }
+        break;
+    case 0:
+    case 1:
+    case 4:
+    case 5:
+        {
+            switch (axisType)
+            {
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_X:
+                return -1.f;
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Z:
+                return sample8CubeIndex == 0 || sample8CubeIndex == 4 ? -1.f : 1.f;
+                break;
+            }    
+        }
+        break;
+    case 6:
+    case 7:
+        {
+            switch (axisType)
+            {
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_X:
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Y:
+                return 1.f;
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Z:
+                return sample8CubeIndex == 7 ? -1.f : 1.f;
+                break;
+            }    
+        }
+        break;
+    }
+    
+    return 1.f;
 }

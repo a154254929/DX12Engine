@@ -62,6 +62,7 @@ protected:
     
     float GetSymbol(float inValueOffset, bool bFlip = false);
     float GetSymbolByCubeIndex(float inValueOffset);
+    float GetSymbolMaterialByCubeIndex(float inValueOffset);
     
 protected:
     float lastT1Value = 0.f;
