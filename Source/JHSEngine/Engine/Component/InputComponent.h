@@ -42,4 +42,7 @@ public:
     
     virtual void OnMouseMove(int x, int y);
     virtual void OnMouseWheel(int x, int y, float inDelta);
+
+private:
+    bool bFWasDown = false;
 };

@@ -248,7 +248,7 @@ namespace math_utils
         value[2] = -in_rotation_matrix.m11 + in_rotation_matrix.m22 - in_rotation_matrix.m33;//y
         value[3] = -in_rotation_matrix.m11 - in_rotation_matrix.m22 + in_rotation_matrix.m33;//z
 
-        float tmp_value = 0.f;
+        float tmp_value = value[0];
 
         int index = 0;
         for (int i = 0; i < 4; i++)
@@ -260,7 +260,7 @@ namespace math_utils
             }
         }
 
-        if (tmp_value != 0.f)
+        if (tmp_value >= 0.f)
         {
             float value_sqrt = sqrt(tmp_value + 1.f) * 0.5f;
             float mult = 0.25f / value_sqrt;
@@ -280,7 +280,7 @@ namespace math_utils
                 out_quat.w = (in_rotation_matrix.m23 - in_rotation_matrix.m32) * mult;
                 out_quat.x = value_sqrt;
                 out_quat.y = (in_rotation_matrix.m12 + in_rotation_matrix.m21) * mult;
-                out_quat.z = (in_rotation_matrix.m31 - in_rotation_matrix.m13) * mult;
+                out_quat.z = (in_rotation_matrix.m31 + in_rotation_matrix.m13) * mult;
                 break;
             }
             case 2://y

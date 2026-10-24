@@ -94,7 +94,7 @@ XMFLOAT3& GActorObject::GetPosition()
     return rootComponent->GetPosition();
 }
 
-fvector_3d GActorObject::GetRotation() const
+frotator GActorObject::GetRotation() const
 {
     return rootComponent->GetRotation();
 }

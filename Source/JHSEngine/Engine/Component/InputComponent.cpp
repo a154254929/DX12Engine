@@ -14,8 +14,22 @@ void CInputComponent::BeginInit()
 
 void CInputComponent::Tick(float deltaTime)
 {
+    const bool bFDown = (GetAsyncKeyState('F') & 0x8000) != 0;
+    const bool bFJustPressed = bFDown && !bFWasDown;
+    bFWasDown = bFDown;
+
     if (captureKeyboardInforDelegate.IsBound())
     {
+        // F is a one-shot command and can be pressed while movement keys are held.
+        if (bFJustPressed)
+        {
+            FInputKey focusKey;
+            focusKey.keyName = "F";
+            focusKey.pressState = EPressState::Press;
+            captureKeyboardInforDelegate.Execute(focusKey);
+            return;
+        }
+
         FInputKey inputKey;
         if (GetAsyncKeyState('W') & KF_UP)
         {
@@ -52,10 +66,6 @@ void CInputComponent::Tick(float deltaTime)
         else if (GetAsyncKeyState('Y') & KF_UP)
         {
             inputKey.keyName = "Y";
-        }
-        else if (GetAsyncKeyState('F') & KF_UP)
-        {
-            inputKey.keyName = "F";
         }
         else if (GetAsyncKeyState(VK_MENU) & KF_UP)
         {

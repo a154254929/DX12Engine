@@ -11,7 +11,7 @@ GParallelLight::GParallelLight()
 
 void GParallelLight::Tick(float deltaTime)
 {
-    fvector_3d rotationV3 = GetRotation();
+    fvector_3d rotationV3 = fvector_3d();
     
     //rotationV3.x += deltaTime * 15.0f;
     rotationV3.y += deltaTime * 15.0f;

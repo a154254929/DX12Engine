@@ -339,8 +339,7 @@ void GRotateArrow::OnMouseMove(int x, int y)
         
         fvector_3d deltaVector = worldActorDir * rotateValue;
         
-        fvector_3d lastRotation = selectedObject->GetRotation();
-        frotator lastRotator(lastRotation.y, lastRotation.z, lastRotation.x);
+        frotator lastRotator;
         frotator deltaRotator(deltaVector.y, deltaVector.z, deltaVector.x);
         
         fquat actorRotationQuat;

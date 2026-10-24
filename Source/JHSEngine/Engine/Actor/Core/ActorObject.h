@@ -28,7 +28,7 @@ public:
     virtual void SetPickup(bool inPickup);
 
     XMFLOAT3& GetPosition();
-    fvector_3d GetRotation() const;
+    frotator GetRotation() const;
     fquat GetRotationQuat() const;
     fvector_3d GetScale() const;
 

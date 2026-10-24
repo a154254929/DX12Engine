@@ -1,4 +1,5 @@
 #include "EngineMath.h"
+#include <cmath>
 
 namespace EngineMath
 {
@@ -312,20 +313,73 @@ namespace EngineMath
 
     fquat BuildQuat(const fvector_3d inForwardVector, const fvector_3d inUpVector)
     {
-        fvector_3d rightVector = fvector_3d::cross_product(inUpVector, inForwardVector);
+        fvector_3d forwardVector = inForwardVector;
+        if (fvector_3d::dot(forwardVector, forwardVector) < 1.e-8f)
+        {
+            return fquat();
+        }
+        forwardVector.normalize();
+        fvector_3d rightVector = fvector_3d::cross_product(inUpVector, forwardVector);
+        if (fvector_3d::dot(rightVector, rightVector) < 1.e-8f)
+        {
+            const fvector_3d fallbackUp = fabsf(forwardVector.y) < 0.99f
+                ? fvector_3d(0.f, 1.f, 0.f) : fvector_3d(0.f, 0.f, 1.f);
+            rightVector = fvector_3d::cross_product(fallbackUp, forwardVector);
+        }
         rightVector.normalize();
-        fvector_3d upVector = fvector_3d::cross_product(inForwardVector, rightVector);
-        fmatrix_3x3 rotationMatrix = {
-            rightVector.x,		upVector.x,	    inForwardVector.x,
-            rightVector.y,		upVector.y,     inForwardVector.y,
-            rightVector.z,		upVector.z,	    inForwardVector.z
-        };
-        return math_utils::matrix_to_quat(rotationMatrix);
+        fvector_3d upVector = fvector_3d::cross_product(forwardVector, rightVector);
+        upVector.normalize();
+        fmatrix_3x3 rotationMatrix;
+        BuildMatrixWithRotation(rotationMatrix, ToFloat3(rightVector), ToFloat3(upVector), ToFloat3(forwardVector));
+        fquat result = math_utils::matrix_to_quat(rotationMatrix);
+        result.normalize();
+        return result;
+    }
+
+    frotator BuildRotator(const fvector_3d inForwardVector, const fvector_3d inUpVector)
+    {
+        frotator result;
+        fvector_3d forwardVector = inForwardVector;
+        if (fvector_3d::dot(forwardVector, forwardVector) < 1.e-8f)
+        {
+            return frotator();
+        }
+        forwardVector.normalize();
+        fvector_3d rightVector = fvector_3d::cross_product(inUpVector, forwardVector);
+        if (fvector_3d::dot(rightVector, rightVector) < 1.e-8f)
+        {
+            const fvector_3d fallbackUp = fabsf(forwardVector.y) < 0.99f
+                ? fvector_3d(0.f, 1.f, 0.f) : fvector_3d(0.f, 0.f, 1.f);
+            rightVector = fvector_3d::cross_product(fallbackUp, forwardVector);
+        }
+        rightVector.normalize();
+        fvector_3d upVector = fvector_3d::cross_product(forwardVector, rightVector);
+        upVector.normalize();
+        fmatrix_3x3 rotationMatrix;
+        BuildMatrixWithRotation(rotationMatrix, ToFloat3(rightVector), ToFloat3(upVector), ToFloat3(forwardVector));
+        
+        result.inertia_to_object(rotationMatrix);
+        return ToDXRotator(result);
+    }
+
+    frotator Lerp(const frotator& a, const frotator& b, float t)
+    {
+        const frotator delta(
+            std::remainder(b.pitch - a.pitch, 360.f),
+            std::remainder(b.yaw - a.yaw, 360.f),
+            std::remainder(b.roll - a.roll, 360.f));
+        return a + delta * t;
+    }
+
+    frotator ToDXRotator(const frotator& inRotator)
+    {
+        return frotator(inRotator.roll, inRotator.pitch, inRotator.yaw);
     }
 
     void BuildMatrixWithRotation(fmatrix_3x3& outMatrix, XMFLOAT3 inRightVector, XMFLOAT3 inUpVector,
                                  XMFLOAT3 inForwardVector)
     {
+        // Match the reference engine's basis-column rotation convention.
         outMatrix = {
             inRightVector.x,		inUpVector.x,	inForwardVector.x,
             inRightVector.y,		inUpVector.y,	inForwardVector.y,

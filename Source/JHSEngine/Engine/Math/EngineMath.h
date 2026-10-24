@@ -68,6 +68,10 @@ namespace EngineMath
         const fvector_3d inUpVector = fvector_3d(0.f, 1.f, 0.f)
     );
     
+    frotator BuildRotator(const fvector_3d inForwardVector, const fvector_3d inUpVector = fvector_3d(0.f, 1.f, 0.f));
+    
+    frotator ToDXRotator(const frotator& inRotator);
+    
     void BuildMatrixWithRotation(
         fmatrix_3x3& outMatrix,
         XMFLOAT3 inRightVector,
@@ -75,6 +79,8 @@ namespace EngineMath
         XMFLOAT3 inForwardVector
     );
     
+    frotator Lerp(const frotator& a, const frotator& b, float t);
+
     template<typename T>
     T Lerp(const T& a, const T& b, float t)
     {

@@ -17,7 +17,7 @@ public:
     void SetUpVector(const XMFLOAT3& inUpVector);
 
     XMFLOAT3& GetPosition() { return position; };
-    fvector_3d GetRotation() const { return fvector_3d(rotation.x, rotation.y, rotation.z); };
+    frotator GetRotation() const ;
     fquat GetRotationQuat() const ;
     fvector_3d GetScale() const { return fvector_3d(scale.x, scale.y, scale.z); };
     XMFLOAT3& GetForwardVector() { return forwardVector; };
@@ -34,7 +34,6 @@ public:
 
 private:
     XMFLOAT3 position;
-    XMFLOAT3 rotation;
     XMFLOAT3 scale;
 
     XMFLOAT3 forwardVector;

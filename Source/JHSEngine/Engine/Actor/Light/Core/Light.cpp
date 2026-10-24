@@ -6,13 +6,13 @@ GLight::GLight()
 
 void GLight::Tick(float deltaTime)
 {
-    fvector_3d rotationV3 = GetRotation();
+    frotator rotationV3 = GetRotation();
     
     //rotationV3.x += deltaTime * 15.0f;
     //rotationV3.y += deltaTime * 25.0f;
     //rotationV3.x += deltaTime * 15.0f;
     
-    SetRotation(rotationV3);
+    SetRotation(fvector_3d(rotationV3.pitch, rotationV3.yaw, rotationV3.roll));
 }
 
 void GLight::SetPosition(const XMFLOAT3& inPosition)

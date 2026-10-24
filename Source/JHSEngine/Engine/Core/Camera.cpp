@@ -50,8 +50,8 @@ void GCamera::BeginInit()
 
 void GCamera::Tick(float deltaTime)
 {
-    Super::Tick(deltaTime);
     timeline.Tick(deltaTime);
+    Super::Tick(deltaTime);
 }
 
 void GCamera::ExecuteKeboard(const FInputKey& inputKey)
@@ -106,17 +106,27 @@ void GCamera::ExecuteKeboard(const FInputKey& inputKey)
         SetDirty(true);
     }
     
-    if (inputKey.keyName == "F" && !bFPressed)
+    if (inputKey.keyName == "F" && !bFPressed && selectedObject)
     {
+        /*
         LookAt(
             EngineMath::ToVector3d(GetPosition()),
             EngineMath::ToVector3d(selectedObject->GetPosition())
         );
+        */
         
+        if (cameraType == ECameraType::OvservationObject)
+        {
+            GetRightVector() = XMFLOAT3(viewMatrix._11, viewMatrix._21, viewMatrix._31);
+            GetUpVector() = XMFLOAT3(viewMatrix._12, viewMatrix._22, viewMatrix._32);
+            GetForwardVector() = XMFLOAT3(viewMatrix._13, viewMatrix._23, viewMatrix._33);
+        }
+        cameraType = ECameraType::CameraRoaming;
         bFPressed = true;
+        timeline.ClearTimeline();
         FTimelineDelegate timelineDelegate;
         timelineDelegate.Bind(this, &GCamera::LookAtAndMoveToSelectedObject);
-        timeline.BindTimelineEvent(0.8f, timelineDelegate);
+        timeline.BindTimelineEvent(1.0f, timelineDelegate);
     }
 }
 
@@ -347,13 +357,17 @@ void GCamera::LookAtAndMoveToSelectedObject(float inTime, float inDeltaTime)
         BoundingBox selectedObjectBoundingBox = selectedObject->GetBoundingBox();
         float radius = EngineMath::ToVector3d(selectedObjectBoundingBox.Extents).len();
         float h = 10.f;
-        float fov = GetYFov();
+        float fov = XMConvertToRadians(GetYFov());
         float l = (radius + h) / tan(fov / 2);
         
         fvector_3d cameraPosition = EngineMath::ToVector3d(GetPosition());
         fvector_3d selectedObjectPosition = EngineMath::ToVector3d(selectedObject->GetPosition());
         
-        fvector_3d cameraForward = EngineMath::ToVector3d(GetForwardVector());
+        fvector_3d cameraForward = selectedObjectPosition - cameraPosition;
+        if (fvector_3d::dot(cameraForward, cameraForward) < 1.e-8f)
+        {
+            cameraForward = EngineMath::ToVector3d(GetForwardVector());
+        }
         cameraForward.normalize();
         
         fvector_3d selectedObjectCenter = EngineMath::ToVector3d(selectedObjectBoundingBox.Center);
@@ -361,6 +375,27 @@ void GCamera::LookAtAndMoveToSelectedObject(float inTime, float inDeltaTime)
         fvector_3d currentPosition = EngineMath::Lerp(cameraPosition, endPosition, inDeltaTime);
         
         SetPosition(EngineMath::ToFloat3(currentPosition));
+        
+        if (true)
+        {
+            fquat cameraQuat = GetRotationQuat();
+            fquat targetQuat = EngineMath::BuildQuat(cameraForward);
+            if ((cameraQuat | targetQuat) < 0.f)
+            {
+                targetQuat *= -1.f;
+            }
+
+            fquat currentQ = fquat::s_lerp(cameraQuat, targetQuat, inDeltaTime);
+            currentQ.normalize();
+            SetRotationQuat(currentQ);
+        }
+        else
+        {
+            frotator cameraRotator = GetRotation();
+            frotator targetRotator = EngineMath::BuildRotator(cameraForward);
+            frotator currentRotator = EngineMath::Lerp(cameraRotator, targetRotator, inDeltaTime);
+            SetRotation(currentRotator);
+        }
     }
     bFPressed = false;
 }

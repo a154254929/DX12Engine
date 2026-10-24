@@ -3,7 +3,6 @@
 
 CTransformationComponent::CTransformationComponent()
     : position(0.f, 0.f, 0.f)
-    , rotation(0.f, 0.f, 0.f)
     , scale(1.f, 1.f, 1.f)
     , forwardVector(0.f, 0.f, 1.f)
     , upVector(0.f, 1.f, 0.f)
@@ -18,17 +17,15 @@ void CTransformationComponent::SetPosition(const XMFLOAT3& inPosition)
 
 void CTransformationComponent::SetRotation(const fvector_3d& inRotation)
 {
-    fvector_3d lastRotation = EngineMath::ToVector3d(rotation);
-    fvector_3d offsetRotation = inRotation - lastRotation;
-    
-    /*
     float rollRadians = XMConvertToRadians(inRotation.z);
     float pitchRadians = XMConvertToRadians(inRotation.x);
     float yawRadians = XMConvertToRadians(inRotation.y);
-    */
+    
+    /*
     float rollRadians = XMConvertToRadians(offsetRotation.z);
     float pitchRadians = XMConvertToRadians(offsetRotation.x);
     float yawRadians = XMConvertToRadians(offsetRotation.y);
+    */
 
     XMMATRIX rotationPitchYawRoll = XMMatrixRotationRollPitchYaw(pitchRadians, yawRadians, rollRadians);
 
@@ -39,8 +36,6 @@ void CTransformationComponent::SetRotation(const fvector_3d& inRotation)
     XMStoreFloat3(&rightVector, XMVector3TransformNormal(right, rotationPitchYawRoll));
     XMStoreFloat3(&upVector, XMVector3TransformNormal(up, rotationPitchYawRoll));
     XMStoreFloat3(&forwardVector, XMVector3TransformNormal(forward, rotationPitchYawRoll));
-    
-    rotation = EngineMath::ToFloat3(inRotation);
 }
 
 void CTransformationComponent::SetRotation(const frotator& inRotator)
@@ -60,25 +55,28 @@ void CTransformationComponent::SetRotation(const frotator& inRotator)
     XMStoreFloat3(&rightVector, XMVector3TransformNormal(right, rotationPitchYawRoll));
     XMStoreFloat3(&upVector, XMVector3TransformNormal(up, rotationPitchYawRoll));
     XMStoreFloat3(&forwardVector, XMVector3TransformNormal(forward, rotationPitchYawRoll));
-    
-    rotation = EngineMath::ToFloat3(inRotation);
 }
 
 void CTransformationComponent::SetRotationQuat(const fquat& inRotatorQuat)
 {
     fmatrix_3x3 rotationMatrix;
-    math_utils::inertia_to_object(inRotatorQuat, rotationMatrix);
+    math_utils::object_to_inertia(inRotatorQuat, rotationMatrix);
     
-    XMFLOAT3X3 xmMatrixRotation= EngineMath::ToFloat3x3(rotationMatrix);
-    XMMATRIX rotationRTX = XMLoadFloat3x3(&xmMatrixRotation);
+    fvector_3d rightVec = fvector_3d(1.f, 0.f, 0.f);
+    fvector_3d upVec = fvector_3d(0.f, 1.f, 0.f);
+    fvector_3d forwardVec = fvector_3d(0.f, 0.f, 1.f);
     
-    XMVECTOR right = XMLoadFloat3(&rightVector);
-    XMVECTOR up = XMLoadFloat3(&upVector);
-    XMVECTOR forward = XMLoadFloat3(&forwardVector);
+    rightVec = math_utils::mul(rightVec, rotationMatrix);
+    upVec = math_utils::mul(upVec, rotationMatrix);
+    forwardVec = math_utils::mul(forwardVec, rotationMatrix);
     
-    XMStoreFloat3(&rightVector, XMVector3TransformNormal(right, rotationRTX));
-    XMStoreFloat3(&upVector, XMVector3TransformNormal(up, rotationRTX));
-    XMStoreFloat3(&forwardVector, XMVector3TransformNormal(forward, rotationRTX));
+    rightVec.normalize();
+    upVec.normalize();
+    forwardVec.normalize();
+    
+    rightVector = EngineMath::ToFloat3(rightVec);
+    upVector = EngineMath::ToFloat3(upVec);
+    forwardVector = EngineMath::ToFloat3(forwardVec);
 }
 
 void CTransformationComponent::SetScale(const fvector_3d& inScale)
@@ -101,6 +99,15 @@ void CTransformationComponent::SetRightVector(const XMFLOAT3& inRightVector)
 void CTransformationComponent::SetUpVector(const XMFLOAT3& inUpVector)
 {
     upVector = inUpVector;
+}
+
+frotator CTransformationComponent::GetRotation() const
+{
+    fmatrix_3x3 rotationMatrix;
+    frotator rotator;
+    EngineMath::BuildMatrixWithRotation(rotationMatrix, rightVector, upVector, forwardVector);
+    rotator.inertia_to_object(rotationMatrix);
+    return EngineMath::ToDXRotator(rotator);
 }
 
 fquat CTransformationComponent::GetRotationQuat() const
