@@ -13,6 +13,13 @@ LRESULT CALLBACK EngineWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     
     switch (msg)
     {
+    case WM_SYSCOMMAND:
+        // Prevent Alt from entering a menu loop that pauses rendering.
+        if ((wParam & 0xFFF0) == SC_KEYMENU)
+        {
+            return 0;
+        }
+        break;
     case WM_CLOSE:
         PostQuitMessage(0);
         return 0;

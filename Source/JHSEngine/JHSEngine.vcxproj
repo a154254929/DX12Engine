@@ -263,6 +263,7 @@
     <ClCompile Include="Engine\Component\Mesh\SphereMeshComponent.cpp" />
     <ClCompile Include="Engine\Component\Sky\Core\FogConstantBuffer.cpp" />
     <ClCompile Include="Engine\Component\Sky\FogComponent.cpp" />
+    <ClCompile Include="Engine\Component\TimelineComponent.cpp" />
     <ClCompile Include="Engine\Component\TransformationComponent.cpp" />
     <ClCompile Include="Engine\Config\EngineRenderConfig.cpp" />
     <ClCompile Include="Engine\Core\Camera.cpp" />
@@ -400,6 +401,7 @@
     <ClInclude Include="Engine\Component\Mesh\SphereMeshComponent.h" />
     <ClInclude Include="Engine\Component\Sky\Core\FogConstantBuffer.h" />
     <ClInclude Include="Engine\Component\Sky\FogComponent.h" />
+    <ClInclude Include="Engine\Component\TimelineComponent.h" />
     <ClInclude Include="Engine\Component\TransformationComponent.h" />
     <ClInclude Include="Engine\Config\EngineRenderConfig.h" />
     <ClInclude Include="Engine\Core\Camera.h" />

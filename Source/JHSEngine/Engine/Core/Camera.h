@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "../Interface/DirectXDeviceInterface.h"
+#include "Engine/Component/TimelineComponent.h"
 #include "Viewport/ClientViewport.h"
 
 struct FInputKey;
@@ -42,6 +43,8 @@ public:
 protected:
     void RotateAroundYAxis(float inRotateDegrees);
     void RotateAroundXAxis(float inRotateDegrees);
+protected:
+    void LookAtAndMoveToSelectedObject(float inTime, float inDeltaTime);
 public:
 
     FORCEINLINE CInputComponent* GetInputComponent() { return inputComponent; }
@@ -63,4 +66,6 @@ protected:
     float phi;
 
     float speed = .05f;
+    
+    FTimeline timeline;
 };

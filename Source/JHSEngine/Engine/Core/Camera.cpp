@@ -39,6 +39,7 @@ void GCamera::BeginInit()
 void GCamera::Tick(float deltaTime)
 {
     Super::Tick(deltaTime);
+    timeline.Tick(deltaTime);
 }
 
 void GCamera::ExecuteKeboard(const FInputKey& inputKey)
@@ -91,6 +92,13 @@ void GCamera::ExecuteKeboard(const FInputKey& inputKey)
         cameraType = ECameraType::OvservationObject;
         
         SetDirty(true);
+    }
+    
+    if (inputKey.keyName == "F")
+    {
+        FTimelineDelegate timelineDelegate;
+        timelineDelegate.Bind(this, &GCamera::LookAtAndMoveToSelectedObject);
+        timeline.BindTimelineEvent(1.f, timelineDelegate);
     }
 }
 
@@ -313,4 +321,12 @@ void GCamera::RotateAroundXAxis(float inRotateDegrees)
     XMStoreFloat3(&GetTransformationComponent()->GetUpVector(), XMVector3TransformNormal(XMLoadFloat3(&GetTransformationComponent()->GetUpVector()), rotationX));
     XMStoreFloat3(&GetTransformationComponent()->GetForwardVector(), XMVector3TransformNormal(XMLoadFloat3(&GetTransformationComponent()->GetForwardVector()), rotationX));
 
+}
+
+void GCamera::LookAtAndMoveToSelectedObject(float inTime, float inDeltaTime)
+{
+    if (selectedObject)
+    {
+        Engine_Log("inTime = %f, inDeltaTime = %f", inTime, inDeltaTime);
+    }
 }
