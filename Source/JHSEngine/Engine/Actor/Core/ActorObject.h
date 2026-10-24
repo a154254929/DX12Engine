@@ -13,6 +13,10 @@ public:
     GActorObject();
 
     FORCEINLINE CTransformationComponent* GetRootComponent() { return rootComponent; };
+    
+    BoundingBox GetBoundingBox();
+    
+    void GetBoundingBox(BoundingBox& outBoundingBox);
 
 public:
     virtual void SetPosition(const XMFLOAT3& inPosition);

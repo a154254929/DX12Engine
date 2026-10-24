@@ -9,6 +9,9 @@ public:
     
     void SetParentComponent(CComponent* inParent);
     void AddChildComponent(CComponent* inChild);
+    
+public:
+    FORCEINLINE std::vector<CComponent*>& GetChildren() { return childComponents; }
 protected:
     CComponent* parentComponent;
     std::vector<CComponent*> childComponents;

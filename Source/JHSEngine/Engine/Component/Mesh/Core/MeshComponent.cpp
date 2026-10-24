@@ -1,5 +1,6 @@
 #include "MeshComponent.h"
 #include "../../../Mesh/Core/Material/Material.h"
+#include "Engine/Rendering/Core/DirectX/RenderingPipeline/Geometry/GeometryMap.h"
 
 CMeshComponent::CMeshComponent()
 {
@@ -19,6 +20,28 @@ void CMeshComponent::Init()
 
 void CMeshComponent::BuildMesh(const FMeshRenderingData* inRenderingData)
 {
+}
+
+BoundingBox CMeshComponent::GetBoundingBox()
+{
+    BoundingBox aabb;
+    GetBoundingBox(aabb);
+    return aabb;
+}
+
+void CMeshComponent::GetBoundingBox(BoundingBox& outBoundingBox)
+{
+    FGeometry::FindRenderingDatas(
+        [&](std::shared_ptr<FRenderingData>& inRenderingData)->EFindValueType
+        {
+            if (inRenderingData->meshComp == this)
+            {
+                outBoundingBox = inRenderingData->boundingBox;
+                return EFindValueType::EFindValueType_Complete;
+            }
+            return EFindValueType::EFindValueType_In_progress;
+        }
+    );
 }
 
 UINT CMeshComponent::GetMaterialNum() const
