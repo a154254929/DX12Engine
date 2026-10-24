@@ -7,12 +7,12 @@ class CTransformationComponent;
 class GActorObject : public CCoreMinimalObject
 {
     CVARIABLE()
-    CTransformationComponent* transformationComponent;
+    CTransformationComponent* rootComponent;
 
 public:
     GActorObject();
 
-    FORCEINLINE CTransformationComponent* GetTransformationComponent() { return transformationComponent; };
+    FORCEINLINE CTransformationComponent* GetRootComponent() { return rootComponent; };
 
 public:
     virtual void SetPosition(const XMFLOAT3& inPosition);

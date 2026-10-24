@@ -19,8 +19,7 @@ void FTimeline::Tick(float deltaTime)
     }
     else
     {
-        currentLeftTime = 0;
-        timelineDelegate.ReleaseDelegate();
+        ClearTimeline();
     }
 }
 
@@ -29,4 +28,10 @@ void FTimeline::BindTimelineEvent(float inTime, FTimelineDelegate& inTimelineDel
     timeLength = inTime;
     currentLeftTime = inTime;
     timelineDelegate = inTimelineDelegate;
+}
+
+void FTimeline::ClearTimeline()
+{
+    currentLeftTime = 0;
+    timelineDelegate.ReleaseDelegate();
 }

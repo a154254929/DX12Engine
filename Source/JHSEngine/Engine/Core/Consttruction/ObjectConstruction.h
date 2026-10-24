@@ -1,8 +1,8 @@
 #pragma once
-#include <utility>
 
 class CCoreMinimalObject;
 #include "../../Core/CoreObject/CoreMinimalObject.h"
+#include "ComponentConstruction.h"
 
 struct FCreateObjectParam
 {
@@ -17,6 +17,8 @@ struct FCreateObjectParam
 template<class T>
 T* CreateObject(const FCreateObjectParam& inOwner, CCoreMinimalObject* newObject)
 {
+    ComponentConstruction::CreateComponent(inOwner.owner, newObject);
+    
     T* outObj = dynamic_cast<T*>(newObject);
     outObj->SetOwner(inOwner.owner);
     return outObj;

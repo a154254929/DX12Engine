@@ -5,27 +5,27 @@ GActorObject::GActorObject()
 {
     FCreateObjectParam param;
     param.owner = this;
-    transformationComponent = CreateObject<CTransformationComponent>(param, new CTransformationComponent());
+    rootComponent = CreateObject<CTransformationComponent>(param, new CTransformationComponent());
 }
 
 void GActorObject::SetPosition(const XMFLOAT3& inPosition)
 {
-    transformationComponent->SetPosition(inPosition);
+    rootComponent->SetPosition(inPosition);
 }
 
 void GActorObject::SetRotation(const fvector_3d& inRotation)
 {
-    transformationComponent->SetRotation(inRotation);
+    rootComponent->SetRotation(inRotation);
 }
 
 void GActorObject::SetRotation(const frotator& inRotator)
 {
-    transformationComponent->SetRotation(inRotator);
+    rootComponent->SetRotation(inRotator);
 }
 
 void GActorObject::SetScale(const fvector_3d& inScale)
 {
-    transformationComponent->SetScale(inScale);
+    rootComponent->SetScale(inScale);
 }
 
 void GActorObject::SetPickup(bool inPickup)
@@ -34,30 +34,30 @@ void GActorObject::SetPickup(bool inPickup)
 
 XMFLOAT3& GActorObject::GetPosition()
 {
-    return transformationComponent->GetPosition();
+    return rootComponent->GetPosition();
 }
 
 fvector_3d GActorObject::GetRotation() const
 {
-    return transformationComponent->GetRotation();
+    return rootComponent->GetRotation();
 }
 
 fvector_3d GActorObject::GetScale() const
 {
-    return transformationComponent->GetScale();
+    return rootComponent->GetScale();
 }
 
 XMFLOAT3& GActorObject::GetForwardVector()
 {
-    return transformationComponent->GetForwardVector();
+    return rootComponent->GetForwardVector();
 }
 
 XMFLOAT3& GActorObject::GetRightVector()
 {
-    return transformationComponent->GetRightVector();
+    return rootComponent->GetRightVector();
 }
 
 XMFLOAT3& GActorObject::GetUpVector()
 {
-    return transformationComponent->GetUpVector();
+    return rootComponent->GetUpVector();
 }

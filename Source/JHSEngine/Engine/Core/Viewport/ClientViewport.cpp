@@ -62,15 +62,15 @@ void GClientViewport::Tick(float deltaTime)
 void GClientViewport::BuildViewMatrix(float deltaTime)
 {
     //计算和矫正
-    GetTransformationComponent()->CorrectionVector();
+    GetRootComponent()->CorrectionVector();
 
     //计算自身方向移动的意图
-    fvector_3d v3 = GetTransformationComponent()->GetCorrectionPosition();
+    fvector_3d v3 = GetRootComponent()->GetCorrectionPosition();
 
     //构建ViewMatrix
-    XMFLOAT3 rightVector = GetTransformationComponent()->GetRightVector();
-    XMFLOAT3 upVector = GetTransformationComponent()->GetUpVector();
-    XMFLOAT3 forwardVector = GetTransformationComponent()->GetForwardVector();
+    XMFLOAT3 rightVector = GetRootComponent()->GetRightVector();
+    XMFLOAT3 upVector = GetRootComponent()->GetUpVector();
+    XMFLOAT3 forwardVector = GetRootComponent()->GetForwardVector();
 
     viewMatrix = {
         rightVector.x,    upVector.x,        forwardVector.x,    0.f,

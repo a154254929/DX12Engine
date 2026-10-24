@@ -229,7 +229,7 @@ void GRotateArrow::Tick(float deltaTime)
         GetForwardVector()
     );
     
-    FXMVECTOR cameraPosition = XMLoadFloat3(&GetWorld()->GetCamera()->GetTransformationComponent()->GetPosition());
+    FXMVECTOR cameraPosition = XMLoadFloat3(&GetWorld()->GetCamera()->GetRootComponent()->GetPosition());
     
     XMVECTOR outObjectPosition = XMVector3TransformCoord(cameraPosition, arrowWorldMatrixInverse);
     

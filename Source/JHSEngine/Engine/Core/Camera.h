@@ -67,5 +67,6 @@ protected:
 
     float speed = .05f;
     
+    bool bFPressed;
     FTimeline timeline;
 };

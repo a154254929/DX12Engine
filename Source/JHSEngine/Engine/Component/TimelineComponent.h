@@ -11,6 +11,8 @@ struct FTimeline
     void Tick(float deltaTime);
     
     void BindTimelineEvent(float inTime, FTimelineDelegate& inTimelineDelegate);
+    
+    void ClearTimeline();
 private:
     float timeLength;
     float currentLeftTime;

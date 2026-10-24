@@ -5,7 +5,9 @@
 #include "../Library/RaycastSystemLibrary.h"
 #include "../Rendering/Core/DirectX/RenderingPipeline/RenderLayer/RenderLayerManager.h"
 #include "../Component/Mesh/Core/MeshComponentType.h"
+#include "Engine/Math/EngineMath.h"
 
+extern GActorObject* selectedObject;
 GCamera::GCamera()
     : Super()
 {
@@ -19,6 +21,8 @@ GCamera::GCamera()
     radius = 10.f;
     theta = 0;
     phi = 0;
+    
+    bFPressed = false;
 }
 
 void GCamera::BeginInit()
@@ -94,15 +98,20 @@ void GCamera::ExecuteKeboard(const FInputKey& inputKey)
         SetDirty(true);
     }
     
-    if (inputKey.keyName == "F")
+    if (inputKey.keyName == "F" && !bFPressed)
     {
+        LookAt(
+            EngineMath::ToVector3d(GetPosition()),
+            EngineMath::ToVector3d(selectedObject->GetPosition())
+        );
+        
+        bFPressed = true;
         FTimelineDelegate timelineDelegate;
         timelineDelegate.Bind(this, &GCamera::LookAtAndMoveToSelectedObject);
         timeline.BindTimelineEvent(1.f, timelineDelegate);
     }
 }
 
-extern GActorObject* selectedObject;
 void GCamera::BuildViewMatrix(float deltaTime)
 {
     switch (cameraType)
@@ -114,14 +123,14 @@ void GCamera::BuildViewMatrix(float deltaTime)
         }
         case ECameraType::OvservationObject:
         {
-            XMFLOAT3& cameraPos = GetTransformationComponent()->GetPosition();
+            XMFLOAT3& cameraPos = GetRootComponent()->GetPosition();
 
             cameraPos.x = radius * cosf(phi) * cosf(theta);
             cameraPos.y = radius * sinf(theta);
             cameraPos.z = radius * sinf(phi) * cosf(theta);
 
             XMVECTOR pos = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
-            XMFLOAT3& targetPosition = selectedObject->GetTransformationComponent()->GetPosition();
+            XMFLOAT3& targetPosition = selectedObject->GetRootComponent()->GetPosition();
             XMVECTOR viewTarget = XMVectorSet(targetPosition.x, targetPosition.y, targetPosition.z, 1.0f);
             XMVECTOR viewUp = XMVectorSet(0.f, 1.0f, 0.f, 0.f);
 
@@ -208,14 +217,14 @@ void GCamera::MoveForward(float inValue)
 {
     if (cameraType == ECameraType::CameraRoaming && bRightMosueDown)
     {
-        XMFLOAT3 f3Position = GetTransformationComponent()->GetPosition();
-        XMFLOAT3 f3Forward = GetTransformationComponent()->GetForwardVector();
+        XMFLOAT3 f3Position = GetRootComponent()->GetPosition();
+        XMFLOAT3 f3Forward = GetRootComponent()->GetForwardVector();
         XMVECTOR amountMovement = XMVectorReplicate(inValue * 5.f);
         XMVECTOR forward = XMLoadFloat3(&f3Forward);
         XMVECTOR position = XMLoadFloat3(&f3Position);
         position += amountMovement * forward;
         XMStoreFloat3(&f3Position, position);
-        GetTransformationComponent()->SetPosition(f3Position);
+        GetRootComponent()->SetPosition(f3Position);
     }
 }
 
@@ -223,14 +232,14 @@ void GCamera::MoveRight(float inValue)
 {
     if (cameraType == ECameraType::CameraRoaming && bRightMosueDown)
     {
-        XMFLOAT3 f3Position = GetTransformationComponent()->GetPosition();
-        XMFLOAT3 f3Right = GetTransformationComponent()->GetRightVector();
+        XMFLOAT3 f3Position = GetRootComponent()->GetPosition();
+        XMFLOAT3 f3Right = GetRootComponent()->GetRightVector();
         XMVECTOR amountMovement = XMVectorReplicate(inValue * 5.f);
         XMVECTOR right = XMLoadFloat3(&f3Right);
         XMVECTOR position = XMLoadFloat3(&f3Position);
         position += amountMovement * right;
         XMStoreFloat3(&f3Position, position);
-        GetTransformationComponent()->SetPosition(f3Position);
+        GetRootComponent()->SetPosition(f3Position);
     }
 }
 
@@ -238,14 +247,14 @@ void GCamera::MoveUp(float inValue)
 {
     if (cameraType == ECameraType::CameraRoaming && bRightMosueDown)
     {
-        XMFLOAT3 f3Position = GetTransformationComponent()->GetPosition();
-        XMFLOAT3 f3Up = GetTransformationComponent()->GetUpVector();
+        XMFLOAT3 f3Position = GetRootComponent()->GetPosition();
+        XMFLOAT3 f3Up = GetRootComponent()->GetUpVector();
         XMVECTOR amountMovement = XMVectorReplicate(inValue * 5.f);
         XMVECTOR up = XMLoadFloat3(&f3Up);
         XMVECTOR position = XMLoadFloat3(&f3Position);
         position += amountMovement * up;
         XMStoreFloat3(&f3Position, position);
-        GetTransformationComponent()->SetPosition(f3Position);
+        GetRootComponent()->SetPosition(f3Position);
     }
 }
 
@@ -297,29 +306,29 @@ void GCamera::OnClickedScreen(int x, int y)
 void GCamera::RotateAroundYAxis(float inRotateDegrees)
 {
     //拿到相机方向
-    XMVECTOR upVector = XMLoadFloat3(&GetTransformationComponent()->GetUpVector());
+    XMVECTOR upVector = XMLoadFloat3(&GetRootComponent()->GetUpVector());
 
     //拿到旋转矩阵
     XMMATRIX rotationY = XMMatrixRotationY(inRotateDegrees);
 
     //计算各个向量旋转后的结构
-    XMStoreFloat3(&GetTransformationComponent()->GetRightVector(), XMVector3TransformNormal(XMLoadFloat3(&GetTransformationComponent()->GetRightVector()), rotationY));
-    //XMStoreFloat3(&GetTransformationComponent()->GetUpVector(), XMVector3TransformNormal(upVector, rotationY));
-    XMStoreFloat3(&GetTransformationComponent()->GetForwardVector(), XMVector3TransformNormal(XMLoadFloat3(&GetTransformationComponent()->GetForwardVector()), rotationY));
+    XMStoreFloat3(&GetRootComponent()->GetRightVector(), XMVector3TransformNormal(XMLoadFloat3(&GetRootComponent()->GetRightVector()), rotationY));
+    //XMStoreFloat3(&GetRootComponent()->GetUpVector(), XMVector3TransformNormal(upVector, rotationY));
+    XMStoreFloat3(&GetRootComponent()->GetForwardVector(), XMVector3TransformNormal(XMLoadFloat3(&GetRootComponent()->GetForwardVector()), rotationY));
 }
 
 void GCamera::RotateAroundXAxis(float inRotateDegrees)
 {
     //拿到相机方向
-    XMVECTOR rightVector = XMLoadFloat3(&GetTransformationComponent()->GetRightVector());
+    XMVECTOR rightVector = XMLoadFloat3(&GetRootComponent()->GetRightVector());
 
     //拿到旋转矩阵
     XMMATRIX rotationX = XMMatrixRotationAxis(rightVector, inRotateDegrees);
 
     //计算各个向量旋转后的结构
-    //XMStoreFloat3(&GetTransformationComponent()->GetRightVector(), XMVector3TransformNormal(rightVector, rotationX));
-    XMStoreFloat3(&GetTransformationComponent()->GetUpVector(), XMVector3TransformNormal(XMLoadFloat3(&GetTransformationComponent()->GetUpVector()), rotationX));
-    XMStoreFloat3(&GetTransformationComponent()->GetForwardVector(), XMVector3TransformNormal(XMLoadFloat3(&GetTransformationComponent()->GetForwardVector()), rotationX));
+    //XMStoreFloat3(&GetRootComponent()->GetRightVector(), XMVector3TransformNormal(rightVector, rotationX));
+    XMStoreFloat3(&GetRootComponent()->GetUpVector(), XMVector3TransformNormal(XMLoadFloat3(&GetRootComponent()->GetUpVector()), rotationX));
+    XMStoreFloat3(&GetRootComponent()->GetForwardVector(), XMVector3TransformNormal(XMLoadFloat3(&GetRootComponent()->GetForwardVector()), rotationX));
 
 }
 
@@ -327,6 +336,11 @@ void GCamera::LookAtAndMoveToSelectedObject(float inTime, float inDeltaTime)
 {
     if (selectedObject)
     {
-        Engine_Log("inTime = %f, inDeltaTime = %f", inTime, inDeltaTime);
+        /*
+        SetPosition(
+            EngineMath::Lerp(GetPosition(), selectedObject->GetPosition(), inTime)
+        );
+        */
     }
+    bFPressed = false;
 }
