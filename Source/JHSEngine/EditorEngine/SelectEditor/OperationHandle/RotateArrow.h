@@ -60,6 +60,9 @@ protected:
     virtual void OnLeftButtonUp(int x, int y);
     virtual void OnCaptureKeyboardInformation(const FInputKey& inputKey);
     
+    float GetSymbol(float inValueOffset, bool bFlip = false);
+    float GetSymbolByCubeIndex(float inValueOffset);
+    
 protected:
     float lastT1Value = 0.f;
     float rotateRate;

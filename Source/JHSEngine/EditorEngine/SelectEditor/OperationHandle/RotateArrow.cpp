@@ -162,13 +162,22 @@ fvector_3d GRotateArrow::GetSelectedObjectDirection(
         switch (axisType)
         {
         case ESelectAxis_X:
-            outWorldActorDirection = fvector_3d(0.f, 1.f, 0.f);
+            {
+                //outWorldActorDirection = fvector_3d(0.f, 1.f, 0.f);
+                outWorldActorDirection = EngineMath::ToVector3d(GetWorld()->GetCamera()->GetUpVector());
+            }
             break;
         case ESelectAxis_Y:
-            outWorldActorDirection = fvector_3d(1.f, 0.f, 0.f);
+            {
+                //outWorldActorDirection = fvector_3d(1.f, 0.f, 0.f);
+                outWorldActorDirection = EngineMath::ToVector3d(GetWorld()->GetCamera()->GetRightVector());
+            }
             break;
         case ESelectAxis_Z:
-            outWorldActorDirection = fvector_3d(0.f, 1.f, 0.f);
+            {
+                //outWorldActorDirection = fvector_3d(0.f, 1.f, 0.f);
+                outWorldActorDirection = EngineMath::ToVector3d(GetWorld()->GetCamera()->GetUpVector());
+            }
             break;
         case ESelectAxis_Any:
             outWorldActorDirection = GetCustomAxisDirection(
@@ -239,11 +248,11 @@ void GRotateArrow::Tick(float deltaTime)
     XMFLOAT3 viewPosition;
     XMStoreFloat3(&viewPosition, outObjectPosition);
     
-    int type = EngineMath::GetSample8CubeIndex(EngineMath::ToVector3d(viewPosition));
+    sample8CubeIndex = EngineMath::GetSample8CubeIndex(EngineMath::ToVector3d(viewPosition));
     
-    Engine_Log("%d", type);
+    Engine_Log("%d", sample8CubeIndex);
     
-    switch (type)
+    switch (sample8CubeIndex)
     {
     case 0:
         yAxisComponent->SetRotation(frotator(0.f, -90.f, 0.f));
@@ -322,27 +331,19 @@ void GRotateArrow::OnMouseMove(int x, int y)
     {
         SetCDValue(rayInterHitT1);
         
+        //保证摄像机和物体的相对拖拽偏移保持不变
         float cmaeraAndSelectedDistance = 
             (EngineMath::ToVector3d(GetWorld()->GetCamera()->GetPosition())
             - EngineMath::ToVector3d(selectedObject->GetPosition())).len();
-        float delta = (rayInterHitT1 - lastT1Value) / cmaeraAndSelectedDistance;
+        float deltaRotate = (rayInterHitT1 - lastT1Value) / cmaeraAndSelectedDistance;
 
         //float diffT1Value = rayInterHitT1 - lastT1Value;
-        float diffT1Value = delta - rotateRate;
-        float rotateValue = 0.f;
+        float diffT1Value = deltaRotate - rotateRate;
+        float rotateSymbol = GetSymbolByCubeIndex(diffT1Value);
         
-        if (diffT1Value > 0.f)
-        {
-            rotateValue += 2.5f;
-        }
-        else if (diffT1Value < 0.f)
-        {
-            rotateValue -= 2.5f;
-        }
-        
-        rotateRate = delta;
+        rotateRate = deltaRotate;
 
-        if (rotateValue == 0.f)
+        if (rotateSymbol == 0.f)
         {
             return;
         }
@@ -354,7 +355,7 @@ void GRotateArrow::OnMouseMove(int x, int y)
             fvector_3d()
         );
         
-        fvector_3d deltaVector = worldActorDir * rotateValue * fabs(diffT1Value) * 360.f;
+        fvector_3d deltaVector = worldActorDir * rotateSymbol * fabsf(diffT1Value) * 360.f;
         
         frotator lastRotator;
         frotator deltaRotator(deltaVector.y, deltaVector.z, deltaVector.x);
@@ -443,4 +444,128 @@ void GRotateArrow::OnCaptureKeyboardInformation(const FInputKey& inputKey)
         
         ResetVisible();
     }
+}
+
+float GRotateArrow::GetSymbol(float inValueOffset, bool bFlip)
+{
+    if (inValueOffset > 0.f)
+    {
+        return bFlip ? 1.f : -1.f;
+    }
+    else if (inValueOffset < 0.f)
+    {
+        return bFlip ? -1.f : 1.f;
+    }
+    return 0.f;
+}
+
+float GRotateArrow::GetSymbolByCubeIndex(float inValueOffset)
+{
+    GOperationHandleBase::ESelectAxisType axisType = GetSelectAxisType();
+        
+    switch (sample8CubeIndex)
+    {
+    case 0:
+    case 1:
+        {
+            switch (axisType)
+            {
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_X:
+                {
+                    return GetSymbol(inValueOffset);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Y:
+                {
+                    return GetSymbol(inValueOffset);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Z:
+                {
+                    return GetSymbol(inValueOffset, sample8CubeIndex == 0);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Any:
+                break;
+            }
+        }
+        break;
+    case 2:
+    case 3:
+        {
+            switch (axisType)
+            {
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_X:
+                {
+                    return GetSymbol(inValueOffset, true);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Y:
+                {
+                    return GetSymbol(inValueOffset);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Z:
+                {
+                    return GetSymbol(inValueOffset, sample8CubeIndex == 3);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Any:
+                break;
+            }
+        }
+        break;
+    case 4:
+    case 5:
+        {
+            switch (axisType)
+            {
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_X:
+                {
+                    return GetSymbol(inValueOffset);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Y:
+                {
+                    return GetSymbol(inValueOffset);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Z:
+                {
+                    return GetSymbol(inValueOffset, sample8CubeIndex == 4);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Any:
+                break;
+            }    
+        }
+        break;
+    case 6:
+    case 7:
+        {
+            switch (axisType)
+            {
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_X:
+                {
+                    return GetSymbol(inValueOffset, true);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Y:
+                {
+                    return GetSymbol(inValueOffset);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Z:
+                {
+                    return GetSymbol(inValueOffset, sample8CubeIndex == 7);
+                }
+                break;
+            case GOperationHandleBase::ESelectAxisType::ESelectAxis_Any:
+                break;
+            }    
+        }
+        break;
+    }
+    
+    return 0.f;
 }
