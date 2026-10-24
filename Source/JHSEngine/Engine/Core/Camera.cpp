@@ -5,6 +5,7 @@
 #include "../Library/RaycastSystemLibrary.h"
 #include "../Rendering/Core/DirectX/RenderingPipeline/RenderLayer/RenderLayerManager.h"
 #include "../Component/Mesh/Core/MeshComponentType.h"
+#include "Engine/Config/EngineRenderConfig.h"
 #include "Engine/Math/EngineMath.h"
 
 extern GActorObject* selectedObject;
@@ -27,7 +28,14 @@ GCamera::GCamera()
 
 void GCamera::BeginInit()
 {
-    ViewportInit();
+    float aspectRatio = (float)FEngineRenderConfig::GetRenderConfig()->ScreenWidth / (float)FEngineRenderConfig::GetRenderConfig()->ScreenHeight;
+    SetFrustum(
+        45.0f, //以弧度为单位的自上而下的视场角
+        aspectRatio,//宽高比
+        1.0f,//近裁剪面
+        10000.f//远剪裁面
+    );
+
     inputComponent->captureKeyboardInforDelegate.Bind(this, &GCamera::ExecuteKeboard);
     
     inputComponent->OnLeftMouseButtonDownDelegate.Bind(this, &GCamera::OnLeftMouseButtonDown);
@@ -108,7 +116,7 @@ void GCamera::ExecuteKeboard(const FInputKey& inputKey)
         bFPressed = true;
         FTimelineDelegate timelineDelegate;
         timelineDelegate.Bind(this, &GCamera::LookAtAndMoveToSelectedObject);
-        timeline.BindTimelineEvent(1.f, timelineDelegate);
+        timeline.BindTimelineEvent(0.8f, timelineDelegate);
     }
 }
 
@@ -336,11 +344,25 @@ void GCamera::LookAtAndMoveToSelectedObject(float inTime, float inDeltaTime)
 {
     if (selectedObject)
     {
-        /*
+        BoundingBox selectedObjectBoundingBox = selectedObject->GetBoundingBox();
+        float radius = EngineMath::ToVector3d(selectedObjectBoundingBox.Extents).len();
+        float h = 10.f;
+        float fov = GetYFov();
+        float l = (radius + h) / tan(fov / 2);
+        
+        fvector_3d cameraPosition = EngineMath::ToVector3d(GetPosition());
+        fvector_3d selectedObjectPosition = EngineMath::ToVector3d(selectedObject->GetPosition());
+        
+        fvector_3d cameraForward = EngineMath::ToVector3d(GetForwardVector());
+        cameraForward.normalize();
+        
+        fvector_3d selectedObjectCenter = EngineMath::ToVector3d(selectedObjectBoundingBox.Center);
+        fvector_3d endPosition = selectedObjectPosition + cameraForward * l * -1.0f;
+        fvector_3d currentPosition = EngineMath::Lerp(cameraPosition, endPosition, inDeltaTime);
+        
         SetPosition(
-            EngineMath::Lerp(GetPosition(), selectedObject->GetPosition(), inTime)
+            EngineMath::ToFloat3(currentPosition)
         );
-        */
     }
     bFPressed = false;
 }
