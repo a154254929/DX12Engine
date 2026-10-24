@@ -62,4 +62,6 @@ protected:
     
 protected:
     float lastT1Value = 0.f;
+    float rotateRate;
+    int sample8CubeIndex;
 };

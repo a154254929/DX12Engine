@@ -202,6 +202,7 @@ int CDirectXRenderingEngine::PostInit()
             fog->SetFogHeight(500.f);
             fog->SetFogTransparentCoefficient(0.05f);
         }
+        */
         
         if (GDonutMesh* donutMesh = world->CreateActorObject<GDonutMesh>())
         {
@@ -211,11 +212,12 @@ int CDirectXRenderingEngine::PostInit()
             if (CMaterial* material = (*donutMesh->GetMaterials())[0])
             {
                 material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
-                material->SetBaseColorIndexKey(FEnginePathHelper::GetEngineContentRelativeLogsPath() + "/Texture/Texture2.dds");
+                material->SetBaseColorIndexKey("Texture2.dds");
                 material->SetMaterialType(EMaterialType::BaseColor);
             }
         }
         
+        /*
         if (GAesmaMesh* aesmaMesh = world->CreateActorObject<GAesmaMesh>())
         {
             aesmaMesh->CreateMesh(3, 1, 3, 20, 20);
@@ -224,14 +226,14 @@ int CDirectXRenderingEngine::PostInit()
             if (CMaterial* material = (*aesmaMesh->GetMaterials())[0])
             {
                 material->SetBaseColor(fvector_4d(1.f, 1.f, 1.f, 1.f));
-                material->SetBaseColorIndexKey(FEnginePathHelper::GetEngineContentRelativeLogsPath() + "/Texture/Texture2.dds");
+                material->SetBaseColorIndexKey(FEnginePathHelper::GetEngineRelativeContentPath() + "/Texture/Texture2.dds");
                 material->SetMaterialType(EMaterialType::BaseColor);
             }
         }
         */
         
         /*
-        string fbxPath = FEnginePathHelper::GetEngineContentRelativeLogsPath() + "/Pet_Huqiu.fbx";
+        string fbxPath = FEnginePathHelper::GetEngineRelativeContentPath() + "/Pet_Huqiu.fbx";
         if (GCustomMesh* fbxMesh = world->CreateActorObject<GCustomMesh>())
         {
             fbxMesh->CreateMesh(fbxPath);

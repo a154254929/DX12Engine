@@ -26,6 +26,9 @@ GRotateArrow::GRotateArrow()
     xPlaneComponent->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE_ROT_PLANE);
     yPlaneComponent->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE_ROT_PLANE);
     zPlaneComponent->SetRenderLayerType(EMeshRenderLayerType::RENDERLAYER_OPERATION_HANDLE_ROT_PLANE);
+    
+    lastT1Value = 0.f;
+    rotateRate = 0.f;
 }
 
 void GRotateArrow::SetMeshRenderLayerType(EMeshRenderLayerType inRenderLayerType)
@@ -318,8 +321,14 @@ void GRotateArrow::OnMouseMove(int x, int y)
     if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
         SetCDValue(rayInterHitT1);
+        
+        float cmaeraAndSelectedDistance = 
+            (EngineMath::ToVector3d(GetWorld()->GetCamera()->GetPosition())
+            - EngineMath::ToVector3d(selectedObject->GetPosition())).len();
+        float delta = (rayInterHitT1 - lastT1Value) / cmaeraAndSelectedDistance;
 
-        float diffT1Value = rayInterHitT1 - lastT1Value;
+        //float diffT1Value = rayInterHitT1 - lastT1Value;
+        float diffT1Value = delta - rotateRate;
         float rotateValue = 0.f;
         
         if (diffT1Value > 0.f)
@@ -330,14 +339,22 @@ void GRotateArrow::OnMouseMove(int x, int y)
         {
             rotateValue -= 2.5f;
         }
-        lastT1Value = rayInterHitT1;
+        
+        rotateRate = delta;
 
         if (rotateValue == 0.f)
         {
             return;
         }
         
-        fvector_3d deltaVector = worldActorDir * rotateValue;
+        // The ray calculation uses a drag direction; rotation uses the selected axis.
+        worldActorDir = GOperationHandleBase::GetSelectedObjectDirection(
+            fvector_3d(),
+            fvector_3d(),
+            fvector_3d()
+        );
+        
+        fvector_3d deltaVector = worldActorDir * rotateValue * fabs(diffT1Value) * 360.f;
         
         frotator lastRotator;
         frotator deltaRotator(deltaVector.y, deltaVector.z, deltaVector.x);
@@ -356,7 +373,7 @@ void GRotateArrow::OnMouseMove(int x, int y)
         
         fvector_3d resultRotation(resultRotator.roll, resultRotator.pitch, resultRotator.yaw);
         
-        if (true)
+        if (false)
         {
             XMMATRIX worldInvMatrix;
             EngineMath::BuildMatrixInvFromPositionRotationScale(
@@ -384,7 +401,6 @@ void GRotateArrow::OnMouseMove(int x, int y)
         }
         
         selectedObject->SetRotation(resultRotation);
-        
     }
 }
 
@@ -404,6 +420,7 @@ void GRotateArrow::OnLeftButtonDown(int x, int y)
     if (GetRayInterHitPosition(x, y, rayInterHitT1, worldActorDir, worldActorPosition))
     {
         lastT1Value = rayInterHitT1;
+        rotateRate = 0.f;
     }
 }
 
