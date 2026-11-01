@@ -59,6 +59,14 @@ void FRenderingPipeline::BuildPipeline()
         &renderLayerManager
     );
     
+    ssao.Init(
+        &geometryMap,
+        &directXPipelineState,
+        &renderLayerManager
+    );
+    
+    ssao.Init(256, 256);
+    
     geometryMap.dynamicShadowMap.Init(
         &geometryMap,
         &directXPipelineState,
@@ -73,6 +81,8 @@ void FRenderingPipeline::BuildPipeline()
 
     //构建常量描述堆
     geometryMap.BuildDescriptorHeap();
+    
+    ssao.BuildDescriptors();
     
     uiPipeline.Init(geometryMap.GetHeap(),
         geometryMap.GetDrawTexture2DResourcesNumber()           //Texture2D
@@ -148,9 +158,11 @@ void FRenderingPipeline::PreDraw(float deltaTime)
     //渲染灯光材质贴图等
     geometryMap.Draw(deltaTime);
     
+    geometryMap.dynamicShadowCubeMap.PreDraw(deltaTime);
+    
     geometryMap.DrawShadow(deltaTime);
     
-    geometryMap.dynamicShadowCubeMap.PreDraw(deltaTime);
+    ssao.Draw(deltaTime);
 
     //清理主视口
     ClearMainViewportSwapChainCanvas();

@@ -5,6 +5,7 @@
 #include "PipelineState/DirectXPipelineState.h"
 #include "RootSignature/DirectXRootSignature.h"
 #include "../../../../Core/Viewport/ViewportInfo.h"
+#include "AmbientOcclusion/ScrenSpace/ScrennSpaceAmbientOcclusion.h"
 #include "DynamicMap/Cubemap/DynamicReflectionCubeMap.h"
 #include "RenderLayer/RenderLayerManager.h"
 #include "UI/IMGUIPipeline.h"
@@ -40,4 +41,6 @@ protected:
     
     FDynamicReflectionCubeMap dynamicCubeMap;
     FIMGUIPipeline uiPipeline;
+    
+    FScreenSpaceAmbientOcclusion ssao;
 };

@@ -22,6 +22,12 @@ void FDynamicMap::Init(FGeometryMap* inGeometryMap, FDirectXPipelineState* inDir
     renderLayerManager = inRenderLayerManager;
 }
 
+void FDynamicMap::Init(int inWidth, int inHeight)
+{
+    width = inWidth;
+    height = inHeight;
+}
+
 void FDynamicMap::UpdateCalculations(float deltaTime, const FViewportInfo& inViewportInfo)
 {
 }

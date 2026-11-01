@@ -18,6 +18,7 @@ public:
         FDirectXPipelineState* inDirectXPipelineState,
         FRenderLayerManager* inRenderLayerManager
         );
+    virtual void Init(int inWidth, int inHeight);
     
     virtual void UpdateCalculations(
         float deltaTime,
