@@ -972,7 +972,8 @@ bool CDirectXRenderingEngine::InitDirect3D()
     rtvDescriptorHeapDesc.NumDescriptors =
         FEngineRenderConfig::GetRenderConfig()->SwapChainCount //交换链
         + 6                                                    //实时cubemap
-        + 6;                                                   //ShadowCubemap
+        + 6                                                    //ShadowCubemap
+        + 1;                                                   //NormalBuffer
     /*
         D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV  CBV常量缓冲区视图 SRV着色器资源视图 UAV无需访问视图
         D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER      采样器视图

@@ -1,5 +1,11 @@
 #include "NormalBuffer.h"
 
+#include "Engine/Component/Mesh/Core/MeshComponentType.h"
+#include "../Geometry/GeometryMap.h"
+#include "../RenderLayer/RenderLayerManager.h"
+#include "../RenderTarget/BufferRenderTarget.h"
+#include "Engine/Config/EngineRenderConfig.h"
+
 FNormalBuffer::FNormalBuffer()
 {
     format = DXGI_FORMAT_R16G16B16A16_FLOAT;
@@ -18,7 +24,61 @@ void FNormalBuffer::Init(int inWidth, int inHeight)
 
 void FNormalBuffer::Draw(float deltaTime)
 {
-    Super::Draw(deltaTime);
+    if (FBufferRenderTarget* bufferRenderTarget = dynamic_cast<FBufferRenderTarget*>(renderTarget.get()))
+    {
+        auto renderTargetViewport = renderTarget->GetViewport();
+        auto renderTargetScissorRect = renderTarget->GetScissorRect();
+        
+        GetGraphicsCommandList()->RSSetViewports(1, &renderTargetViewport);
+        GetGraphicsCommandList()->RSSetScissorRects(1, &renderTargetScissorRect);
+        
+        //指向那个资源 转换状态
+        CD3DX12_RESOURCE_BARRIER resourceBarrierPresent = CD3DX12_RESOURCE_BARRIER::Transition(
+            renderTarget->GetRenderTaget(),
+            D3D12_RESOURCE_STATE_GENERIC_READ,
+            D3D12_RESOURCE_STATE_RENDER_TARGET
+            );
+        
+        auto depthStencilView = GetDSVHeap()->GetCPUDescriptorHandleForHeapStart();
+        const float defaultClearColor[4] = { 0.0f, 0.0f, 1.0f, 0.0f };
+        GetGraphicsCommandList()->ClearRenderTargetView(
+            renderTarget->GetRTVHeap()->GetCPUDescriptorHandleForHeapStart(),
+            defaultClearColor,
+            0,
+            nullptr
+        );
+        
+        GetGraphicsCommandList()->ClearDepthStencilView(
+            depthStencilView,
+            D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
+            1.f,
+            0,
+            0,
+            nullptr
+        );
+        
+        GetGraphicsCommandList()->OMSetRenderTargets(
+            1,
+            &bufferRenderTarget->GetCPURenderTargetView(),
+            true,
+            &depthStencilView
+        );
+        
+        //从主视口渲染
+        geometryMap->DrawViewport(deltaTime);
+        
+        renderLayerManager->ResetPSO(9999);
+        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE, ERenderingConditions::RC_Shadow);
+        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_TRANSPARENT, ERenderingConditions::RC_Shadow);
+        renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE_REFLECTOR, ERenderingConditions::RC_Shadow);
+        
+        //指向那个资源 转换其状态
+        CD3DX12_RESOURCE_BARRIER resourceBarrierPresentRenderTarget = CD3DX12_RESOURCE_BARRIER::Transition(
+            renderTarget->GetRenderTaget(),
+            D3D12_RESOURCE_STATE_RENDER_TARGET,
+            D3D12_RESOURCE_STATE_GENERIC_READ
+        );
+    }
 }
 
 void FNormalBuffer::BuildDescriptors()
@@ -27,6 +87,13 @@ void FNormalBuffer::BuildDescriptors()
 
 void FNormalBuffer::BuildRenderTargetRTV()
 {
+    UINT rtvDescriptorSize = GetDescriptorHandleIncrementSizeByRTV();
+    auto rtvDesHeapStart = GetRTVHeap()->GetCPUDescriptorHandleForHeapStart();
+    int offset = FEngineRenderConfig::GetRenderConfig()->SwapChainCount + 6 + 6; //交换链+实时cubemap+ShadowCubemap
+    if (FBufferRenderTarget* bufferRenderTarget = dynamic_cast<FBufferRenderTarget*>(renderTarget.get()))
+    {
+        bufferRenderTarget->GetCPURenderTargetView() = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvDesHeapStart, offset, rtvDescriptorSize);
+    }
 }
 
 void FNormalBuffer::BuildSRVDescriptors()
@@ -35,6 +102,20 @@ void FNormalBuffer::BuildSRVDescriptors()
 
 void FNormalBuffer::BuildRTVDescriptors()
 {
+    if (FBufferRenderTarget* bufferRenderTarget = dynamic_cast<FBufferRenderTarget*>(renderTarget.get()))
+    {
+        D3D12_RENDER_TARGET_VIEW_DESC rtvDescriptor = {};
+        rtvDescriptor.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+        rtvDescriptor.Format = format;
+        rtvDescriptor.Texture2D.MipSlice = 0;
+        rtvDescriptor.Texture2D.PlaneSlice = 0;
+        
+        GetD3dDevice()->CreateRenderTargetView(
+            bufferRenderTarget->GetRenderTaget(),
+            &rtvDescriptor,
+            bufferRenderTarget->GetCPURenderTargetView()
+        );
+    }
 }
 
 void FNormalBuffer::BuildRenderTargetBuffer(ComPtr<ID3D12Resource>& outResource)
