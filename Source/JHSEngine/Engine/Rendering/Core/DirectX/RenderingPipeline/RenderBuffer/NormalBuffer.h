@@ -23,5 +23,5 @@ public:
     virtual void BuildRTVDescriptors();
     
 protected:
-    virtual void BuildRenderTargetBuffrer(ComPtr<ID3D12Resource>& outResource);
+    virtual void BuildRenderTargetBuffer(ComPtr<ID3D12Resource>& outResource);
 };
