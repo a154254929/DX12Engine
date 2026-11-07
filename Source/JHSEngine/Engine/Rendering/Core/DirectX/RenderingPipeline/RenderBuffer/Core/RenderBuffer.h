@@ -17,6 +17,9 @@ public:
     virtual void Init(int inWidth, int inHeight) override;
     
 protected:
+    virtual void BuildRenderTargetBuffer(ComPtr<ID3D12Resource>& outResource);
+    
+protected:
     DXGI_FORMAT format;
     
 };

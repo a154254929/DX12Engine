@@ -14,7 +14,7 @@ public:
 	}
 };
 
-//×î¼òµ¥µÄ Ö§³Ö¶à²ÎÊý´úÀí
+//ï¿½ï¿½òµ¥µï¿½ Ö§ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 template<class TObjectType, class TReturn, typename ...ParamTypes>
 class FObjectDelegate :public FDelegateBase<TReturn, ParamTypes...>
 {
@@ -195,10 +195,10 @@ public:
 	template<class TObjectType>
 	const FDelegateHandle AddFunction(TObjectType* InObject, TReturn(TObjectType::* InFuncation)(ParamTypes ...))
 	{
-		//Éú³ÉGUID
+		//ï¿½ï¿½ï¿½ï¿½GUID
 		FDelegateHandle Handle;
 
-		this->insert(std::make_pair(Handle,TDelegate()));//Ìí¼Ó
+		this->insert(std::make_pair(Handle,TDelegate()));//ï¿½ï¿½ï¿½ï¿½
 
 		TDelegate &InDelegate = this->at(Handle);
 		InDelegate.Bind(InObject, InFuncation);
@@ -209,7 +209,7 @@ public:
 	const FDelegateHandle &AddFunction(TReturn(*InFuncation)(ParamTypes...))
 	{
 		FDelegateHandle Handle;
-		this->insert(std::make_pair(Handle, TDelegate()));//Ìí¼Ó
+		this->insert(std::make_pair(Handle, TDelegate()));//ï¿½ï¿½ï¿½ï¿½
 
 		TDelegate& InDelegate = this->at(Handle);
 		InDelegate.Bind(InFuncation);
