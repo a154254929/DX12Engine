@@ -42,7 +42,7 @@ void FNormalBuffer::Draw(float deltaTime)
         auto depthStencilView = GetDSVHeap()->GetCPUDescriptorHandleForHeapStart();
         const float defaultClearColor[4] = { 0.0f, 0.0f, 1.0f, 0.0f };
         GetGraphicsCommandList()->ClearRenderTargetView(
-            renderTarget->GetRTVHeap()->GetCPUDescriptorHandleForHeapStart(),
+            bufferRenderTarget->GetCPURenderTargetView(),
             defaultClearColor,
             0,
             nullptr
@@ -67,7 +67,7 @@ void FNormalBuffer::Draw(float deltaTime)
         //从主视口渲染
         geometryMap->DrawViewport(deltaTime);
         
-        renderLayerManager->ResetPSO(9999);
+        renderLayerManager->ResetPSO(EMeshRenderLayerType::RENDERLAYER_NORMAL_BUFFER);
         renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE, ERenderingConditions::RC_Shadow);
         renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_TRANSPARENT, ERenderingConditions::RC_Shadow);
         renderLayerManager->DrawMesh(deltaTime, RENDERLAYER_OPAQUE_REFLECTOR, ERenderingConditions::RC_Shadow);

@@ -7,6 +7,7 @@
 #include "RenderLayers/OpaqueReflectorRenderLayer.h"
 #include "RenderLayers/OpaqueShadowRenderLayer.h"
 #include "../../../../../Core/Viewport/ViewportInfo.h"
+#include "BufferRenderLayer/NormalBufferRenderLayer.h"
 #include "Engine/Component/Mesh/Core/MeshComponent.h"
 #include "Engine/Component/Mesh/Core/MeshComponentType.h"
 #include "Engine/Core/World.h"
@@ -36,6 +37,7 @@ FRenderLayerManager::FRenderLayerManager()
     CreateRenderLayer<FOperationHandleRenderLayer>();
     CreateRenderLayer<FOperationHandleRotPlaneRenderLayer>();
 #endif
+    CreateRenderLayer<FNormalBufferRenderLayer>();
 }
 
 FRenderLayerManager::~FRenderLayerManager()

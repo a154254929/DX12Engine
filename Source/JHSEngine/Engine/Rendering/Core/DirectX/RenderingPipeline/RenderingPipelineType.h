@@ -16,6 +16,8 @@ enum EPipelineState
     Select,
     OperationHandle,
     OperationHandleRotPlane,
+    
+    NormalBuffer = 20,
 };
 
 enum ERenderingConditions
